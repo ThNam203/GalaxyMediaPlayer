@@ -5,8 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GalaxyMediaPlayer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
-    </Grid>
+        MouseDown="Window_MouseDown"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        ResizeMode="CanResizeWithGrip"
+        Height="630" 
+        Width="1120"
+        MinHeight="360"
+        MinWidth="640">
+    
+    <Frame  Name="MainFrame"
+            NavigationUIVisibility="Hidden"/>
 </Window>

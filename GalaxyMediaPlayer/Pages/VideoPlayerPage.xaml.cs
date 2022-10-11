@@ -13,22 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace GalaxyMediaPlayer
+namespace GalaxyMediaPlayer.Pages
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for VideoPlayerPage.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class VideoPlayerPage : Page
     {
-        public MainWindow()
+        public VideoPlayerPage()
         {
             InitializeComponent();
-            MainFrame.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
-        }
-
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed) DragMove();
         }
     }
 }
