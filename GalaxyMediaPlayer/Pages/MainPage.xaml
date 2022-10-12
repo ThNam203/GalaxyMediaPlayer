@@ -16,17 +16,94 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Name="MainRow" Height="*"/>
-            <RowDefinition Name="MusicPlayerRow" Height="80"/>
+            <RowDefinition Name="MusicPlayerRow" Height="60"/>
         </Grid.RowDefinitions>
 
-        <Grid Name="NavGrid">
+        <!-- Nam: this holds navigate buttons -->
+        <Border Name="NavBorder"
+                Padding="16 0">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0.5, 0" EndPoint="0.5, 1">
+                    <GradientStop Color="#20c2c2c2" Offset="0.0" />
+                    <GradientStop Color="Transparent" Offset="1.0" />
+                </LinearGradientBrush>
+            </Border.Background>
             
-        </Grid>
+            <!-- Nam: app's name textblock -->
+            <StackPanel>
+                <TextBlock Name="tbAppName"
+                       Foreground="White"
+                       FontWeight="Bold"
+                       FontSize="28"
+                       HorizontalAlignment="Center"
+                       Margin="0 8"
+                       Text="Galaxy MP"/>
 
-        <GridSplitter Grid.Column="1"/>
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+            </StackPanel>
+        </Border>
+
+        <GridSplitter Name="GridSplitter" 
+                      Grid.Column="1"
+                      Width="2"
+                      Background="Transparent"
+                      HorizontalAlignment="Stretch"/>
 
         <Grid Name="ContentGrid"
-              Grid.Column="2"/>
+              Grid.Column="2">
+            <Grid Background="Transparent">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.Resources>
+                    <Style TargetType="Button">
+                        <Style.Setters>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Name="border"
+                                                Background="Transparent"
+                                                Margin="4"
+                                                Padding="4">
+                                            <ContentPresenter Name="presenter"
+                                                              TextBlock.FontWeight="Bold"
+                                                              TextBlock.Foreground="DarkGray"/>
+                                        </Border>
+
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="presenter" 
+                                                        Property="TextBlock.Foreground" 
+                                                        Value="White"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style.Setters>
+                    </Style>
+                </Grid.Resources>
+
+                <StackPanel Orientation="Horizontal" 
+                            Grid.Column="1"
+                            HorizontalAlignment="Right">
+                    <Button Name="btnMinimize"
+                            Click="btnMinimize_Click"
+                            Content="__"/>
+
+                    <Button Name="btnMaximize"
+                            Click="btnMaximize_Click"
+                            Content="▭" />
+
+                    <Button Name="btnClose" 
+                            Click="btnClose_Click"
+                            Content="✕"
+                            Margin="0 0 8 0"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
 
         <Grid Name="MusicPlayerGrid"
               Grid.ColumnSpan="3"
