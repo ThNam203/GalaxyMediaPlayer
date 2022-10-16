@@ -8,6 +8,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MainPage">
 
+
     <Grid Name="MainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Name="NavCol" Width="200" MinWidth="180" MaxWidth="250"/>
@@ -16,22 +17,357 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Name="MainRow" Height="*"/>
-            <RowDefinition Name="MusicPlayerRow" Height="80"/>
+            <RowDefinition Name="MusicPlayerRow" Height="70"/>
         </Grid.RowDefinitions>
 
-        <Grid Name="NavGrid">
-            
-        </Grid>
+        <!-- Nam: this holds navigate buttons -->
+        <Border Name="NavBorder"
+                Padding="16 0">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0.5, 0" EndPoint="0.5, 1">
+                    <GradientStop Color="#20c2c2c2" Offset="0.0" />
+                    <GradientStop Color="Transparent" Offset="1.0" />
+                </LinearGradientBrush>
+            </Border.Background>
 
-        <GridSplitter Grid.Column="1"/>
+
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                
+                
+                
+                <!--Style button of navbar but it does not work-->
+                <Grid.Resources>
+                    <Style x:Key="Btndefault" 
+                           TargetType="Button">
+                        <Setter Property="Background" Value="Transparent"></Setter>
+                        <Setter Property="FontSize" Value="20"></Setter>
+                        <Setter Property="FontWeight" Value="Bold"></Setter>
+                        <Setter Property="Width" Value="200"></Setter>
+                        <Setter Property="Height" Value="50"></Setter>
+                        <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" 
+                                                    Value="Gray"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Grid.Resources>
+                
+                
+                
+                <!--Dat: Row 0 is the name of app-->
+                <Grid Grid.Row="0">
+                    <!-- Nam: app's name textblock -->
+                    <StackPanel  Grid.Row="0">
+                        <TextBlock x:Name="tbAppName"
+                                   Foreground="White"
+                                   FontWeight="Bold"
+                                   FontSize="28"
+                                   HorizontalAlignment="Center"
+                                   Text="Galaxy MP"/>
+
+                        <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+                    </StackPanel>
+                </Grid>
+
+                
+                
+                
+                <!--Dat: Row 1 is list of app-->
+                <Grid Grid.Row="1">
+                    <StackPanel Name="ListItem">
+                        <Button Content="Home"
+                                Width="200"
+                                Height="auto"
+                                Background="Transparent"
+                                Foreground="White"
+                                FontSize="20"
+                                FontWeight="Bold"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Padding="0 5"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <GridSplitter Name="GridSplitter" 
+                      Grid.Column="1"
+                      Width="2"
+                      Background="Transparent"
+                      HorizontalAlignment="Stretch"/>
 
         <Grid Name="ContentGrid"
-              Grid.Column="2"/>
+              Grid.Column="2">
+            <Grid Background="Transparent">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.Resources>
+                    <Style TargetType="Button">
+                        <Style.Setters>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Name="border"
+                                                Background="Transparent"
+                                                Margin="4"
+                                                Padding="4">
+                                            <ContentPresenter Name="presenter"
+                                                              TextBlock.FontWeight="Bold"
+                                                              TextBlock.Foreground="DarkGray"/>
+                                        </Border>
+
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="presenter" 
+                                                        Property="TextBlock.Foreground" 
+                                                        Value="White"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style.Setters>
+                    </Style>
+                </Grid.Resources>
+
+                <StackPanel Orientation="Horizontal" 
+                            Grid.Column="1"
+                            HorizontalAlignment="Right">
+                    <Button Name="btnMinimize"
+                            Click="btnMinimize_Click"
+                            Content="__"/>
+
+                    <Button Name="btnMaximize"
+                            Click="btnMaximize_Click"
+                            Content="▭" />
+
+                    <Button Name="btnClose" 
+                            Click="btnClose_Click"
+                            Content="✕"
+                            Margin="0 0 8 0"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
 
         <Grid Name="MusicPlayerGrid"
-              Grid.ColumnSpan="3"
-              Grid.Row="1">
+                    Grid.ColumnSpan="3"
+                    Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
             
+            <Grid.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Background" Value="Black"/>
+                    <Setter Property="Width" Value="24"/>
+                    <Setter Property="Height" Value="24"/>
+                    <Setter Property="Margin" Value="8 0"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="outerBorder" Padding="4" CornerRadius="5">
+                                    <Border x:Name="innerBorder" Background="{TemplateBinding Background}"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="outerBorder" Property="Background" Value="#89CFF0"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Grid.Resources>
+
+            <Border Name="SongInfoDisplay"
+                    Background="Black"
+                    Height="60"
+                    Width="150"
+                    HorizontalAlignment="Left"
+                    Margin="8">
+
+                <StackPanel Orientation="Horizontal">
+                    <Image Width="60" Height="60"></Image>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock>Song title</TextBlock>
+                        <TextBlock>Song artist</TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <StackPanel Name="SongSliderPanel"
+                        Visibility="Collapsed"
+                        Orientation="Horizontal"
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                <StackPanel.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="FontWeight" Value="DemiBold"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="TextAlignment" Value="Center"/>
+                        <Setter Property="Width" Value="50"/>
+                    </Style>
+
+                    <Style x:Key="UncompletedSliderRepeatButton" TargetType="RepeatButton">
+                        <Setter Property="SnapsToDevicePixels" Value="true" />
+                        <Setter Property="OverridesDefaultStyle" Value="true" />
+                        <Setter Property="IsTabStop" Value="false" />
+                        <Setter Property="Focusable" Value="false" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="RepeatButton">
+                                    <Border Background="White" Height="3"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
+                    <Style x:Key="CompletedSliderRepeatButton" TargetType="RepeatButton">
+                        <Setter Property="SnapsToDevicePixels" Value="true" />
+                        <Setter Property="OverridesDefaultStyle" Value="true" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="RepeatButton">
+                                    <Border SnapsToDevicePixels="True" Background="#18A8D8" Height="3"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
+                    <Style x:Key="SliderThumb" TargetType="Thumb">
+                        <Setter Property="SnapsToDevicePixels" Value="true" />
+                        <Setter Property="OverridesDefaultStyle" Value="true" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Thumb">
+                                    <Ellipse Height="10" Width="10" Fill="AliceBlue"></Ellipse>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
+                    <ControlTemplate x:Key="Slider" TargetType="Slider">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Track Grid.Row="1" x:Name="PART_Track"   >
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Style="{StaticResource CompletedSliderRepeatButton}"  Command="Slider.DecreaseLarge" />
+                                </Track.DecreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Style="{StaticResource SliderThumb}"  />
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Style="{StaticResource UncompletedSliderRepeatButton}" Command="Slider.IncreaseLarge" />
+                                </Track.IncreaseRepeatButton>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+
+                    <Style x:Key="Horizontal_Slider" TargetType="Slider">
+                        <Setter Property="Focusable" Value="False"/>
+                        <Setter Property="SnapsToDevicePixels" Value="true" />
+                        <Setter Property="OverridesDefaultStyle" Value="true" />
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Style.Triggers>
+                            <Trigger Property="Orientation" Value="Horizontal">
+                                <Setter Property="MinHeight" Value="21" />
+                                <Setter Property="MinWidth" Value="104" />
+                                <Setter Property="Template" Value="{StaticResource Slider}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Resources>
+                <TextBlock Name="tbCurrentSongPosition"
+                           Text="00:00:00"/>
+
+                <Slider Name="SongDurationSlider"
+                        Thumb.DragCompleted="SongDurationSlider_Thumb_DragCompleted"
+                        Thumb.DragStarted="SongDurationSlider_Thumb_DragStarted"
+                        ValueChanged="SongDurationSlider_ValueChanged"
+                        Style="{StaticResource Horizontal_Slider}"
+                        HorizontalAlignment="Center"
+                        Maximum="100"
+                        Minimum="0"
+                        Width="250"
+                        Margin="8 0"/>
+
+                <TextBlock Name="tbSongDuration"
+                           Text="00:00:00"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Grid.ColumnSpan="2"
+                        Grid.Row="1">
+                <Button Name="btnRandom">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/random_32.png"/>
+                    </Button.Background>
+                </Button>
+
+                <Button Name="btnLoop"
+                        Click="btnLoop_Click">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/loop_32.png"/>
+                    </Button.Background>
+                </Button>
+
+                <Button Name="btnPrevious">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/previous_32.png"/>
+                    </Button.Background>
+                </Button>
+
+                <Button Name="btnPlayPause"
+                    Click="btnPlayPause_Click">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/play_32.png"/>
+                    </Button.Background>
+                </Button>
+
+                <Button Name="btnNext">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/next_32.png"/>
+                    </Button.Background>
+                </Button>
+
+                <Button Name="btnVolumn">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/volume_32.png"/>
+                    </Button.Background>
+                </Button>
+
+                <Button Name="btnMore">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/more_32.png"/>
+                    </Button.Background>
+                </Button>
+            </StackPanel>
         </Grid>
     </Grid>
 </Page>

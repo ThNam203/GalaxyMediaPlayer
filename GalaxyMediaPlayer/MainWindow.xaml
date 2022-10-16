@@ -14,7 +14,12 @@
         Width="1120"
         MinHeight="360"
         MinWidth="640">
+    <Window.Background>
+        <ImageBrush 
+            ImageSource="Resources/Images/background_1.jpg"
+            Stretch="UniformToFill"/>
+    </Window.Background>
     
     <Frame  Name="MainFrame"
-            NavigationUIVisibility="Hidden"/>
+            NavigationUIVisibility ="Hidden"/>
 </Window>
