@@ -8,6 +8,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MainPage">
 
+
     <Grid Name="MainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Name="NavCol" Width="200" MinWidth="180" MaxWidth="250"/>
@@ -28,19 +29,77 @@
                     <GradientStop Color="Transparent" Offset="1.0" />
                 </LinearGradientBrush>
             </Border.Background>
-            
-            <!-- Nam: app's name textblock -->
-            <StackPanel>
-                <TextBlock Name="tbAppName"
-                       Foreground="White"
-                       FontWeight="Bold"
-                       FontSize="28"
-                       HorizontalAlignment="Center"
-                       Margin="0 8"
-                       Text="Galaxy MP"/>
 
-                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
-            </StackPanel>
+
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                
+                
+                
+                <!--Style button of navbar but it does not work-->
+                <Grid.Resources>
+                    <Style x:Key="Btndefault" 
+                           TargetType="Button">
+                        <Setter Property="Background" Value="Transparent"></Setter>
+                        <Setter Property="FontSize" Value="20"></Setter>
+                        <Setter Property="FontWeight" Value="Bold"></Setter>
+                        <Setter Property="Width" Value="200"></Setter>
+                        <Setter Property="Height" Value="50"></Setter>
+                        <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" 
+                                                    Value="Gray"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Grid.Resources>
+                
+                
+                
+                <!--Dat: Row 0 is the name of app-->
+                <Grid Grid.Row="0">
+                    <!-- Nam: app's name textblock -->
+                    <StackPanel  Grid.Row="0">
+                        <TextBlock x:Name="tbAppName"
+                                   Foreground="White"
+                                   FontWeight="Bold"
+                                   FontSize="28"
+                                   HorizontalAlignment="Center"
+                                   Text="Galaxy MP"/>
+
+                        <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+                    </StackPanel>
+                </Grid>
+
+                
+                
+                
+                <!--Dat: Row 1 is list of app-->
+                <Grid Grid.Row="1">
+                    <StackPanel Name="ListItem">
+                        <Button Content="Home"
+                                Width="200"
+                                Height="auto"
+                                Background="Transparent"
+                                Foreground="White"
+                                FontSize="20"
+                                FontWeight="Bold"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Padding="0 5"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
         </Border>
 
         <GridSplitter Name="GridSplitter" 
