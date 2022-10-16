@@ -16,7 +16,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Name="MainRow" Height="*"/>
-            <RowDefinition Name="MusicPlayerRow" Height="60"/>
+            <RowDefinition Name="MusicPlayerRow" Height="70"/>
         </Grid.RowDefinitions>
 
         <!-- Nam: this holds navigate buttons -->
@@ -105,12 +105,19 @@
             </Grid>
         </Grid>
 
-        <StackPanel Name="MusicPlayerGrid"
+        <Grid Name="MusicPlayerGrid"
                     Grid.ColumnSpan="3"
-                    Grid.Row="1"
-                    HorizontalAlignment="Center"
-                    Orientation="Horizontal">
-            <StackPanel.Resources>
+                    Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <Grid.Resources>
                 <Style TargetType="Button">
                     <Setter Property="Background" Value="Black"/>
                     <Setter Property="Width" Value="24"/>
@@ -131,49 +138,177 @@
                         </Setter.Value>
                     </Setter>
                 </Style>
-            </StackPanel.Resources>
+            </Grid.Resources>
 
-            <Button Name="btnRandom">
-                <Button.Background>
-                    <ImageBrush ImageSource="/Resources/Icons/random_32.png"/>
-                </Button.Background>
-            </Button>
+            <Border Name="SongInfoDisplay"
+                    Background="Black"
+                    Height="60"
+                    Width="150"
+                    HorizontalAlignment="Left"
+                    Margin="8">
 
-            <Button Name="btnLoop">
-                <Button.Background>
-                    <ImageBrush ImageSource="/Resources/Icons/loop_32.png"/>
-                </Button.Background>
-            </Button>
+                <StackPanel Orientation="Horizontal">
+                    <Image Width="60" Height="60"></Image>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock>Song title</TextBlock>
+                        <TextBlock>Song artist</TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
 
-            <Button Name="btnPrevious">
-                <Button.Background>
-                    <ImageBrush ImageSource="/Resources/Icons/previous_32.png"/>
-                </Button.Background>
-            </Button>
+            <StackPanel Name="SongSliderPanel"
+                        Visibility="Collapsed"
+                        Orientation="Horizontal"
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                <StackPanel.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="FontWeight" Value="DemiBold"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="TextAlignment" Value="Center"/>
+                        <Setter Property="Width" Value="50"/>
+                    </Style>
 
-            <Button Name="btnPlayPause">
-                <Button.Background>
-                    <ImageBrush ImageSource="/Resources/Icons/play_32.png"/>
-                </Button.Background>
-            </Button>
+                    <Style x:Key="UncompletedSliderRepeatButton" TargetType="RepeatButton">
+                        <Setter Property="SnapsToDevicePixels" Value="true" />
+                        <Setter Property="OverridesDefaultStyle" Value="true" />
+                        <Setter Property="IsTabStop" Value="false" />
+                        <Setter Property="Focusable" Value="false" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="RepeatButton">
+                                    <Border Background="White" Height="3"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
 
-            <Button Name="btnNext">
-                <Button.Background>
-                    <ImageBrush ImageSource="/Resources/Icons/next_32.png"/>
-                </Button.Background>
-            </Button>
+                    <Style x:Key="CompletedSliderRepeatButton" TargetType="RepeatButton">
+                        <Setter Property="SnapsToDevicePixels" Value="true" />
+                        <Setter Property="OverridesDefaultStyle" Value="true" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="RepeatButton">
+                                    <Border SnapsToDevicePixels="True" Background="#18A8D8" Height="3"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
 
-            <Button Name="btnVolumn">
-                <Button.Background>
-                    <ImageBrush ImageSource="/Resources/Icons/volume_32.png"/>
-                </Button.Background>
-            </Button>
+                    <Style x:Key="SliderThumb" TargetType="Thumb">
+                        <Setter Property="SnapsToDevicePixels" Value="true" />
+                        <Setter Property="OverridesDefaultStyle" Value="true" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Thumb">
+                                    <Ellipse Height="10" Width="10" Fill="AliceBlue"></Ellipse>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
 
-            <Button Name="btnMore">
-                <Button.Background>
-                    <ImageBrush ImageSource="/Resources/Icons/more_32.png"/>
-                </Button.Background>
-            </Button>
-        </StackPanel>
+                    <ControlTemplate x:Key="Slider" TargetType="Slider">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Track Grid.Row="1" x:Name="PART_Track"   >
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Style="{StaticResource CompletedSliderRepeatButton}"  Command="Slider.DecreaseLarge" />
+                                </Track.DecreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Style="{StaticResource SliderThumb}"  />
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Style="{StaticResource UncompletedSliderRepeatButton}" Command="Slider.IncreaseLarge" />
+                                </Track.IncreaseRepeatButton>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+
+                    <Style x:Key="Horizontal_Slider" TargetType="Slider">
+                        <Setter Property="Focusable" Value="False"/>
+                        <Setter Property="SnapsToDevicePixels" Value="true" />
+                        <Setter Property="OverridesDefaultStyle" Value="true" />
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Style.Triggers>
+                            <Trigger Property="Orientation" Value="Horizontal">
+                                <Setter Property="MinHeight" Value="21" />
+                                <Setter Property="MinWidth" Value="104" />
+                                <Setter Property="Template" Value="{StaticResource Slider}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Resources>
+                <TextBlock Name="tbCurrentSongPosition"
+                           Text="00:00:00"/>
+
+                <Slider Name="SongDurationSlider"
+                        Thumb.DragCompleted="SongDurationSlider_Thumb_DragCompleted"
+                        Thumb.DragStarted="SongDurationSlider_Thumb_DragStarted"
+                        ValueChanged="SongDurationSlider_ValueChanged"
+                        Style="{StaticResource Horizontal_Slider}"
+                        HorizontalAlignment="Center"
+                        Maximum="100"
+                        Minimum="0"
+                        Width="250"
+                        Margin="8 0"/>
+
+                <TextBlock Name="tbSongDuration"
+                           Text="00:00:00"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Grid.ColumnSpan="2"
+                        Grid.Row="1">
+                <Button Name="btnRandom">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/random_32.png"/>
+                    </Button.Background>
+                </Button>
+
+                <Button Name="btnLoop"
+                        Click="btnLoop_Click">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/loop_32.png"/>
+                    </Button.Background>
+                </Button>
+
+                <Button Name="btnPrevious">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/previous_32.png"/>
+                    </Button.Background>
+                </Button>
+
+                <Button Name="btnPlayPause"
+                    Click="btnPlayPause_Click">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/play_32.png"/>
+                    </Button.Background>
+                </Button>
+
+                <Button Name="btnNext">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/next_32.png"/>
+                    </Button.Background>
+                </Button>
+
+                <Button Name="btnVolumn">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/volume_32.png"/>
+                    </Button.Background>
+                </Button>
+
+                <Button Name="btnMore">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/more_32.png"/>
+                    </Button.Background>
+                </Button>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Page>

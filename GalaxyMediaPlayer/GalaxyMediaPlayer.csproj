@@ -20,6 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Resources\Icons\loop_32.png" />
     <Resource Include="Resources\Icons\more_32.png" />
     <Resource Include="Resources\Icons\next_32.png" />

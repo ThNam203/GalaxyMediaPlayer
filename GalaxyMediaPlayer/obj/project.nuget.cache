@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "e38lAFYClem//k0EYwyLUwFi1a69oBHFChGwupu+wn1w3ymbyIsm458x3IdqK005TSsoc1UAV9dqOkcZrznPUw==",
+  "dgSpecHash": "rXoKdugZ7su2N1ShqjsuQrcN9rwZUQXCARNuwaBvxTRWnTKOiHChYOAj4ZnJPKLgUB5gxo9bqfbL2AbtL1fSbQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\hthna\\source\\repos\\GalaxyMediaPlayer\\GalaxyMediaPlayer\\GalaxyMediaPlayer.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\hthna\\.nuget\\packages\\taglib-sharp-netstandard2.0\\2.1.0\\taglib-sharp-netstandard2.0.2.1.0.nupkg.sha512"
+  ],
   "logs": []
 }
