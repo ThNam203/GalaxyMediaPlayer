@@ -37,8 +37,6 @@
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
                 
-                
-                
                 <!--Style button of navbar but it does not work-->
                 <Grid.Resources>
                     <Style x:Key="Btndefault" 
