@@ -9,9 +9,25 @@
 
   <ItemGroup>
     <None Remove="Resources\background_1.jpg" />
+    <None Remove="Resources\Icons\loop_32.png" />
+    <None Remove="Resources\Icons\more_32.png" />
+    <None Remove="Resources\Icons\next_32.png" />
+    <None Remove="Resources\Icons\pause_32.png" />
+    <None Remove="Resources\Icons\play_32.png" />
+    <None Remove="Resources\Icons\previous_32.png" />
+    <None Remove="Resources\Icons\random_32.png" />
+    <None Remove="Resources\Icons\volume_32.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Icons\loop_32.png" />
+    <Resource Include="Resources\Icons\more_32.png" />
+    <Resource Include="Resources\Icons\next_32.png" />
+    <Resource Include="Resources\Icons\pause_32.png" />
+    <Resource Include="Resources\Icons\play_32.png" />
+    <Resource Include="Resources\Icons\previous_32.png" />
+    <Resource Include="Resources\Icons\random_32.png" />
+    <Resource Include="Resources\Icons\volume_32.png" />
     <Resource Include="Resources\Images\background_1.jpg" />
   </ItemGroup>
 
