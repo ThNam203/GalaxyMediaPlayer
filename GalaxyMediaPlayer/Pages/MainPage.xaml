@@ -62,8 +62,6 @@
                     </Style>
                 </Grid.Resources>
                 
-                
-                
                 <!--Dat: Row 0 is the name of app-->
                 <Grid Grid.Row="0">
                     <!-- Nam: app's name textblock -->
@@ -79,9 +77,6 @@
                     </StackPanel>
                 </Grid>
 
-                
-                
-                
                 <!--Dat: Row 1 is list of app-->
                 <Grid Grid.Row="1">
                     <StackPanel Name="ListItem">
@@ -197,20 +192,48 @@
                 </Style>
             </Grid.Resources>
 
-            <Border Name="SongInfoDisplay"
+            <Border Name="SongInfoDisplayGrid"
                     Background="Black"
+                    Visibility="Collapsed"
+                    CornerRadius="5"
+                    Grid.RowSpan="2"
                     Height="60"
-                    Width="150"
-                    HorizontalAlignment="Left"
-                    Margin="8">
+                    Width="180"
+                    Margin="4 0 0 0"
+                    HorizontalAlignment="Left">
 
-                <StackPanel Orientation="Horizontal">
-                    <Image Width="60" Height="60"></Image>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock>Song title</TextBlock>
-                        <TextBlock>Song artist</TextBlock>
-                    </StackPanel>
-                </StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Image Name="imgSongImage"
+                           Width="60" Height="60"
+                           Margin="8 4"
+                           Stretch="Uniform"
+                           HorizontalAlignment="Left"
+                           SnapsToDevicePixels="True"
+                           Grid.RowSpan="2"/>
+
+                    <TextBlock Name="tbSongTitle"
+                               Foreground="White"
+                               VerticalAlignment="Center"
+                               Margin="0 4 4 0"
+                               Grid.Column="1"
+                               TextTrimming="CharacterEllipsis"/>
+
+                    <TextBlock Name="tbSongArtist"
+                               Foreground="White"
+                               VerticalAlignment="Center"
+                               Margin="0 0 4 4"
+                               Grid.Column="1"
+                               Grid.Row="1"/>
+                </Grid>
             </Border>
 
             <StackPanel Name="SongSliderPanel"

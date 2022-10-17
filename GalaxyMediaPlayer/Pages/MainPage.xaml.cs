@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -35,7 +37,6 @@ namespace GalaxyMediaPlayer.Pages
             InitializeMediaControlButtonsColor(); // Nam: if buttons are not active, we grey them out
         }
         
-
         private void MediaPlayer_MediaEnded(object? sender, EventArgs e)
         {
             // Nam: looping song function
@@ -93,7 +94,7 @@ namespace GalaxyMediaPlayer.Pages
                 brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/pause_32.png"));
                 playPauseButton.Background = brush;
 
-                string songPath = "C:\\Users\\hthna\\Downloads\\long music file.mp3";
+                string songPath = "C:\\Users\\hthna\\Downloads\\Die For You - VALORANT Champions 2021 -.mp3";
 
                 if (isSongOpened)
                 {
@@ -101,6 +102,31 @@ namespace GalaxyMediaPlayer.Pages
                 }
                 else
                 {
+                    // Nam: add song image, title, artist to displayGrid
+                    SongInfoDisplayGrid.Visibility = Visibility.Visible;
+                    TagLib.File songFile = TagLib.File.Create(songPath);
+                    try // song image
+                    {
+                        var pic = songFile.Tag.Pictures[0];
+                        MemoryStream ms = new MemoryStream(pic.Data.Data);
+                        BitmapImage bitmapImage = new BitmapImage();
+                        bitmapImage.BeginInit();
+                        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmapImage.StreamSource = ms;
+                        bitmapImage.EndInit();
+                        imgSongImage.Source = bitmapImage;
+                    }
+                    catch (IndexOutOfRangeException)
+                    {
+                        imgSongImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/music_note_64.png"));
+                    }
+
+                    // song title and artist
+                    tbSongTitle.Text = Path.GetFileName(songPath);
+                    string albumArtist = string.Join(", ", songFile.Tag.Performers);
+                    if (albumArtist.Length == 0 || albumArtist.Trim().Length == 0) tbSongArtist.Text = "No artist found";
+                    else tbSongArtist.Text = albumArtist;
+
                     mediaPlayer.Open(new Uri(songPath, UriKind.Absolute));
                     mediaPlayer.Play();
                 }
@@ -137,7 +163,14 @@ namespace GalaxyMediaPlayer.Pages
         private void SongDurationSlider_Thumb_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
             isDragging = false;
-            mediaPlayer.Position = TimeSpan.FromSeconds(totalTime * (sender as Slider).Value / 100);
+            try
+            {
+                mediaPlayer.Position = TimeSpan.FromSeconds(totalTime * (sender as Slider).Value / 100);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("There is something wrong, please feed it back");
+            }
         }
 
         private void SongDurationSlider_Thumb_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
