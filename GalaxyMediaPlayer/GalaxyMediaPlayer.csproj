@@ -12,6 +12,7 @@
     <None Remove="Resources\Icons\ComputerPageIcons\ic_audio_file.png" />
     <None Remove="Resources\Icons\ic_folder_128.png" />
     <None Remove="Resources\Icons\loop_32.png" />
+    <None Remove="Resources\Icons\MediaControlIcons\no_sound_32.png" />
     <None Remove="Resources\Icons\more_32.png" />
     <None Remove="Resources\Icons\music_note_64.png" />
     <None Remove="Resources\Icons\NavIcons\blank_square.png" />
@@ -53,6 +54,7 @@
     <Resource Include="Resources\Icons\MediaControlIcons\loop_32.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\more_32.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\music_note_64.png" />
+    <Resource Include="Resources\Icons\MediaControlIcons\no_sound_32.png" />
     <Resource Include="Resources\Icons\NavIcons\blank_square.png" />
     <Resource Include="Resources\Icons\NavIcons\ic_computer.png" />
     <Resource Include="Resources\Icons\NavIcons\ic_home.png" />

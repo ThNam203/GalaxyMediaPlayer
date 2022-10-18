@@ -14,12 +14,10 @@ namespace GalaxyMediaPlayer.Pages
     /// </summary>
     public partial class MainPage : Page
     {
-        public MediaPlayer mediaPlayer = new MediaPlayer();
-        private double totalTime;
+        private double totalTimeInSecond;
         private bool isDragging = false; // Nam: if user is dragging, we are not updating the slider value, see more below
-        private bool isLooping = false;
-        private bool isSongOpened = false; // Nam: determine if a song is currently opened in MediaPlayer, if true, we resume or start it, if false, we open new file and start
-        private bool isSongPlaying = false; // Nam: this is used for continue and pause function
+        private bool isMuted = false;
+        private double volumnBeforeMute; // Nam: this property hold the volumn before mute
         // Nam: format string for each duration
         private string durationFormat = "";
         private string dayFormat = "dd.hh\\:mm\\:ss";
@@ -29,53 +27,32 @@ namespace GalaxyMediaPlayer.Pages
 
         // Nam: use this value when a button is not active
         float opacityNotActiveValue = 0.5f;
+
         public MainPage()
         {
             InitializeComponent();
-            mediaPlayer.MediaOpened += MediaPlayer_MediaOpened;
-            mediaPlayer.MediaEnded += MediaPlayer_MediaEnded;
             InitializeMediaControlButtonsColor(); // Nam: if buttons are not active, we grey them out
-        }
-        
-        private void MediaPlayer_MediaEnded(object? sender, EventArgs e)
-        {
-            // Nam: looping song function
-            if (isLooping)
-            {
-                mediaPlayer.Position = TimeSpan.Zero;
-                mediaPlayer.Play();
-            }
-            else
-            {
-                // Nam: THIS IS NOT SECURED, CHECK IT LATER
-                isSongOpened = false;
-            }
-        }
-
-        private void mediaListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            NavButton? selectedItem = mediaListBox.SelectedItem as NavButton;
-            if (selectedItem != null) ContentFrame.Navigate(selectedItem.NavLink);
-        }
-
-        private void SongDurationSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            tbCurrentSongPosition.Text = TimeSpan.FromSeconds(SongDurationSlider.Value / 100 * totalTime).ToString(durationFormat);
+            MyMediaPlayer.Initialize();
+            MyMediaPlayer.mediaPlayer.MediaOpened += MediaPlayer_MediaOpened;
         }
 
         private void MediaPlayer_MediaOpened(object? sender, EventArgs e)
         {
-            isSongOpened = true;
+            MyMediaPlayer.isSongOpened = true;
+            MyMediaPlayer.isSongPlaying = true;
             SongSliderPanel.Visibility = Visibility.Visible;
-            totalTime = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
+            totalTimeInSecond = MyMediaPlayer.GetTotalTimeInSecond();
+
+            AddSongInformationToInfoGrid();
+            changeBtnPlayPauseBackgroundImage();
 
             // Nam: set durationFormat for beautiful ui
-            if (totalTime < 60) durationFormat = secondFormat;
-            else if (totalTime < 3600) durationFormat = minuteFormat;
-            else if (totalTime < 86400) durationFormat = hourFormat;
+            if (totalTimeInSecond < 60) durationFormat = secondFormat;
+            else if (totalTimeInSecond < 3600) durationFormat = minuteFormat;
+            else if (totalTimeInSecond < 86400) durationFormat = hourFormat;
             else durationFormat = dayFormat;
 
-            tbSongDuration.Text = mediaPlayer.NaturalDuration.TimeSpan.ToString(durationFormat);
+            tbSongDuration.Text = MyMediaPlayer.mediaPlayer.NaturalDuration.TimeSpan.ToString(durationFormat);
             tbCurrentSongPosition.Text = TimeSpan.FromSeconds(0).ToString(durationFormat);
 
             DispatcherTimer timerVideoTime = new DispatcherTimer();
@@ -87,70 +64,49 @@ namespace GalaxyMediaPlayer.Pages
         private void TimerVideoTime_Tick(object? sender, EventArgs e)
         {
             // Nam: If user is dragging slider, we are not updating the slider value
-            if (!isDragging) SongDurationSlider.Value = (mediaPlayer.Position.TotalSeconds / totalTime) * 100;
+            if (!isDragging) SongDurationSlider.Value = (MyMediaPlayer.mediaPlayer.Position.TotalSeconds / totalTimeInSecond) * 100;
         }
+
+        private void mediaListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            NavButton? selectedItem = mediaListBox.SelectedItem as NavButton;
+            if (selectedItem != null) ContentFrame.Navigate(selectedItem.NavLink);
+        }
+
+        private void SongDurationSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            tbCurrentSongPosition.Text = TimeSpan.FromSeconds(SongDurationSlider.Value / 100 * totalTimeInSecond).ToString(durationFormat);
+        }
+        
         private void btnPlayPause_Click(object sender, RoutedEventArgs e)
         {
-            Button playPauseButton = (Button)sender;
-            isSongPlaying = !isSongPlaying;
+            MyMediaPlayer.isSongPlaying = !MyMediaPlayer.isSongPlaying;
+            changeBtnPlayPauseBackgroundImage();
 
-            if (isSongPlaying)
+            if (MyMediaPlayer.isSongPlaying)
             {
-                ImageBrush brush = new ImageBrush();
-                brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/pause_32.png"));
-                playPauseButton.Background = brush;
-
                 string songPath = "C:\\Users\\hthna\\Downloads\\Die For You - VALORANT Champions 2021 -.mp3";
 
-                if (isSongOpened)
+                if (MyMediaPlayer.isSongOpened)
                 {
-                    mediaPlayer.Play();
+                    MyMediaPlayer.Play();
                 }
                 else
                 {
-                    // Nam: add song image, title, artist to displayGrid
-                    SongInfoDisplayGrid.Visibility = Visibility.Visible;
-                    TagLib.File songFile = TagLib.File.Create(songPath);
-                    try // song image
-                    {
-                        var pic = songFile.Tag.Pictures[0];
-                        MemoryStream ms = new MemoryStream(pic.Data.Data);
-                        BitmapImage bitmapImage = new BitmapImage();
-                        bitmapImage.BeginInit();
-                        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                        bitmapImage.StreamSource = ms;
-                        bitmapImage.EndInit();
-                        imgSongImage.Source = bitmapImage;
-                    }
-                    catch (IndexOutOfRangeException)
-                    {
-                        imgSongImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/music_note_64.png"));
-                    }
-
-                    // song title and artist
-                    tbSongTitle.Text = Path.GetFileName(songPath);
-                    string albumArtist = string.Join(", ", songFile.Tag.Performers);
-                    if (albumArtist.Length == 0 || albumArtist.Trim().Length == 0) tbSongArtist.Text = "No artist found";
-                    else tbSongArtist.Text = albumArtist;
-
-                    mediaPlayer.Open(new Uri(songPath, UriKind.Absolute));
-                    mediaPlayer.Play();
+                    MyMediaPlayer.OpenAndPlay(songPath);
+                    AddSongInformationToInfoGrid();
                 }
             }
             else
             {
-                ImageBrush brush = new ImageBrush();
-                brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/play_32.png"));
-                playPauseButton.Background = brush;
-
-                if (mediaPlayer.CanPause) mediaPlayer.Pause();
+                MyMediaPlayer.Pause();
             }
         }
 
         private void btnLoop_Click(object sender, RoutedEventArgs e)
         {
-            isLooping = !isLooping;
-            if (isLooping)
+            MyMediaPlayer.isLooping = !MyMediaPlayer.isLooping;
+            if (MyMediaPlayer.isLooping)
             {
                 btnLoop.Background.Opacity = 1;
             }
@@ -160,10 +116,57 @@ namespace GalaxyMediaPlayer.Pages
             }
         }
 
+        // Nam: change playPauseButton's background image
+        private void changeBtnPlayPauseBackgroundImage()
+        {
+            if (MyMediaPlayer.isSongPlaying)
+            {
+                ImageBrush brush = new ImageBrush();
+                brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/pause_32.png"));
+                btnPlayPause.Background = brush;
+            }
+            else
+            {
+                ImageBrush brush = new ImageBrush();
+                brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/play_32.png"));
+                btnPlayPause.Background = brush;
+            }
+        }
+
+        // Nam: add song image, title, artist to displayGrid
+        private void AddSongInformationToInfoGrid()
+        {
+            string songPath = MyMediaPlayer.mediaPlayer.Source.AbsolutePath.Replace("%20", " ");
+
+            SongInfoDisplayGrid.Visibility = Visibility.Visible;
+            TagLib.File songFile = TagLib.File.Create(songPath);
+            try // song image
+            {
+                var pic = songFile.Tag.Pictures[0];
+                MemoryStream ms = new MemoryStream(pic.Data.Data);
+                BitmapImage bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.StreamSource = ms;
+                bitmapImage.EndInit();
+                imgSongImage.Source = bitmapImage;
+            }
+            catch (IndexOutOfRangeException)
+            {
+                imgSongImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/music_note_64.png"));
+            }
+
+            // song title and artist
+            tbSongTitle.Text = Path.GetFileName(songPath);
+            string albumArtist = string.Join(", ", songFile.Tag.Performers);
+            if (albumArtist.Length == 0 || albumArtist.Trim().Length == 0) tbSongArtist.Text = "No artist found";
+            else tbSongArtist.Text = albumArtist;
+        }
+
         // Nam: the initial value for opacity is 1, if it's not active, we set it lower
         private void InitializeMediaControlButtonsColor()
         {
-            if (!isLooping) btnLoop.Background.Opacity = opacityNotActiveValue;
+            if (!MyMediaPlayer.isLooping) btnLoop.Background.Opacity = opacityNotActiveValue;
         }
 
         private void SongDurationSlider_Thumb_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
@@ -171,7 +174,7 @@ namespace GalaxyMediaPlayer.Pages
             isDragging = false;
             try
             {
-                mediaPlayer.Position = TimeSpan.FromSeconds(totalTime * (sender as Slider).Value / 100);
+                MyMediaPlayer.mediaPlayer.Position = TimeSpan.FromSeconds(totalTimeInSecond * (sender as Slider).Value / 100);
             }
             catch (Exception)
             {
@@ -204,6 +207,37 @@ namespace GalaxyMediaPlayer.Pages
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void btnVolumn_Click(object sender, RoutedEventArgs e)
+        {
+            isMuted = !isMuted;
+            SetVolumnIcon();
+            if (isMuted)
+            {
+                volumnBeforeMute = MyMediaPlayer.GetVolumn;
+                MyMediaPlayer.SetVolumn(0);
+            }
+            else
+            {
+                MyMediaPlayer.SetVolumn(volumnBeforeMute);
+            }
+        }
+
+        private void SetVolumnIcon()
+        {
+            if (isMuted)
+            {
+                ImageBrush brush = new ImageBrush();
+                brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/no_sound_32.png"));
+                btnVolumn.Background = brush;
+            }
+            else
+            {
+                ImageBrush brush = new ImageBrush();
+                brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/volume_32.png"));
+                btnVolumn.Background = brush;
+            }
         }
     }
 }
