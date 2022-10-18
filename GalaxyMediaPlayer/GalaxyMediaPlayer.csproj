@@ -9,11 +9,14 @@
 
   <ItemGroup>
     <None Remove="Resources\background_1.jpg" />
+    <None Remove="Resources\Icons\ComputerPageIcons\ic_audio_file.png" />
+    <None Remove="Resources\Icons\ic_folder_128.png" />
     <None Remove="Resources\Icons\loop_32.png" />
     <None Remove="Resources\Icons\more_32.png" />
     <None Remove="Resources\Icons\music_note_64.png" />
     <None Remove="Resources\Icons\NavIcons\blank_square.png" />
     <None Remove="Resources\Icons\NavIcons\ic_computer.png" />
+    <None Remove="Resources\Icons\NavIcons\ic_computer_32.png" />
     <None Remove="Resources\Icons\NavIcons\ic_home.png" />
     <None Remove="Resources\Icons\NavIcons\ic_image.png" />
     <None Remove="Resources\Icons\NavIcons\ic_movie.png" />
@@ -30,13 +33,26 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />
+    <COMReference Include="{d37e2a3e-8545-3a39-9f4f-31827c9124ab}">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>4</VersionMinor>
+      <VersionMajor>2</VersionMajor>
+      <Guid>d37e2a3e-8545-3a39-9f4f-31827c9124ab</Guid>
+    </COMReference>
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Icons\loop_32.png" />
-    <Resource Include="Resources\Icons\more_32.png" />
-    <Resource Include="Resources\Icons\music_note_64.png" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+    <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />
+    <PackageReference Include="WPF-UI" Version="2.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ComputerPageIcons\ic_audio_file.png" />
+    <Resource Include="Resources\Icons\ComputerPageIcons\ic_folder_128.png" />
+    <Resource Include="Resources\Icons\MediaControlIcons\loop_32.png" />
+    <Resource Include="Resources\Icons\MediaControlIcons\more_32.png" />
+    <Resource Include="Resources\Icons\MediaControlIcons\music_note_64.png" />
     <Resource Include="Resources\Icons\NavIcons\blank_square.png" />
     <Resource Include="Resources\Icons\NavIcons\ic_computer.png" />
     <Resource Include="Resources\Icons\NavIcons\ic_home.png" />
@@ -46,12 +62,12 @@
     <Resource Include="Resources\Icons\NavIcons\ic_playlist.png" />
     <Resource Include="Resources\Icons\NavIcons\ic_video.png" />
     <Resource Include="Resources\Icons\NavIcons\ic_youtube.png" />
-    <Resource Include="Resources\Icons\next_32.png" />
-    <Resource Include="Resources\Icons\pause_32.png" />
-    <Resource Include="Resources\Icons\play_32.png" />
-    <Resource Include="Resources\Icons\previous_32.png" />
-    <Resource Include="Resources\Icons\random_32.png" />
-    <Resource Include="Resources\Icons\volume_32.png" />
+    <Resource Include="Resources\Icons\MediaControlIcons\next_32.png" />
+    <Resource Include="Resources\Icons\MediaControlIcons\pause_32.png" />
+    <Resource Include="Resources\Icons\MediaControlIcons\play_32.png" />
+    <Resource Include="Resources\Icons\MediaControlIcons\previous_32.png" />
+    <Resource Include="Resources\Icons\MediaControlIcons\random_32.png" />
+    <Resource Include="Resources\Icons\MediaControlIcons\volume_32.png" />
     <Resource Include="Resources\Images\background_1.jpg" />
   </ItemGroup>
 

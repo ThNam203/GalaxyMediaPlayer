@@ -68,11 +68,12 @@
                                  BorderBrush="Transparent"
                                  HorizontalAlignment="Left"
                                  Width="200">
-                            <local:NavButton Title="Home" ImageUri="ic_home.png" NavLink="/Pages/ComputerBrowse.xaml"/>
+                            <local:NavButton Title="Home" ImageUri="ic_home.png"/>
                             <local:NavButton Title="Movies" ImageUri="ic_movie.png"/>
                             <local:NavButton Title="Videos" ImageUri="ic_video.png"/>
                             <local:NavButton Title="Photos" ImageUri="ic_image.png"/>
                             <local:NavButton Title="Music" ImageUri="ic_note.png"/>
+                            <local:NavButton Title="Computer" ImageUri="ic_computer.png" NavLink="Pages/NavContentPages/Computer.xaml"/>
                         </ListBox>
                 </Grid>
             </Grid>
@@ -347,45 +348,45 @@
                         Grid.Row="1">
                 <Button Name="btnRandom">
                     <Button.Background>
-                        <ImageBrush ImageSource="/Resources/Icons/random_32.png"/>
+                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/random_32.png"/>
                     </Button.Background>
                 </Button>
 
                 <Button Name="btnLoop"
                         Click="btnLoop_Click">
                     <Button.Background>
-                        <ImageBrush ImageSource="/Resources/Icons/loop_32.png"/>
+                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/loop_32.png"/>
                     </Button.Background>
                 </Button>
 
                 <Button Name="btnPrevious">
                     <Button.Background>
-                        <ImageBrush ImageSource="/Resources/Icons/previous_32.png"/>
+                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/previous_32.png"/>
                     </Button.Background>
                 </Button>
 
                 <Button Name="btnPlayPause"
                     Click="btnPlayPause_Click">
                     <Button.Background>
-                        <ImageBrush ImageSource="/Resources/Icons/play_32.png"/>
+                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/play_32.png"/>
                     </Button.Background>
                 </Button>
 
                 <Button Name="btnNext">
                     <Button.Background>
-                        <ImageBrush ImageSource="/Resources/Icons/next_32.png"/>
+                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/next_32.png"/>
                     </Button.Background>
                 </Button>
 
                 <Button Name="btnVolumn">
                     <Button.Background>
-                        <ImageBrush ImageSource="/Resources/Icons/volume_32.png"/>
+                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/volume_32.png"/>
                     </Button.Background>
                 </Button>
 
                 <Button Name="btnMore">
                     <Button.Background>
-                        <ImageBrush ImageSource="/Resources/Icons/more_32.png"/>
+                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/more_32.png"/>
                     </Button.Background>
                 </Button>
             </StackPanel>

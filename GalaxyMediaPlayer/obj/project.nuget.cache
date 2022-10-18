@@ -1,10 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "wG8cNm+cyFs0Hm5XxbAlEu42uI9qgAmbM/Zo+VGQ1+s26iMcep5coMnjCPFZE0Icx1cyNn3BomGsEgA1ni+1qw==",
+  "dgSpecHash": "Q3CezX0enrZELvAzinba1WW++Ts8h1gGXbbGEgs4TO0/x5F66HhsjaeAcunm+p21i629bi+vjB7BfLOZHh/fTQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\User\\source\\repos\\GalaxyMediaPlayer\\GalaxyMediaPlayer\\GalaxyMediaPlayer.csproj",
+  "projectFilePath": "C:\\Users\\hthna\\source\\repos\\GalaxyMediaPlayer\\GalaxyMediaPlayer\\GalaxyMediaPlayer.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\User\\.nuget\\packages\\taglib-sharp-netstandard2.0\\2.1.0\\taglib-sharp-netstandard2.0.2.1.0.nupkg.sha512"
+    "C:\\Users\\hthna\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
+    "C:\\Users\\hthna\\.nuget\\packages\\system.drawing.common\\6.0.0\\system.drawing.common.6.0.0.nupkg.sha512",
+    "C:\\Users\\hthna\\.nuget\\packages\\taglib-sharp-netstandard2.0\\2.1.0\\taglib-sharp-netstandard2.0.2.1.0.nupkg.sha512",
+    "C:\\Users\\hthna\\.nuget\\packages\\wpf-ui\\2.0.3\\wpf-ui.2.0.3.nupkg.sha512"
   ],
   "logs": []
 }
