@@ -20,17 +20,67 @@
             <RowDefinition Name="MusicPlayerRow" Height="70"/>
         </Grid.RowDefinitions>
 
-        <ListBox Name="mediaListBox" 
-                         SelectionChanged="mediaListBox_SelectionChanged"
-                         SelectionMode="Single" 
-                         Background="Transparent" 
-                         BorderBrush="Transparent">
-            <local:NavButton Title="Home" ImageUri="ic_home.png" NavLink="/Pages/ComputerBrowse.xaml"/>
-            <local:NavButton Title="Movies" ImageUri="ic_movie.png"/>
-            <local:NavButton Title="Videos" ImageUri="ic_video.png"/>
-            <local:NavButton Title="Photos" ImageUri="ic_image.png"/>
-            <local:NavButton Title="Music" ImageUri="ic_note.png"/>
-        </ListBox>
+        <!--change-->
+
+        <!-- Nam: this holds navigate buttons -->
+        <Border Name="NavBorder"
+                Width="{Binding Path=Width, ElementName=NavCol}">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0.5, 0" EndPoint="0.5, 1">
+                    <GradientStop Color="#20c2c2c2" Offset="0.0" />
+                    <GradientStop Color="Transparent" Offset="1.0" />
+                </LinearGradientBrush>
+            </Border.Background>
+
+
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <!--Style button of navbar but it does not work-->
+                
+                <!--Dat: Row 0 is the name of app-->
+                <Grid Grid.Row="0">
+                    <!-- Nam: app's name textblock -->
+                    <StackPanel Name="SPanelAppName" 
+                                Width="{Binding Path=Width, ElementName=NavCol}">
+                        <TextBlock x:Name="tbAppName"
+                                   Foreground="White"
+                                   Width="{Binding Path=Width, ElementName=SPanelAppName}"
+                                   FontWeight="Bold"
+                                   FontSize="28"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   Text="Galaxy MP"/>
+
+                        <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+                    </StackPanel>
+                </Grid>
+
+                <!--Dat: Row 1 is list of app-->
+                <Grid Grid.Row="1">
+                        <ListBox Name="mediaListBox" 
+                                 SelectionChanged="mediaListBox_SelectionChanged"
+                                 SelectionMode="Single" 
+                                 Background="Transparent" 
+                                 BorderBrush="Transparent"
+                                 HorizontalAlignment="Left"
+                                 Width="200">
+                            <local:NavButton Title="Home" ImageUri="ic_home.png" NavLink="/Pages/ComputerBrowse.xaml"/>
+                            <local:NavButton Title="Movies" ImageUri="ic_movie.png"/>
+                            <local:NavButton Title="Videos" ImageUri="ic_video.png"/>
+                            <local:NavButton Title="Photos" ImageUri="ic_image.png"/>
+                            <local:NavButton Title="Music" ImageUri="ic_note.png"/>
+                        </ListBox>
+                </Grid>
+            </Grid>
+        </Border>
+
+
+        <!--change-->
+
 
         <GridSplitter Name="GridSplitter" 
                       Grid.Column="1"
@@ -46,8 +96,13 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
+
                     <RowDefinition Name="ControlButton" Height="auto"/>
                     <RowDefinition Height="*"/>
+
+                    <RowDefinition Name="ControlButtons" Height="auto"/>
+                    <RowDefinition/>
+
                 </Grid.RowDefinitions>
 
                 <Grid.Resources>
