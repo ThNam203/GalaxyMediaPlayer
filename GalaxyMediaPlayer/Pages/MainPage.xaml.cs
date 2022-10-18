@@ -52,6 +52,12 @@ namespace GalaxyMediaPlayer.Pages
             }
         }
 
+        private void mediaListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            NavButton? selectedItem = mediaListBox.SelectedItem as NavButton;
+            if (selectedItem != null) ContentFrame.Navigate(selectedItem.NavLink);
+        }
+
         private void SongDurationSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             tbCurrentSongPosition.Text = TimeSpan.FromSeconds(SongDurationSlider.Value / 100 * totalTime).ToString(durationFormat);
