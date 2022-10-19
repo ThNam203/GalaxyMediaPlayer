@@ -31,6 +31,7 @@ namespace GalaxyMediaPlayer.Converters
                             bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                             bitmapImage.StreamSource = ms;
                             bitmapImage.EndInit();
+                            bitmapImage.Freeze();
                             return bitmapImage;
                         }
                         catch (IndexOutOfRangeException)
@@ -42,20 +43,38 @@ namespace GalaxyMediaPlayer.Converters
                     {
                         // for images media files
                         Image image = Image.FromFile(model.entityPath);
-                        Image thumb = image.GetThumbnailImage(100, 100, () => false, IntPtr.Zero);
-                        Bitmap bitmap = new Bitmap(thumb);
+
+                        int scaleHeight = 0;
+                        int scaleWidth = 0;
+                        int width = image.Width;
+                        int height = image.Height;
+
+                        // Nam: ImageControl have 100 x 100 size
+                        if (width == height) scaleHeight = scaleWidth = 100;
+                        else if (height > width)
+                        {
+                            scaleHeight = 100;
+                            scaleWidth = (int)Math.Round(((double)100 / height) * width);
+                        }
+                        else if (height < width)
+                        {
+                            scaleWidth = 100;
+                            scaleHeight = (int)Math.Round(((double)100 / width) * height);
+                        }
+
+                        Image thumb = image.GetThumbnailImage(scaleWidth, scaleHeight, () => false, IntPtr.Zero);
 
                         using (MemoryStream memory = new MemoryStream())
                         {
-                            image.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
+                            thumb.Save(memory, ImageFormat.Png);
                             memory.Position = 0;
-                            BitmapImage bitmapimage = new BitmapImage();
-                            bitmapimage.BeginInit();
-                            bitmapimage.StreamSource = memory;
-                            bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
-                            bitmapimage.EndInit();
-
-                            return bitmapimage;
+                            BitmapImage bitmapImage = new BitmapImage();
+                            bitmapImage.BeginInit();
+                            bitmapImage.StreamSource = memory;
+                            bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                            bitmapImage.EndInit();
+                            bitmapImage.Freeze();
+                            return bitmapImage;
                         }
                     }
                     else if (model.entityType == EntityType.Video)
@@ -73,6 +92,7 @@ namespace GalaxyMediaPlayer.Converters
                             bitmapImage.StreamSource = memory;
                             bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                             bitmapImage.EndInit();
+                            bitmapImage.Freeze();
                             return bitmapImage;
                         }
                     }
