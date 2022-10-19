@@ -70,7 +70,8 @@
                  SelectionMode="Extended"
                  MouseDoubleClick="browseListBox_MouseDoubleClick">
             <ListBox.Resources>
-                <SolidColorBrush x:Key="Background" Color="Gray" />
+                <SolidColorBrush x:Key="ThumbBg" Color="Gray" />
+                <CornerRadius x:Key="radius" TopLeft="5" BottomLeft="5" TopRight="5" BottomRight="5"/>
 
                 <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -80,7 +81,7 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type RepeatButton}">
-                                <Border Background="Transparent" />
+                                <Border Background="Transparent"/>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -97,13 +98,15 @@
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type Thumb}">
                                 <Border Name="Border"
-                                        CornerRadius="3"
-                                        Background="{StaticResource Background}"
+                                        CornerRadius="{StaticResource radius}"
+                                        Background="#c2c2c2"
                                         BorderBrush="Transparent"
                                         BorderThickness="1" />
                                 <ControlTemplate.Triggers>
-                                    <Trigger Property="IsDragging" Value="true">
-                                        <Setter TargetName="Border" Property="Background" Value="{StaticResource Background}" />
+                                    <Trigger Property="IsMouseOver" Value="true">
+                                        <Setter TargetName="Border" 
+                                                Property="Background" 
+                                                Value="{StaticResource ThumbBg}" />
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
@@ -114,32 +117,14 @@
                 <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition MaxHeight="60"/>
                             <RowDefinition Height="*"/>
-                            <RowDefinition MaxHeight="60"/>
                         </Grid.RowDefinitions>
                         <Border
                             Grid.RowSpan="3"
-                            CornerRadius="2"
+                            CornerRadius="{StaticResource radius}"
                             Background="#F8F8F8"/>
-
-                        <RepeatButton                        
-                            Focusable="False" Content="Up"
-                            Height="60"
-                            Command="ScrollBar.LineUpCommand">
-
-                            <RepeatButton.Template>
-                                <ControlTemplate>
-                                    <DockPanel>
-                                        <Image Source="/Scroll4;component/Resources/bg.slide-up-active.png"/>
-                                        <ContentPresenter/>
-                                    </DockPanel>
-                                </ControlTemplate>
-                            </RepeatButton.Template>
-                        </RepeatButton>
                         <Track
                             Name="PART_Track"
-                            Grid.Row="1"
                             IsDirectionReversed="True">
                             <Track.DecreaseRepeatButton>
                                 <RepeatButton
@@ -158,20 +143,6 @@
                                     Command="ScrollBar.PageDownCommand" />
                             </Track.IncreaseRepeatButton>
                         </Track>
-                        <RepeatButton
-                            Grid.Row="2"
-                            Focusable="False"
-                            Height="60"
-                            Command="ScrollBar.LineDownCommand"
-                            Content="Down">
-                            <RepeatButton.Template>
-                                <ControlTemplate>
-                                    <DockPanel>
-                                        <Image Source="/Scroll4;component/Resources/bg.slide-down-disabled.png"/>
-                                    </DockPanel>
-                                </ControlTemplate>
-                            </RepeatButton.Template>
-                        </RepeatButton>
 
                     </Grid>
                 </ControlTemplate>
@@ -180,8 +151,9 @@
                     <Setter Property="OverridesDefaultStyle" Value="true"/>
                     <Style.Triggers>
                         <Trigger Property="Orientation" Value="Vertical">
-                            <Setter Property="Width" Value="60"/>
+                            <Setter Property="Width" Value="10"/>
                             <Setter Property="Height" Value="Auto" />
+                            <Setter Property="Margin" Value="8 24" />
                             <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
                         </Trigger>
                     </Style.Triggers>
