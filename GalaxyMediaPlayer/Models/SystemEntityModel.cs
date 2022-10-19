@@ -12,27 +12,23 @@
             entityName = "Unknown";
             entityType = EntityType.Folder;
             entityPath = "";
-            imageSource = "folder.folder"; // use converter
         }
         public SystemEntityModel(string name)
         {
             entityName = name;
             entityType = EntityType.Folder;
             entityPath = "";
-            imageSource = "folder.folder";
         }
-        public SystemEntityModel(string name, EntityType type, string path, string imageSource)
+        public SystemEntityModel(string name, EntityType type, string path)
         {
             entityName = name;
             entityType = type;
             entityPath = path;
-            this.imageSource = imageSource;
         }
 
         public string entityName { get; set; }
         public EntityType entityType { get; set; }
         public string entityPath { get; set; }
-        public string imageSource { get; set; }
     }
 
     public enum EntityType

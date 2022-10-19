@@ -9,8 +9,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ComputerBrowse"
-      Loaded="Page_Loaded"
-      DataContext="{Binding RelativeSource={RelativeSource Self}}">
+      Loaded="Page_Loaded">
     <Page.Resources>
         <cvt:FileTypeToImageSource x:Key="entityTypeToImageSource"></cvt:FileTypeToImageSource>
     </Page.Resources>
@@ -204,7 +203,9 @@
                             </Grid.RowDefinitions>
 
                             <Image Width="100" Height="100" Margin="0 8"
-                                   Source="{Binding imageSource, Converter={StaticResource entityTypeToImageSource}}" />
+                                   Source="{Binding RelativeSource={RelativeSource Self},
+                                   Path=DataContext,
+                                   Converter={StaticResource entityTypeToImageSource}}" />
 
                             <TextBlock Grid.Row="1" 
                                        FontSize="13"

@@ -18,7 +18,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         private Stack<string> pathStack = new Stack<string>();
         // this is for media file extension filter
         private List<string> musicExtension = new List<string> { "mp3" };
-        private List<string> videoExtension = new List<string> { };
+        private List<string> videoExtension = new List<string> { "mp4" };
         private List<string> imageExtension = new List<string> { "jpg", "gif", "png" };
 
         // this binds to listbox in computer browse page
@@ -59,8 +59,8 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 SystemEntityModel model = new SystemEntityModel(
                     name: name,
                     type: EntityType.Folder,
-                    path: fullPath,
-                    imageSource: "folder.folder"); // folder.folder is dummy string, we use EntityType to resolve
+                    path: fullPath);
+
                 systemEntities.Add(model);
             }
 
@@ -68,8 +68,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 systemEntities.Add(new SystemEntityModel(
                     name: diskName,
                     type: EntityType.Folder,
-                    path: diskName,
-                    imageSource: "folder.folder")); // folder.folder is dummy string, we use EntityType to resolve
+                    path: diskName));
         }
 
         private void browseListBox_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -133,8 +132,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                     SystemEntityModel newEntity = new SystemEntityModel(
                         name: direcInfo.Name,
                         type: EntityType.Folder,
-                        path: direcInfo.FullName,
-                        imageSource: "folder.folder"); // folder.folder is dummy string, we use EntityType to resolve
+                        path: direcInfo.FullName);
 
                     systemEntities.Add(newEntity);
                 }
@@ -152,16 +150,20 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                         systemEntities.Add(new SystemEntityModel(
                             name: fi.Name,
                             type: EntityType.Music,
-                            path: fi.FullName,
-                            imageSource: fi.FullName));
+                            path: fi.FullName));
                     }
                     else if (imageExtension.Contains(fileExtension))
                     {
                         systemEntities.Add(new SystemEntityModel(
                             name: fi.Name,
                             type: EntityType.Image,
-                            path: fi.FullName,
-                            imageSource: fi.FullName));
+                            path: fi.FullName));
+                    }
+                    else if (videoExtension.Contains(fileExtension)) {
+                        systemEntities.Add(new SystemEntityModel(
+                            name: fi.Name,
+                            type: EntityType.Video,
+                            path: fi.FullName));
                     }
                 }
             }

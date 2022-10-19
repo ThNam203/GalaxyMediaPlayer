@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "Q3CezX0enrZELvAzinba1WW++Ts8h1gGXbbGEgs4TO0/x5F66HhsjaeAcunm+p21i629bi+vjB7BfLOZHh/fTQ==",
+  "dgSpecHash": "FEA1rAonG1H7pSrnMx5IRKuWQ53LY2DQNMPUL0/8Y1mSlcJjNSQzTlBoTQJe+9Qu0ahfQoEBSzeLwUeyOxT2Ag==",
   "success": true,
   "projectFilePath": "C:\\Users\\hthna\\source\\repos\\GalaxyMediaPlayer\\GalaxyMediaPlayer\\GalaxyMediaPlayer.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\hthna\\.nuget\\packages\\microsoft-windowsapicodepack-core\\1.1.4\\microsoft-windowsapicodepack-core.1.1.4.nupkg.sha512",
+    "C:\\Users\\hthna\\.nuget\\packages\\microsoft-windowsapicodepack-shell\\1.1.4\\microsoft-windowsapicodepack-shell.1.1.4.nupkg.sha512",
     "C:\\Users\\hthna\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "C:\\Users\\hthna\\.nuget\\packages\\system.drawing.common\\6.0.0\\system.drawing.common.6.0.0.nupkg.sha512",
     "C:\\Users\\hthna\\.nuget\\packages\\taglib-sharp-netstandard2.0\\2.1.0\\taglib-sharp-netstandard2.0.2.1.0.nupkg.sha512",
