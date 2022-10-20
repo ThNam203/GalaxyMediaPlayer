@@ -35,6 +35,8 @@ namespace GalaxyMediaPlayer
         // Nam: this is used for continue and pause function
         public static bool isSongPlaying = false;
 
+        public static bool isRandoming = false;
+
         public static void Initialize()
         {
             mediaPlayer.MediaEnded += MediaPlayer_MediaEnded;
@@ -102,7 +104,13 @@ namespace GalaxyMediaPlayer
 
         public static void PlayNextSong()
         {
-            if (positionInPlaylist >= playlist.Count - 1)
+            if (isRandoming)
+            {
+                int random = new Random().Next(0, GetPlaylistSize());
+                while (random == positionInPlaylist) random = new Random().Next(0, GetPlaylistSize());
+                positionInPlaylist = random;
+            }
+            else if (positionInPlaylist >= playlist.Count - 1)
             {
                 positionInPlaylist = 0;
             }
@@ -112,7 +120,13 @@ namespace GalaxyMediaPlayer
 
         public static void PlayPreviousSong()
         {
-            if (positionInPlaylist == 0)
+            if (isRandoming)
+            {
+                int random = new Random().Next(0, GetPlaylistSize());
+                while (random == positionInPlaylist) random = new Random().Next(0, GetPlaylistSize());
+                positionInPlaylist = random;
+            }
+            else if (positionInPlaylist == 0)
             {
                 positionInPlaylist = playlist.Count - 1;
             }
@@ -166,17 +180,24 @@ namespace GalaxyMediaPlayer
                 mediaPlayer.Position = TimeSpan.Zero;
                 mediaPlayer.Play();
             }
+            else if (isRandoming)
+            {
+                int random = new Random().Next(0, GetPlaylistSize());
+                while (random == positionInPlaylist) random = new Random().Next(0, GetPlaylistSize());
+
+                positionInPlaylist = random;
+                PlayCurrentSong();
+            }
             else if (repeatingOptions == RepeatingOption.RepeatPlaylist)
             {
                 positionInPlaylist++;
                 if (positionInPlaylist >= playlist.Count) positionInPlaylist = 0;
-
-                OpenAndPlay(playlist[positionInPlaylist]);
+                PlayCurrentSong();
             }
             else if (repeatingOptions == RepeatingOption.NoRepeat)
             {
                 positionInPlaylist++;
-                if (positionInPlaylist < playlist.Count) OpenAndPlay(playlist[positionInPlaylist]);
+                if (positionInPlaylist < playlist.Count) PlayCurrentSong();
             }
         }
     }

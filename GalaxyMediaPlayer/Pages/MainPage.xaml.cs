@@ -359,12 +359,10 @@ namespace GalaxyMediaPlayer.Pages
             btnPlayPause.Background.Opacity = opacityNotActiveValue;
             btnPrevious.Background.Opacity = opacityNotActiveValue;
             btnNext.Background.Opacity = opacityNotActiveValue;
-            btnRandom.Background.Opacity = opacityNotActiveValue;
 
             btnPlayPause.IsEnabled = false;
             btnPrevious.IsEnabled = false;
             btnNext.IsEnabled = false;
-            btnRandom.IsEnabled = false;
         }
 
         private void ActivateControlButtons()
@@ -372,12 +370,10 @@ namespace GalaxyMediaPlayer.Pages
             btnPlayPause.Background.Opacity = 1;
             btnPrevious.Background.Opacity = 1;
             btnNext.Background.Opacity = 1;
-            btnRandom.Background.Opacity = 1;
 
             btnPlayPause.IsEnabled = true;
             btnPrevious.IsEnabled = true;
             btnNext.IsEnabled = true;
-            btnRandom.IsEnabled = true;
         }
 
         private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -404,6 +400,14 @@ namespace GalaxyMediaPlayer.Pages
             if (MyMediaPlayer.folderCurrentlyInUse == Computer.currentBrowsingFolder)
                 changeAllBtnPlayPauseBackgroundImage();
             else changeBtnPlayPauseBackgroundInGridInfo();
+        }
+
+        private void btnRandom_Click(object sender, RoutedEventArgs e)
+        {
+            MyMediaPlayer.isRandoming = !MyMediaPlayer.isRandoming;
+
+            if (MyMediaPlayer.isRandoming) btnRandom.Background.Opacity = 1;
+            else btnRandom.Background.Opacity = opacityNotActiveValue;
         }
     }
 }

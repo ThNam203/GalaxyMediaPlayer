@@ -1,4 +1,4 @@
-﻿ <Page x:Class="GalaxyMediaPlayer.Pages.MainPage"
+﻿  <Page x:Class="GalaxyMediaPlayer.Pages.MainPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -373,29 +373,33 @@
                 </Button>
 
                 <Button Name="btnPrevious"
-                        Click="btnPrevious_Click">
+                        Click="btnPrevious_Click"
+                        IsEnabled="False">
                     <Button.Background>
-                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/previous_32.png"/>
+                            <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/previous_32.png"/>
                     </Button.Background>
                 </Button>
 
                 <Button Name="btnPlayPause"
-                        Click="btnPlayPause_Click">
+                        Click="btnPlayPause_Click"
+                        IsEnabled="False">
                     <Button.Background>
-                            <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/play_32.png"/>
+                            <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/play_32.png"/>
                         </Button.Background>
                 </Button>
 
                 <Button Name="btnNext"
-                        Click="btnNext_Click">
+                        Click="btnNext_Click"
+                        IsEnabled="False">
                     <Button.Background>
-                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/next_32.png"/>
+                        <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/next_32.png"/>
                     </Button.Background>
                 </Button>
 
-                <Button Name="btnRandom">
+                <Button Name="btnRandom"
+                        Click="btnRandom_Click">
                     <Button.Background>
-                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/random_32.png"/>
+                        <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/random_32.png"/>
                     </Button.Background>
                 </Button>
 
