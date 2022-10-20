@@ -82,8 +82,11 @@
         </Style>
     </Page.Resources>
 
-    <Grid Name="MainGrid">
-        <Grid.ColumnDefinitions>
+    <Canvas Name="canvas">
+        <Grid Name="MainGrid"
+              Width="{Binding ActualWidth, ElementName=canvas}"
+              Height="{Binding ActualHeight, ElementName=canvas}">
+            <Grid.ColumnDefinitions>
             <ColumnDefinition Name="NavCol" Width="200" MinWidth="180" MaxWidth="250"/>
             <ColumnDefinition Name="GridSplitterCol" Width="2"/>
             <ColumnDefinition Name="ContentCol" Width="*"/>
@@ -200,16 +203,16 @@
                 <StackPanel Orientation="Horizontal" 
                             Grid.Column="1"
                             HorizontalAlignment="Right">
-                    <Button Name="btnMinimize"
-                            Click="btnMinimize_Click"
+                    <Button Name="btnMinimizeApp"
+                            Click="btnMinimizeApp_Click"
                             Content="__"/>
 
-                    <Button Name="btnMaximize"
-                            Click="btnMaximize_Click"
+                    <Button Name="btnMaximizeApp"
+                            Click="btnMaximizeApp_Click"
                             Content="▭" />
 
-                    <Button Name="btnClose" 
-                            Click="btnClose_Click"
+                    <Button Name="btnCloseApp" 
+                            Click="btnCloseApp_Click"
                             Content="✕"
                             Margin="0 0 8 0"/>
                 </StackPanel>
@@ -224,7 +227,7 @@
                     Grid.ColumnSpan="3"
                     Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="250"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="200"/>
             </Grid.ColumnDefinitions>
@@ -262,22 +265,24 @@
                     CornerRadius="5"
                     Grid.RowSpan="2"
                     Height="60"
-                    Width="180"
+                    Width="auto"
+                    MaxWidth="250"
                     Margin="4 0 0 0"
                     HorizontalAlignment="Left">
 
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
                     <Image Name="imgSongImage"
-                           Width="60" Height="60"
+                           Width="50" Height="50"
                            Margin="8 4"
                            Stretch="Uniform"
                            HorizontalAlignment="Left"
@@ -288,6 +293,7 @@
                                Foreground="White"
                                VerticalAlignment="Center"
                                Margin="0 4 4 0"
+                               Width="90"
                                Grid.Column="1"
                                TextTrimming="CharacterEllipsis"/>
 
@@ -295,14 +301,37 @@
                                Foreground="White"
                                VerticalAlignment="Center"
                                Margin="0 0 4 4"
+                               Width="90"
                                Grid.Column="1"
                                Grid.Row="1"/>
-                </Grid>
+
+                    <StackPanel Name="ExtraControlGridInfo" 
+                                Grid.Column="2"
+                                Orientation="Horizontal"
+                                Visibility="Collapsed"
+                                Grid.RowSpan="2">
+                            
+                        <Button Name="btnPlayPauseInGridInfo"
+                                Click="btnPlayPauseInGridInfo_Click">
+                            <Button.Background>
+                                <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/play_32.png"/>
+                            </Button.Background>
+                        </Button>
+
+                        <Button Name="btnCloseInGridInfo"
+                                Click="btnClose_Click">
+                            <Button.Background>
+                                <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/close_32.png"/>
+                            </Button.Background>
+                        </Button>
+                    </StackPanel>
+                    </Grid>
             </Border>
 
             <StackPanel Name="SongSliderPanel"
                         Visibility="Collapsed"
                         Orientation="Horizontal"
+                        Panel.ZIndex="1000"
                         Grid.ColumnSpan="3"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center">
@@ -336,12 +365,6 @@
                         HorizontalAlignment="Center"
                         Grid.ColumnSpan="3"
                         Grid.Row="1"> 
-                <Button Name="btnRandom">
-                    <Button.Background>
-                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/random_32.png"/>
-                    </Button.Background>
-                </Button>
-
                 <Button Name="btnRepeat"
                         Click="btnRepeat_Click">
                     <Button.Background>
@@ -357,10 +380,10 @@
                 </Button>
 
                 <Button Name="btnPlayPause"
-                    Click="btnPlayPause_Click">
+                        Click="btnPlayPause_Click">
                     <Button.Background>
-                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/play_32.png"/>
-                    </Button.Background>
+                            <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/play_32.png"/>
+                        </Button.Background>
                 </Button>
 
                 <Button Name="btnNext"
@@ -369,6 +392,13 @@
                         <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/next_32.png"/>
                     </Button.Background>
                 </Button>
+
+                <Button Name="btnRandom">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/random_32.png"/>
+                    </Button.Background>
+                </Button>
+
                 <Button Name="btnMore">
                     <Button.Background>
                         <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/more_32.png"/>
@@ -397,4 +427,5 @@
             </StackPanel>
         </Grid>
     </Grid>
+    </Canvas>
 </Page>

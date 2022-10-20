@@ -14,6 +14,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
     public partial class Computer : Page
     {
         MediaPlayer mediaPlayer = new MediaPlayer();
+        public static string currentBrowsingFolder = "";
         // Nam: which is used for navigating back
         private Stack<string> pathStack = new Stack<string>();
         // Nam: this is for media file extension filter
@@ -40,6 +41,9 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         }
         private void IntializeBrowseFoldersAndDisks()
         {
+            MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid("", true);
+            MainPage.Instance.ChangeButtonsViewOnOpenFolder(true);
+
             systemEntities.Clear();
             List<string> rootFoldersAndDisksPath = new()
             {
@@ -81,6 +85,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             {
                 if (entity.entityType == EntityType.Music)
                 {
+                    MyMediaPlayer.SetPlaylistFromTempPlaylist();
                     MyMediaPlayer.SetPositionInPlaylist(allMusicPathsInFolder.IndexOf(entity.entityPath));
                     MyMediaPlayer.PlayCurrentSong();
                 }
@@ -99,6 +104,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             if (pathStack.Count == 0)
             {
                 IntializeBrowseFoldersAndDisks();
+                currentBrowsingFolder = "";
                 currentFolderName.Text = "My Computer";
                 BackBtn.Visibility = Visibility.Hidden;
             }
@@ -114,6 +120,9 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         // (instead we pop it, but on the original function that do)
         private void OpenFolder(DirectoryInfo di, bool IsOnBackButtonPress)
         {
+            currentBrowsingFolder = di.FullName;
+            if (!MyMediaPlayer.isSongOpened) MyMediaPlayer.folderCurrentlyInUse = di.FullName;
+
             if (!IsOnBackButtonPress)
             {
                 // this part is for navigating
@@ -125,7 +134,6 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             currentFolderName.Text = di.Name;
 
             systemEntities.Clear();
-
             // add sub folders
             foreach (DirectoryInfo direcInfo in di.EnumerateDirectories())
             {
@@ -141,6 +149,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 }
             }
 
+            allMusicPathsInFolder.Clear();
             // add media files and pass every music to MyMediaPlayer
             foreach (FileInfo fi in di.EnumerateFiles("*.*"))
             {
@@ -172,7 +181,10 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 }
             }
 
-            MyMediaPlayer.SetPlaylist(allMusicPathsInFolder);
+            // Nam: mediaPlayer need to update first so ui can change accordingly
+            MyMediaPlayer.SetTempPlaylist(allMusicPathsInFolder);
+            MainPage.Instance.ChangeButtonsViewOnOpenFolder(forceShow: false);
+            MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid(di.FullName, false);
         }
     }
 }

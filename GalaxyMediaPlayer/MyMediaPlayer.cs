@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+using System.IO;
 using System.Windows.Media;
-using System.Windows.Threading;
 
 namespace GalaxyMediaPlayer
 {
@@ -19,14 +15,25 @@ namespace GalaxyMediaPlayer
 
         public static MediaPlayer mediaPlayer = new MediaPlayer();
         private static List<string> playlist = new List<string>();
+        private static List<string> tempPlaylist = new List<string>();
         private static int positionInPlaylist = 0;
+
+        // if currentFolder is the same as the folder holding the playing song
+        // show extra control buttons in info grid AND
+        // we update playPauseButtonInGridInfo along with playPauseButton 
+        // if it's false, then we update separately
+        public static string folderCurrentlyInUse = "";
+
         // Nam: first is no loop, second is looping one, and last is loop over the playlist
         public static RepeatingOption repeatingOptions = RepeatingOption.NoRepeat;
+
         // Nam: determine if a song is currently opened in MediaPlayer,
         // if true, we resume or start it, if false, we open new file and start
-        // but currently there is nowhere that it turn false
-        public static bool isSongOpened = false; 
-        public static bool isSongPlaying = false; // Nam: this is used for continue and pause function
+        // this property is like isSongStopped
+        public static bool isSongOpened = false;
+
+        // Nam: this is used for continue and pause function
+        public static bool isSongPlaying = false;
 
         public static void Initialize()
         {
@@ -34,31 +41,63 @@ namespace GalaxyMediaPlayer
         }
         private static void OpenAndPlay(string songPath)
         {
-            mediaPlayer.Stop();
+            // Nam: mediaPlayer.MediaOpen() wont invoke if it open the same songPath with the previous songPath
+            // so we need to add a garbage songPath to open first
+            // We don't know if it's a good work-around
+            mediaPlayer.Open(new Uri("C:\\dd", UriKind.Absolute));
             mediaPlayer.Open(new Uri(songPath, UriKind.Absolute));
+
+            string? songFolder = Path.GetDirectoryName(songPath);
+            if (string.IsNullOrEmpty(songFolder)) songFolder = songPath.Substring(0, songPath.LastIndexOf("\\"));
+            folderCurrentlyInUse = songFolder;
+
             mediaPlayer.Play();
         }
 
         public static void PlayCurrentSong()
         {
+            isSongPlaying = true;
+            isSongOpened = true;
             OpenAndPlay(playlist[positionInPlaylist]);
         }
 
         public static void Continue()
         {
+            isSongPlaying = true;
+            isSongOpened = true;
             mediaPlayer.Play();
         }
 
         public static void Pause()
         {
-            if (mediaPlayer.CanPause) mediaPlayer.Pause();
+            if (mediaPlayer.CanPause)
+            {
+                mediaPlayer.Pause();
+                isSongPlaying = false;
+            }
         }
 
-        public static void SetPlaylist(List<string> songPaths)
+        public static void Stop()
+        {
+            mediaPlayer.Stop();
+            isSongPlaying = false;
+            isSongOpened = false;
+        }
+
+        public static int GetPlaylistSize() => playlist.Count;
+        public static int GetTempPlaylistSize() => tempPlaylist.Count;
+
+        public static void SetPlaylistFromTempPlaylist()
         {
             playlist.Clear();
-            playlist.AddRange(songPaths);
+            playlist.AddRange(tempPlaylist);
             SetPositionInPlaylist(0);
+        }
+
+        public static void SetTempPlaylist(List<string> songPaths)
+        {
+            tempPlaylist.Clear();
+            tempPlaylist.AddRange(songPaths);
         }
 
         public static void PlayNextSong()
@@ -136,7 +175,8 @@ namespace GalaxyMediaPlayer
             }
             else if (repeatingOptions == RepeatingOption.NoRepeat)
             {
-                // Doing nothing
+                positionInPlaylist++;
+                if (positionInPlaylist < playlist.Count) OpenAndPlay(playlist[positionInPlaylist]);
             }
         }
     }
