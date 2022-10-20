@@ -49,6 +49,8 @@ namespace GalaxyMediaPlayer.Pages
             SongSliderPanel.Visibility = Visibility.Visible;
             AddSongInformationToInfoGrid();
             changeAllBtnPlayPauseBackgroundImage();
+            ActivateControlButtons();
+            ChangeAdditionControlVisibilityInInforGrid(Computer.currentBrowsingFolder, false);
 
             // Nam: set durationFormat for beautiful ui
             if (totalTimeInSecond < 60) durationFormat = secondFormat;
@@ -350,7 +352,13 @@ namespace GalaxyMediaPlayer.Pages
             }
             else
             {
-                ActivateControlButtons();
+                btnPlayPause.Background.Opacity = 1;
+                btnPrevious.Background.Opacity = opacityNotActiveValue;
+                btnNext.Background.Opacity = opacityNotActiveValue;
+
+                btnPlayPause.IsEnabled = true;
+                btnPrevious.IsEnabled = false;
+                btnNext.IsEnabled = false;
             }
         }
 
@@ -365,7 +373,7 @@ namespace GalaxyMediaPlayer.Pages
             btnNext.IsEnabled = false;
         }
 
-        private void ActivateControlButtons()
+        public void ActivateControlButtons()
         {
             btnPlayPause.Background.Opacity = 1;
             btnPrevious.Background.Opacity = 1;

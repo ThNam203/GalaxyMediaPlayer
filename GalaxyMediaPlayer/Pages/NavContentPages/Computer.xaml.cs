@@ -39,10 +39,10 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             // set up main folders and disks to browse
-            IntializeBrowseFoldersAndDisks();
+            IntializeBrowseFoldersAndDisksAndMediaControlButtonsView();
             browseListBox.ItemsSource = systemEntities;
         }
-        private void IntializeBrowseFoldersAndDisks()
+        private void IntializeBrowseFoldersAndDisksAndMediaControlButtonsView()
         {
             MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid("", true);
             MainPage.Instance.ChangeButtonsViewOnOpenFolder(true);
@@ -106,7 +106,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
             if (pathStack.Count == 0)
             {
-                IntializeBrowseFoldersAndDisks();
+                IntializeBrowseFoldersAndDisksAndMediaControlButtonsView();
                 currentBrowsingFolder = "";
                 currentFolderName.Text = "My Computer";
                 BackBtn.Visibility = Visibility.Hidden;

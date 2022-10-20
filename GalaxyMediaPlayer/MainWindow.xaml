@@ -12,8 +12,8 @@
         ResizeMode="CanResizeWithGrip"
         Height="630" 
         Width="1120"
-        MinHeight="432"
-        MinWidth="768">
+        MinHeight="540"
+        MinWidth="960">
     <Window.Background>
         <ImageBrush 
             ImageSource="Resources/Images/background_1.jpg"
