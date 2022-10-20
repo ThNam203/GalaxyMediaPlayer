@@ -31,7 +31,7 @@ namespace GalaxyMediaPlayer.Pages
         public MainPage()
         {
             InitializeComponent();
-            InitializeMediaControlButtonsColor(); // Nam: if buttons are not active, we grey them out
+            InitializeMediaControlButtonsView(); // Nam: if buttons are not active, we grey them out and change volumn slider position
             MyMediaPlayer.Initialize();
             MyMediaPlayer.mediaPlayer.MediaOpened += MediaPlayer_MediaOpened;
         }
@@ -85,16 +85,14 @@ namespace GalaxyMediaPlayer.Pages
 
             if (MyMediaPlayer.isSongPlaying)
             {
-                string songPath = "C:\\Users\\hthna\\Downloads\\Die For You - VALORANT Champions 2021 -.mp3";
-
                 if (MyMediaPlayer.isSongOpened)
                 {
-                    MyMediaPlayer.Play();
+                    MyMediaPlayer.Continue();
                 }
                 else
                 {
-                    MyMediaPlayer.OpenAndPlay(songPath);
-                    AddSongInformationToInfoGrid();
+                    MyMediaPlayer.SetPositionInPlaylist(0);
+                    MyMediaPlayer.PlayCurrentSong();
                 }
             }
             else
@@ -103,16 +101,34 @@ namespace GalaxyMediaPlayer.Pages
             }
         }
 
-        private void btnLoop_Click(object sender, RoutedEventArgs e)
+        private void btnRepeat_Click(object sender, RoutedEventArgs e)
         {
-            MyMediaPlayer.isLooping = !MyMediaPlayer.isLooping;
-            if (MyMediaPlayer.isLooping)
+            MyMediaPlayer.ChangeRepeatingOptionOnClick();
+            SetBtnRepeatViewOnRepeatingOption();
+        }
+
+        private void SetBtnRepeatViewOnRepeatingOption()
+        {
+            if (MyMediaPlayer.repeatingOptions == MyMediaPlayer.RepeatingOption.NoRepeat)
             {
-                btnLoop.Background.Opacity = 1;
+                ImageBrush brush = new ImageBrush();
+                brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/repeat_32.png"));
+                btnRepeat.Background = brush;
+                btnRepeat.Background.Opacity = opacityNotActiveValue;
             }
-            else
+            else if (MyMediaPlayer.repeatingOptions == MyMediaPlayer.RepeatingOption.RepeatOne)
             {
-                btnLoop.Background.Opacity = opacityNotActiveValue;
+                ImageBrush brush = new ImageBrush();
+                brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/repeat_one_32.png"));
+                btnRepeat.Background = brush;
+                btnRepeat.Background.Opacity = 1;
+            }
+            else if (MyMediaPlayer.repeatingOptions == MyMediaPlayer.RepeatingOption.RepeatPlaylist)
+            {
+                ImageBrush brush = new ImageBrush();
+                brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/repeat_32.png"));
+                btnRepeat.Background = brush;
+                btnRepeat.Background.Opacity = 1;
             }
         }
 
@@ -164,9 +180,10 @@ namespace GalaxyMediaPlayer.Pages
         }
 
         // Nam: the initial value for opacity is 1, if it's not active, we set it lower
-        private void InitializeMediaControlButtonsColor()
+        private void InitializeMediaControlButtonsView()
         {
-            if (!MyMediaPlayer.isLooping) btnLoop.Background.Opacity = opacityNotActiveValue;
+            SetBtnRepeatViewOnRepeatingOption();
+            VolumeSlider.Value = MyMediaPlayer.GetVolumn;
         }
 
         private void SongDurationSlider_Thumb_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
@@ -212,20 +229,24 @@ namespace GalaxyMediaPlayer.Pages
         private void btnVolumn_Click(object sender, RoutedEventArgs e)
         {
             isMuted = !isMuted;
-            SetVolumnIcon();
             if (isMuted)
             {
                 volumnBeforeMute = MyMediaPlayer.GetVolumn;
                 MyMediaPlayer.SetVolumn(0);
+                VolumeSlider.Value = 0;
             }
             else
             {
                 MyMediaPlayer.SetVolumn(volumnBeforeMute);
+                VolumeSlider.Value = volumnBeforeMute;
             }
+            SetVolumnIcon();
         }
 
         private void SetVolumnIcon()
         {
+            if (MyMediaPlayer.GetVolumn == 0) isMuted = true;
+            else isMuted = false;
             if (isMuted)
             {
                 ImageBrush brush = new ImageBrush();
@@ -238,6 +259,22 @@ namespace GalaxyMediaPlayer.Pages
                 brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/volume_32.png"));
                 btnVolumn.Background = brush;
             }
+        }
+
+        private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            MyMediaPlayer.SetVolumn(e.NewValue);
+            SetVolumnIcon();
+        }
+
+        private void btnNext_Click(object sender, RoutedEventArgs e)
+        {
+            MyMediaPlayer.PlayNextSong();
+        }
+
+        private void btnPrevious_Click(object sender, RoutedEventArgs e)
+        {
+            MyMediaPlayer.PlayPreviousSong();
         }
     }
 }

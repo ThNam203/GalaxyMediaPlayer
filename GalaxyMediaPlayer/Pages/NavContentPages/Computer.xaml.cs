@@ -14,13 +14,15 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
     public partial class Computer : Page
     {
         MediaPlayer mediaPlayer = new MediaPlayer();
-        // which is used for navigating back
+        // Nam: which is used for navigating back
         private Stack<string> pathStack = new Stack<string>();
-        // this is for media file extension filter
+        // Nam: this is for media file extension filter
         private List<string> musicExtension = new List<string> { "mp3" };
         private List<string> videoExtension = new List<string> { "mp4" };
         private List<string> imageExtension = new List<string> { "jpg", "gif", "png" };
 
+        // Nam: this is for playlist feature in MainPage and MyMediaPlayer.cs
+        public List<string> allMusicPathsInFolder = new List<string>();
         // this binds to listbox in computer browse page
         private ObservableCollection<SystemEntityModel> systemEntities { get; set; }
         public Computer()
@@ -79,7 +81,8 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             {
                 if (entity.entityType == EntityType.Music)
                 {
-                    MyMediaPlayer.OpenAndPlay(entity.entityPath);
+                    MyMediaPlayer.SetPositionInPlaylist(allMusicPathsInFolder.IndexOf(entity.entityPath));
+                    MyMediaPlayer.PlayCurrentSong();
                 }
                 else if (entity.entityType == EntityType.Folder)
                 {
@@ -138,7 +141,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 }
             }
 
-            // add media files
+            // add media files and pass every music to MyMediaPlayer
             foreach (FileInfo fi in di.EnumerateFiles("*.*"))
             {
                 if (fi.Exists)
@@ -147,6 +150,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
                     if (musicExtension.Contains(fileExtension))
                     {
+                        allMusicPathsInFolder.Add(fi.FullName);
                         systemEntities.Add(new SystemEntityModel(
                             name: fi.Name,
                             type: EntityType.Music,
@@ -167,6 +171,8 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                     }
                 }
             }
+
+            MyMediaPlayer.SetPlaylist(allMusicPathsInFolder);
         }
     }
 }
