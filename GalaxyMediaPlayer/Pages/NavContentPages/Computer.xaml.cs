@@ -5,6 +5,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace GalaxyMediaPlayer.Pages.NavContentPages
 {
@@ -26,6 +27,9 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         private List<string> imageExtension = new List<string> { "jpg", "gif", "png" };
 
         private string dateFormat = "MM/dd/yyyy hh:mm tt";
+
+        // Nam: change browse style (listbox and griddata)
+        private bool isUsingGridStyle = false;
 
         // Nam: this is for playlist feature in MainPage and MyMediaPlayer.cs
         public List<string> allMusicPathsInFolder = new List<string>();
@@ -73,7 +77,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                     name: name,
                     type: EntityType.Folder,
                     path: fullPath,
-                    dateCreated: "",
+                    dateCreated: new DirectoryInfo(fullPath).CreationTime.ToString(dateFormat),
                     size: 0,
                     extension: "Folder");
 
@@ -230,6 +234,23 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                     DirectoryInfo di = new DirectoryInfo(entity.Path);
                     OpenFolder(di, false);
                 }
+            }
+        }
+
+        private void BrowseStyleImage_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            isUsingGridStyle = !isUsingGridStyle;
+            if (isUsingGridStyle)
+            {
+                browseListBox.Visibility = Visibility.Collapsed;
+                browseDataGrid.Visibility = Visibility.Visible;
+                BrowseStyleImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/ComputerPageIcons/list_32.png"));
+            }
+            else
+            {
+                browseListBox.Visibility = Visibility.Visible;
+                browseDataGrid.Visibility = Visibility.Collapsed;
+                BrowseStyleImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/ComputerPageIcons/four_squares_32.png"));
             }
         }
     }

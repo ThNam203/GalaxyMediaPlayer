@@ -20,7 +20,8 @@ namespace GalaxyMediaPlayer.Pages
         private bool isDragging = false; // Nam: if user is dragging, we are not updating the slider value, see more below
         private bool isMuted = false;
         private double volumnBeforeMute; // Nam: this property hold the volumn before mute
-        // Nam: format string for each duration
+
+        // Nam: format string for each song duration
         private string durationFormat = "";
         private string dayFormat = "dd.hh\\:mm\\:ss";
         private string hourFormat = "hh\\:mm\\:ss";

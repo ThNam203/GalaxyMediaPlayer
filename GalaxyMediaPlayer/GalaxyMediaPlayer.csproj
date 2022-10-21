@@ -10,7 +10,9 @@
   <ItemGroup>
     <None Remove="Resources\background_1.jpg" />
     <None Remove="Resources\Icons\ComputerPageIcons\folder_16.png" />
+    <None Remove="Resources\Icons\ComputerPageIcons\four_squares_32.png" />
     <None Remove="Resources\Icons\ComputerPageIcons\ic_audio_file.png" />
+    <None Remove="Resources\Icons\ComputerPageIcons\list_32.png" />
     <None Remove="Resources\Icons\ComputerPageIcons\music_16.png" />
     <None Remove="Resources\Icons\ComputerPageIcons\photo_16.png" />
     <None Remove="Resources\Icons\ComputerPageIcons\unknown_fle_16.png" />
@@ -60,8 +62,10 @@
 
   <ItemGroup>
     <Resource Include="Resources\Icons\ComputerPageIcons\folder_16.png" />
+    <Resource Include="Resources\Icons\ComputerPageIcons\four_squares_32.png" />
     <Resource Include="Resources\Icons\ComputerPageIcons\ic_audio_file.png" />
     <Resource Include="Resources\Icons\ComputerPageIcons\ic_folder_128.png" />
+    <Resource Include="Resources\Icons\ComputerPageIcons\list_32.png" />
     <Resource Include="Resources\Icons\ComputerPageIcons\music_16.png" />
     <Resource Include="Resources\Icons\ComputerPageIcons\photo_16.png" />
     <Resource Include="Resources\Icons\ComputerPageIcons\unknown_fle_16.png" />
