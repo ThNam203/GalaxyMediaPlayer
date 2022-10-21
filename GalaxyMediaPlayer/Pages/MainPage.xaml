@@ -418,7 +418,7 @@
                     <Button.Background>
                         <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/volume_32.png"/>
                     </Button.Background>
-                </Button>
+                </Button> 
                 
                 <Slider Name="VolumeSlider"
                         ValueChanged="VolumeSlider_ValueChanged"

@@ -25,6 +25,8 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                                                                  "m4v", "mp4v", "3g2", "3gp2", "3gp", "3gpp", "mp4" };
         private List<string> imageExtension = new List<string> { "jpg", "gif", "png" };
 
+        private string dateFormat = "MM/dd/yyyy hh:mm tt";
+
         // Nam: this is for playlist feature in MainPage and MyMediaPlayer.cs
         public List<string> allMusicPathsInFolder = new List<string>();
         // this binds to listbox in computer browse page
@@ -41,6 +43,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             // set up main folders and disks to browse
             IntializeBrowseFoldersAndDisksAndMediaControlButtonsView();
             browseListBox.ItemsSource = systemEntities;
+            browseDataGrid.ItemsSource = systemEntities;
         }
         private void IntializeBrowseFoldersAndDisksAndMediaControlButtonsView()
         {
@@ -65,10 +68,14 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             {
                 int lastIndexOfBackslash = fullPath.LastIndexOf(@"\");
                 string name = fullPath.Substring(lastIndexOfBackslash + 1, fullPath.Length - 1 - lastIndexOfBackslash);
+                // Nam: default screen doesnt have griddataview, so we put garbage in dateCreated, size, extension
                 SystemEntityModel model = new SystemEntityModel(
                     name: name,
                     type: EntityType.Folder,
-                    path: fullPath);
+                    path: fullPath,
+                    dateCreated: "",
+                    size: 0,
+                    extension: "Folder");
 
                 systemEntities.Add(model);
             }
@@ -77,27 +84,20 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 systemEntities.Add(new SystemEntityModel(
                     name: diskName,
                     type: EntityType.Folder,
-                    path: diskName));
+                    path: diskName,
+                    dateCreated: "",
+                    size: 0,
+                    extension: "Folder"));
         }
 
         private void browseListBox_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            SystemEntityModel? entity = browseListBox.SelectedItem as SystemEntityModel;
+            OnBrowseItemDoubleClick(isUsingListBox: true);
+        }
 
-            if (entity != null)
-            {
-                if (entity.entityType == EntityType.Music)
-                {
-                    MyMediaPlayer.SetPlaylistFromTempPlaylist();
-                    MyMediaPlayer.SetPositionInPlaylist(allMusicPathsInFolder.IndexOf(entity.entityPath));
-                    MyMediaPlayer.PlayCurrentSong();
-                }
-                else if (entity.entityType == EntityType.Folder)
-                {
-                    DirectoryInfo di = new DirectoryInfo(entity.entityPath);
-                    OpenFolder(di, false);
-                }
-            }
+        private void DataGridRow_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            OnBrowseItemDoubleClick(isUsingListBox: false);
         }
 
         private void BackBtn_Click(object sender, RoutedEventArgs e)
@@ -136,58 +136,101 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
             currentFolderName.Text = di.Name;
 
-            systemEntities.Clear();
-            // add sub folders
-            foreach (DirectoryInfo direcInfo in di.EnumerateDirectories())
+            try
             {
-                // check if the directory has read access
-                if (direcInfo.Exists)
+                systemEntities.Clear();
+                // add sub folders
+                foreach (DirectoryInfo direcInfo in di.EnumerateDirectories())
                 {
-                    SystemEntityModel newEntity = new SystemEntityModel(
-                        name: direcInfo.Name,
-                        type: EntityType.Folder,
-                        path: direcInfo.FullName);
-
-                    systemEntities.Add(newEntity);
-                }
-            }
-
-            allMusicPathsInFolder.Clear();
-            // add media files and pass every music to MyMediaPlayer
-            foreach (FileInfo fi in di.EnumerateFiles("*.*"))
-            {
-                if (fi.Exists)
-                {
-                    var fileExtension = fi.Extension.TrimStart('.').ToLowerInvariant();
-
-                    if (musicExtension.Contains(fileExtension))
+                    // check if the directory has read access
+                    if (direcInfo.Exists)
                     {
-                        allMusicPathsInFolder.Add(fi.FullName);
-                        systemEntities.Add(new SystemEntityModel(
-                            name: fi.Name,
-                            type: EntityType.Music,
-                            path: fi.FullName));
-                    }
-                    else if (imageExtension.Contains(fileExtension))
-                    {
-                        systemEntities.Add(new SystemEntityModel(
-                            name: fi.Name,
-                            type: EntityType.Image,
-                            path: fi.FullName));
-                    }
-                    else if (videoExtension.Contains(fileExtension)) {
-                        systemEntities.Add(new SystemEntityModel(
-                            name: fi.Name,
-                            type: EntityType.Video,
-                            path: fi.FullName));
+                        SystemEntityModel newEntity = new SystemEntityModel(
+                            name: direcInfo.Name,
+                            type: EntityType.Folder,
+                            path: direcInfo.FullName,
+                            dateCreated: direcInfo.CreationTime.ToString(dateFormat),
+                            size: 0,
+                            extension: "Folder");
+                        
+                        systemEntities.Add(newEntity);
                     }
                 }
-            }
 
-            // Nam: mediaPlayer need to update first so ui can change accordingly
-            MyMediaPlayer.SetTempPlaylist(allMusicPathsInFolder);
-            MainPage.Instance.ChangeButtonsViewOnOpenFolder(forceShow: false);
-            MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid(di.FullName, false);
+                allMusicPathsInFolder.Clear();
+                // add media files and pass every music to MyMediaPlayer
+                foreach (FileInfo fi in di.EnumerateFiles("*.*"))
+                {
+                    if (fi.Exists)
+                    {
+                        var fileExtension = fi.Extension.TrimStart('.').ToLowerInvariant();
+
+                        if (musicExtension.Contains(fileExtension))
+                        {
+                            allMusicPathsInFolder.Add(fi.FullName);
+                            systemEntities.Add(new SystemEntityModel(
+                                name: fi.Name,
+                                type: EntityType.Music,
+                                path: fi.FullName,
+                                dateCreated: fi.CreationTime.ToString(dateFormat),
+                                size: fi.Length,
+                                extension: fi.Extension));
+                        }
+                        else if (imageExtension.Contains(fileExtension))
+                        {
+                            systemEntities.Add(new SystemEntityModel(
+                                name: fi.Name,
+                                type: EntityType.Image,
+                                path: fi.FullName,
+                                dateCreated: fi.CreationTime.ToString(dateFormat),
+                                size: fi.Length,
+                                extension: fi.Extension));
+                        }
+                        else if (videoExtension.Contains(fileExtension))
+                        {
+                            systemEntities.Add(new SystemEntityModel(
+                                name: fi.Name,
+                                type: EntityType.Video,
+                                path: fi.FullName,
+                                dateCreated: fi.CreationTime.ToString(""),
+                                size: fi.Length,
+                                extension: fi.Extension));
+                        }
+                    }
+                }
+
+                // Nam: mediaPlayer need to update first so ui can change accordingly
+                MyMediaPlayer.SetTempPlaylist(allMusicPathsInFolder);
+                MainPage.Instance.ChangeButtonsViewOnOpenFolder(forceShow: false);
+                MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid(di.FullName, false);
+            }
+            catch(UnauthorizedAccessException) 
+            {
+                MessageBox.Show("You don't have the permission to access this folder");
+            }
+        }
+
+        private void OnBrowseItemDoubleClick(bool isUsingListBox)
+        {
+            SystemEntityModel? entity;
+            if (isUsingListBox)
+                entity = browseListBox.SelectedItem as SystemEntityModel;
+            else entity = browseDataGrid.SelectedItem as SystemEntityModel; 
+
+            if (entity != null)
+            {
+                if (entity.Type == EntityType.Music)
+                {
+                    MyMediaPlayer.SetPlaylistFromTempPlaylist();
+                    MyMediaPlayer.SetPositionInPlaylist(allMusicPathsInFolder.IndexOf(entity.Path));
+                    MyMediaPlayer.PlayCurrentSong();
+                }
+                else if (entity.Type == EntityType.Folder)
+                {
+                    DirectoryInfo di = new DirectoryInfo(entity.Path);
+                    OpenFolder(di, false);
+                }
+            }
         }
     }
 }

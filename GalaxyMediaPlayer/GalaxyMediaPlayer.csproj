@@ -9,7 +9,12 @@
 
   <ItemGroup>
     <None Remove="Resources\background_1.jpg" />
+    <None Remove="Resources\Icons\ComputerPageIcons\folder_16.png" />
     <None Remove="Resources\Icons\ComputerPageIcons\ic_audio_file.png" />
+    <None Remove="Resources\Icons\ComputerPageIcons\music_16.png" />
+    <None Remove="Resources\Icons\ComputerPageIcons\photo_16.png" />
+    <None Remove="Resources\Icons\ComputerPageIcons\unknown_fle_16.png" />
+    <None Remove="Resources\Icons\ComputerPageIcons\video_16.png" />
     <None Remove="Resources\Icons\ic_folder_128.png" />
     <None Remove="Resources\Icons\loop_32.png" />
     <None Remove="Resources\Icons\MediaControlIcons\close_32.png" />
@@ -54,8 +59,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Icons\ComputerPageIcons\folder_16.png" />
     <Resource Include="Resources\Icons\ComputerPageIcons\ic_audio_file.png" />
     <Resource Include="Resources\Icons\ComputerPageIcons\ic_folder_128.png" />
+    <Resource Include="Resources\Icons\ComputerPageIcons\music_16.png" />
+    <Resource Include="Resources\Icons\ComputerPageIcons\photo_16.png" />
+    <Resource Include="Resources\Icons\ComputerPageIcons\unknown_fle_16.png" />
+    <Resource Include="Resources\Icons\ComputerPageIcons\video_16.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\close_32.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\more_32.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\music_note_64.png" />
