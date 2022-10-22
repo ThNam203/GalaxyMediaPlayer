@@ -1,4 +1,5 @@
 ﻿using GalaxyMediaPlayer.Helpers;
+using MuxicMatchApi;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -23,11 +24,25 @@ namespace GalaxyMediaPlayer.Models
             set { _songTitle = value; }
         }
 
+        private string _songLyrics;
+        public string? SongLyrics
+        {
+            get { return _songLyrics; }
+            set { _songLyrics = value; }
+        }
+
         private string _songArtists;
         public string SongArtists 
         { 
             get { return _songArtists;}
             set { _songArtists = value; }
+        }
+
+        private string _songFirstArtist;
+        public string SongFirstArtist
+        {
+            get { return _songFirstArtist; }
+            set { _songFirstArtist = value; }
         }
 
         private string _songPath;
@@ -39,13 +54,36 @@ namespace GalaxyMediaPlayer.Models
                 _songPath = value;
 
                 TagLib.File songFile = TagLib.File.Create(_songPath);
+
                 SongTitle = songFile.Tag.Title;
+                if (SongTitle == "" || SongTitle == null)
+                {
+                    SongTitle = new FileInfo(_songPath).Name;
+                }
+
+                if (songFile.Tag.Lyrics == null) { SongLyrics = "No lyrics for this song is found"; }
+                else SongLyrics = songFile.Tag.Lyrics;
+
                 SongArtists = songFile.Tag.JoinedAlbumArtists;
+                if (SongArtists == null) { SongArtists = ""; };
+
+                SongFirstArtist = songFile.Tag.FirstArtist;
+                if (SongFirstArtist == null) { SongFirstArtist = ""; };
+
                 SongPerformers = songFile.Tag.JoinedPerformers;
+                if (SongPerformers == null) { SongPerformers = ""; };
+
                 SongComposers = songFile.Tag.JoinedComposers;
+                if (SongComposers == null) { SongComposers = ""; };
+
                 SongGenres = songFile.Tag.JoinedGenres;
+                if (SongGenres == null) { SongGenres = ""; };
+
                 SongCreatedYear = songFile.Tag.Year;
-                SongDurationInString = songFile.Properties.Duration.ToString(DurationFormatHelper.GetDurationFormatFromTotalSeconds(songFile.Properties.Duration.TotalSeconds));
+
+                // Nam: Not using method below cause it's meeting a bug where duration return only about 70%
+                // SongDurationInString = songFile.Length.Duration.ToString(DurationFormatHelper.GetDurationFormatFromTotalSeconds(songFile.Properties.Duration.TotalSeconds));
+                SongDurationInString = MyMediaPlayer.mediaPlayer.NaturalDuration.TimeSpan.ToString(DurationFormatHelper.GetDurationFormatFromTotalSeconds(MyMediaPlayer.GetTotalTimeInSecond()));
 
                 try
                 {
