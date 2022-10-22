@@ -6,29 +6,28 @@
     /// </summary>
     public class SystemEntityModel
     {
-        // assuming it is a folder
-        public SystemEntityModel()
+        public SystemEntityModel(
+            string name,
+            EntityType type,
+            string path,
+            string dateCreated,
+            long size,
+            string extension)
         {
-            entityName = "Unknown";
-            entityType = EntityType.Folder;
-            entityPath = "";
-        }
-        public SystemEntityModel(string name)
-        {
-            entityName = name;
-            entityType = EntityType.Folder;
-            entityPath = "";
-        }
-        public SystemEntityModel(string name, EntityType type, string path)
-        {
-            entityName = name;
-            entityType = type;
-            entityPath = path;
+            Name = name;
+            Type = type;
+            Path = path;
+            DateCreated = dateCreated;
+            Size = size;
+            Extension = extension;
         }
 
-        public string entityName { get; set; }
-        public EntityType entityType { get; set; }
-        public string entityPath { get; set; }
+        public string Name { get; set; }
+        public EntityType Type { get; set; }
+        public string Path { get; set; }
+        public string DateCreated { get; set; }
+        public long Size { get; set; }
+        public string Extension { get; set; }
     }
 
     public enum EntityType

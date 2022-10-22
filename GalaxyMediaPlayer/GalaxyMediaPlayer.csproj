@@ -8,13 +8,40 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Fonts\Raleway\Raleway-Black.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-BlackItalic.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-Bold.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-BoldItalic.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-ExtraBold.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-ExtraBoldItalic.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-ExtraLight.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-ExtraLightItalic.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-Italic.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-Light.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-LightItalic.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-Medium.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-MediumItalic.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-Regular.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-SemiBold.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-SemiBoldItalic.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-Thin.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-ThinItalic.ttf" />
     <None Remove="Resources\background_1.jpg" />
+    <None Remove="Resources\Icons\ComputerPageIcons\folder_16.png" />
+    <None Remove="Resources\Icons\ComputerPageIcons\four_squares_32.png" />
     <None Remove="Resources\Icons\ComputerPageIcons\ic_audio_file.png" />
+    <None Remove="Resources\Icons\ComputerPageIcons\list_32.png" />
+    <None Remove="Resources\Icons\ComputerPageIcons\music_16.png" />
+    <None Remove="Resources\Icons\ComputerPageIcons\photo_16.png" />
+    <None Remove="Resources\Icons\ComputerPageIcons\unknown_fle_16.png" />
+    <None Remove="Resources\Icons\ComputerPageIcons\video_16.png" />
     <None Remove="Resources\Icons\ic_folder_128.png" />
     <None Remove="Resources\Icons\loop_32.png" />
+    <None Remove="Resources\Icons\MediaControlIcons\close_32.png" />
     <None Remove="Resources\Icons\MediaControlIcons\no_sound_32.png" />
     <None Remove="Resources\Icons\MediaControlIcons\repeat_32.png" />
     <None Remove="Resources\Icons\MediaControlIcons\repeat_one_32.png" />
+    <None Remove="Resources\Icons\MediaControlIcons\square_32.png" />
     <None Remove="Resources\Icons\more_32.png" />
     <None Remove="Resources\Icons\music_note_64.png" />
     <None Remove="Resources\Icons\NavIcons\blank_square.png" />
@@ -45,20 +72,49 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
     <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4" />
+    <PackageReference Include="MuxicMatchApi" Version="2.5.0" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />
     <PackageReference Include="WPF-UI" Version="2.0.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Fonts\Raleway\Raleway-Black.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-BlackItalic.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-Bold.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-BoldItalic.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-ExtraBold.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-ExtraBoldItalic.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-ExtraLight.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-ExtraLightItalic.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-Italic.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-Light.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-LightItalic.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-Medium.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-MediumItalic.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-Regular.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-SemiBold.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-SemiBoldItalic.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-Thin.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-ThinItalic.ttf" />
+    <Resource Include="Resources\Icons\ComputerPageIcons\folder_16.png" />
+    <Resource Include="Resources\Icons\ComputerPageIcons\four_squares_32.png" />
     <Resource Include="Resources\Icons\ComputerPageIcons\ic_audio_file.png" />
     <Resource Include="Resources\Icons\ComputerPageIcons\ic_folder_128.png" />
+    <Resource Include="Resources\Icons\ComputerPageIcons\list_32.png" />
+    <Resource Include="Resources\Icons\ComputerPageIcons\music_16.png" />
+    <Resource Include="Resources\Icons\ComputerPageIcons\photo_16.png" />
+    <Resource Include="Resources\Icons\ComputerPageIcons\unknown_fle_16.png" />
+    <Resource Include="Resources\Icons\ComputerPageIcons\video_16.png" />
+    <Resource Include="Resources\Icons\MediaControlIcons\close_32.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\more_32.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\music_note_64.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\no_sound_32.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\repeat_32.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\repeat_one_32.png" />
+    <Resource Include="Resources\Icons\MediaControlIcons\square_32.png" />
     <Resource Include="Resources\Icons\NavIcons\blank_square.png" />
     <Resource Include="Resources\Icons\NavIcons\ic_computer.png" />
     <Resource Include="Resources\Icons\NavIcons\ic_home.png" />
