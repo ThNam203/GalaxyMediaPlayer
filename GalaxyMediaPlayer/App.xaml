@@ -4,6 +4,8 @@
              xmlns:local="clr-namespace:GalaxyMediaPlayer"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <FontFamily x:Key="Raleway">pack://application:,,,/Fonts/Raleway/Raleway</FontFamily>
+        
         <SolidColorBrush x:Key="ThumbBg" Color="Gray" />
         <CornerRadius x:Key="radius" TopLeft="5" BottomLeft="5" TopRight="5" BottomRight="5"/>
 

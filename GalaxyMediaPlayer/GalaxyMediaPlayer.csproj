@@ -8,6 +8,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Fonts\Raleway\Raleway-Black.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-BlackItalic.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-Bold.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-BoldItalic.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-ExtraBold.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-ExtraBoldItalic.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-ExtraLight.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-ExtraLightItalic.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-Italic.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-Light.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-LightItalic.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-Medium.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-MediumItalic.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-Regular.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-SemiBold.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-SemiBoldItalic.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-Thin.ttf" />
+    <None Remove="Fonts\Raleway\Raleway-ThinItalic.ttf" />
     <None Remove="Resources\background_1.jpg" />
     <None Remove="Resources\Icons\ComputerPageIcons\folder_16.png" />
     <None Remove="Resources\Icons\ComputerPageIcons\four_squares_32.png" />
@@ -63,6 +81,24 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Fonts\Raleway\Raleway-Black.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-BlackItalic.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-Bold.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-BoldItalic.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-ExtraBold.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-ExtraBoldItalic.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-ExtraLight.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-ExtraLightItalic.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-Italic.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-Light.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-LightItalic.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-Medium.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-MediumItalic.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-Regular.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-SemiBold.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-SemiBoldItalic.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-Thin.ttf" />
+    <Resource Include="Fonts\Raleway\Raleway-ThinItalic.ttf" />
     <Resource Include="Resources\Icons\ComputerPageIcons\folder_16.png" />
     <Resource Include="Resources\Icons\ComputerPageIcons\four_squares_32.png" />
     <Resource Include="Resources\Icons\ComputerPageIcons\ic_audio_file.png" />

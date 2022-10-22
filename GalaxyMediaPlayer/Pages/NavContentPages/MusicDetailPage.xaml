@@ -48,6 +48,10 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
     </Page.Resources>
 
     <Grid Background="Transparent"
@@ -99,7 +103,6 @@
                            Height="180"
                            TextAlignment="Left"
                            FontSize="{Binding SongTitleFontSize}"
-                           Foreground="White"
                            FontWeight="Bold"/>
 
                         <TextBlock Name="tbSongInfo"
@@ -108,7 +111,6 @@
                            Width="{Binding ActualWidth, ElementName=InfoPanel}"
                            Height="20"
                            FontSize="16"
-                           Foreground="White"
                            FontWeight="Bold"/>
                     </StackPanel>
                 </StackPanel>
@@ -121,18 +123,87 @@
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="300"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Name="tbSongLyrics"
+                    <StackPanel>
+                        <TextBlock Text="Lyrics"
+                                   FontFamily="{StaticResource Raleway}"
+                                   Margin="0 4"
+                                   FontSize="24"
+                                   FontWeight="Bold"/>
+
+                        <TextBlock Name="tbSongLyrics"
                                d:Text="Song Lyrics" 
-                               FontSize="22"
-                               Foreground="White"
+                               FontSize="16"
+                               FontFamily="{StaticResource Raleway}"
                                HorizontalAlignment="Left"
                                Text="{Binding SongLyrics}"/>
 
-                    <Border Grid.Column="1"
-                            Background="Red"/>
+                        <Button Name="btnFetchLyrics"
+                                Click="btnFetchLyrics_Click"
+                                HorizontalAlignment="Left"
+                                Margin="0 8 0 0">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Border Width="auto" Height="30" Background="#e76f51" Padding="4">
+                                        <ContentPresenter TextBlock.FontFamily="{StaticResource Raleway}"
+                                                          TextBlock.FontSize="16"
+                                                          TextBlock.FontStyle="Italic"
+                                                          TextBlock.Foreground="AliceBlue"
+                                                          Content="OR: fetch lyrics online"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1">
+                        <StackPanel.Resources>
+                            <Style x:Key="title" TargetType="TextBlock">
+                                <Setter Property="Margin" Value="16 4"/>
+                                <Setter Property="FontSize" Value="20"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter Property="FontFamily" Value="{StaticResource Raleway}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Style>
+
+                            <Style x:Key="info" TargetType="TextBlock">
+                                <Setter Property="Margin" Value="32 0"/>
+                                <Setter Property="FontSize" Value="16"/>
+                                <Setter Property="FontFamily" Value="{StaticResource Raleway}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Style>
+                        </StackPanel.Resources>
+
+                        <TextBlock Text="Additional Information"
+                                   FontWeight="ExtraBold"
+                                   FontSize="24"/>
+
+                        <TextBlock Text="Performed by"
+                                   Style="{StaticResource title}"/>
+
+                        <TextBlock Text="{Binding SongPerformers}"
+                                   Style="{StaticResource info}"/>
+
+                        <TextBlock Text="Composed by"
+                                   Style="{StaticResource title}"/>
+
+                        <TextBlock Text="{Binding SongComposers}"
+                                   Style="{StaticResource info}"/>
+
+                        <TextBlock Text="Duration"
+                                   Style="{StaticResource title}"/>
+
+                        <TextBlock Text="{Binding SongDurationInString}"
+                                   Style="{StaticResource info}"/>
+
+                        <TextBlock Text="Copyright"
+                                   Style="{StaticResource title}"/>
+
+                        <TextBlock Text="{Binding SongCopyright}"
+                                   Style="{StaticResource info}"/>
+                    </StackPanel>
                 </Grid>
             </Grid>
         </ScrollViewer>

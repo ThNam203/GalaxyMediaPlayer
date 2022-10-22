@@ -79,7 +79,7 @@ namespace GalaxyMediaPlayer.Models
                 SongGenres = songFile.Tag.JoinedGenres;
                 if (SongGenres == null) { SongGenres = ""; };
 
-                SongCreatedYear = songFile.Tag.Year;
+                _songCopyright = songFile.Tag.Copyright;
 
                 // Nam: Not using method below cause it's meeting a bug where duration return only about 70%
                 // SongDurationInString = songFile.Length.Duration.ToString(DurationFormatHelper.GetDurationFormatFromTotalSeconds(songFile.Properties.Duration.TotalSeconds));
@@ -132,11 +132,11 @@ namespace GalaxyMediaPlayer.Models
             set { _songGenres = value; }
         }
 
-        private uint _songCreatedYear;
-        public uint SongCreatedYear 
+        private string _songCopyright;
+        public string SongCopyright
         { 
-            get { return _songCreatedYear; }
-            set { _songCreatedYear = value; }
+            get { return _songCopyright; }
+            set { _songCopyright = value; }
         }
 
         private string _songDurationInString;

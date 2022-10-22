@@ -22,18 +22,11 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             InitializeComponent();
             this.DataContext = musicModel;
             SetFontSize();
-            SetLyrics().ContinueWith(result =>
-            {
-                this.Dispatcher.Invoke(() =>
-                {
-                    tbSongLyrics.Text = result.Result;
-                });
-            });
         }
 
         private async Task<string> SetLyrics()
         {
-            string DEFAULT_RETURN_VALUE = "No lyrics found";
+            string DEFAULT_RETURN_VALUE = "Sorry we couldn't fetch lyrics for your song.";
 
             var baseUrl = "https://www.azlyrics.com/lyrics";
             string paramArtist = FormatStringToGetLyrics(musicModel.SongFirstArtist);
@@ -106,6 +99,19 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             }
 
             return rs;
+        }
+
+        private void btnFetchLyrics_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            SetLyrics().ContinueWith(result =>
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    tbSongLyrics.Text = result.Result;
+                });
+            });
+
+            btnFetchLyrics.Visibility = System.Windows.Visibility.Collapsed;
         }
     }
 }
