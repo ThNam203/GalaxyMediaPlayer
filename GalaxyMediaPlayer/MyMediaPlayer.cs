@@ -167,6 +167,8 @@ namespace GalaxyMediaPlayer
 
         public static double GetVolumn => mediaPlayer.Volume;
 
+        public static Uri GetSource => mediaPlayer.Source;
+
         public static double GetTotalTimeInSecond() 
         {
             return mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;

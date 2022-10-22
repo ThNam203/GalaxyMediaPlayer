@@ -55,14 +55,14 @@ C:\Users\User\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-
 C:\Users\User\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\GalaxyMediaPlayer.genruntimeconfig.cache
 C:\Users\User\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\ref\GalaxyMediaPlayer.dll
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\bin\Debug\net6.0-windows\GalaxyMediaPlayer.exe
-C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\bin\Debug\net6.0-windows\GalaxyMediaPlayer.dll
-C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\bin\Debug\net6.0-windows\taglib-sharp.dll
-C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\bin\Debug\net6.0-windows\Wpf.Ui.dll
-C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\bin\Debug\net6.0-windows\Microsoft.WindowsAPICodePack.Shell.dll
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\bin\Debug\net6.0-windows\GalaxyMediaPlayer.deps.json
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\bin\Debug\net6.0-windows\GalaxyMediaPlayer.runtimeconfig.json
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\bin\Debug\net6.0-windows\GalaxyMediaPlayer.dll
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\bin\Debug\net6.0-windows\GalaxyMediaPlayer.pdb
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\bin\Debug\net6.0-windows\Microsoft.WindowsAPICodePack.dll
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\bin\Debug\net6.0-windows\Microsoft.WindowsAPICodePack.Shell.dll
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\bin\Debug\net6.0-windows\taglib-sharp.dll
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\bin\Debug\net6.0-windows\Wpf.Ui.dll
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\GalaxyMediaPlayer.csproj.AssemblyReference.cache
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\GalaxyMediaPlayer.csproj.ResolveComReference.cache
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\MainWindow.g.cs
@@ -90,3 +90,5 @@ C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\GalaxyMediaPlayer.pdb
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\GalaxyMediaPlayer.genruntimeconfig.cache
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\ref\GalaxyMediaPlayer.dll
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\Pages\NavContentPages\MusicDetailPage.g.cs
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\Pages\NavContentPages\MusicDetailPage.baml

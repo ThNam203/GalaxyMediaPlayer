@@ -249,43 +249,19 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal"
-                    Margin="8 0 0 7">
+                    Margin="8 0 0 0">
             <Button x:Name="BackBtn" 
-                    Content="&lt;"
-                    Margin="8 4 0 0"
+                    Margin="8 0 0 0"
                     Visibility="Collapsed"
+                    Content="&lt;"
+                    Style="{StaticResource BackButtonArrowStyle}"
                     Click="BackBtn_Click">
-                <Button.Style>
-                    <Style TargetType="{x:Type Button}">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type Button}">
-                                    <Border x:Name="border"
-                                            Background="Transparent"
-                                            BorderThickness="0"
-                                            Padding="4 0">
-
-                                        <ContentPresenter x:Name="presenter"
-                                                          TextBlock.Foreground="Gray"
-                                                          TextBlock.FontSize="24"/>
-                                    </Border>
-
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="TextBlock.Foreground" TargetName="presenter" Value="White"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </Button.Style>
             </Button>
 
             <TextBlock x:Name="currentFolderName" 
                        Text="My Computer"
                        FontSize="26"
-                       Margin="4 4 16 4"
+                       Margin="4 0 16 4"
                        Foreground="White"/>
 
             <Image
@@ -428,7 +404,6 @@
                                     Width="*" 
                                     CanUserResize="True"
                                     MinWidth="150"
-                                    SortDirection="Ascending"
                                     Binding="{Binding DateCreated}"/>
                 
                 <DataGridTextColumn Header="Size" 
@@ -436,7 +411,6 @@
                                     Width="*" 
                                     CanUserResize="True"
                                     MinWidth="100"
-                                    SortDirection="Ascending"
                                     Binding="{Binding Size, Converter={StaticResource FileSizeToString}}"/>
                 
                 <DataGridTextColumn Header="Type" 
@@ -444,7 +418,6 @@
                                     Width="*" 
                                     CanUserResize="True"
                                     MinWidth="100"
-                                    SortDirection="Ascending"
                                     Binding="{Binding Type}"/>
             </DataGrid.Columns>
         </DataGrid>

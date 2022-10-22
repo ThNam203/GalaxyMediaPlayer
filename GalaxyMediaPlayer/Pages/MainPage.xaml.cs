@@ -1,5 +1,7 @@
-﻿using GalaxyMediaPlayer.Pages.NavContentPages;
+﻿using GalaxyMediaPlayer.Helpers;
+using GalaxyMediaPlayer.Pages.NavContentPages;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -16,20 +18,19 @@ namespace GalaxyMediaPlayer.Pages
     public partial class MainPage : Page
     {
         public static MainPage Instance { get; set; }
+        // Nam: use for navigate back to lastest frame back stack
+        public static Stack<Uri> frameStack = new Stack<Uri>();
+
         private double totalTimeInSecond;
         private bool isDragging = false; // Nam: if user is dragging, we are not updating the slider value, see more below
         private bool isMuted = false;
         private double volumnBeforeMute; // Nam: this property hold the volumn before mute
 
-        // Nam: format string for each song duration
+        // Nam: format string for song duration
         private string durationFormat = "";
-        private string dayFormat = "dd.hh\\:mm\\:ss";
-        private string hourFormat = "hh\\:mm\\:ss";
-        private string minuteFormat = "mm\\:ss";
-        private string secondFormat = "ss";
 
         // Nam: use this value when a button is not active
-        float opacityNotActiveValue = 0.5f;
+        private float opacityNotActiveValue = 0.5f;
 
         public MainPage()
         {
@@ -53,11 +54,7 @@ namespace GalaxyMediaPlayer.Pages
             ActivateControlButtons();
             ChangeAdditionControlVisibilityInInforGrid(Computer.currentBrowsingFolder, false);
 
-            // Nam: set durationFormat for beautiful ui
-            if (totalTimeInSecond < 60) durationFormat = secondFormat;
-            else if (totalTimeInSecond < 3600) durationFormat = minuteFormat;
-            else if (totalTimeInSecond < 86400) durationFormat = hourFormat;
-            else durationFormat = dayFormat;
+            durationFormat = DurationFormatHelper.GetDurationFormatFromTotalSeconds(totalTimeInSecond);
 
             tbSongDuration.Text = MyMediaPlayer.mediaPlayer.NaturalDuration.TimeSpan.ToString(durationFormat);
             tbCurrentSongPosition.Text = TimeSpan.FromSeconds(0).ToString(durationFormat);
@@ -196,7 +193,7 @@ namespace GalaxyMediaPlayer.Pages
         // Nam: add song image, title, artist to displayGrid
         private void AddSongInformationToInfoGrid()
         {
-            string songPath = MyMediaPlayer.mediaPlayer.Source.AbsolutePath.Replace("%20", " ");
+            string songPath = Uri.UnescapeDataString(MyMediaPlayer.mediaPlayer.Source.AbsolutePath);
 
             SongInfoDisplayGrid.Visibility = Visibility.Visible;
             TagLib.File songFile = TagLib.File.Create(songPath);
@@ -417,6 +414,16 @@ namespace GalaxyMediaPlayer.Pages
 
             if (MyMediaPlayer.isRandoming) btnRandom.Background.Opacity = 1;
             else btnRandom.Background.Opacity = opacityNotActiveValue;
+        }
+
+        private void SongInfoDisplayGrid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ContentFrame.Navigate(new Uri("Pages/NavContentPages/MusicDetailPage.xaml", UriKind.Relative));
+        }
+
+        private void ContentFrame_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+            frameStack.Push(e.Uri);
         }
     }
 }

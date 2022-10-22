@@ -17,7 +17,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         MediaPlayer mediaPlayer = new MediaPlayer();
         public static string currentBrowsingFolder = "";
         // Nam: which is used for navigating back
-        private Stack<string> pathStack = new Stack<string>();
+        private static Stack<string> pathStack = new Stack<string>();
         // Nam: this is for media file extension filter
         private List<string> musicExtension = new List<string> { "wma", "wax", "mp3", "m4a", "mpa", "mp2", "m3u", "mid", "midi", "rmi",
                                                                  "aif", "aifc", "aiff", "au", "snd", "wav", "cda", "aac", "adts", "m2ts", "flac" };
@@ -45,7 +45,16 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             // set up main folders and disks to browse
-            IntializeBrowseFoldersAndDisksAndMediaControlButtonsView();
+            if (pathStack.Count == 0)
+            {
+                IntializeBrowseFoldersAndDisksAndMediaControlButtonsView();
+            }
+            else
+            {
+                string folderPath = pathStack.Peek();
+                OpenFolder(new DirectoryInfo(folderPath), false);
+            }
+
             browseListBox.ItemsSource = systemEntities;
             browseDataGrid.ItemsSource = systemEntities;
         }
@@ -133,7 +142,8 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             if (!IsOnBackButtonPress)
             {
                 // this part is for navigating
-                pathStack.Push(di.FullName);
+                // if the new folderPath is the same at the peek pathStack, we won't add it
+                if (pathStack.Count == 0 || pathStack.Peek() != di.FullName) pathStack.Push(di.FullName);
                 if (pathStack.Count > 0) BackBtn.Visibility = Visibility.Visible;
                 // done
             }

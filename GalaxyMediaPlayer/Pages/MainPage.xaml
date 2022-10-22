@@ -118,7 +118,7 @@
                 <StackPanel Name="SPanelAppName" 
                             Grid.Row="0"
                             Width="{Binding Path=Width, ElementName=NavCol}">
-                    <TextBlock x:Name="tbAppName"
+                        <TextBlock x:Name="tbAppName"
                                Foreground="White"
                                Width="{Binding Path=Width, ElementName=SPanelAppName}"
                                FontWeight="Bold"
@@ -127,10 +127,7 @@
                                HorizontalAlignment="Center"
                                TextAlignment="Center"
                                Text="Galaxy MP"/>
-
-                    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"
-                               Margin="0 8"/>
-                </StackPanel>
+                    </StackPanel>
 
                 <!--Dat: Row 1 is list of app-->
                 <ListBox Name="mediaListBox" 
@@ -158,18 +155,15 @@
 
         <Grid Name="ContentGrid"
               Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Name="AppControlButtonsRow" Height="auto"/>
+                    <RowDefinition Name="ControlFrameRow" Height="*"/>
+                </Grid.RowDefinitions>
             <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                
-                <Grid.RowDefinitions>
-                    <RowDefinition Name="ControlButton" Height="auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Name="ControlButtons" Height="auto"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
 
                 <Grid.Resources>
                     <Style TargetType="Button">
@@ -219,6 +213,7 @@
             </Grid>
 
             <Frame Name="ContentFrame" 
+                   LoadCompleted="ContentFrame_LoadCompleted"
                    Grid.Column="1"
                    Grid.Row="1"/>
         </Grid>
@@ -262,6 +257,7 @@
             <Border Name="SongInfoDisplayGrid"
                     Background="Black"
                     Visibility="Collapsed"
+                    MouseLeftButtonDown="SongInfoDisplayGrid_MouseLeftButtonDown"
                     CornerRadius="5"
                     Grid.RowSpan="2"
                     Height="60"
