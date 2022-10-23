@@ -53,12 +53,12 @@
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource brushAccent}"/>
+                    <Setter Property="Background" Value="{DynamicResource brushLightAccent}"/>
                     <Setter Property="Foreground" Value="{DynamicResource brushSecondary}"/>
                 </Trigger>
 
                 <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource brushDarkAccent}"/>
+                    <Setter Property="Background" Value="{DynamicResource brushAccent}"/>
                     <Setter Property="Foreground" Value="{DynamicResource brushSecondary}"/>
                 </Trigger>
 

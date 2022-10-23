@@ -41,6 +41,7 @@
     <None Remove="Resources\Icons\MediaControlIcons\no_sound_32.png" />
     <None Remove="Resources\Icons\MediaControlIcons\repeat_32.png" />
     <None Remove="Resources\Icons\MediaControlIcons\repeat_one_32.png" />
+    <None Remove="Resources\Icons\MediaControlIcons\settings_32.png" />
     <None Remove="Resources\Icons\MediaControlIcons\square_32.png" />
     <None Remove="Resources\Icons\more_32.png" />
     <None Remove="Resources\Icons\music_note_64.png" />
@@ -116,6 +117,7 @@
     <Resource Include="Resources\Icons\MediaControlIcons\no_sound_32.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\repeat_32.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\repeat_one_32.png" />
+    <Resource Include="Resources\Icons\MediaControlIcons\settings_32.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\square_32.png" />
     <Resource Include="Resources\Icons\NavIcons\blank_square.png" />
     <Resource Include="Resources\Icons\NavIcons\ic_computer.png" />

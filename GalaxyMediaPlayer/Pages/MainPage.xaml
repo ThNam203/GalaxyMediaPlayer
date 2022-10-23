@@ -226,34 +226,12 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="200"/>
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <Grid.Resources>
-                <Style TargetType="Button">
-                    <Setter Property="Width" Value="24"/>
-                    <Setter Property="Height" Value="24"/>
-                    <Setter Property="Margin" Value="8 0"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="Button">
-                                <Border x:Name="outerBorder" Padding="4" CornerRadius="5">
-                                    <Border x:Name="innerBorder" Background="{TemplateBinding Background}"/>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="outerBorder" Property="Background" Value="{DynamicResource brushLightAccent}"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Grid.Resources>
-
-            <Border Name="SongInfoDisplayGrid"
+                <Border Name="SongInfoDisplayGrid"
                     Background="Black"
                     Visibility="Collapsed"
                     MouseLeftButtonDown="SongInfoDisplayGrid_MouseLeftButtonDown"
@@ -306,8 +284,9 @@
                                 Orientation="Horizontal"
                                 Visibility="Collapsed"
                                 Grid.RowSpan="2">
-                            
+
                         <Button Name="btnPlayPauseInGridInfo"
+                                Style="{StaticResource btnMediaControlStyle}"
                                 Click="btnPlayPauseInGridInfo_Click">
                             <Button.Background>
                                 <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/play_32.png"/>
@@ -315,6 +294,7 @@
                         </Button>
 
                         <Button Name="btnCloseInGridInfo"
+                                Style="{StaticResource btnMediaControlStyle}"
                                 Click="btnClose_Click">
                             <Button.Background>
                                 <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/close_32.png"/>
@@ -357,55 +337,62 @@
                         Background="{DynamicResource mainBrush}"
                         Grid.Row="1">
                     
-                <Button Name="btnRepeat"
-                        Click="btnRepeat_Click">
-                    <Button.Background>
-                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/repeat_32.png"/>
-                    </Button.Background>
-                </Button>
-
-                <Button Name="btnPrevious"
-                        Click="btnPrevious_Click"
-                        IsEnabled="False">
-                    <Button.Background>
-                            <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/previous_32.png"/>
-                    </Button.Background>
-                </Button>
-
-                <Button Name="btnPlayPause"
-                        Click="btnPlayPause_Click"
-                        IsEnabled="False">
-                    <Button.Background>
-                            <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/play_32.png"/>
+                    <Button Name="btnRepeat"
+                            Style="{StaticResource btnMediaControlStyle}"
+                            Click="btnRepeat_Click">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/repeat_32.png"/>
                         </Button.Background>
-                </Button>
+                    </Button>
 
-                <Button Name="btnNext"
-                        Click="btnNext_Click"
-                        IsEnabled="False">
-                    <Button.Background>
-                        <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/next_32.png"/>
-                    </Button.Background>
-                </Button>
+                        <Button Name="btnPrevious"
+                            Style="{StaticResource btnMediaControlStyle}"
+                            Click="btnPrevious_Click"
+                            IsEnabled="False">
+                        <Button.Background>
+                                <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/previous_32.png"/>
+                        </Button.Background>
+                    </Button>
 
-                <Button Name="btnRandom"
-                        Click="btnRandom_Click">
-                    <Button.Background>
-                        <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/random_32.png"/>
-                    </Button.Background>
-                </Button>
+                        <Button Name="btnPlayPause"
+                            Style="{StaticResource btnMediaControlStyle}"
+                            Click="btnPlayPause_Click"
+                            IsEnabled="False">
+                        <Button.Background>
+                                <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/play_32.png"/>
+                            </Button.Background>
+                    </Button>
 
-                <Button Name="btnMore">
-                    <Button.Background>
-                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/more_32.png"/>
-                    </Button.Background>
-                </Button>
-            </StackPanel>
+                    <Button Name="btnNext"
+                            Style="{StaticResource btnMediaControlStyle}"
+                            Click="btnNext_Click"
+                            IsEnabled="False">
+                        <Button.Background>
+                            <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/next_32.png"/>
+                        </Button.Background>
+                    </Button>
+
+                    <Button Name="btnRandom"
+                            Style="{StaticResource btnMediaControlStyle}"
+                            Click="btnRandom_Click">
+                        <Button.Background>
+                            <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/random_32.png"/>
+                        </Button.Background>
+                    </Button>
+
+                    <Button Name="btnMore"
+                            Style="{StaticResource btnMediaControlStyle}">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/more_32.png"/>
+                        </Button.Background>
+                    </Button>
+                </StackPanel>
             <StackPanel Name="VolumnControlPanel"
                         Orientation="Horizontal"
                         Grid.Column="2"
                         Grid.Row="1">
-                <Button Name="btnVolumn"
+                    <Button Name="btnVolumn"
+                        Style="{StaticResource btnMediaControlStyle}"
                         Click="btnVolumn_Click">
                     <Button.Background>
                         <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/volume_32.png"/>

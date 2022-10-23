@@ -109,11 +109,11 @@
                            FontWeight="Bold"/>
 
                         <TextBlock Name="tbSongInfo"
-                           d:Text="BTS IS DOGSHIT"
+                           d:Text="Song info"
                            Text="{Binding SongPerformers}"
                            Width="{Binding ActualWidth, ElementName=InfoPanel}"
                            Height="20"
-                           FontSize="16"
+                           FontSize="18"
                            FontWeight="Bold"/>
                     </StackPanel>
                 </StackPanel>
@@ -129,37 +129,50 @@
                         <ColumnDefinition Width="300"/>
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel>
-                        <TextBlock Text="Lyrics"
-                                   FontFamily="{StaticResource Raleway}"
-                                   Margin="0 4"
-                                   FontSize="22"
-                                   FontWeight="Bold"/>
+                    <StackPanel Margin="16 0 0 0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Lyrics"
+                                       FontFamily="{StaticResource Raleway}"
+                                       Margin="0 4"
+                                       FontSize="22"
+                                       FontWeight="Bold"/>
 
-                        <TextBlock Name="tbSongLyrics"
-                               d:Text="Song Lyrics" 
-                               FontSize="14"
-                               FontFamily="{StaticResource Raleway}"
-                               HorizontalAlignment="Left"
-                               Text="{Binding SongLyrics}"/>
+                            <Button Name="btnFetchLyricsOptions"
+                                    Click="btnFetchLyricsOptions_Click"
+                                    Style="{StaticResource btnMediaControlStyle}">
+                                <Button.Background>
+                                    <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/settings_32.png"/>
+                                </Button.Background>
+                            </Button>
+                        </StackPanel>
 
-                        <Button Name="btnFetchLyrics"
+                        <StackPanel Name="spFetchLyricsOptions"
+                                    Visibility="Collapsed">
+                            <Button Name="btnOpenLyricsFile"
+                                Click="btnOpenLyricsFile_Click"
+                                HorizontalAlignment="Left"
+                                Margin="0 4"
+                                FontSize="16"
+                                Content="Open lyrics file"
+                                Style="{StaticResource ResourceKey=btnBtnWithTextDefault}">
+                            </Button>
+
+                            <Button Name="btnFetchLyrics"
                                 Click="btnFetchLyrics_Click"
                                 HorizontalAlignment="Left"
-                                Margin="0 4 0 0">
-                            <Button.Template>
-                                <ControlTemplate>
-                                    <Border CornerRadius="5" Width="auto" Height="30" 
-                                            Background="{DynamicResource brushLightAccent}" Padding="4">
-                                        <ContentPresenter TextBlock.FontFamily="{StaticResource Raleway}"
-                                                          TextBlock.FontSize="16"
-                                                          TextBlock.FontStyle="Italic"
-                                                          TextBlock.Foreground="{DynamicResource brushSecondary}"
-                                                          Content="OR: fetch lyrics online"/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
+                                Margin="0 4 0 16"
+                                FontSize="16"
+                                Content="Fetch lyrics online"
+                                Style="{StaticResource ResourceKey=btnBtnWithTextDefault}">
+                            </Button>
+                        </StackPanel>
+
+                        <TextBlock Name="tbSongLyrics"
+                                   d:Text="Song Lyrics" 
+                                   FontSize="14"
+                                   FontFamily="{StaticResource Raleway}"
+                                   HorizontalAlignment="Left"
+                                   Text="{Binding SongLyrics}"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="1"
