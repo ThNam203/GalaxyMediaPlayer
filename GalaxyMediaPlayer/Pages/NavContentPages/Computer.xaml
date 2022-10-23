@@ -18,22 +18,22 @@
         <cvt:EntityTypeToVisibility x:Key="EntityTypeToVisibility"></cvt:EntityTypeToVisibility>
         
         <Style x:Key="DataGridRowBrowseStyle" TargetType="{x:Type DataGridRow}">
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Background" Value="{DynamicResource brushPrimary}"/>
             <Setter Property="Margin" Value="0 4 0 0"/>
             <Setter Property="SnapsToDevicePixels" Value="true"/>
             <Setter Property="Validation.ErrorTemplate" Value="{x:Null}"/>
+            <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick"/>
             <Setter Property="ValidationErrorTemplate">
                 <Setter.Value>
                     <ControlTemplate>
-                        <TextBlock Foreground="Red" Margin="2,0,0,0" Text="!" VerticalAlignment="Center"/>
+                        <TextBlock Foreground="{DynamicResource brushSecondary}" Margin="2,0,0,0" Text="!" VerticalAlignment="Center"/>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type DataGridRow}">
-                        <Border x:Name="DGR_Border" Padding="0 8" Background="{TemplateBinding Background}" BorderThickness="0" CornerRadius="5" SnapsToDevicePixels="True">
+                        <Border x:Name="DGR_Border" Padding="0 0" Background="{TemplateBinding Background}" BorderThickness="0" CornerRadius="5" SnapsToDevicePixels="True">
                             <SelectiveScrollingGrid>
                                 <SelectiveScrollingGrid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
@@ -53,13 +53,13 @@
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#623ed0"/>
-                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Background" Value="{DynamicResource brushAccent}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource brushSecondary}"/>
                 </Trigger>
 
                 <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="#623ed0"/>
-                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Background" Value="{DynamicResource brushDarkAccent}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource brushSecondary}"/>
                 </Trigger>
 
                 <MultiTrigger>
@@ -73,7 +73,7 @@
         </Style>
         <Style x:Key="ColumnHeaderGripperStyle" TargetType="{x:Type Thumb}">
             <Setter Property="Width" Value="2"/>
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Background" Value="{DynamicResource brushSecondary}"/>
             <Setter Property="Cursor" Value="SizeWE"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -85,8 +85,8 @@
         </Style>
         <Style x:Key="DataGridColumnHeaderBrowseStyle" TargetType="{x:Type DataGridColumnHeader}">
             <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="{DynamicResource brushPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource brushSecondary}"/>
             <Setter Property="Margin" Value="0 8"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -142,7 +142,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type DataGridCell}">
-                        <Border Background="{TemplateBinding Background}" BorderThickness="0" SnapsToDevicePixels="True">
+                        <Border Padding="0 8" Background="{TemplateBinding Background}" BorderThickness="0" SnapsToDevicePixels="True">
                             <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                         </Border>
                     </ControlTemplate>
@@ -173,8 +173,8 @@
             </Setter>
         </Style>
         <Style x:Key="DataGridBrowseStyle" TargetType="{x:Type DataGrid}">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#222528"/>
+            <Setter Property="Background" Value="{DynamicResource brushPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource brushSecondary}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="RowDetailsVisibilityMode" Value="VisibleWhenSelected"/>
             <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
@@ -183,7 +183,7 @@
             <Setter Property="AutoGenerateColumns" Value="False"/>
             <Setter Property="HeadersVisibility" Value="Column"/>
             <Setter Property="Margin" Value="0 10 0 0"/>
-            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="SelectionMode" Value="Extended"/>
             <Setter Property="SelectionUnit" Value="FullRow"/>
             <Setter Property="CanUserAddRows" Value="False"/>
             <Setter Property="CanUserDeleteRows" Value="False"/>
@@ -262,7 +262,7 @@
                        Text="My Computer"
                        FontSize="26"
                        Margin="4 0 16 4"
-                       Foreground="White"/>
+                       Foreground="{DynamicResource brushSecondary}"/>
 
             <Image
                 Name="BrowseStyleImage"
@@ -280,7 +280,7 @@
                  x:Name="browseListBox"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                 Background="Transparent"
+                 Background="{DynamicResource brushPrimary}"
                  Visibility="Visible"
                  BorderThickness="0"
                  SelectionMode="Extended"
@@ -307,7 +307,7 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Border x:Name="border" Margin="16" Background="Transparent">
+                    <Border x:Name="border" Margin="16" Background="{DynamicResource brushPrimary}">
                         <Grid Width="120" Height="150">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"/>
@@ -323,22 +323,22 @@
                                        FontSize="13"
                                        Padding="4 0"
                                        Background="Transparent"
+                                       Foreground="{DynamicResource brushSecondary}"
                                        HorizontalAlignment="Center"
-                                       Foreground="White"
                                        Text="{Binding Name}"
                                        TextTrimming="CharacterEllipsis"/>
                         </Grid>
                     </Border>
                     <DataTemplate.Triggers>
                         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
-                            <Setter TargetName="border" Property="BorderBrush" Value="White"/>
+                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource brushSecondary}"/>
                             <Setter TargetName="border" Property="BorderThickness" Value="1"/>
                             <Setter TargetName="border" Property="Margin" Value="15"/>
-                            <Setter TargetName="border" Property="Background" Value="#40c2c2c2"/>
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource brushLightAccent}"/>
                         </DataTrigger>
 
                         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsMouseOver}" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#40c2c2c2"/>
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource brushLightAccent}"/>
                         </DataTrigger>
                     </DataTemplate.Triggers>
                 </DataTemplate>
@@ -363,6 +363,8 @@
                   CellStyle="{DynamicResource DataGridCellStyle1}" 
                   ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderBrowseStyle}" 
                   RowStyle="{DynamicResource DataGridRowBrowseStyle}"
+                  SelectionMode="Extended"
+                  SelectionUnit="FullRow"
                   Margin="16 4"
                   Grid.Row="2">
             <DataGrid.Resources>

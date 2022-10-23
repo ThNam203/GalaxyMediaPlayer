@@ -418,12 +418,15 @@ namespace GalaxyMediaPlayer.Pages
 
         private void SongInfoDisplayGrid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            SongInfoDisplayGrid.Visibility = Visibility.Collapsed;
             ContentFrame.Navigate(new Uri("Pages/NavContentPages/MusicDetailPage.xaml", UriKind.Relative));
         }
 
         private void ContentFrame_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
-            frameStack.Push(e.Uri);
+            // Nam: limit the frameStack, we won't want IT to happen
+            if (frameStack.Count <= 100)
+                frameStack.Push(e.Uri);
         }
     }
 }

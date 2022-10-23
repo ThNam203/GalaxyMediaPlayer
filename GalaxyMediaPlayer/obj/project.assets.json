@@ -72,6 +72,19 @@
           }
         }
       },
+      "LrcParser/2022.529.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.1/LrcParser.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.1/LrcParser.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft-WindowsAPICodePack-Core/1.1.4": {
         "type": "package",
         "compile": {
@@ -178,6 +191,15 @@
         "runtime": {
           "lib/netstandard2.0/ScrapySharp.Core.dll": {},
           "lib/netstandard2.0/ScrapySharp.dll": {}
+        }
+      },
+      "SubtitlesParser/1.5.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.1/SubtitlesParser.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/SubtitlesParser.dll": {}
         }
       },
       "System.Configuration.ConfigurationManager/4.5.0-preview1-26216-02": {
@@ -386,6 +408,19 @@
         "lib/uap10.0/HtmlAgilityPack.pri"
       ]
     },
+    "LrcParser/2022.529.1": {
+      "sha512": "zNlADgwB4+6peM9kJZfjetHPmKr7/DRuLV2lPrrUcem6qaWkIcdoDFEPXFxegj4azwLaO6aI0nALV0wtb3gyMQ==",
+      "type": "package",
+      "path": "lrcparser/2022.529.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.1/LrcParser.dll",
+        "lib/netstandard2.1/LrcParser.xml",
+        "lrcparser.2022.529.1.nupkg.sha512",
+        "lrcparser.nuspec"
+      ]
+    },
     "Microsoft-WindowsAPICodePack-Core/1.1.4": {
       "sha512": "gsEStalyKPTR5/HKyAHYvIoDZTGUTUgIBS1eeGvkjWgDYB7f5aSBFAAJfxhhDsOGDjLs6O0uzw1H0EWYWZGDmg==",
       "type": "package",
@@ -528,6 +563,18 @@
         "lib/netstandard2.0/ScrapySharp.dll",
         "scrapysharp.3.0.0.nupkg.sha512",
         "scrapysharp.nuspec"
+      ]
+    },
+    "SubtitlesParser/1.5.1": {
+      "sha512": "IPgRapnlAtKkh+P5eg6qCqUsj8211mYNq+Fg7FPGzUqFUxVbkAua8kU85S3pgo+8mnNzNeflejNfk21LSw8iCg==",
+      "type": "package",
+      "path": "subtitlesparser/1.5.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.1/SubtitlesParser.dll",
+        "subtitlesparser.1.5.1.nupkg.sha512",
+        "subtitlesparser.nuspec"
       ]
     },
     "System.Configuration.ConfigurationManager/4.5.0-preview1-26216-02": {
@@ -709,8 +756,10 @@
   "projectFileDependencyGroups": {
     "net6.0-windows7.0": [
       "HtmlAgilityPack >= 1.11.46",
+      "LrcParser >= 2022.529.1",
       "Microsoft-WindowsAPICodePack-Shell >= 1.1.4",
       "MuxicMatchApi >= 2.5.0",
+      "SubtitlesParser >= 1.5.1",
       "System.Drawing.Common >= 6.0.0",
       "WPF-UI >= 2.0.3",
       "taglib-sharp-netstandard2.0 >= 2.1.0"
@@ -764,6 +813,10 @@
             "target": "Package",
             "version": "[1.11.46, )"
           },
+          "LrcParser": {
+            "target": "Package",
+            "version": "[2022.529.1, )"
+          },
           "Microsoft-WindowsAPICodePack-Shell": {
             "target": "Package",
             "version": "[1.1.4, )"
@@ -771,6 +824,10 @@
           "MuxicMatchApi": {
             "target": "Package",
             "version": "[2.5.0, )"
+          },
+          "SubtitlesParser": {
+            "target": "Package",
+            "version": "[1.5.1, )"
           },
           "System.Drawing.Common": {
             "target": "Package",

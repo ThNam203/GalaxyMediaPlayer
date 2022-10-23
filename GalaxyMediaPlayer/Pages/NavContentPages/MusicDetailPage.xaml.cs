@@ -3,6 +3,7 @@ using HtmlAgilityPack;
 using ScrapySharp.Extensions;
 using System;
 using System.Drawing;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -49,7 +50,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
                     foreach (var lyrics in lyricsNode.Descendants())
                     {
-                        if (lyrics.Name == "#text") resultSongLyrics += lyrics.InnerText.CleanInnerHtmlAscii();
+                        if (lyrics.Name == "#text") resultSongLyrics += HtmlEntity.DeEntitize(lyrics.InnerText.CleanInnerHtmlAscii());
                     }
 
                     resultSongLyrics.TrimStart('\r', '\n');
@@ -84,6 +85,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 MainPage.frameStack.Pop();
                 Uri lastestPage = MainPage.frameStack.Peek();
                 MainPage.Instance.ContentFrame.Navigate(lastestPage);
+                MainPage.Instance.SongInfoDisplayGrid.Visibility = System.Windows.Visibility.Visible;
             }
         }
 

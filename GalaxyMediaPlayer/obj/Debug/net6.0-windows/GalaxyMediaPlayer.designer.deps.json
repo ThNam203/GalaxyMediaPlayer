@@ -66,6 +66,14 @@
           }
         }
       },
+      "LrcParser/2022.529.1": {
+        "runtime": {
+          "lib/netstandard2.1/LrcParser.dll": {
+            "assemblyVersion": "2022.529.1.0",
+            "fileVersion": "2022.529.1.0"
+          }
+        }
+      },
       "Microsoft-WindowsAPICodePack-Core/1.1.4": {
         "runtime": {
           "lib/netcoreapp3.1/Microsoft.WindowsAPICodePack.dll": {
@@ -136,6 +144,14 @@
           "lib/netstandard2.0/ScrapySharp.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "SubtitlesParser/1.5.1": {
+        "runtime": {
+          "lib/netstandard2.1/SubtitlesParser.dll": {
+            "assemblyVersion": "1.5.1.0",
+            "fileVersion": "1.5.1.0"
           }
         }
       },
@@ -247,6 +263,13 @@
       "path": "htmlagilitypack/1.11.46",
       "hashPath": "htmlagilitypack.1.11.46.nupkg.sha512"
     },
+    "LrcParser/2022.529.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-zNlADgwB4+6peM9kJZfjetHPmKr7/DRuLV2lPrrUcem6qaWkIcdoDFEPXFxegj4azwLaO6aI0nALV0wtb3gyMQ==",
+      "path": "lrcparser/2022.529.1",
+      "hashPath": "lrcparser.2022.529.1.nupkg.sha512"
+    },
     "Microsoft-WindowsAPICodePack-Core/1.1.4": {
       "type": "package",
       "serviceable": true,
@@ -295,6 +318,13 @@
       "sha512": "sha512-qwOe4oPAFPgFP5pi9aMHo5I66Pw8EYiY93k/FQvHs3P0vgt/cnjsgMuoc6pxYXrxVbBdKSqPTkem1D4iktjHNQ==",
       "path": "scrapysharp/3.0.0",
       "hashPath": "scrapysharp.3.0.0.nupkg.sha512"
+    },
+    "SubtitlesParser/1.5.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-IPgRapnlAtKkh+P5eg6qCqUsj8211mYNq+Fg7FPGzUqFUxVbkAua8kU85S3pgo+8mnNzNeflejNfk21LSw8iCg==",
+      "path": "subtitlesparser/1.5.1",
+      "hashPath": "subtitlesparser.1.5.1.nupkg.sha512"
     },
     "System.Configuration.ConfigurationManager/4.5.0-preview1-26216-02": {
       "type": "package",

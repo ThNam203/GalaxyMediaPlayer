@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\App.xaml
-6-894743595
+7-931737657
 
-17210251903
-214-483358309
-MainWindow.xaml;Pages\MainPage.xaml;Pages\NavContentPages\Computer.xaml;Pages\NavContentPages\MusicDetailPage.xaml;Pages\VideoPlayerPage.xaml;Themes\Generic.xaml;
+16-1941539069
+2161654001731
+ColorSkins\DarkSkin.xaml;ColorSkins\TransparentSkin.xaml;MainWindow.xaml;Pages\MainPage.xaml;Pages\NavContentPages\Computer.xaml;Pages\NavContentPages\MusicDetailPage.xaml;Themes\Generic.xaml;
 
 False
 
