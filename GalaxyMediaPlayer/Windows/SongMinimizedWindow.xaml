@@ -8,39 +8,45 @@
         WindowStartupLocation="CenterOwner"
         Height="200" Width="200"
         WindowStyle="None"
+        Closing="Window_Closing"
         ResizeMode="NoResize"
+        MouseEnter="Window_MouseEnter"
+        MouseMove="Window_MouseMove"
         MouseDown="Window_MouseDown">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Right"
-                    Panel.ZIndex="1000">
-            <Button Name="btnMinimizeApp"
-                    Click="btnMinimizeApp_Click"
-                    Style="{StaticResource AppControlButtonStyle}"
-                    Content="__"/>
-
-            <Button Name="btnMaximizeApp"
-                    Click="btnMaximizeApp_Click"
-                    Style="{StaticResource AppControlButtonStyle}"
-                    Content="▭" />
-
-            <Button Name="btnCloseApp" 
-                    Click="btnCloseApp_Click"
-                    Style="{StaticResource AppControlButtonStyle}"
-                    Content="✕"/>
-        </StackPanel>
 
         <Grid Grid.RowSpan="2">
             <Image Name="imgSongImage"
                    d:Source="/Resources/Images/background_1.jpg"
                    Stretch="UniformToFill"/>
 
-            <TextBlock Name="tbSongTitle"
+            <Border Name="borderToShowInfo"
+                    Visibility="Visible">
+                <Border.Background>
+                    <SolidColorBrush Color="Gray" Opacity="0.8"/>
+                </Border.Background>
+                <Grid>
+
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                Panel.ZIndex="1000">
+                        <Button Name="btnMinimizeApp"
+                                Click="btnMinimizeApp_Click"
+                                Style="{StaticResource AppControlButtonStyle}"
+                                Content="__"/>
+
+                        <Button Name="btnMaximizeApp"
+                                Click="btnMaximizeApp_Click"
+                                Style="{StaticResource AppControlButtonStyle}"
+                                Content="▭" />
+
+                        <Button Name="btnCloseApp" 
+                                Click="btnCloseApp_Click"
+                                Style="{StaticResource AppControlButtonStyle}"
+                                Content="✕"/>
+                    </StackPanel>
+                    <TextBlock Name="tbSongTitle"
                        FontSize="18"
                        Height="50"
                        TextWrapping="WrapWithOverflow"
@@ -49,64 +55,64 @@
                        Margin="8,50,8,50"
                        d:Text="Breathing"/>
 
-            <StackPanel Orientation="Vertical"
+                    <StackPanel Orientation="Vertical"
                         VerticalAlignment="Bottom"
                         HorizontalAlignment="Center"
                         Margin="0 0 0 16">
-                <StackPanel Orientation="Horizontal"
+                        <StackPanel Orientation="Horizontal"
                             Margin="0 0 0 8">
-                    <Button Name="btnRepeat"
+                            <Button Name="btnRepeat"
                             Style="{StaticResource btnMediaControlStyle}"
                             Click="btnRepeat_Click">
-                        <Button.Background>
-                            <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/repeat_32.png"/>
-                        </Button.Background>
-                    </Button>
+                                <Button.Background>
+                                    <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/repeat_32.png"/>
+                                </Button.Background>
+                            </Button>
 
-                    <Button Name="btnPrevious"
+                            <Button Name="btnPrevious"
                             Style="{StaticResource btnMediaControlStyle}"
                             Click="btnPrevious_Click">
-                        <Button.Background>
-                            <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/previous_32.png"/>
-                        </Button.Background>
-                    </Button>
+                                <Button.Background>
+                                    <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/previous_32.png"/>
+                                </Button.Background>
+                            </Button>
 
-                    <Button Name="btnPlayPause"
+                            <Button Name="btnPlayPause"
                             Style="{StaticResource btnMediaControlStyle}"
                             Click="btnPlayPause_Click">
-                        <Button.Background>
-                            <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/play_32.png"/>
-                        </Button.Background>
-                    </Button>
+                                <Button.Background>
+                                    <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/play_32.png"/>
+                                </Button.Background>
+                            </Button>
 
-                    <Button Name="btnNext"
+                            <Button Name="btnNext"
                             Style="{StaticResource btnMediaControlStyle}"
                             Click="btnNext_Click">
-                        <Button.Background>
-                            <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/next_32.png"/>
-                        </Button.Background>
-                    </Button>
+                                <Button.Background>
+                                    <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/next_32.png"/>
+                                </Button.Background>
+                            </Button>
 
-                    <Button Name="btnRandom"
+                            <Button Name="btnRandom"
                             Style="{StaticResource btnMediaControlStyle}"
                             Click="btnRandom_Click">
-                        <Button.Background>
-                            <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/random_32.png"/>
-                        </Button.Background>
-                    </Button>
-                </StackPanel>
-                
-                <StackPanel Name="SongSliderPanel"
+                                <Button.Background>
+                                    <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/random_32.png"/>
+                                </Button.Background>
+                            </Button>
+                        </StackPanel>
+
+                        <StackPanel Name="SongSliderPanel"
                         Orientation="Horizontal"
                         Grid.ColumnSpan="3"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center">
 
-                    <TextBlock Name="tbCurrentSongPosition"
+                            <TextBlock Name="tbCurrentSongPosition"
                             Style="{StaticResource tbDurationShow}"
                             Text="00:00:00"/>
 
-                    <Slider Name="SongDurationSlider"
+                            <Slider Name="SongDurationSlider"
                         Thumb.DragCompleted="SongDurationSlider_Thumb_DragCompleted"
                         Thumb.DragStarted="SongDurationSlider_Thumb_DragStarted"
                         ValueChanged="SongDurationSlider_ValueChanged"
@@ -117,11 +123,13 @@
                         Width="80"
                         Margin="8 0"/>
 
-                    <TextBlock Name="tbSongDuration"
+                            <TextBlock Name="tbSongDuration"
                             Style="{StaticResource tbDurationShow}"
                             Text="00:00:00"/>
-                </StackPanel>
-            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
         </Grid>
     </Grid>
 </Window>

@@ -8,6 +8,8 @@ using GalaxyMediaPlayer.Helpers;
 using System.Windows.Threading;
 using System.Windows.Controls;
 using System.Drawing;
+using System.Threading;
+using System.Diagnostics;
 
 namespace GalaxyMediaPlayer.Windows
 {
@@ -19,26 +21,74 @@ namespace GalaxyMediaPlayer.Windows
         private string durationFormat;
         private double totalTimeInSecond;
         private bool isDragging = false; // Nam: if user is dragging, we are not updating the slider value, see more below
+
+        private DispatcherTimer showInfoTimer; // Nam: use on mouseEnter, it will hide UI if user is not moving for CollapseTime
+        private const float DEFAULT_COLLAPSE_TIME = 2; // if user is not moving for 2 seconds, we hide UI
+        private float collapseTime = DEFAULT_COLLAPSE_TIME;
         public SongMinimizedWindow()
         {
             InitializeComponent();
             SetUpView();
             SetUpSlider();
             SetBtnRepeatViewOnRepeatingOption();
+            MyMediaPlayer.mediaPlayer.MediaOpened += MediaPlayer_MediaOpened;
+            showInfoTimer = new DispatcherTimer();
+            showInfoTimer.Interval = TimeSpan.FromSeconds(0.1);
+            showInfoTimer.Tick += ShowInfoTimer_Tick;
+            showInfoTimer.Start();
+        }
+
+        private void ShowInfoTimer_Tick(object? sender, EventArgs e)
+        {
+            if (collapseTime > 0) collapseTime -= 0.1f;
+            else
+            {
+                HideUI();
+                showInfoTimer.Stop();
+            }
+        }
+
+        private void HideUI()
+        {
+            borderToShowInfo.Visibility = Visibility.Collapsed;
+        }
+
+        private void ShowUI()
+        {
+            borderToShowInfo.Visibility = Visibility.Visible;
+        }
+
+        private void ResetShowUITimer()
+        {
+            collapseTime = DEFAULT_COLLAPSE_TIME;
+            showInfoTimer.Stop();
+            showInfoTimer.Start();
+        }
+
+        private void MediaPlayer_MediaOpened(object? sender, EventArgs e)
+        {
+            MyMediaPlayer.isSongOpened = true;
+            MyMediaPlayer.isSongPlaying = true;
+
+            SetUpView();
+            SetUpSlider();
         }
 
         private void SetUpSlider()
         {
+
+            // Slider update timer
+            DispatcherTimer timerVideoTime = new DispatcherTimer();
+            timerVideoTime.Interval = TimeSpan.FromSeconds(0.05);
+            timerVideoTime.Tick += TimerVideoTime_Tick;
+            timerVideoTime.Start();
+
+
             totalTimeInSecond = MyMediaPlayer.GetTotalTimeInSecond();
             durationFormat = DurationFormatHelper.GetDurationFormatFromTotalSeconds(totalTimeInSecond);
 
             tbSongDuration.Text = MyMediaPlayer.mediaPlayer.NaturalDuration.TimeSpan.ToString(durationFormat);
             tbCurrentSongPosition.Text = TimeSpan.FromSeconds(0).ToString(durationFormat);
-
-            DispatcherTimer timerVideoTime = new DispatcherTimer();
-            timerVideoTime.Interval = TimeSpan.FromSeconds(0.5);
-            timerVideoTime.Tick += TimerVideoTime_Tick;
-            timerVideoTime.Start();
         }
 
         private void SetUpView()
@@ -175,8 +225,7 @@ namespace GalaxyMediaPlayer.Windows
 
         private void btnCloseApp_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
-            MainWindow.Instance.Visibility = Visibility.Visible;
+            Application.Current.Shutdown();
         }
 
         private void btnMaximizeApp_Click(object sender, RoutedEventArgs e)
@@ -188,6 +237,31 @@ namespace GalaxyMediaPlayer.Windows
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed) DragMove();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            MyMediaPlayer.mediaPlayer.MediaOpened -= MediaPlayer_MediaOpened;
+        }
+
+        private void Window_MouseEnter(object sender, MouseEventArgs e)
+        {
+            ShowUI();
+            ResetShowUITimer();
+        }
+
+        private System.Windows.Point _lastMove;
+        private void Window_MouseMove(object sender, MouseEventArgs e)
+        {
+            var p = e.GetPosition((IInputElement)sender);
+            if (_lastMove != p)
+            {
+                // really moved
+                _lastMove = p;
+                Trace.WriteLine(sender);
+                ShowUI();
+                ResetShowUITimer();
+            }
         }
     }
 }

@@ -60,8 +60,9 @@ namespace GalaxyMediaPlayer.Pages
             tbSongDuration.Text = MyMediaPlayer.mediaPlayer.NaturalDuration.TimeSpan.ToString(durationFormat);
             tbCurrentSongPosition.Text = TimeSpan.FromSeconds(0).ToString(durationFormat);
 
+            // Slider update timer
             DispatcherTimer timerVideoTime = new DispatcherTimer();
-            timerVideoTime.Interval = TimeSpan.FromSeconds(0.5);
+            timerVideoTime.Interval = TimeSpan.FromSeconds(0.05);
             timerVideoTime.Tick += TimerVideoTime_Tick;
             timerVideoTime.Start();
         }
@@ -69,7 +70,10 @@ namespace GalaxyMediaPlayer.Pages
         private void TimerVideoTime_Tick(object? sender, EventArgs e)
         {
             // Nam: If user is dragging slider, we are not updating the slider value
-            if (!isDragging) SongDurationSlider.Value = (MyMediaPlayer.mediaPlayer.Position.TotalSeconds / totalTimeInSecond) * 100;
+            if (!isDragging && MyMediaPlayer.isSongPlaying)
+            {
+                SongDurationSlider.Value = (MyMediaPlayer.mediaPlayer.Position.TotalSeconds / totalTimeInSecond) * 100;
+            }
         }
 
         private void mediaListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
