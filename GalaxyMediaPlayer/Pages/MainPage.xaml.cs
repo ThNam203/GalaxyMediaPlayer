@@ -1,5 +1,6 @@
 ﻿using GalaxyMediaPlayer.Helpers;
 using GalaxyMediaPlayer.Pages.NavContentPages;
+using GalaxyMediaPlayer.Windows;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -60,7 +61,7 @@ namespace GalaxyMediaPlayer.Pages
             tbCurrentSongPosition.Text = TimeSpan.FromSeconds(0).ToString(durationFormat);
 
             DispatcherTimer timerVideoTime = new DispatcherTimer();
-            timerVideoTime.Interval = TimeSpan.FromSeconds(1);
+            timerVideoTime.Interval = TimeSpan.FromSeconds(0.5);
             timerVideoTime.Tick += TimerVideoTime_Tick;
             timerVideoTime.Start();
         }
@@ -119,16 +120,14 @@ namespace GalaxyMediaPlayer.Pages
             if (MyMediaPlayer.folderCurrentlyInUse == Computer.currentBrowsingFolder)
             {
                 changeAllBtnPlayPauseBackgroundImage();
-
-                if (MyMediaPlayer.isSongPlaying) MyMediaPlayer.Continue();
-                else MyMediaPlayer.Pause();
             }
             else
             {
-                if (MyMediaPlayer.isSongPlaying) MyMediaPlayer.Continue();
-                else MyMediaPlayer.Pause();
                 changeBtnPlayPauseBackgroundInGridInfo();
             }
+
+            if (MyMediaPlayer.isSongPlaying) MyMediaPlayer.Continue();
+            else MyMediaPlayer.Pause();
         }
 
         private void btnRepeat_Click(object sender, RoutedEventArgs e)
@@ -427,6 +426,13 @@ namespace GalaxyMediaPlayer.Pages
             // Nam: limit the frameStack, we won't want IT to happen
             if (frameStack.Count <= 100)
                 frameStack.Push(e.Uri);
+        }
+
+        private void btnMore_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow.Instance.Visibility = Visibility.Hidden;
+            SongMinimizedWindow newWindow = new SongMinimizedWindow();
+            newWindow.Show();
         }
     }
 }

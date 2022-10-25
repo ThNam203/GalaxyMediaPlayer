@@ -9,8 +9,10 @@ namespace GalaxyMediaPlayer
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static MainWindow Instance;
         public MainWindow()
         {
+            Instance = this;
             InitializeComponent();
             MainFrame.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
         }

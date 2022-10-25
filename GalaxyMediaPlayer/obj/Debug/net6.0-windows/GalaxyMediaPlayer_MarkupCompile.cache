@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\App.xaml
-7-931737657
+81996850949
 
-16-1941539069
+17-1382624491
 2161654001731
-ColorSkins\DarkSkin.xaml;ColorSkins\TransparentSkin.xaml;MainWindow.xaml;Pages\MainPage.xaml;Pages\NavContentPages\Computer.xaml;Pages\NavContentPages\MusicDetailPage.xaml;Themes\Generic.xaml;
+ColorSkins\DarkSkin.xaml;ColorSkins\TransparentSkin.xaml;MainWindow.xaml;Pages\MainPage.xaml;Pages\NavContentPages\Computer.xaml;Pages\NavContentPages\MusicDetailPage.xaml;Themes\Generic.xaml;Windows\SongMinimizedWindow.xaml;
 
 False
 

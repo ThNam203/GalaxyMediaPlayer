@@ -137,4 +137,8 @@
     <Resource Include="Resources\Images\background_1.jpg" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UserControls\" />
+  </ItemGroup>
+
 </Project>

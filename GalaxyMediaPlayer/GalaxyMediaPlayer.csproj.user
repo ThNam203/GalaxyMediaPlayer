@@ -16,6 +16,9 @@
     <Compile Update="Pages\NavContentPages\MusicDetailPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Windows\SongMinimizedWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="ColorSkins\DarkSkin.xaml">
@@ -34,6 +37,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\NavContentPages\MusicDetailPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Windows\SongMinimizedWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

@@ -1,4 +1,4 @@
-﻿    <Page x:Class="GalaxyMediaPlayer.Pages.MainPage"
+﻿<Page x:Class="GalaxyMediaPlayer.Pages.MainPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,80 +7,6 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MainPage">
-    <Page.Resources>
-        <Style x:Key="UncompletedSliderRepeatButton" TargetType="RepeatButton">
-            <Setter Property="SnapsToDevicePixels" Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="IsTabStop" Value="false" />
-            <Setter Property="Focusable" Value="false" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="RepeatButton">
-                        <Border Background="White" Height="3"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="CompletedSliderRepeatButton" TargetType="RepeatButton">
-            <Setter Property="SnapsToDevicePixels" Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="RepeatButton">
-                        <Border SnapsToDevicePixels="True" Background="#18A8D8" Height="3"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="SliderThumb" TargetType="Thumb">
-            <Setter Property="SnapsToDevicePixels" Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Thumb">
-                        <Ellipse Height="10" Width="10" Fill="AliceBlue"></Ellipse>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <ControlTemplate x:Key="Slider" TargetType="Slider">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Track Grid.Row="1" x:Name="PART_Track"   >
-                    <Track.DecreaseRepeatButton>
-                        <RepeatButton Style="{StaticResource CompletedSliderRepeatButton}"  Command="Slider.DecreaseLarge" />
-                    </Track.DecreaseRepeatButton>
-                    <Track.Thumb>
-                        <Thumb Style="{StaticResource SliderThumb}"  />
-                    </Track.Thumb>
-                    <Track.IncreaseRepeatButton>
-                        <RepeatButton Style="{StaticResource UncompletedSliderRepeatButton}" Command="Slider.IncreaseLarge" />
-                    </Track.IncreaseRepeatButton>
-                </Track>
-            </Grid>
-        </ControlTemplate>
-
-        <Style x:Key="Horizontal_Slider" TargetType="Slider">
-            <Setter Property="Focusable" Value="False"/>
-            <Setter Property="SnapsToDevicePixels" Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Style.Triggers>
-                <Trigger Property="Orientation" Value="Horizontal">
-                    <Setter Property="MinHeight" Value="21" />
-                    <Setter Property="MinWidth" Value="104" />
-                    <Setter Property="Template" Value="{StaticResource Slider}" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-    </Page.Resources>
 
     <Canvas Name="canvas">
         <Grid Name="MainGrid"
@@ -165,48 +91,22 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
 
-                <Grid.Resources>
-                    <Style TargetType="Button">
-                        <Style.Setters>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Name="border"
-                                                Background="{DynamicResource brushPrimary}"
-                                                Margin="4"
-                                                Padding="4">
-                                            <ContentPresenter Name="presenter"
-                                                              TextBlock.FontWeight="Bold"
-                                                              TextBlock.Foreground="DarkGray"/>
-                                        </Border>
-
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="presenter" 
-                                                        Property="TextBlock.Foreground" 
-                                                        Value="White"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style.Setters>
-                    </Style>
-                </Grid.Resources>
-
                 <StackPanel Orientation="Horizontal" 
-                            Grid.Column="1"
-                            HorizontalAlignment="Right">
+                        Grid.Column="1"
+                        HorizontalAlignment="Right">
                     <Button Name="btnMinimizeApp"
                             Click="btnMinimizeApp_Click"
+                            Style="{StaticResource AppControlButtonStyle}"
                             Content="__"/>
 
                     <Button Name="btnMaximizeApp"
                             Click="btnMaximizeApp_Click"
+                            Style="{StaticResource AppControlButtonStyle}"
                             Content="▭" />
 
                     <Button Name="btnCloseApp" 
                             Click="btnCloseApp_Click"
+                            Style="{StaticResource AppControlButtonStyle}"
                             Content="✕"
                             Margin="0 0 8 0"/>
                 </StackPanel>
@@ -304,16 +204,16 @@
                     </Grid>
             </Border>
 
-                <StackPanel Name="SongSliderPanel"
-                            Visibility="Collapsed"
-                            Orientation="Horizontal"
-                            Grid.ColumnSpan="3"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center">
+            <StackPanel Name="SongSliderPanel"
+                        Visibility="Collapsed"
+                        Orientation="Horizontal"
+                        Grid.ColumnSpan="3"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
                     
-                    <TextBlock Name="tbCurrentSongPosition"
-                               Style="{StaticResource tbDurationShow}"
-                               Text="00:00:00"/>
+                <TextBlock Name="tbCurrentSongPosition"
+                            Style="{StaticResource tbDurationShow}"
+                            Text="00:00:00"/>
 
                 <Slider Name="SongDurationSlider"
                         Thumb.DragCompleted="SongDurationSlider_Thumb_DragCompleted"
@@ -326,9 +226,9 @@
                         Width="250"
                         Margin="8 0"/>
 
-                    <TextBlock Name="tbSongDuration"
-                               Style="{StaticResource tbDurationShow}"
-                               Text="00:00:00"/>
+                <TextBlock Name="tbSongDuration"
+                            Style="{StaticResource tbDurationShow}"
+                            Text="00:00:00"/>
             </StackPanel>
 
                 <StackPanel Orientation="Horizontal"
@@ -381,7 +281,8 @@
                     </Button>
 
                     <Button Name="btnMore"
-                            Style="{StaticResource btnMediaControlStyle}">
+                            Style="{StaticResource btnMediaControlStyle}"
+                            Click="btnMore_Click">
                         <Button.Background>
                             <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/more_32.png"/>
                         </Button.Background>

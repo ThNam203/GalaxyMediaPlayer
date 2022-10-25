@@ -168,12 +168,12 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
         private void btnFetchLyrics_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            spFetchLyricsOptions.Visibility = System.Windows.Visibility.Collapsed;
             SetLyricsOnline().ContinueWith(result =>
             {
                 this.Dispatcher.Invoke(() =>
                 {
                     tbSongLyrics.Text = result.Result; 
-                    spFetchLyricsOptions.Visibility = System.Windows.Visibility.Collapsed;
                 });
             });
         }
