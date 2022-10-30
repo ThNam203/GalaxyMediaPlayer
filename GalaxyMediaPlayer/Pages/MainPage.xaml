@@ -7,7 +7,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MainPage">
-
+ 
     <Canvas Name="canvas">
         <Grid Name="MainGrid"
               Width="{Binding ActualWidth, ElementName=canvas}"
@@ -132,43 +132,57 @@
                 </Grid.RowDefinitions>
 
                 <Border Name="SongInfoDisplayGrid"
-                    Background="Black"
-                    Visibility="Collapsed"
-                    MouseLeftButtonDown="SongInfoDisplayGrid_MouseLeftButtonDown"
-                    CornerRadius="5"
-                    Grid.RowSpan="2"
-                    Height="60"
-                    Width="auto"
-                    MaxWidth="250"
-                    Margin="4 0 0 0"
-                    HorizontalAlignment="Left">
+                        Background="Black"
+                        Visibility="Collapsed"
+                        CornerRadius="5"
+                        Grid.RowSpan="2"
+                        Height="60"
+                        Width="auto"
+                        MaxWidth="250"
+                        Margin="4 0 0 0"
+                        HorizontalAlignment="Left"
+                        MouseLeftButtonDown="SongInfoDisplayGrid_MouseLeftButtonDown"
+                        MouseEnter="SongInfoDisplayGrid_MouseEnter"
+                        MouseLeave="SongInfoDisplayGrid_MouseLeave">
 
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="auto"/>
-                        </Grid.ColumnDefinitions>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
-                    <Image Name="imgSongImage"
-                           Width="50" Height="50"
-                           Margin="8 4"
-                           Stretch="Uniform"
-                           HorizontalAlignment="Left"
-                           SnapsToDevicePixels="True"
-                           Grid.RowSpan="2"/>
+                    <Grid   Grid.RowSpan="2"
+                            Width="50" Height="50"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Margin="8 0">
+                        <Image  Name="imgSongImage"
+                                Stretch="Uniform"
+                                SnapsToDevicePixels="True"/>
+
+                        <Border Name="minimizeImageBorder"
+                                Padding="16"
+                                Visibility="Hidden"
+                                MouseDown="minimizeImageBorder_MouseDown">
+                            <Border.Background>
+                                <SolidColorBrush Color="DimGray" Opacity="0.5"/>
+                            </Border.Background>
+                            <Image Source="/Resources/Icons/MediaControlIcons/minimize_32.png"/>
+                        </Border>
+                    </Grid>
 
                     <TextBlock Name="tbSongTitle"
-                               Foreground="{DynamicResource brushSecondary}"
-                               VerticalAlignment="Center"
-                               Margin="0 4 4 0"
-                               Width="90"
-                               Grid.Column="1"
-                               TextTrimming="CharacterEllipsis"/>
+                            Foreground="{DynamicResource brushSecondary}"
+                            VerticalAlignment="Center"
+                            Margin="0 4 4 0"
+                            Width="90"
+                            Grid.Column="1"
+                            TextTrimming="CharacterEllipsis"/>
 
                     <TextBlock Name="tbSongArtist"
                                Foreground="{DynamicResource brushSecondary}"
@@ -281,8 +295,7 @@
                     </Button>
 
                     <Button Name="btnMore"
-                            Style="{StaticResource btnMediaControlStyle}"
-                            Click="btnMore_Click">
+                            Style="{StaticResource btnMediaControlStyle}">
                         <Button.Background>
                             <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/more_32.png"/>
                         </Button.Background>

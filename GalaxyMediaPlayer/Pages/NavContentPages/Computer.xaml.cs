@@ -1,20 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace GalaxyMediaPlayer.Pages.NavContentPages
 {
-    /// <summary>
-    /// Interaction logic for ComputerBrowse.xaml
-    /// </summary>
+    public enum SortType
+    {
+        Name,
+        Date,
+        Size,
+        Type
+    }
     public partial class Computer : Page
     {
+
         MediaPlayer mediaPlayer = new MediaPlayer();
         public static string currentBrowsingFolder = "";
         // Nam: which is used for navigating back
@@ -27,19 +34,23 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                                                                  "m4v", "mp4v", "3g2", "3gp2", "3gp", "3gpp", "mp4" };
         private List<string> imageExtension = new List<string> { "jpg", "gif", "png" };
 
-        private string dateFormat = "MM/dd/yyyy hh:mm tt";
+        private const string dateFormat = "MM/dd/yyyy hh:mm tt";
 
         // Nam: change browse style (listbox and griddata)
         private bool isUsingGridStyle = false;
 
         // Nam: this is for playlist feature in MainPage and MyMediaPlayer.cs
-        public List<string> allMusicPathsInFolder = new List<string>();
+        private List<string> allMusicPathsInFolder = new List<string>();
+
         // this binds to listbox in computer browse page
-        private ObservableCollection<SystemEntityModel> systemEntities { get; set; }
+        public ObservableCollection<SystemEntityModel> systemEntities { get; set; }
+        // Nam: this is to sort the list by SortType, then systemEntities point to it to show the sorted
+        private List<SystemEntityModel> systemEntitiesSort { get; set; }
         public Computer()
         {
             InitializeComponent();
             systemEntities = new();
+            systemEntitiesSort = new();
             DataContext = this;
         }
 
@@ -56,8 +67,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 OpenFolder(new DirectoryInfo(folderPath), false);
             }
 
-            browseListBox.ItemsSource = systemEntities;
-            browseDataGrid.ItemsSource = systemEntities;
+            cbSortByOptions.ItemsSource = new List<SortType> { SortType.Name, SortType.Date, SortType.Size, SortType.Type };
         }
         private void IntializeBrowseFoldersAndDisksAndMediaControlButtonsView()
         {
@@ -104,9 +114,37 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                     extension: "Folder"));
         }
 
-        private void browseListBox_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void sortList(SortType type, bool isSortAscending)
         {
-            OnBrowseItemDoubleClick(isUsingListBox: true);
+            systemEntitiesSort = new List<SystemEntityModel>(systemEntities);
+            if (type == SortType.Name)
+            {
+                systemEntitiesSort.Sort((x, y) => x.Name.CompareTo(y.Name));
+            } 
+            else if (type == SortType.Date)
+            {
+                systemEntitiesSort.Sort((x, y) => x.DateCreated.CompareTo(y.DateCreated));
+            }
+            else if (type == SortType.Size)
+            {
+                systemEntitiesSort.Sort((x, y) => x.Size.CompareTo(y.Size));
+            }
+            else if (type == SortType.Type)
+            {
+                systemEntitiesSort.Sort((x, y) => x.Type.CompareTo(y.Type));
+            }
+
+            // Nam: THIS IS NOT A GOOD IDEA, SHOULD CHANGE IF POSSIBLE
+            systemEntities.Clear();
+            systemEntities = new ObservableCollection<SystemEntityModel>(systemEntitiesSort);
+            browseListBox.ItemsSource = systemEntities;
+            browseDataGrid.ItemsSource = systemEntities;
+        }
+
+        private void browseListBoxItem_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ClickCount >= 2) 
+                OnBrowseItemDoubleClick(isUsingListBox: true);
         }
 
         private void DataGridRow_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -265,42 +303,10 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             }
         }
 
-        private sealed class SelectionAdorner : Adorner
+        private void cbSortByOptions_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Initializes a new instance of the SelectionAdorner class.
-            public SelectionAdorner(UIElement parent)
-                : base(parent)
-            {
-                // Make sure the mouse doesn't see us.
-                this.IsHitTestVisible = false;
-
-                // We only draw a rectangle when we're enabled.
-                this.IsEnabledChanged += delegate { this.InvalidateVisual(); };
-            }
-
-            // Gets or sets the area of the selection rectangle.
-            public Rect SelectionArea { get; set; }
-
-            // Participates in rendering operations that are directed by the layout system.
-            protected override void OnRender(DrawingContext drawingContext)
-            {
-                base.OnRender(drawingContext);
-
-                if (this.IsEnabled)
-                {
-                    // Make the lines snap to pixels (add half the pen width [0.5])
-                    double[] x = { this.SelectionArea.Left + 0.5, this.SelectionArea.Right + 0.5 };
-                    double[] y = { this.SelectionArea.Top + 0.5, this.SelectionArea.Bottom + 0.5 };
-                    drawingContext.PushGuidelineSet(new GuidelineSet(x, y));
-
-                    Brush fill = SystemColors.HighlightBrush.Clone();
-                    fill.Opacity = 0.4;
-                    drawingContext.DrawRectangle(
-                        fill,
-                        new Pen(SystemColors.HighlightBrush, 1.0),
-                        this.SelectionArea);
-                }
-            }
+            SortType type = (SortType)(sender as ComboBox).SelectedItem;
+            sortList(type, true);
         }
     }
 }

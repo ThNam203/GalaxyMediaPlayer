@@ -20,6 +20,7 @@
             DateCreated = dateCreated;
             Size = size;
             Extension = extension;
+            IsSelected = false;
         }
 
         public string Name { get; set; }
@@ -28,6 +29,7 @@
         public string DateCreated { get; set; }
         public long Size { get; set; }
         public string Extension { get; set; }
+        public bool IsSelected { get; set; }
     }
 
     public enum EntityType
@@ -35,7 +37,6 @@
         Folder,
         Image,
         Video,
-        Music,
-        Document
+        Music
     }
 }

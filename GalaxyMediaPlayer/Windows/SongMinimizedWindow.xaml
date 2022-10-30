@@ -12,7 +12,9 @@
         ResizeMode="NoResize"
         MouseEnter="Window_MouseEnter"
         MouseMove="Window_MouseMove"
-        MouseDown="Window_MouseDown">
+        MouseDown="Window_MouseDown"
+        MouseLeave="Window_MouseLeave"
+        Loaded="Window_Loaded">
     <Grid>
 
         <Grid Grid.RowSpan="2">

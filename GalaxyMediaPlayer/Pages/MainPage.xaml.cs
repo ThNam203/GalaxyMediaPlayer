@@ -432,11 +432,22 @@ namespace GalaxyMediaPlayer.Pages
                 frameStack.Push(e.Uri);
         }
 
-        private void btnMore_Click(object sender, RoutedEventArgs e)
+        private void minimizeImageBorder_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            e.Handled = true;
             MainWindow.Instance.Visibility = Visibility.Hidden;
             SongMinimizedWindow newWindow = new SongMinimizedWindow();
             newWindow.Show();
+        }
+
+        private void SongInfoDisplayGrid_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            minimizeImageBorder.Visibility = Visibility.Visible;
+        }
+
+        private void SongInfoDisplayGrid_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            minimizeImageBorder.Visibility = Visibility.Hidden;
         }
     }
 }

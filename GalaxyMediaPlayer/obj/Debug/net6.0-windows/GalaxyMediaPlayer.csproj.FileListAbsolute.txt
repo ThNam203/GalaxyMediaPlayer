@@ -95,6 +95,7 @@ C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\Pages\MainPage.g.cs
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\Pages\NavContentPages\Computer.g.cs
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\Pages\NavContentPages\MusicDetailPage.g.cs
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\Windows\SongMinimizedWindow.g.cs
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\App.g.cs
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\GeneratedInternalTypeHelper.g.cs
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\GalaxyMediaPlayer_MarkupCompile.cache
@@ -105,6 +106,7 @@ C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\Pages\NavContentPages\Computer.baml
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\Pages\NavContentPages\MusicDetailPage.baml
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\Themes\Generic.baml
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\Windows\SongMinimizedWindow.baml
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\GalaxyMediaPlayer.g.resources
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\GalaxyMediaPlayer.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\GalaxyMediaPlayer.AssemblyInfoInputs.cache
@@ -116,5 +118,3 @@ C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\GalaxyMediaPlayer.pdb
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\GalaxyMediaPlayer.genruntimeconfig.cache
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\ref\GalaxyMediaPlayer.dll
-C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\Windows\SongMinimizedWindow.g.cs
-C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\Windows\SongMinimizedWindow.baml

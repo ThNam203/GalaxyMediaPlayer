@@ -23,8 +23,13 @@ namespace GalaxyMediaPlayer.Windows
         private bool isDragging = false; // Nam: if user is dragging, we are not updating the slider value, see more below
 
         private DispatcherTimer showInfoTimer; // Nam: use on mouseEnter, it will hide UI if user is not moving for CollapseTime
-        private const float DEFAULT_COLLAPSE_TIME = 2; // if user is not moving for 2 seconds, we hide UI
+        private const float DEFAULT_COLLAPSE_TIME = 1; // if user is not moving for 2 seconds, we hide UI
         private float collapseTime = DEFAULT_COLLAPSE_TIME;
+
+        // Nam: due to some issue with ALT F4 (not shutdown entire app (remain mainwindow)), we need to check
+        // if it's true (alt f4) then we shut down entire app
+        // if it's false, we close this window and reoopen (visibility) mainwindow
+        private bool isClosingApp = true;
         public SongMinimizedWindow()
         {
             InitializeComponent();
@@ -223,16 +228,18 @@ namespace GalaxyMediaPlayer.Windows
             Application.Current.MainWindow.WindowState = WindowState.Minimized;
         }
 
+        private void btnMaximizeApp_Click(object sender, RoutedEventArgs e)
+        {
+            isClosingApp = false;
+            this.Close();
+            MainWindow.Instance.Visibility = Visibility.Visible;
+        }
+
         private void btnCloseApp_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
 
-        private void btnMaximizeApp_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-            MainWindow.Instance.Visibility = Visibility.Visible;
-        }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -241,6 +248,14 @@ namespace GalaxyMediaPlayer.Windows
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (isClosingApp)
+            {
+                Application.Current.Shutdown();
+            }
+            else
+            {
+                Application.Current.MainWindow = MainWindow.Instance;
+            }
             MyMediaPlayer.mediaPlayer.MediaOpened -= MediaPlayer_MediaOpened;
         }
 
@@ -262,6 +277,17 @@ namespace GalaxyMediaPlayer.Windows
                 ShowUI();
                 ResetShowUITimer();
             }
+        }
+
+        private void Window_MouseLeave(object sender, MouseEventArgs e)
+        {
+            HideUI();
+            showInfoTimer.Stop();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Application.Current.MainWindow = this;
         }
     }
 }
