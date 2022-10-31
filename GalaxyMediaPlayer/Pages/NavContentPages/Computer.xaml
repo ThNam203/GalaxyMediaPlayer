@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:GalaxyMediaPlayer.Pages.NavContentPages"
         xmlns:cvt="clr-namespace:GalaxyMediaPlayer.Converters"
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"  
+        xmlns:virtualizingwrappanel="clr-namespace:GalaxyMediaPlayer.CustomControls.VirtualizingWrapPanel"
         mc:Ignorable="d" 
         d:DesignHeight="450" d:DesignWidth="800"
         Title="ComputerBrowse"
@@ -473,7 +474,7 @@
             </ListBox.Resources>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <ui:VirtualizingWrapPanel
+                    <virtualizingwrappanel:VirtualizingWrapPanel
                         IsItemsHost="True"/>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
