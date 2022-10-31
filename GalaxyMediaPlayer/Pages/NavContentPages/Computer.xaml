@@ -479,7 +479,8 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Border x:Name="border" Margin="16" Background="{DynamicResource brushPrimary}" MouseDown="browseListBoxItem_MouseDoubleClick">
+                    <Border x:Name="border" Margin="16" Background="{DynamicResource brushPrimary}" 
+                            MouseDown="browseListBoxItem_MouseDown">
                         <Grid Width="120" Height="150">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto"/>
@@ -491,7 +492,7 @@
                                    Path=DataContext,
                                    Converter={StaticResource SystemEntityToImageSource}}" />
 
-                            <CheckBox>
+                            <CheckBox Name="checkBox">
                                 <CheckBox.Style>
                                     <Style TargetType="CheckBox">
                                         <Setter Property="Margin" Value="16 12 0 0"/>
@@ -556,7 +557,7 @@
                         </Grid>
                     </Border>
                     <DataTemplate.Triggers>
-                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
+                        <DataTrigger Binding="{Binding ElementName=checkBox, Path=IsChecked}" Value="True">
                             <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource brushSecondary}"/>
                             <Setter TargetName="border" Property="BorderThickness" Value="1"/>
                             <Setter TargetName="border" Property="Margin" Value="15"/>
@@ -567,6 +568,18 @@
                             <Setter TargetName="border" Property="Background" Value="{DynamicResource brushLightAccent}"/>
                         </DataTrigger>
                     </DataTemplate.Triggers>
+                    <!--<DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource brushSecondary}"/>
+                            <Setter TargetName="border" Property="BorderThickness" Value="1"/>
+                            <Setter TargetName="border" Property="Margin" Value="15"/>
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource brushLightAccent}"/>
+                        </DataTrigger>
+
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsMouseOver}" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource brushLightAccent}"/>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>-->
                 </DataTemplate>
             </ListBox.ItemTemplate>
             <ListBox.ItemContainerStyle>
@@ -591,6 +604,7 @@
                   RowStyle="{DynamicResource DataGridRowBrowseStyle}"
                   SelectionMode="Extended"
                   SelectionUnit="FullRow"
+                  VirtualizingPanel.VirtualizationMode="Standard"
                   Margin="16 4"
                   Grid.Row="3"
                   ItemsSource="{Binding systemEntities}">
@@ -613,6 +627,7 @@
                     <DataGridCheckBoxColumn.ElementStyle>
                         <Style TargetType="CheckBox">
                             <Setter Property="Visibility" Value="{Binding Type, Converter={StaticResource ResourceKey=EntityTypeToVisibility}}"/>
+                            <Setter Property="IsChecked" Value="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}"/>
                         </Style>
                     </DataGridCheckBoxColumn.ElementStyle>
                 </DataGridCheckBoxColumn>

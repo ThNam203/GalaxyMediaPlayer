@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -52,6 +51,16 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             systemEntities = new();
             systemEntitiesSort = new();
             DataContext = this;
+
+            DispatcherTimer debugTimer = new DispatcherTimer();
+            debugTimer.Interval = TimeSpan.FromSeconds(10);
+            debugTimer.Tick += DebugTimer_Tick;
+            debugTimer.Start();
+        }
+
+        private void DebugTimer_Tick(object? sender, EventArgs e)
+        {
+            return;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -141,10 +150,32 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             browseDataGrid.ItemsSource = systemEntities;
         }
 
-        private void browseListBoxItem_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void browseListBoxItem_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (e.ClickCount >= 2) 
+            if (e.ClickCount >= 2)
+            {
                 OnBrowseItemDoubleClick(isUsingListBox: true);
+            }
+            // Nam: remove all other IsSelected when click on an item (not checkbox)
+            // the reason is virtualizing make it broken, we make it manual by using IsSelected property
+            else if (e.ClickCount == 1)
+            {
+                if (sender != null)
+                {
+                    if (e.OriginalSource is not CheckBox)
+                    {
+                        FrameworkElement frameworkElement = e.OriginalSource as FrameworkElement;
+                        SystemEntityModel model = (SystemEntityModel)frameworkElement.DataContext;
+                        if (model != null && model.Type != EntityType.Folder)
+                        {
+                            foreach (SystemEntityModel item in systemEntities)
+                            {
+                                if (item.IsSelected == true && item.Name != model.Name) item.IsSelected = false;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private void DataGridRow_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -305,7 +336,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
         private void cbSortByOptions_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            SortType type = (SortType)(sender as ComboBox).SelectedItem;
+            SortType type = (SortType)((ComboBox)sender).SelectedItem;
             sortList(type, true);
         }
     }
