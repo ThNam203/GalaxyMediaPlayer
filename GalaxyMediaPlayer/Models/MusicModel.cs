@@ -61,25 +61,26 @@ namespace GalaxyMediaPlayer.Models
                     SongTitle = new FileInfo(_songPath).Name;
                 }
 
-                if (songFile.Tag.Lyrics == null) { SongLyrics = "No lyrics for this song is found"; }
-                else SongLyrics = songFile.Tag.Lyrics;
+                SongLyrics = songFile.Tag.Lyrics;
+                if (SongLyrics == null || SongLyrics == "") { SongLyrics = "No lyrics for this song is found"; }
 
                 SongArtists = songFile.Tag.JoinedAlbumArtists;
-                if (SongArtists == null) { SongArtists = ""; };
+                if (SongArtists == null || SongArtists == "") { SongArtists = "No infomation"; };
 
                 SongFirstArtist = songFile.Tag.FirstArtist;
-                if (SongFirstArtist == null) { SongFirstArtist = ""; };
+                if (SongFirstArtist == null || SongFirstArtist == "") { SongFirstArtist = "No infomation"; };
 
                 SongPerformers = songFile.Tag.JoinedPerformers;
-                if (SongPerformers == null) { SongPerformers = ""; };
+                if (SongPerformers == null || SongPerformers == "") { SongPerformers = "No infomation"; };
 
                 SongComposers = songFile.Tag.JoinedComposers;
-                if (SongComposers == null) { SongComposers = ""; };
+                if (SongComposers == null || SongComposers == "") { SongComposers = "No infomation"; };
 
                 SongGenres = songFile.Tag.JoinedGenres;
-                if (SongGenres == null) { SongGenres = ""; };
+                if (SongGenres == null || SongGenres == "") { SongGenres = "No infomation"; };
 
-                _songCopyright = songFile.Tag.Copyright;
+                SongCopyright = songFile.Tag.Copyright;
+                if (SongCopyright == null || SongCopyright == "") { SongCopyright = "No infomation"; };
 
                 // Nam: Not using method below cause it's meeting a bug where duration return only about 70%
                 // SongDurationInString = songFile.Length.Duration.ToString(DurationFormatHelper.GetDurationFormatFromTotalSeconds(songFile.Properties.Duration.TotalSeconds));

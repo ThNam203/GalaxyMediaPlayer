@@ -16,11 +16,17 @@
     <Compile Update="Pages\NavContentPages\MusicDetailPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\VideoPlayerPage.xaml.cs">
+    <Compile Update="Windows\SongMinimizedWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="ColorSkins\DarkSkin.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="ColorSkins\TransparentSkin.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -33,7 +39,7 @@
     <Page Update="Pages\NavContentPages\MusicDetailPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\VideoPlayerPage.xaml">
+    <Page Update="Windows\SongMinimizedWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

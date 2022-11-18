@@ -1,4 +1,4 @@
-﻿  <Page x:Class="GalaxyMediaPlayer.Pages.MainPage"
+﻿<Page x:Class="GalaxyMediaPlayer.Pages.MainPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,81 +7,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MainPage">
-    <Page.Resources>
-        <Style x:Key="UncompletedSliderRepeatButton" TargetType="RepeatButton">
-            <Setter Property="SnapsToDevicePixels" Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="IsTabStop" Value="false" />
-            <Setter Property="Focusable" Value="false" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="RepeatButton">
-                        <Border Background="White" Height="3"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="CompletedSliderRepeatButton" TargetType="RepeatButton">
-            <Setter Property="SnapsToDevicePixels" Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="RepeatButton">
-                        <Border SnapsToDevicePixels="True" Background="#18A8D8" Height="3"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="SliderThumb" TargetType="Thumb">
-            <Setter Property="SnapsToDevicePixels" Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Thumb">
-                        <Ellipse Height="10" Width="10" Fill="AliceBlue"></Ellipse>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <ControlTemplate x:Key="Slider" TargetType="Slider">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Track Grid.Row="1" x:Name="PART_Track"   >
-                    <Track.DecreaseRepeatButton>
-                        <RepeatButton Style="{StaticResource CompletedSliderRepeatButton}"  Command="Slider.DecreaseLarge" />
-                    </Track.DecreaseRepeatButton>
-                    <Track.Thumb>
-                        <Thumb Style="{StaticResource SliderThumb}"  />
-                    </Track.Thumb>
-                    <Track.IncreaseRepeatButton>
-                        <RepeatButton Style="{StaticResource UncompletedSliderRepeatButton}" Command="Slider.IncreaseLarge" />
-                    </Track.IncreaseRepeatButton>
-                </Track>
-            </Grid>
-        </ControlTemplate>
-
-        <Style x:Key="Horizontal_Slider" TargetType="Slider">
-            <Setter Property="Focusable" Value="False"/>
-            <Setter Property="SnapsToDevicePixels" Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Style.Triggers>
-                <Trigger Property="Orientation" Value="Horizontal">
-                    <Setter Property="MinHeight" Value="21" />
-                    <Setter Property="MinWidth" Value="104" />
-                    <Setter Property="Template" Value="{StaticResource Slider}" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-    </Page.Resources>
-
+ 
     <Canvas Name="canvas">
         <Grid Name="MainGrid"
               Width="{Binding ActualWidth, ElementName=canvas}"
@@ -134,8 +60,8 @@
                          Grid.Row="1"
                          SelectionChanged="mediaListBox_SelectionChanged"
                          SelectionMode="Single" 
-                         Background="Transparent" 
-                         BorderBrush="Transparent">
+                         Background="{DynamicResource brushPrimary}"
+                         BorderThickness="0">
 
                     <local:NavButton Title="Home" ImageUri="ic_home.png"/>
                     <local:NavButton Title="Movies" ImageUri="ic_movie.png"/>
@@ -165,48 +91,22 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
 
-                <Grid.Resources>
-                    <Style TargetType="Button">
-                        <Style.Setters>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Name="border"
-                                                Background="Transparent"
-                                                Margin="4"
-                                                Padding="4">
-                                            <ContentPresenter Name="presenter"
-                                                              TextBlock.FontWeight="Bold"
-                                                              TextBlock.Foreground="DarkGray"/>
-                                        </Border>
-
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="presenter" 
-                                                        Property="TextBlock.Foreground" 
-                                                        Value="White"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style.Setters>
-                    </Style>
-                </Grid.Resources>
-
                 <StackPanel Orientation="Horizontal" 
-                            Grid.Column="1"
-                            HorizontalAlignment="Right">
+                        Grid.Column="1"
+                        HorizontalAlignment="Right">
                     <Button Name="btnMinimizeApp"
                             Click="btnMinimizeApp_Click"
+                            Style="{StaticResource AppControlButtonStyle}"
                             Content="__"/>
 
                     <Button Name="btnMaximizeApp"
                             Click="btnMaximizeApp_Click"
+                            Style="{StaticResource AppControlButtonStyle}"
                             Content="▭" />
 
                     <Button Name="btnCloseApp" 
                             Click="btnCloseApp_Click"
+                            Style="{StaticResource AppControlButtonStyle}"
                             Content="✕"
                             Margin="0 0 8 0"/>
                 </StackPanel>
@@ -226,88 +126,81 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="200"/>
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <Grid.Resources>
-                <Style TargetType="Button">
-                    <Setter Property="Background" Value="Black"/>
-                    <Setter Property="Width" Value="24"/>
-                    <Setter Property="Height" Value="24"/>
-                    <Setter Property="Margin" Value="8 0"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="Button">
-                                <Border x:Name="outerBorder" Padding="4" CornerRadius="5">
-                                    <Border x:Name="innerBorder" Background="{TemplateBinding Background}"/>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="outerBorder" Property="Background" Value="#89CFF0"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Grid.Resources>
-
-            <Border Name="SongInfoDisplayGrid"
-                    Background="Black"
-                    Visibility="Collapsed"
-                    MouseLeftButtonDown="SongInfoDisplayGrid_MouseLeftButtonDown"
-                    CornerRadius="5"
-                    Grid.RowSpan="2"
-                    Height="60"
-                    Width="auto"
-                    MaxWidth="250"
-                    Margin="4 0 0 0"
-                    HorizontalAlignment="Left">
+                <Border Name="SongInfoDisplayGrid"
+                        Background="Black"
+                        Visibility="Collapsed"
+                        CornerRadius="5"
+                        Grid.RowSpan="2"
+                        Height="60"
+                        Width="auto"
+                        MaxWidth="250"
+                        Margin="4 0 0 0"
+                        HorizontalAlignment="Left"
+                        MouseLeftButtonDown="SongInfoDisplayGrid_MouseLeftButtonDown"
+                        MouseEnter="SongInfoDisplayGrid_MouseEnter"
+                        MouseLeave="SongInfoDisplayGrid_MouseLeave">
 
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="auto"/>
-                        </Grid.ColumnDefinitions>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
-                    <Image Name="imgSongImage"
-                           Width="50" Height="50"
-                           Margin="8 4"
-                           Stretch="Uniform"
-                           HorizontalAlignment="Left"
-                           SnapsToDevicePixels="True"
-                           Grid.RowSpan="2"/>
+                    <Grid   Grid.RowSpan="2"
+                            Width="50" Height="50"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Margin="8 0">
+                        <Image  Name="imgSongImage"
+                                Stretch="Uniform"
+                                SnapsToDevicePixels="True"/>
+
+                        <Border Name="minimizeImageBorder"
+                                Padding="16"
+                                Visibility="Hidden"
+                                MouseDown="minimizeImageBorder_MouseDown">
+                            <Border.Background>
+                                <SolidColorBrush Color="DimGray" Opacity="0.5"/>
+                            </Border.Background>
+                            <Image Source="/Resources/Icons/MediaControlIcons/minimize_32.png"/>
+                        </Border>
+                    </Grid>
 
                     <TextBlock Name="tbSongTitle"
-                               Foreground="White"
-                               VerticalAlignment="Center"
-                               Margin="0 4 4 0"
-                               Width="90"
-                               Grid.Column="1"
-                               TextTrimming="CharacterEllipsis"/>
+                            Foreground="{DynamicResource brushSecondary}"
+                            VerticalAlignment="Center"
+                            Margin="0 4 4 0"
+                            Width="90"
+                            Grid.Column="1"
+                            TextTrimming="CharacterEllipsis"/>
 
                     <TextBlock Name="tbSongArtist"
-                               Foreground="White"
+                               Foreground="{DynamicResource brushSecondary}"
                                VerticalAlignment="Center"
                                Margin="0 0 4 4"
                                Width="90"
                                Grid.Column="1"
-                               Grid.Row="1"/>
+                               Grid.Row="1"
+                               TextTrimming="CharacterEllipsis"/>
 
                     <StackPanel Name="ExtraControlGridInfo" 
                                 Grid.Column="2"
                                 Orientation="Horizontal"
                                 Visibility="Collapsed"
                                 Grid.RowSpan="2">
-                            
+
                         <Button Name="btnPlayPauseInGridInfo"
+                                Style="{StaticResource btnMediaControlStyle}"
                                 Click="btnPlayPauseInGridInfo_Click">
                             <Button.Background>
                                 <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/play_32.png"/>
@@ -315,6 +208,7 @@
                         </Button>
 
                         <Button Name="btnCloseInGridInfo"
+                                Style="{StaticResource btnMediaControlStyle}"
                                 Click="btnClose_Click">
                             <Button.Background>
                                 <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/close_32.png"/>
@@ -327,20 +221,13 @@
             <StackPanel Name="SongSliderPanel"
                         Visibility="Collapsed"
                         Orientation="Horizontal"
-                        Panel.ZIndex="1000"
                         Grid.ColumnSpan="3"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center">
-                <StackPanel.Resources>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="FontWeight" Value="DemiBold"/>
-                        <Setter Property="Foreground" Value="White"/>
-                        <Setter Property="TextAlignment" Value="Center"/>
-                        <Setter Property="Width" Value="50"/>
-                    </Style>
-                </StackPanel.Resources>
+                    
                 <TextBlock Name="tbCurrentSongPosition"
-                           Text="00:00:00"/>
+                            Style="{StaticResource tbDurationShow}"
+                            Text="00:00:00"/>
 
                 <Slider Name="SongDurationSlider"
                         Thumb.DragCompleted="SongDurationSlider_Thumb_DragCompleted"
@@ -354,62 +241,72 @@
                         Margin="8 0"/>
 
                 <TextBlock Name="tbSongDuration"
-                           Text="00:00:00"/>
+                            Style="{StaticResource tbDurationShow}"
+                            Text="00:00:00"/>
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal"
+                <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center"
                         Grid.ColumnSpan="3"
-                        Grid.Row="1"> 
-                <Button Name="btnRepeat"
-                        Click="btnRepeat_Click">
-                    <Button.Background>
-                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/repeat_32.png"/>
-                    </Button.Background>
-                </Button>
-
-                <Button Name="btnPrevious"
-                        Click="btnPrevious_Click"
-                        IsEnabled="False">
-                    <Button.Background>
-                            <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/previous_32.png"/>
-                    </Button.Background>
-                </Button>
-
-                <Button Name="btnPlayPause"
-                        Click="btnPlayPause_Click"
-                        IsEnabled="False">
-                    <Button.Background>
-                            <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/play_32.png"/>
+                        Background="{DynamicResource mainBrush}"
+                        Grid.Row="1">
+                    
+                    <Button Name="btnRepeat"
+                            Style="{StaticResource btnMediaControlStyle}"
+                            Click="btnRepeat_Click">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/repeat_32.png"/>
                         </Button.Background>
-                </Button>
+                    </Button>
 
-                <Button Name="btnNext"
-                        Click="btnNext_Click"
-                        IsEnabled="False">
-                    <Button.Background>
-                        <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/next_32.png"/>
-                    </Button.Background>
-                </Button>
+                        <Button Name="btnPrevious"
+                            Style="{StaticResource btnMediaControlStyle}"
+                            Click="btnPrevious_Click"
+                            IsEnabled="False">
+                        <Button.Background>
+                                <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/previous_32.png"/>
+                        </Button.Background>
+                    </Button>
 
-                <Button Name="btnRandom"
-                        Click="btnRandom_Click">
-                    <Button.Background>
-                        <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/random_32.png"/>
-                    </Button.Background>
-                </Button>
+                        <Button Name="btnPlayPause"
+                            Style="{StaticResource btnMediaControlStyle}"
+                            Click="btnPlayPause_Click"
+                            IsEnabled="False">
+                        <Button.Background>
+                                <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/play_32.png"/>
+                            </Button.Background>
+                    </Button>
 
-                <Button Name="btnMore">
-                    <Button.Background>
-                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/more_32.png"/>
-                    </Button.Background>
-                </Button>
-            </StackPanel>
+                    <Button Name="btnNext"
+                            Style="{StaticResource btnMediaControlStyle}"
+                            Click="btnNext_Click"
+                            IsEnabled="False">
+                        <Button.Background>
+                            <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/next_32.png"/>
+                        </Button.Background>
+                    </Button>
+
+                    <Button Name="btnRandom"
+                            Style="{StaticResource btnMediaControlStyle}"
+                            Click="btnRandom_Click">
+                        <Button.Background>
+                            <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/random_32.png"/>
+                        </Button.Background>
+                    </Button>
+
+                    <Button Name="btnMore"
+                            Style="{StaticResource btnMediaControlStyle}">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/more_32.png"/>
+                        </Button.Background>
+                    </Button>
+                </StackPanel>
             <StackPanel Name="VolumnControlPanel"
                         Orientation="Horizontal"
                         Grid.Column="2"
                         Grid.Row="1">
-                <Button Name="btnVolumn"
+                    <Button Name="btnVolumn"
+                        Style="{StaticResource btnMediaControlStyle}"
                         Click="btnVolumn_Click">
                     <Button.Background>
                         <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/volume_32.png"/>

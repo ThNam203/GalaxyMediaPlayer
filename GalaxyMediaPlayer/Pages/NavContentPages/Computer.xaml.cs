@@ -1,19 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace GalaxyMediaPlayer.Pages.NavContentPages
 {
-    /// <summary>
-    /// Interaction logic for ComputerBrowse.xaml
-    /// </summary>
+    public enum SortType
+    {
+        Name,
+        Date,
+        Size,
+        Type
+    }
     public partial class Computer : Page
     {
+
         MediaPlayer mediaPlayer = new MediaPlayer();
         public static string currentBrowsingFolder = "";
         // Nam: which is used for navigating back
@@ -26,20 +33,34 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                                                                  "m4v", "mp4v", "3g2", "3gp2", "3gp", "3gpp", "mp4" };
         private List<string> imageExtension = new List<string> { "jpg", "gif", "png" };
 
-        private string dateFormat = "MM/dd/yyyy hh:mm tt";
+        private const string dateFormat = "MM/dd/yyyy hh:mm tt";
 
         // Nam: change browse style (listbox and griddata)
         private bool isUsingGridStyle = false;
 
         // Nam: this is for playlist feature in MainPage and MyMediaPlayer.cs
-        public List<string> allMusicPathsInFolder = new List<string>();
+        private List<string> allMusicPathsInFolder = new List<string>();
+
         // this binds to listbox in computer browse page
-        private ObservableCollection<SystemEntityModel> systemEntities { get; set; }
+        public ObservableCollection<SystemEntityModel> systemEntities { get; set; }
+        // Nam: this is to sort the list by SortType, then systemEntities point to it to show the sorted
+        private List<SystemEntityModel> systemEntitiesSort { get; set; }
         public Computer()
         {
             InitializeComponent();
             systemEntities = new();
+            systemEntitiesSort = new();
             DataContext = this;
+
+            DispatcherTimer debugTimer = new DispatcherTimer();
+            debugTimer.Interval = TimeSpan.FromSeconds(10);
+            debugTimer.Tick += DebugTimer_Tick;
+            debugTimer.Start();
+        }
+
+        private void DebugTimer_Tick(object? sender, EventArgs e)
+        {
+            return;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -55,8 +76,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 OpenFolder(new DirectoryInfo(folderPath), false);
             }
 
-            browseListBox.ItemsSource = systemEntities;
-            browseDataGrid.ItemsSource = systemEntities;
+            cbSortByOptions.ItemsSource = new List<SortType> { SortType.Name, SortType.Date, SortType.Size, SortType.Type };
         }
         private void IntializeBrowseFoldersAndDisksAndMediaControlButtonsView()
         {
@@ -103,9 +123,59 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                     extension: "Folder"));
         }
 
-        private void browseListBox_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void sortList(SortType type, bool isSortAscending)
         {
-            OnBrowseItemDoubleClick(isUsingListBox: true);
+            systemEntitiesSort = new List<SystemEntityModel>(systemEntities);
+            if (type == SortType.Name)
+            {
+                systemEntitiesSort.Sort((x, y) => x.Name.CompareTo(y.Name));
+            } 
+            else if (type == SortType.Date)
+            {
+                systemEntitiesSort.Sort((x, y) => x.DateCreated.CompareTo(y.DateCreated));
+            }
+            else if (type == SortType.Size)
+            {
+                systemEntitiesSort.Sort((x, y) => x.Size.CompareTo(y.Size));
+            }
+            else if (type == SortType.Type)
+            {
+                systemEntitiesSort.Sort((x, y) => x.Type.CompareTo(y.Type));
+            }
+
+            // Nam: THIS IS NOT A GOOD IDEA, SHOULD CHANGE IF POSSIBLE
+            systemEntities.Clear();
+            systemEntities = new ObservableCollection<SystemEntityModel>(systemEntitiesSort);
+            browseListBox.ItemsSource = systemEntities;
+            browseDataGrid.ItemsSource = systemEntities;
+        }
+
+        private void browseListBoxItem_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ClickCount >= 2)
+            {
+                OnBrowseItemDoubleClick(isUsingListBox: true);
+            }
+            // Nam: remove all other IsSelected when click on an item (not checkbox)
+            // the reason is virtualizing make it broken, we make it manual by using IsSelected property
+            else if (e.ClickCount == 1)
+            {
+                if (sender != null)
+                {
+                    if (e.OriginalSource is not CheckBox)
+                    {
+                        FrameworkElement frameworkElement = e.OriginalSource as FrameworkElement;
+                        SystemEntityModel model = (SystemEntityModel)frameworkElement.DataContext;
+                        if (model != null && model.Type != EntityType.Folder)
+                        {
+                            foreach (SystemEntityModel item in systemEntities)
+                            {
+                                if (item.IsSelected == true && item.Name != model.Name) item.IsSelected = false;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private void DataGridRow_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -262,6 +332,12 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 browseDataGrid.Visibility = Visibility.Collapsed;
                 BrowseStyleImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/ComputerPageIcons/four_squares_32.png"));
             }
+        }
+
+        private void cbSortByOptions_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SortType type = (SortType)((ComboBox)sender).SelectedItem;
+            sortList(type, true);
         }
     }
 }

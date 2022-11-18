@@ -1,5 +1,6 @@
 ﻿using GalaxyMediaPlayer.Helpers;
 using GalaxyMediaPlayer.Pages.NavContentPages;
+using GalaxyMediaPlayer.Windows;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -59,8 +60,9 @@ namespace GalaxyMediaPlayer.Pages
             tbSongDuration.Text = MyMediaPlayer.mediaPlayer.NaturalDuration.TimeSpan.ToString(durationFormat);
             tbCurrentSongPosition.Text = TimeSpan.FromSeconds(0).ToString(durationFormat);
 
+            // Slider update timer
             DispatcherTimer timerVideoTime = new DispatcherTimer();
-            timerVideoTime.Interval = TimeSpan.FromSeconds(1);
+            timerVideoTime.Interval = TimeSpan.FromSeconds(0.05);
             timerVideoTime.Tick += TimerVideoTime_Tick;
             timerVideoTime.Start();
         }
@@ -68,7 +70,10 @@ namespace GalaxyMediaPlayer.Pages
         private void TimerVideoTime_Tick(object? sender, EventArgs e)
         {
             // Nam: If user is dragging slider, we are not updating the slider value
-            if (!isDragging) SongDurationSlider.Value = (MyMediaPlayer.mediaPlayer.Position.TotalSeconds / totalTimeInSecond) * 100;
+            if (!isDragging && MyMediaPlayer.isSongPlaying)
+            {
+                SongDurationSlider.Value = (MyMediaPlayer.mediaPlayer.Position.TotalSeconds / totalTimeInSecond) * 100;
+            }
         }
 
         private void mediaListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -119,16 +124,14 @@ namespace GalaxyMediaPlayer.Pages
             if (MyMediaPlayer.folderCurrentlyInUse == Computer.currentBrowsingFolder)
             {
                 changeAllBtnPlayPauseBackgroundImage();
-
-                if (MyMediaPlayer.isSongPlaying) MyMediaPlayer.Continue();
-                else MyMediaPlayer.Pause();
             }
             else
             {
-                if (MyMediaPlayer.isSongPlaying) MyMediaPlayer.Continue();
-                else MyMediaPlayer.Pause();
                 changeBtnPlayPauseBackgroundInGridInfo();
             }
+
+            if (MyMediaPlayer.isSongPlaying) MyMediaPlayer.Continue();
+            else MyMediaPlayer.Pause();
         }
 
         private void btnRepeat_Click(object sender, RoutedEventArgs e)
@@ -418,12 +421,33 @@ namespace GalaxyMediaPlayer.Pages
 
         private void SongInfoDisplayGrid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            SongInfoDisplayGrid.Visibility = Visibility.Collapsed;
             ContentFrame.Navigate(new Uri("Pages/NavContentPages/MusicDetailPage.xaml", UriKind.Relative));
         }
 
         private void ContentFrame_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
-            frameStack.Push(e.Uri);
+            // Nam: limit the frameStack, we won't want IT to happen
+            if (frameStack.Count <= 100)
+                frameStack.Push(e.Uri);
+        }
+
+        private void minimizeImageBorder_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            e.Handled = true;
+            MainWindow.Instance.Visibility = Visibility.Hidden;
+            SongMinimizedWindow newWindow = new SongMinimizedWindow();
+            newWindow.Show();
+        }
+
+        private void SongInfoDisplayGrid_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            minimizeImageBorder.Visibility = Visibility.Visible;
+        }
+
+        private void SongInfoDisplayGrid_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            minimizeImageBorder.Visibility = Visibility.Hidden;
         }
     }
 }
