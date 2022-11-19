@@ -5,14 +5,10 @@
       "FSharp.Core/4.5.2": {
         "type": "package",
         "compile": {
-          "lib/netstandard1.6/FSharp.Core.dll": {
-            "related": ".optdata;.sigdata;.xml"
-          }
+          "lib/netstandard1.6/FSharp.Core.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.6/FSharp.Core.dll": {
-            "related": ".optdata;.sigdata;.xml"
-          }
+          "lib/netstandard1.6/FSharp.Core.dll": {}
         },
         "resource": {
           "lib/netstandard1.6/cs/FSharp.Core.resources.dll": {
@@ -62,40 +58,28 @@
       "HtmlAgilityPack/1.11.46": {
         "type": "package",
         "compile": {
-          "lib/netstandard2.0/HtmlAgilityPack.dll": {
-            "related": ".deps.json;.pdb;.xml"
-          }
+          "lib/netstandard2.0/HtmlAgilityPack.dll": {}
         },
         "runtime": {
-          "lib/netstandard2.0/HtmlAgilityPack.dll": {
-            "related": ".deps.json;.pdb;.xml"
-          }
+          "lib/netstandard2.0/HtmlAgilityPack.dll": {}
         }
       },
       "LrcParser/2022.529.1": {
         "type": "package",
         "compile": {
-          "lib/netstandard2.1/LrcParser.dll": {
-            "related": ".xml"
-          }
+          "lib/netstandard2.1/LrcParser.dll": {}
         },
         "runtime": {
-          "lib/netstandard2.1/LrcParser.dll": {
-            "related": ".xml"
-          }
+          "lib/netstandard2.1/LrcParser.dll": {}
         }
       },
       "Microsoft-WindowsAPICodePack-Core/1.1.4": {
         "type": "package",
         "compile": {
-          "lib/netcoreapp3.1/Microsoft.WindowsAPICodePack.dll": {
-            "related": ".xml"
-          }
+          "lib/netcoreapp3.1/Microsoft.WindowsAPICodePack.dll": {}
         },
         "runtime": {
-          "lib/netcoreapp3.1/Microsoft.WindowsAPICodePack.dll": {
-            "related": ".xml"
-          }
+          "lib/netcoreapp3.1/Microsoft.WindowsAPICodePack.dll": {}
         },
         "frameworkReferences": [
           "Microsoft.WindowsDesktop.App.WindowsForms"
@@ -107,14 +91,10 @@
           "Microsoft-WindowsAPICodePack-Core": "1.1.4"
         },
         "compile": {
-          "lib/netcoreapp3.1/Microsoft.WindowsAPICodePack.Shell.dll": {
-            "related": ".xml"
-          }
+          "lib/netcoreapp3.1/Microsoft.WindowsAPICodePack.Shell.dll": {}
         },
         "runtime": {
-          "lib/netcoreapp3.1/Microsoft.WindowsAPICodePack.Shell.dll": {
-            "related": ".xml"
-          }
+          "lib/netcoreapp3.1/Microsoft.WindowsAPICodePack.Shell.dll": {}
         },
         "frameworkReferences": [
           "Microsoft.WindowsDesktop.App"
@@ -132,14 +112,10 @@
       "Microsoft.Win32.SystemEvents/6.0.0": {
         "type": "package",
         "compile": {
-          "lib/net6.0/Microsoft.Win32.SystemEvents.dll": {
-            "related": ".xml"
-          }
+          "lib/net6.0/Microsoft.Win32.SystemEvents.dll": {}
         },
         "runtime": {
-          "lib/net6.0/Microsoft.Win32.SystemEvents.dll": {
-            "related": ".xml"
-          }
+          "lib/net6.0/Microsoft.Win32.SystemEvents.dll": {}
         },
         "build": {
           "buildTransitive/netcoreapp3.1/_._": {}
@@ -167,14 +143,10 @@
       "Newtonsoft.Json/13.0.1": {
         "type": "package",
         "compile": {
-          "lib/netstandard2.0/Newtonsoft.Json.dll": {
-            "related": ".xml"
-          }
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {}
         },
         "runtime": {
-          "lib/netstandard2.0/Newtonsoft.Json.dll": {
-            "related": ".xml"
-          }
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {}
         }
       },
       "ScrapySharp/3.0.0": {
@@ -208,9 +180,7 @@
           "System.Security.Cryptography.ProtectedData": "4.5.0-preview1-26216-02"
         },
         "compile": {
-          "ref/netstandard2.0/_._": {
-            "related": ".xml"
-          }
+          "ref/netstandard2.0/_._": {}
         },
         "runtime": {
           "lib/netstandard2.0/System.Configuration.ConfigurationManager.dll": {}
@@ -222,14 +192,10 @@
           "Microsoft.Win32.SystemEvents": "6.0.0"
         },
         "compile": {
-          "lib/net6.0/System.Drawing.Common.dll": {
-            "related": ".xml"
-          }
+          "lib/net6.0/System.Drawing.Common.dll": {}
         },
         "runtime": {
-          "lib/net6.0/System.Drawing.Common.dll": {
-            "related": ".xml"
-          }
+          "lib/net6.0/System.Drawing.Common.dll": {}
         },
         "build": {
           "buildTransitive/netcoreapp3.1/_._": {}
@@ -267,9 +233,7 @@
       "System.Security.Cryptography.ProtectedData/4.5.0-preview1-26216-02": {
         "type": "package",
         "compile": {
-          "ref/netstandard2.0/_._": {
-            "related": ".xml"
-          }
+          "ref/netstandard2.0/_._": {}
         },
         "runtime": {
           "lib/netstandard2.0/System.Security.Cryptography.ProtectedData.dll": {}
@@ -296,14 +260,10 @@
           "System.Drawing.Common": "6.0.0"
         },
         "compile": {
-          "lib/net6.0-windows7.0/Wpf.Ui.dll": {
-            "related": ".xml"
-          }
+          "lib/net6.0-windows7.0/Wpf.Ui.dll": {}
         },
         "runtime": {
-          "lib/net6.0-windows7.0/Wpf.Ui.dll": {
-            "related": ".xml"
-          }
+          "lib/net6.0-windows7.0/Wpf.Ui.dll": {}
         },
         "frameworkReferences": [
           "Microsoft.WindowsDesktop.App.WPF"
@@ -766,28 +726,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\hthna\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\User\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\hthna\\source\\repos\\GalaxyMediaPlayer\\GalaxyMediaPlayer\\GalaxyMediaPlayer.csproj",
+      "projectUniqueName": "C:\\Users\\User\\source\\repos\\GalaxyMediaPlayer\\GalaxyMediaPlayer\\GalaxyMediaPlayer.csproj",
       "projectName": "GalaxyMediaPlayer",
-      "projectPath": "C:\\Users\\hthna\\source\\repos\\GalaxyMediaPlayer\\GalaxyMediaPlayer\\GalaxyMediaPlayer.csproj",
-      "packagesPath": "C:\\Users\\hthna\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\hthna\\source\\repos\\GalaxyMediaPlayer\\GalaxyMediaPlayer\\obj\\",
+      "projectPath": "C:\\Users\\User\\source\\repos\\GalaxyMediaPlayer\\GalaxyMediaPlayer\\GalaxyMediaPlayer.csproj",
+      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\User\\source\\repos\\GalaxyMediaPlayer\\GalaxyMediaPlayer\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\hthna\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
-        "net6.0-windows"
+        "net6.0-windows7.0"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -848,8 +803,7 @@
           "net47",
           "net471",
           "net472",
-          "net48",
-          "net481"
+          "net48"
         ],
         "assetTargetFallback": true,
         "warn": true,
@@ -861,7 +815,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.200\\RuntimeIdentifierGraph.json"
       }
     }
   }

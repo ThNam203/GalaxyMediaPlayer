@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\
+C:\Users\User\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\
 GalaxyMediaPlayer
 none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
-C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\App.xaml
-81996850949
+C:\Users\User\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\App.xaml
+91257870655
 
-22-2070198290
-2161654001731
-ColorSkins\DarkSkin.xaml;ColorSkins\TransparentSkin.xaml;MainWindow.xaml;Pages\MainPage.xaml;Pages\NavContentPages\Computer.xaml;Pages\NavContentPages\MusicDetailPage.xaml;Themes\Generic.xaml;Windows\SongMinimizedWindow.xaml;
+23-1057082723
+216-1286282016
+ColorSkins\DarkSkin.xaml;ColorSkins\TransparentSkin.xaml;MainWindow.xaml;Pages\ImagePage.xaml;Pages\MainPage.xaml;Pages\NavContentPages\Computer.xaml;Pages\NavContentPages\MusicDetailPage.xaml;Themes\Generic.xaml;Windows\SongMinimizedWindow.xaml;
 
-False
+True
 
