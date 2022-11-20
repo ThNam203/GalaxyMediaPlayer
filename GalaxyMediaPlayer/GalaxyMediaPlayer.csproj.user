@@ -16,6 +16,21 @@
     <Compile Update="Pages\NavContentPages\MusicDetailPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Pages\NavContentPages\PlaylistPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\PlaylistControls\ConfirmDeleteDialog.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\PlaylistControls\NewPlaylistControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\PlaylistControls\PlaylistRightClickDialog.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\PlaylistControls\RenameDialog.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Windows\SongMinimizedWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -37,6 +52,21 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\NavContentPages\MusicDetailPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\NavContentPages\PlaylistPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\PlaylistControls\ConfirmDeleteDialog.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\PlaylistControls\NewPlaylistControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\PlaylistControls\PlaylistRightClickDialog.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\PlaylistControls\RenameDialog.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Windows\SongMinimizedWindow.xaml">

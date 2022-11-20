@@ -82,6 +82,9 @@ namespace GalaxyMediaPlayer.Models
                 SongCopyright = songFile.Tag.Copyright;
                 if (SongCopyright == null || SongCopyright == "") { SongCopyright = "No infomation"; };
 
+                SongAlbum = songFile.Tag.Album;
+                if (SongAlbum == null || SongAlbum == "") { SongAlbum = "No infomation"; };
+
                 // Nam: Not using method below cause it's meeting a bug where duration return only about 70%
                 // SongDurationInString = songFile.Length.Duration.ToString(DurationFormatHelper.GetDurationFormatFromTotalSeconds(songFile.Properties.Duration.TotalSeconds));
                 SongDurationInString = MyMediaPlayer.mediaPlayer.NaturalDuration.TimeSpan.ToString(DurationFormatHelper.GetDurationFormatFromTotalSeconds(MyMediaPlayer.GetTotalTimeInSecond()));
@@ -138,6 +141,13 @@ namespace GalaxyMediaPlayer.Models
         { 
             get { return _songCopyright; }
             set { _songCopyright = value; }
+        }
+
+        private string _songAlbum;
+        public string SongAlbum
+        { 
+            get { return _songAlbum; }
+            set { _songAlbum = value; }
         }
 
         private string _songDurationInString;
