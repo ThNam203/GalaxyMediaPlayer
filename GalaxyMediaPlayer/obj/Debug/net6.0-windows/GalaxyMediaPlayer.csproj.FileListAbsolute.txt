@@ -118,3 +118,13 @@ C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\GalaxyMediaPlayer.pdb
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\GalaxyMediaPlayer.genruntimeconfig.cache
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\ref\GalaxyMediaPlayer.dll
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\Pages\NavContentPages\PlaylistPage.g.cs
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\Pages\NavContentPages\PlaylistPage.baml
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\UserControls\PlaylistControls\NewPlaylistControl.g.cs
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\UserControls\PlaylistControls\NewPlaylistControl.baml
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\UserControls\PlaylistControls\PlaylistRightClickDialog.g.cs
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\UserControls\PlaylistControls\PlaylistRightClickDialog.baml
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\UserControls\PlaylistControls\ConfirmDeleteDialog.g.cs
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\UserControls\PlaylistControls\RenameDialog.g.cs
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\UserControls\PlaylistControls\ConfirmDeleteDialog.baml
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\UserControls\PlaylistControls\RenameDialog.baml

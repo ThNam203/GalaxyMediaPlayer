@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -31,7 +30,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         private List<string> videoExtension = new List<string> { "asf", "wmv", "wm", "asx", "wvx", "wmx", "wpl", "dvr-ms",
                                                                  "wmd", "avi", "mpg", "mpeg", "m1v", "mpe", "ivf", "mov", 
                                                                  "m4v", "mp4v", "3g2", "3gp2", "3gp", "3gpp", "mp4" };
-        private List<string> imageExtension = new List<string> { "jpg", "gif", "png" };
+        private List<string> imageExtension = new List<string> { "jpg", "gif", "png", "jpeg" };
 
         private const string dateFormat = "MM/dd/yyyy hh:mm tt";
 
@@ -308,6 +307,10 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                     MyMediaPlayer.SetPlaylistFromTempPlaylist();
                     MyMediaPlayer.SetPositionInPlaylist(allMusicPathsInFolder.IndexOf(entity.Path));
                     MyMediaPlayer.PlayCurrentSong();
+                }
+                else if (entity.Type == EntityType.Image)
+                {
+
                 }
                 else if (entity.Type == EntityType.Folder)
                 {

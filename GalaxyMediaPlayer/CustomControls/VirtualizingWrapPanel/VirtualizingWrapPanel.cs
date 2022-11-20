@@ -490,11 +490,11 @@ public class VirtualizingWrapPanel : VirtualizingPanelBase
 
     /// <inheritdoc />
     protected override double GetPageUpScrollAmount()
-        => -Viewport.Height / 2;
+        => -Viewport.Height;
 
     /// <inheritdoc />
     protected override double GetPageDownScrollAmount()
-        => Viewport.Height / 2;
+        => Viewport.Height;
 
     /// <inheritdoc />
     protected override double GetPageLeftScrollAmount()

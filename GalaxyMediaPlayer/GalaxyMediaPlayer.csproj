@@ -58,6 +58,7 @@
     <None Remove="Resources\Icons\NavIcons\ic_youtube.png" />
     <None Remove="Resources\Icons\next_32.png" />
     <None Remove="Resources\Icons\pause_32.png" />
+    <None Remove="Resources\Icons\PlaylistPageIcons\playlist.png" />
     <None Remove="Resources\Icons\play_32.png" />
     <None Remove="Resources\Icons\previous_32.png" />
     <None Remove="Resources\Icons\random_32.png" />
@@ -138,11 +139,10 @@
     <Resource Include="Resources\Icons\MediaControlIcons\previous_32.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\random_32.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\volume_32.png" />
+    <Resource Include="Resources\Icons\PlaylistPageIcons\playlist.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Images\background_1.jpg" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="UserControls\" />
   </ItemGroup>
 
 </Project>
