@@ -31,7 +31,6 @@ namespace GalaxyMediaPlayer.Pages
             InitializeComponent();
             Images = new ObservableCollection<ImageModel>();
             listViewImage.ItemsSource = Images;
-
         }
 
 
