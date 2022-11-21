@@ -3,11 +3,15 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:cvt="clr-namespace:GalaxyMediaPlayer.Converters"
+      xmlns:virtualizingwrappanel="clr-namespace:GalaxyMediaPlayer.CustomControls.VirtualizingWrapPanel"
       xmlns:local="clr-namespace:GalaxyMediaPlayer.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ImagePage">
-
+    <Page.Resources>
+        <cvt:ImagePathToImageSource x:Key="ImagePathToImageSource"></cvt:ImagePathToImageSource>
+    </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -94,7 +98,7 @@
                     Style="{StaticResource ItemBar}"/>
             </StackPanel>
         </Border>
-        <Border x:Name="Border_img"
+        <Border x:Name="BorderlistView"
                 Visibility="Visible"
                 Grid.Row="2"
                 Background="#50c2c2c2"
@@ -104,7 +108,29 @@
                     Style="{StaticResource ButtonAddNowStyle}"
                     Click="Button_Click"/>
         </Border>
-        
+
+
+        <ListView Name="listViewImage"
+                  Grid.Row="2"
+                  Background="Transparent"
+                  Visibility="Collapsed"
+                  ItemsSource="{Binding Images}"
+                  Margin="{Binding ElementName=BorderlistView, Path=Margin}"
+                  BorderThickness="0">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <virtualizingwrappanel:VirtualizingWrapPanel
+                        IsItemsHost="True"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                        <Image Source="{Binding Path}" Width="200" Height="150" HorizontalAlignment="Stretch" VerticalAlignment="Top" Stretch="UniformToFill" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
 
     </Grid>
 </Page>
