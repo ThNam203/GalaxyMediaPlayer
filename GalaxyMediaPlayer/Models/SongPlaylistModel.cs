@@ -10,6 +10,7 @@ namespace GalaxyMediaPlayer.Models
         public string Artist { get; set; }
         public string Performer { get; set; }
         public string Length { get; set; }
+        public string Path { get; set; }
 
         public SongInfor(SongInfor songInfor)
         {
@@ -18,6 +19,17 @@ namespace GalaxyMediaPlayer.Models
             this.Artist = songInfor.Artist;
             this.Performer = songInfor.Performer;
             this.Length = songInfor.Length;
+            this.Path = songInfor.Path;
+        }
+        
+        public SongInfor(string Name, string Album, string Artist, string Performer, string Length, string Path)
+        {
+            this.Name = Name;
+            this.Album = Album;
+            this.Artist = Artist;
+            this.Performer = Performer;
+            this.Length = Length;
+            this.Path = Path;
         }
     }
     public class SongPlaylistModel
@@ -27,6 +39,7 @@ namespace GalaxyMediaPlayer.Models
             this._id = Guid.NewGuid().ToString();
             this._name = playlistName;
             this._songs = new List<SongInfor>();
+            this._timeCreated = DateTime.Now;
         }
 
         public SongPlaylistModel(SongPlaylistModel model)
@@ -34,6 +47,7 @@ namespace GalaxyMediaPlayer.Models
             this._id = model.Id;
             this._name = model.Name;
             this._songs = model.Songs;
+            this._timeCreated = DateTime.Now;
         }
 
         private string _id;
@@ -46,6 +60,12 @@ namespace GalaxyMediaPlayer.Models
         {
             get { return _name; }
             set { _name = value; }
+        }
+
+        private DateTime _timeCreated;
+        public DateTime TimeCreated
+        {
+            get { return _timeCreated; }
         }
 
         private List<SongInfor> _songs;

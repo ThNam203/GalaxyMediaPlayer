@@ -12,10 +12,11 @@ namespace GalaxyMediaPlayer.UserControls.PlaylistControls
     {
         private Action<string> onRenameButtonClick;
 
-        public RenameDialog(Action<string> onRenameButtonClick)
+        public RenameDialog(Action<string> onRenameButtonClick, string currentName)
         {
             InitializeComponent();
             this.onRenameButtonClick = onRenameButtonClick;
+            playlistNameTextbox.Text = currentName;
         }
 
         private void cancelBtn_Click(object sender, RoutedEventArgs e)

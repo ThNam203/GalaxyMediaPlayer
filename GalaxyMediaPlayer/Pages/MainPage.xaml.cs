@@ -76,10 +76,20 @@ namespace GalaxyMediaPlayer.Pages
             }
         }
 
-        private void mediaListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        // Nam: Computer.isUserBrowsing mainly use for playing music outside the computer page
+        // which prevent SetPlaylistFromTempPlaylist method to provoke in MyMediaPlayer
+        private void navButtonsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            NavButton? selectedItem = mediaListBox.SelectedItem as NavButton;
-            if (selectedItem != null) ContentFrame.Navigate(selectedItem.NavLink);
+            NavButton? selectedItem = navButtonsListBox.SelectedItem as NavButton;
+            if (selectedItem != null)
+            {
+                ContentFrame.Navigate(selectedItem.NavLink);
+                if (selectedItem.Title == "Computer")
+                {
+                    Computer.isUserBrowsing = true;
+                }
+                else Computer.isUserBrowsing = false;
+            }
         }
 
         private void SongDurationSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -92,7 +102,22 @@ namespace GalaxyMediaPlayer.Pages
             MyMediaPlayer.isSongPlaying = !MyMediaPlayer.isSongPlaying;
             changeAllBtnPlayPauseBackgroundImage();
 
-            if (MyMediaPlayer.folderCurrentlyInUse != Computer.currentBrowsingFolder)
+
+            // Nam: if User is not browsing, we won't call SetPlaylistFromTempPlaylist method
+            // cause we need to SetNewPlaylist manually
+            if (!Computer.isUserBrowsing)
+            {
+                if (MyMediaPlayer.isSongPlaying)
+                {
+                    if (MyMediaPlayer.isSongOpened) MyMediaPlayer.Continue();
+                    else MyMediaPlayer.PlayCurrentSong();
+                }
+                else
+                {
+                    MyMediaPlayer.Pause();
+                }
+            }
+            else if (MyMediaPlayer.folderCurrentlyInUse != Computer.currentBrowsingFolder)
             {
                 MyMediaPlayer.SetPlaylistFromTempPlaylist();
                 MyMediaPlayer.PlayCurrentSong();

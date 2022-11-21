@@ -405,6 +405,7 @@
                     Margin="8 0 0 0"
                     Visibility="Collapsed"
                     Content="&lt;"
+                    Click="BackBtn_Click"
                     Style="{StaticResource BackButtonArrowStyle}">
             </Button>
 
@@ -457,10 +458,31 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
+                
+                <Button
+                    Name="addNewSongToPlaylistBtn"
+                    Click="addNewSongToPlaylistBtn_Click"
+                    Visibility="Collapsed">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Border Width="100"
+                                Margin="16 0 0 0"
+                                CornerRadius="10"
+                                Background="#2a9d8f"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                <TextBlock Text="Add new song" 
+                                       TextAlignment="Center"
+                                       Foreground="{DynamicResource brushSecondary}"
+                                       Margin="4"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
             </StackPanel>
 
             <!--SelectionChanged="cbSortByOptions_SelectionChanged"-->
-            <ComboBox   Name="cbSortByOptions"
+            <ComboBox   Name="cbSortPlaylistBy"
                         Width="80"
                         Margin="0 0 50 0"
                         Grid.Column="1"
@@ -505,7 +527,11 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Margin="8 16">
+                    <StackPanel 
+                        Margin="8 16"    
+                        Name="listBoxItem"
+                        MouseLeftButtonDown="listBoxItem_MouseLeftButtonDown"
+                        MouseRightButtonDown="listBoxItem_MouseRightButtonDown">
                         <Border x:Name="border"
                                 Width="100" Height="100"
                                 Background="{DynamicResource brushLightAccent}"

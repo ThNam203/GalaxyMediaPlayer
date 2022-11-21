@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaxyMediaPlayer.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -19,18 +20,11 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
     }
     public partial class Computer : Page
     {
-
         MediaPlayer mediaPlayer = new MediaPlayer();
         public static string currentBrowsingFolder = "";
+        public static bool isUserBrowsing = false;
         // Nam: which is used for navigating back
         private static Stack<string> pathStack = new Stack<string>();
-        // Nam: this is for media file extension filter
-        private List<string> musicExtension = new List<string> { "wma", "wax", "mp3", "m4a", "mpa", "mp2", "m3u", "mid", "midi", "rmi",
-                                                                 "aif", "aifc", "aiff", "au", "snd", "wav", "cda", "aac", "adts", "m2ts", "flac" };
-        private List<string> videoExtension = new List<string> { "asf", "wmv", "wm", "asx", "wvx", "wmx", "wpl", "dvr-ms",
-                                                                 "wmd", "avi", "mpg", "mpeg", "m1v", "mpe", "ivf", "mov", 
-                                                                 "m4v", "mp4v", "3g2", "3gp2", "3gp", "3gpp", "mp4" };
-        private List<string> imageExtension = new List<string> { "jpg", "gif", "png", "jpeg" };
 
         private const string dateFormat = "MM/dd/yyyy hh:mm tt";
 
@@ -248,7 +242,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                     {
                         var fileExtension = fi.Extension.TrimStart('.').ToLowerInvariant();
 
-                        if (musicExtension.Contains(fileExtension))
+                        if (SupportedExtensions.MUSIC_EXTENSION.Contains(fileExtension))
                         {
                             allMusicPathsInFolder.Add(fi.FullName);
                             systemEntities.Add(new SystemEntityModel(
@@ -259,7 +253,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                                 size: fi.Length,
                                 extension: fi.Extension));
                         }
-                        else if (imageExtension.Contains(fileExtension))
+                        else if (SupportedExtensions.IMAGE_EXTENSION.Contains(fileExtension))
                         {
                             systemEntities.Add(new SystemEntityModel(
                                 name: fi.Name,
@@ -269,7 +263,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                                 size: fi.Length,
                                 extension: fi.Extension));
                         }
-                        else if (videoExtension.Contains(fileExtension))
+                        else if (SupportedExtensions.VIDEO_EXTENSION.Contains(fileExtension))
                         {
                             systemEntities.Add(new SystemEntityModel(
                                 name: fi.Name,
