@@ -210,7 +210,7 @@
                 </Trigger>
 
                 <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource brushAccent}"/>
+                    <Setter Property="Background" Value="#495057"/>
                     <Setter Property="Foreground" Value="{DynamicResource brushSecondary}"/>
                 </Trigger>
 

@@ -62,9 +62,9 @@
                     </StackPanel>
 
                 <!--Dat: Row 1 is list of app-->
-                <ListBox Name="mediaListBox" 
+                <ListBox Name="navButtonsListBox" 
                          Grid.Row="1"
-                         SelectionChanged="mediaListBox_SelectionChanged"
+                         SelectionChanged="navButtonsListBox_SelectionChanged"
                          SelectionMode="Single" 
                          Background="{DynamicResource brushPrimary}"
                          BorderThickness="0">

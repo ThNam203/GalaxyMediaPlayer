@@ -11,9 +11,9 @@ false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\App.xaml
 13-290807214
-
-26-1986306019
-2161654001731
+172525871
+29347709525
+218-1924804021
 ColorSkins\DarkSkin.xaml;ColorSkins\TransparentSkin.xaml;MainWindow.xaml;Pages\MainPage.xaml;Pages\NavContentPages\Computer.xaml;Pages\NavContentPages\MusicDetailPage.xaml;Pages\NavContentPages\PlaylistPage.xaml;Themes\Generic.xaml;UserControls\PlaylistControls\ConfirmDeleteDialog.xaml;UserControls\PlaylistControls\NewPlaylistControl.xaml;UserControls\PlaylistControls\PlaylistRightClickDialog.xaml;UserControls\PlaylistControls\RenameDialog.xaml;Windows\SongMinimizedWindow.xaml;
 
 False
