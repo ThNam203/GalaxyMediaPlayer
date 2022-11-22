@@ -21,7 +21,6 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
     public partial class Computer : Page
     {
         MediaPlayer mediaPlayer = new MediaPlayer();
-        public static string currentBrowsingFolder = "";
         public static bool isUserBrowsing = false;
         // Nam: which is used for navigating back
         private static Stack<string> pathStack = new Stack<string>();
@@ -73,7 +72,8 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         }
         private void IntializeBrowseFoldersAndDisksAndMediaControlButtonsView()
         {
-            MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid("", true);
+            MainPage.currentMusicBrowsingFolder = "";
+            MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid(true);
             MainPage.Instance.ChangeButtonsViewOnOpenFolder(true);
 
             systemEntities.Clear();
@@ -137,7 +137,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             }
 
             // Nam: THIS IS NOT A GOOD IDEA, SHOULD CHANGE IF POSSIBLE
-            systemEntities.Clear();
+            // systemEntities.Clear();
             systemEntities = new ObservableCollection<SystemEntityModel>(systemEntitiesSort);
             browseListBox.ItemsSource = systemEntities;
             browseDataGrid.ItemsSource = systemEntities;
@@ -183,7 +183,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             if (pathStack.Count == 0)
             {
                 IntializeBrowseFoldersAndDisksAndMediaControlButtonsView();
-                currentBrowsingFolder = "";
+                MainPage.currentMusicBrowsingFolder = "";
                 currentFolderName.Text = "My Computer";
                 BackBtn.Visibility = Visibility.Hidden;
             }
@@ -199,8 +199,8 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         // (instead we pop it, but on the original function that do)
         private void OpenFolder(DirectoryInfo di, bool IsOnBackButtonPress)
         {
-            currentBrowsingFolder = di.FullName;
-            if (!MyMediaPlayer.isSongOpened) MyMediaPlayer.folderCurrentlyInUse = di.FullName;
+            MainPage.currentMusicBrowsingFolder = di.FullName;
+            if (!MyMediaPlayer.isSongOpened) MyMediaPlayer.pathCurrentlyInUse = di.FullName;
 
             if (!IsOnBackButtonPress)
             {
@@ -279,7 +279,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 // Nam: mediaPlayer need to update first so ui can change accordingly
                 MyMediaPlayer.SetTempPlaylist(allMusicPathsInFolder);
                 MainPage.Instance.ChangeButtonsViewOnOpenFolder(forceShow: false);
-                MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid(di.FullName, false);
+                MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid(false);
             }
             catch(UnauthorizedAccessException) 
             {
@@ -298,6 +298,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             {
                 if (entity.Type == EntityType.Music)
                 {
+                    MyMediaPlayer.pathCurrentlyInUse = MainPage.currentMusicBrowsingFolder;
                     MyMediaPlayer.SetPlaylistFromTempPlaylist();
                     MyMediaPlayer.SetPositionInPlaylist(allMusicPathsInFolder.IndexOf(entity.Path));
                     MyMediaPlayer.PlayCurrentSong();

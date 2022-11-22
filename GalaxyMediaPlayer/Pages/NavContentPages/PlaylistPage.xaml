@@ -207,7 +207,7 @@
                 </Trigger>
 
                 <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource brushAccent}"/>
+                    <Setter Property="Background" Value="#495057"/>
                     <Setter Property="Foreground" Value="{DynamicResource brushSecondary}"/>
                 </Trigger>
 
@@ -395,7 +395,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -416,87 +415,108 @@
                        Foreground="{DynamicResource brushSecondary}"/>
         </StackPanel>
 
-        <Grid
-            Grid.Row="1"
-            Margin="8,8,8,8" 
+        <Grid Grid.Row="1"
+            Margin="8 0" 
             Grid.ColumnSpan="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock/>
+            <Grid Panel.ZIndex="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock/>
 
-            <StackPanel Orientation="Horizontal">
-                <Label Foreground="{DynamicResource brushSecondary}">
-                    Songs
-                </Label>
-                
-                <Label Foreground="{DynamicResource brushSecondary}">
-                    Videos
-                </Label>
-                
-                <Label Foreground="{DynamicResource brushSecondary}">
-                    Images
-                </Label>
+                <StackPanel Orientation="Horizontal" Margin="1">
+                    <Label  Name="showMusicPlaylistsBtn"
+                            Padding="8"
+                            BorderBrush="White" 
+                            BorderThickness="0 0 0 3" 
+                            Foreground="{DynamicResource brushSecondary}"
+                            MouseDown="showMusicPlaylistsBtn_MouseDown">
+                        Music
+                    </Label>
 
-                <Button
+                    <Label Name="showVideosPlaylistsBtn"
+                           Padding="8"
+                           BorderBrush="Transparent" 
+                           BorderThickness="0 0 0 3" 
+                           Foreground="{DynamicResource brushSecondary}"
+                           MouseDown="showVideosPlaylistsBtn_MouseDown">
+                        Videos
+                    </Label>
+
+                    <Label  Name="showImagesPlaylistsBtn"
+                            Padding="8"
+                            BorderBrush="Transparent" 
+                            BorderThickness="0 0 0 3" 
+                            Foreground="{DynamicResource brushSecondary}"
+                            MouseDown="showImagesPlaylistsBtn_MouseDown">
+                        Images
+                    </Label>
+
+                    <Button
                     Name="newPlaylistBtn"
                     Click="newPlaylistBtn_Click">
-                    <Button.Template>
-                        <ControlTemplate>
-                            <Border Width="100"
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Border Width="100"
                                 Margin="16 0 0 0"
                                 CornerRadius="10"
                                 Background="#2a9d8f"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center">
-                                <TextBlock Text="+ New playlist" 
+                                    <TextBlock Text="+ New playlist" 
                                        TextAlignment="Center"
                                        Foreground="{DynamicResource brushSecondary}"
                                        Margin="4"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-                
-                <Button
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                    <Button
                     Name="addNewSongToPlaylistBtn"
                     Click="addNewSongToPlaylistBtn_Click"
                     Visibility="Collapsed">
-                    <Button.Template>
-                        <ControlTemplate>
-                            <Border Width="100"
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Border Width="100"
                                 Margin="16 0 0 0"
                                 CornerRadius="10"
                                 Background="#2a9d8f"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center">
-                                <TextBlock Text="Add new song" 
+                                    <TextBlock Text="Add new song" 
                                        TextAlignment="Center"
                                        Foreground="{DynamicResource brushSecondary}"
                                        Margin="4"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </StackPanel>
 
-            <!--SelectionChanged="cbSortByOptions_SelectionChanged"-->
-            <ComboBox   Name="cbSortPlaylistBy"
+                <!--SelectionChanged="cbSortByOptions_SelectionChanged"-->
+                <ComboBox   Name="cbSortPlaylistBy"
                         Width="80"
                         Margin="0 0 50 0"
                         Grid.Column="1"
-                        VerticalAlignment="Center">
-            </ComboBox>
+                        VerticalAlignment="Center"
+                            SelectionChanged="cbSortPlaylistBy_SelectionChanged">
+                    <ComboBoxItem>Name</ComboBoxItem>
+                    <ComboBoxItem>Date  &#8595;</ComboBoxItem>
+                </ComboBox>
+            </Grid>
+
+            <Separator
+                Panel.ZIndex="-10"
+                VerticalAlignment="Bottom"
+                Height="1"
+                Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"
+                Grid.ColumnSpan="2"/>
         </Grid>
 
-        <Separator
-            Grid.Row="2"
-            Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"
-            Margin="16,0,16,0" Grid.ColumnSpan="2"/>
-
         <ListBox
-            Grid.Row="3"
+            Grid.Row="2"
             x:Name="playlistListBox"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -612,16 +632,7 @@
             </DataGrid.Resources>
 
             <DataGrid.Columns>
-                <DataGridCheckBoxColumn CanUserResize="False" Width="auto">
-                    <DataGridCheckBoxColumn.ElementStyle>
-                        <Style TargetType="CheckBox">
-                            <Setter Property="Visibility" Value="{Binding Type, Converter={StaticResource ResourceKey=EntityTypeToVisibility}}"/>
-                            <Setter Property="IsChecked" Value="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}"/>
-                        </Style>
-                    </DataGridCheckBoxColumn.ElementStyle>
-                </DataGridCheckBoxColumn>
-
-                <DataGridTextColumn Header="Song names" 
+                <DataGridTextColumn Header="Music Name" 
                                     IsReadOnly="True" 
                                     Width="*" 
                                     CanUserResize="True"

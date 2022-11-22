@@ -21,7 +21,9 @@ namespace GalaxyMediaPlayer.Pages
         public static MainPage Instance { get; set; }
         // Nam: use for navigate back to lastest frame back stack
         public static Stack<Uri> frameStack = new Stack<Uri>();
-
+        // Nam: use to hold information about where user are navigating (which is for showing MUSIC AdditionalGridInfor)
+        public static string currentMusicBrowsingFolder;
+        
         private double totalTimeInSecond;
         private bool isDragging = false; // Nam: if user is dragging, we are not updating the slider value, see more below
         private bool isMuted = false;
@@ -53,7 +55,8 @@ namespace GalaxyMediaPlayer.Pages
             AddSongInformationToInfoGrid();
             changeAllBtnPlayPauseBackgroundImage();
             ActivateControlButtons();
-            ChangeAdditionControlVisibilityInInforGrid(Computer.currentBrowsingFolder, false);
+
+            ChangeAdditionControlVisibilityInInforGrid(false);
 
             durationFormat = DurationFormatHelper.GetDurationFormatFromTotalSeconds(totalTimeInSecond);
 
@@ -117,14 +120,14 @@ namespace GalaxyMediaPlayer.Pages
                     MyMediaPlayer.Pause();
                 }
             }
-            else if (MyMediaPlayer.folderCurrentlyInUse != Computer.currentBrowsingFolder)
+            else if (MyMediaPlayer.pathCurrentlyInUse != currentMusicBrowsingFolder)
             {
                 MyMediaPlayer.SetPlaylistFromTempPlaylist();
                 MyMediaPlayer.PlayCurrentSong();
             }
             else if (MyMediaPlayer.isSongPlaying)
             {
-                if (MyMediaPlayer.folderCurrentlyInUse == Computer.currentBrowsingFolder)
+                if (MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder)
                 {
                     if (MyMediaPlayer.isSongOpened)
                     {
@@ -146,7 +149,7 @@ namespace GalaxyMediaPlayer.Pages
         private void btnPlayPauseInGridInfo_Click(object sender, RoutedEventArgs e)
         {
             MyMediaPlayer.isSongPlaying = !MyMediaPlayer.isSongPlaying;
-            if (MyMediaPlayer.folderCurrentlyInUse == Computer.currentBrowsingFolder)
+            if (MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder)
             {
                 changeAllBtnPlayPauseBackgroundImage();
             }
@@ -261,13 +264,13 @@ namespace GalaxyMediaPlayer.Pages
         // Nam: forceShow indicates if we are NOT browsing the computer
         // which means we are in the defaut scene (drives and fav folders)
         // then we need to show it anyway
-        public void ChangeAdditionControlVisibilityInInforGrid(string newOpenedFolder, bool forceShow)
+        public void ChangeAdditionControlVisibilityInInforGrid(bool forceShow)
         {
-            if (MyMediaPlayer.folderCurrentlyInUse == newOpenedFolder && forceShow == false)
+            if (MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder && forceShow == false)
             {
                 ExtraControlGridInfo.Visibility = Visibility.Collapsed;
             }
-            else if (MyMediaPlayer.folderCurrentlyInUse != newOpenedFolder || forceShow)
+            else if (MyMediaPlayer.pathCurrentlyInUse != currentMusicBrowsingFolder || forceShow)
             {
                 ExtraControlGridInfo.Visibility = Visibility.Visible;
             }
@@ -365,7 +368,7 @@ namespace GalaxyMediaPlayer.Pages
             {
                 DisableControlButtons();
             }
-            else if (MyMediaPlayer.isSongOpened && MyMediaPlayer.isSongPlaying && MyMediaPlayer.folderCurrentlyInUse == Computer.currentBrowsingFolder)
+            else if (MyMediaPlayer.isSongOpened && MyMediaPlayer.isSongPlaying && MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder)
             {
                 brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/pause_32.png"));
                 btnPlayPause.Background = brush;
@@ -431,7 +434,7 @@ namespace GalaxyMediaPlayer.Pages
             MyMediaPlayer.Stop();
             SongInfoDisplayGrid.Visibility = Visibility.Collapsed;
             SongSliderPanel.Visibility = Visibility.Collapsed;
-            if (MyMediaPlayer.folderCurrentlyInUse == Computer.currentBrowsingFolder)
+            if (MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder)
                 changeAllBtnPlayPauseBackgroundImage();
             else changeBtnPlayPauseBackgroundInGridInfo();
         }

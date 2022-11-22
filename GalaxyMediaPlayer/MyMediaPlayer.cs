@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaxyMediaPlayer.Pages;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Media;
@@ -18,11 +19,11 @@ namespace GalaxyMediaPlayer
         private static List<string> tempPlaylist = new List<string>();
         private static int positionInPlaylist = 0;
 
-        // if currentFolder is the same as the folder holding the playing song
+        // if currentPath is the same as the folder holding the playing song
         // show extra control buttons in info grid AND
         // we update playPauseButtonInGridInfo along with playPauseButton 
         // if it's false, then we update separately
-        public static string folderCurrentlyInUse = "";
+        public static string pathCurrentlyInUse = "";
 
         // Nam: first is no loop, second is looping one, and last is loop over the playlist
         public static RepeatingOption repeatingOptions = RepeatingOption.NoRepeat;
@@ -51,13 +52,14 @@ namespace GalaxyMediaPlayer
 
             string? songFolder = Path.GetDirectoryName(songPath);
             if (string.IsNullOrEmpty(songFolder)) songFolder = songPath.Substring(0, songPath.LastIndexOf("\\"));
-            folderCurrentlyInUse = songFolder;
 
             mediaPlayer.Play();
         }
 
         public static void PlayCurrentSong()
         {
+            // Nam: it's not songPath, folderPath can be "Playlist/Playlist.Name"
+            pathCurrentlyInUse = MainPage.currentMusicBrowsingFolder;
             isSongPlaying = true;
             isSongOpened = true;
             OpenAndPlay(playlist[positionInPlaylist]);
