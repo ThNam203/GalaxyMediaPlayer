@@ -105,7 +105,6 @@ namespace GalaxyMediaPlayer.Pages
             MyMediaPlayer.isSongPlaying = !MyMediaPlayer.isSongPlaying;
             changeAllBtnPlayPauseBackgroundImage();
 
-
             // Nam: if User is not browsing, we won't call SetPlaylistFromTempPlaylist method
             // cause we need to SetNewPlaylist manually
             if (!Computer.isUserBrowsing)

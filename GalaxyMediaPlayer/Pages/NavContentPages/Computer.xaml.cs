@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -31,7 +32,10 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         private bool isUsingGridStyle = false;
 
         // Nam: this is for playlist feature in MainPage and MyMediaPlayer.cs
-        private List<string> allMusicPathsInFolder = new List<string>();
+        private List<string> allMusicPathsInFolder
+        {
+            get { return GetAllMusicPathsInFolderEvenSorted(); }
+        }
 
         // this binds to listbox in computer browse page
         public ObservableCollection<SystemEntityModel> systemEntities { get; set; }
@@ -43,16 +47,6 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             systemEntities = new();
             systemEntitiesSort = new();
             DataContext = this;
-
-            DispatcherTimer debugTimer = new DispatcherTimer();
-            debugTimer.Interval = TimeSpan.FromSeconds(10);
-            debugTimer.Tick += DebugTimer_Tick;
-            debugTimer.Start();
-        }
-
-        private void DebugTimer_Tick(object? sender, EventArgs e)
-        {
-            return;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -116,7 +110,8 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                     extension: "Folder"));
         }
 
-        private void sortList(SortType type, bool isSortAscending)
+        // Nam: Music list (allMusicPathsInFolder) must be sorted to the coresponding position in systemEntities
+        private void sortSystemEntities(SortType type, bool isSortAscending)
         {
             systemEntitiesSort = new List<SystemEntityModel>(systemEntities);
             if (type == SortType.Name)
@@ -136,11 +131,14 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 systemEntitiesSort.Sort((x, y) => x.Type.CompareTo(y.Type));
             }
 
+            MyMediaPlayer.SetTempPlaylist(GetAllMusicPathsInFolderEvenSorted());
+
             // Nam: THIS IS NOT A GOOD IDEA, SHOULD CHANGE IF POSSIBLE
-            // systemEntities.Clear();
-            systemEntities = new ObservableCollection<SystemEntityModel>(systemEntitiesSort);
-            browseListBox.ItemsSource = systemEntities;
-            browseDataGrid.ItemsSource = systemEntities;
+            systemEntities.Clear();
+            foreach (SystemEntityModel entity in systemEntitiesSort) systemEntities.Add(entity);
+            //systemEntities = new ObservableCollection<SystemEntityModel>(systemEntitiesSort);
+            //browseListBox.ItemsSource = systemEntities;
+            //browseDataGrid.ItemsSource = systemEntities;
         }
 
         private void browseListBoxItem_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -244,7 +242,6 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
                         if (SupportedExtensions.MUSIC_EXTENSION.Contains(fileExtension))
                         {
-                            allMusicPathsInFolder.Add(fi.FullName);
                             systemEntities.Add(new SystemEntityModel(
                                 name: fi.Name,
                                 type: EntityType.Music,
@@ -276,8 +273,14 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                     }
                 }
 
-                // Nam: mediaPlayer need to update first so ui can change accordingly
+                if (cbSortByOptions.SelectedIndex != -1)
+                {
+                    SortType type = (SortType)cbSortByOptions.SelectedItem;
+                    sortSystemEntities(type, true);
+                }
+
                 MyMediaPlayer.SetTempPlaylist(allMusicPathsInFolder);
+                // Nam: mediaPlayer need to update first so ui can change accordingly
                 MainPage.Instance.ChangeButtonsViewOnOpenFolder(forceShow: false);
                 MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid(false);
             }
@@ -285,6 +288,20 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             {
                 MessageBox.Show("You don't have the permission to access this folder");
             }
+        }
+
+        // Nam: get musicPaths accordinglly to the sorted (or not) systemEntities
+        private List<string> GetAllMusicPathsInFolderEvenSorted()
+        {
+            List<string> result = new List<string>();
+            foreach (SystemEntityModel model in systemEntities)
+            {
+                if (model.Type == EntityType.Music)
+                {
+                    result.Add(model.Path);
+                }
+            }
+            return result;
         }
 
         private void OnBrowseItemDoubleClick(bool isUsingListBox)
@@ -299,9 +316,26 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 if (entity.Type == EntityType.Music)
                 {
                     MyMediaPlayer.pathCurrentlyInUse = MainPage.currentMusicBrowsingFolder;
-                    MyMediaPlayer.SetPlaylistFromTempPlaylist();
-                    MyMediaPlayer.SetPositionInPlaylist(allMusicPathsInFolder.IndexOf(entity.Path));
-                    MyMediaPlayer.PlayCurrentSong();
+                    if (isUsingListBox)
+                    {
+                        MyMediaPlayer.SetTempPlaylist(allMusicPathsInFolder);
+                        MyMediaPlayer.SetPlaylistFromTempPlaylist();
+                        MyMediaPlayer.SetPositionInPlaylist(allMusicPathsInFolder.IndexOf(entity.Path));
+                        MyMediaPlayer.PlayCurrentSong();
+                    } 
+                    else
+                    {
+                        List<string> songs = new List<string>();
+                        foreach (SystemEntityModel model in browseDataGrid.Items)
+                        {
+                            if (model.Type == EntityType.Music) songs.Add(model.Path);
+                        }
+
+                        MyMediaPlayer.SetTempPlaylist(songs);
+                        MyMediaPlayer.SetPlaylistFromTempPlaylist();
+                        MyMediaPlayer.SetPositionInPlaylist(songs.IndexOf(entity.Path));
+                        MyMediaPlayer.PlayCurrentSong();
+                    }
                 }
                 else if (entity.Type == EntityType.Image)
                 {
@@ -320,12 +354,14 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             isUsingGridStyle = !isUsingGridStyle;
             if (isUsingGridStyle)
             {
+                cbSortByOptions.Visibility = Visibility.Collapsed;
                 browseListBox.Visibility = Visibility.Collapsed;
                 browseDataGrid.Visibility = Visibility.Visible;
                 BrowseStyleImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/ComputerPageIcons/list_32.png"));
             }
             else
             {
+                cbSortByOptions.Visibility = Visibility.Visible;
                 browseListBox.Visibility = Visibility.Visible;
                 browseDataGrid.Visibility = Visibility.Collapsed;
                 BrowseStyleImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/ComputerPageIcons/four_squares_32.png"));
@@ -335,7 +371,8 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         private void cbSortByOptions_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SortType type = (SortType)((ComboBox)sender).SelectedItem;
-            sortList(type, true);
+            sortSystemEntities(type, true);
+            MyMediaPlayer.SetTempPlaylist(allMusicPathsInFolder);
         }
     }
 }
