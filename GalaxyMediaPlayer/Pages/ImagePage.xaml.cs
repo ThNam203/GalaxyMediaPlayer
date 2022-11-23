@@ -44,6 +44,7 @@ namespace GalaxyMediaPlayer.Pages
             {
                 BorderlistView.Visibility = Visibility.Collapsed;
                 listViewImage.Visibility = Visibility.Visible;
+                btn_Addmore.Visibility = Visibility.Visible;
                 foreach (string file in dialog.FileNames)
                 {
                     ImageModel imgModel = new ImageModel(file);
@@ -52,6 +53,9 @@ namespace GalaxyMediaPlayer.Pages
             }
         }
 
-
+        private void Image_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            
+        }
     }
 }
