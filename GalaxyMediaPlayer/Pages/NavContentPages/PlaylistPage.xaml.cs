@@ -1,17 +1,21 @@
 ﻿using GalaxyMediaPlayer.Databases.SongPlaylist;
 using GalaxyMediaPlayer.Helpers;
 using GalaxyMediaPlayer.Models;
+using GalaxyMediaPlayer.UserControls;
 using GalaxyMediaPlayer.UserControls.PlaylistControls;
 using Microsoft.Win32;
+using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace GalaxyMediaPlayer.Pages.NavContentPages
 {
@@ -22,6 +26,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
     {
         private ObservableCollection<SongPlaylistModel> playlists;
         private ObservableCollection<SongInfor> currentChosenPlaylistSongs = new ObservableCollection<SongInfor>();
+        private List<int> deleteIndices = new List<int>();
         public PlaylistPage()
         {
             InitializeComponent();
@@ -186,11 +191,18 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
                 if (openFileDialog.ShowDialog() == true)
                 {
+                    string errorMessages = "";
+
                     foreach (string musicPath in openFileDialog.FileNames)
                     {
                         TagLib.File music = TagLib.File.Create(musicPath);
 
-                        double secondsDuration = music.Properties.Duration.TotalSeconds;
+                        //double secondsDuration = music.Properties.Duration.TotalSeconds; is wrong (some return only 70% of the real duration)
+
+                        // Nam: get media file's length
+                        IShellProperty prop = Microsoft.WindowsAPICodePack.Shell.ShellObject.FromParsingName(musicPath).Properties.System.Media.Duration;
+                        var t = (ulong)prop.ValueAsObject;
+                        double secondsDuration = TimeSpan.FromTicks((long)t).TotalSeconds;
                         string durationFormat = DurationFormatHelper.GetDurationFormatFromTotalSeconds(secondsDuration);
                         string length = TimeSpan.FromSeconds(secondsDuration).ToString(durationFormat);
 
@@ -211,9 +223,18 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                             length: length,
                             path: musicPath);
 
-                        PlaylistSongsDatabaseAccess.SaveSong(newSongInfor);
-                        playlist.Songs.Add(newSongInfor);
-                        currentChosenPlaylistSongs.Add(newSongInfor);
+                        if (PlaylistSongsDatabaseAccess.SaveSong(newSongInfor) == 1)
+                        {
+                            playlist.Songs.Add(newSongInfor);
+                            currentChosenPlaylistSongs.Add(newSongInfor);
+                        }
+                        else errorMessages += newSongInfor.Name + " already exists in playlist\n";
+
+                    }
+
+                    if (errorMessages != "")
+                    {
+                        new ShowMessageControl("Errors", errorMessages).Show();
                     }
                 }
             }
@@ -266,6 +287,39 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                     foreach (SongPlaylistModel song in tempPlaylists) playlists.Add(song);
                 }
             }
+        }
+
+        private void DeleteCheckBoxClick(object sender, RoutedEventArgs e)
+        {
+            if (sender == null) return;
+
+            CheckBox cb = (CheckBox)sender;
+            if ((bool)cb.IsChecked) deleteIndices.Add(playlistSongsDataGrid.SelectedIndex);
+            else deleteIndices.Remove(playlistSongsDataGrid.SelectedIndex);
+            e.Handled = true;
+        }
+
+        private void deleteIconHeader_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (deleteIndices.Count > 0)
+            {
+                ConfirmDialog dialog = new ConfirmDialog("Delete Songs", "Are you sure to delete " + deleteIndices.Count + " songs", deleteSongsInPlaylist);
+
+                dialog.Show();
+            }
+        }
+
+        private void deleteSongsInPlaylist()
+        {
+            List<SongInfor> deleteSongs = new List<SongInfor>();
+            foreach (int idx in deleteIndices.OrderByDescending(v => v))
+            {
+                deleteSongs.Add(currentChosenPlaylistSongs[idx]);
+                currentChosenPlaylistSongs.RemoveAt(idx);
+            }
+
+            deleteIndices.Clear();
+            PlaylistSongsDatabaseAccess.DeleteSongs(deleteSongs);
         }
     }
 }

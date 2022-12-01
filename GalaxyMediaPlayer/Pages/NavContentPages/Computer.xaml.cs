@@ -3,12 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 
 namespace GalaxyMediaPlayer.Pages.NavContentPages
 {
@@ -132,13 +130,8 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             }
 
             MyMediaPlayer.SetTempPlaylist(GetAllMusicPathsInFolderEvenSorted());
-
-            // Nam: THIS IS NOT A GOOD IDEA, SHOULD CHANGE IF POSSIBLE
             systemEntities.Clear();
             foreach (SystemEntityModel entity in systemEntitiesSort) systemEntities.Add(entity);
-            //systemEntities = new ObservableCollection<SystemEntityModel>(systemEntitiesSort);
-            //browseListBox.ItemsSource = systemEntities;
-            //browseDataGrid.ItemsSource = systemEntities;
         }
 
         private void browseListBoxItem_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

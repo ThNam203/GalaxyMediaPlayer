@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace GalaxyMediaPlayer.UserControls.PlaylistControls
 {
@@ -44,9 +34,13 @@ namespace GalaxyMediaPlayer.UserControls.PlaylistControls
 
         private void deleteBtn_Click(object sender, RoutedEventArgs e)
         {
-            ConfirmDeleteDialog confirmDeleteDialog = new ConfirmDeleteDialog(onDeleteButtonClick);
+            ConfirmDialog confirmDeleteDialog = new ConfirmDialog(
+                "Delete playlist", 
+                "Are you sure to delete this playlist?", 
+                onDeleteButtonClick);
+
             MainWindow.ClearAllMessageBox();
-            MainWindow.ShowCustomMessageBoxInMiddle(confirmDeleteDialog);
+            confirmDeleteDialog.Show();
         }
 
         private void StackPanel_MouseDown(object sender, MouseButtonEventArgs e)

@@ -124,9 +124,7 @@ C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\UserControls\PlaylistControls\NewPlaylistControl.baml
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\UserControls\PlaylistControls\PlaylistRightClickDialog.g.cs
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\UserControls\PlaylistControls\PlaylistRightClickDialog.baml
-C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\UserControls\PlaylistControls\ConfirmDeleteDialog.g.cs
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\UserControls\PlaylistControls\RenameDialog.g.cs
-C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\UserControls\PlaylistControls\ConfirmDeleteDialog.baml
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\UserControls\PlaylistControls\RenameDialog.baml
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\GalaxyMediaPlayer_Content.g.cs
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\bin\Debug\net6.0-windows\System.Data.SQLite.dll
@@ -137,3 +135,8 @@ C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\bin\Debug\net6.0
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\bin\Debug\net6.0-windows\Databases\SongPlaylist\Playlist.db
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\bin\Debug\net6.0-windows\GalaxyMediaPlayer.dll.config
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\bin\Debug\net6.0-windows\Dapper.dll
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\UserControls\ShowMessageControl.g.cs
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\UserControls\ShowMessageControl.baml
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\bin\Debug\net6.0-windows\Microsoft.WindowsAPICodePack.ShellExtensions.dll
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\UserControls\ConfirmDialog.g.cs
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\UserControls\ConfirmDialog.baml

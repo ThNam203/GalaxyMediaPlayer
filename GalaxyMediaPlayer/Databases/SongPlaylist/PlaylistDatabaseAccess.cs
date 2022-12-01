@@ -1,12 +1,10 @@
 ﻿using Dapper;
 using GalaxyMediaPlayer.Models;
-using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SQLite;
 using System.Linq;
-using System.Windows.Documents;
 
 namespace GalaxyMediaPlayer.Databases.SongPlaylist
 {
