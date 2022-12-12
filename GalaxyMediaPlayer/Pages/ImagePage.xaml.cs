@@ -55,7 +55,11 @@ namespace GalaxyMediaPlayer.Pages
 
         private void Image_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            
+            if(e.ClickCount == 2)
+            {
+                OpenImageWindow openImageWindow = new OpenImageWindow();
+                openImageWindow.Show();
+            }
         }
     }
 }
