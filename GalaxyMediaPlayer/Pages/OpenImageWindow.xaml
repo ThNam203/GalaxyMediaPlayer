@@ -6,21 +6,20 @@
         xmlns:local="clr-namespace:GalaxyMediaPlayer.Pages"
         xmlns:cvt="clr-namespace:GalaxyMediaPlayer.Converters"
         mc:Ignorable="d"
-        Title="OpenImageWindow" Height="450" Width="800"
+        Title="OpenImageWindow" Height="800" Width="1000"
         WindowStyle="None"
         BorderThickness="0"
-        BorderBrush="Transparent"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        MouseDown="Window_MouseDown">
     <Window.Resources>
         <cvt:SystemEntityToImageSource x:Key="SystemEntityToImageSource"></cvt:SystemEntityToImageSource>
         <cvt:ImagePathToImageSource x:Key="ImagePathToImageSource"></cvt:ImagePathToImageSource>
         <cvt:EntityTypeToVisibility x:Key="EntityTypeToVisibility"></cvt:EntityTypeToVisibility>
         <cvt:ImagePathToThumbnailImage x:Key="ImagePathToThumbnailImage"></cvt:ImagePathToThumbnailImage>
-        <cvt:ImageToBitmapImage x:Key="ImageToBitmapImage"></cvt:ImageToBitmapImage>
     </Window.Resources>
 
     <Window.Background>
-        <SolidColorBrush Color="Black"/>
+        <SolidColorBrush Color="#393735"/>
     </Window.Background>
     
     <Grid>
@@ -32,6 +31,12 @@
         <Grid Name="ContentGrid"
               Background="Transparent"
               Grid.Row="0">
+            <TextBlock x:Name="TitleOfWindow" Foreground="White"
+                       Width="auto"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Margin="20 0 0 0"/>
+
             <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Right">
                 <Button Name="btnMinimizeApp"
@@ -54,8 +59,7 @@
 
         <Grid x:Name="PictureGrid"
               Background="Transparent"
-              Grid.Row ="1"
-              Width="800">
+              Grid.Row ="1">
             <Image x:Name="OpenImg" 
                    RenderOptions.BitmapScalingMode="Fant"
                    Width="{Binding ElementName=PictureGrid,Path=Width,Mode=TwoWay}"

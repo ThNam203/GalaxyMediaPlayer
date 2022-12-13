@@ -32,6 +32,7 @@ namespace GalaxyMediaPlayer.Pages
         {
             InitializeComponent();
             imgPath = img;
+            this.TitleOfWindow.Text = System.IO.Path.GetFileName(img);
         }
 
         public string _imgPath;
@@ -46,6 +47,11 @@ namespace GalaxyMediaPlayer.Pages
                     OpenImg.Source = new BitmapImage(new Uri(_imgPath));
                 }
             }
+        }
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                this.DragMove();
         }
 
         private void btnMinimizeApp_Click(object sender, RoutedEventArgs e)
