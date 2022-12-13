@@ -11,11 +11,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Microsoft.Win32;
 using System.IO;
 using System.Collections.ObjectModel;
 using GalaxyMediaPlayer.Models;
+
+
 
 namespace GalaxyMediaPlayer.Pages
 {
@@ -55,11 +56,15 @@ namespace GalaxyMediaPlayer.Pages
 
         private void Image_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if(e.ClickCount == 2)
+            if (e.ClickCount == 2)
             {
-                OpenImageWindow openImageWindow = new OpenImageWindow();
+                ImageModel imageModelSelected = Images[listViewImage.SelectedIndex];
+                string ImagePath = imageModelSelected.path;
+                OpenImageWindow openImageWindow = new OpenImageWindow(ImagePath);
                 openImageWindow.Show();
             }
         }
+
+        
     }
 }

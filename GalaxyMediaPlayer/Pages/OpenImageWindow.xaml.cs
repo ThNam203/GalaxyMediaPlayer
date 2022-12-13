@@ -16,7 +16,9 @@ using Microsoft.Win32;
 using System.IO;
 using System.Collections.ObjectModel;
 using GalaxyMediaPlayer.Models;
-
+using System.Globalization;
+using Microsoft.WindowsAPICodePack.Shell;
+using System.Drawing.Imaging;
 
 namespace GalaxyMediaPlayer.Pages
 {
@@ -25,14 +27,25 @@ namespace GalaxyMediaPlayer.Pages
     /// </summary>
     public partial class OpenImageWindow : Window
     {
-        public string ImgFile { get; set; }
-        public ImageModel Img { get; set; }
-
-        public OpenImageWindow()
+        
+        public OpenImageWindow(string img)
         {
             InitializeComponent();
-            ImgFile = "";
-            Img = new ImageModel(ImgFile);
+            imgPath = img;
+        }
+
+        public string _imgPath;
+        public string imgPath
+        {
+            get { return _imgPath; }
+            set
+            {
+                _imgPath = value;
+                if(_imgPath != null)
+                {
+                    OpenImg.Source = new BitmapImage(new Uri(_imgPath));
+                }
+            }
         }
 
         private void btnMinimizeApp_Click(object sender, RoutedEventArgs e)

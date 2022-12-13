@@ -7,18 +7,26 @@
         xmlns:cvt="clr-namespace:GalaxyMediaPlayer.Converters"
         mc:Ignorable="d"
         Title="OpenImageWindow" Height="450" Width="800"
-        WindowStyle="None">
+        WindowStyle="None"
+        BorderThickness="0"
+        BorderBrush="Transparent"
+        ResizeMode="NoResize">
     <Window.Resources>
         <cvt:SystemEntityToImageSource x:Key="SystemEntityToImageSource"></cvt:SystemEntityToImageSource>
         <cvt:ImagePathToImageSource x:Key="ImagePathToImageSource"></cvt:ImagePathToImageSource>
         <cvt:EntityTypeToVisibility x:Key="EntityTypeToVisibility"></cvt:EntityTypeToVisibility>
         <cvt:ImagePathToThumbnailImage x:Key="ImagePathToThumbnailImage"></cvt:ImagePathToThumbnailImage>
+        <cvt:ImageToBitmapImage x:Key="ImageToBitmapImage"></cvt:ImageToBitmapImage>
     </Window.Resources>
+
+    <Window.Background>
+        <SolidColorBrush Color="Black"/>
+    </Window.Background>
     
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Name="MainRow" Height="40"/>
-            <RowDefinition Name="PictureRow"/>
+            <RowDefinition Name="PictureRow" Height="*"/>
         </Grid.RowDefinitions>
 
         <Grid Name="ContentGrid"
@@ -46,8 +54,12 @@
 
         <Grid x:Name="PictureGrid"
               Background="Transparent"
-              Grid.Row ="1">
-            <!--<Image x:Name="OpenImg" Source="{Binding ElementName=}"/>-->
+              Grid.Row ="1"
+              Width="800">
+            <Image x:Name="OpenImg" 
+                   RenderOptions.BitmapScalingMode="Fant"
+                   Width="{Binding ElementName=PictureGrid,Path=Width,Mode=TwoWay}"
+                   Stretch="Uniform"/>
         </Grid>
     </Grid>
 </Window>
