@@ -61,6 +61,13 @@ namespace GalaxyMediaPlayer.Pages
                 ImageModel imageModelSelected = Images[listViewImage.SelectedIndex];
                 string ImagePath = imageModelSelected.path;
                 OpenImageWindow openImageWindow = new OpenImageWindow(ImagePath);
+
+                //MainWindow main = Application.Current.MainWindow as MainWindow;
+                //if (main != null)
+                //{
+                //    main.WindowState = WindowState.Minimized;
+                //}
+
                 openImageWindow.Show();
             }
         }
