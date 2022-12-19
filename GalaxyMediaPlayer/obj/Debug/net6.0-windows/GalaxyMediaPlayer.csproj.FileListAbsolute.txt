@@ -140,3 +140,5 @@ C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\bin\Debug\net6.0-windows\Microsoft.WindowsAPICodePack.ShellExtensions.dll
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\UserControls\ConfirmDialog.g.cs
 C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\UserControls\ConfirmDialog.baml
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\Pages\NavContentPages\MusicPage.g.cs
+C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\Pages\NavContentPages\MusicPage.baml

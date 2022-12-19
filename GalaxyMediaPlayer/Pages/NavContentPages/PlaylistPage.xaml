@@ -464,7 +464,7 @@
                                 Background="#2a9d8f"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center">
-                                    <TextBlock Text="+ New playlist" 
+                                    <TextBlock Text="New Playlist" 
                                        TextAlignment="Center"
                                        Foreground="{DynamicResource brushSecondary}"
                                        Margin="4"/>
@@ -682,5 +682,37 @@
                 </DataGridCheckBoxColumn>
             </DataGrid.Columns>
         </DataGrid>
+
+        <Border Grid.Row="2"
+                Name="emptyPlaylistBorder"
+                HorizontalAlignment="Center"
+                Visibility="Collapsed"
+                VerticalAlignment="Center">
+            <StackPanel>
+                <TextBlock Margin="0 0 0 8" Foreground="White" Width="300" Height="40" TextWrapping="Wrap" TextAlignment="Center">
+                    Create playlist to easily access to your managed songs!
+                </TextBlock>
+
+
+                <Button
+                    Name="secondaryNewPlaylistBtn"
+                    Click="newPlaylistBtn_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Border Width="100"
+                                CornerRadius="10"
+                                Background="#2a9d8f"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                <TextBlock Text="New Playlist" 
+                                       TextAlignment="Center"
+                                       Foreground="{DynamicResource brushSecondary}"
+                                       Margin="4"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </StackPanel>
+        </Border>
     </Grid>
 </Page>

@@ -35,6 +35,12 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
             playlistListBox.ItemsSource = playlists;
             playlistSongsDataGrid.ItemsSource = currentChosenPlaylistSongs;
+
+            if (playlists.Count <= 0)
+            {
+                emptyPlaylistBorder.Visibility = Visibility.Visible;
+                newPlaylistBtn.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void listBoxItem_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -84,6 +90,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 int left = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).X);
                 int top = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).Y);
                 MainWindow.ShowCustomMessageBox(dialog, left: left, top: top);
+                e.Handled = true;
             }
         }
 
@@ -121,6 +128,12 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             PlaylistDatabaseAccess.SavePlaylist(playlist);
 
             MainWindow.ClearAllMessageBox();
+
+            if (playlists.Count > 0)
+            {
+                emptyPlaylistBorder.Visibility = Visibility.Collapsed;
+                newPlaylistBtn.Visibility = Visibility.Visible;
+            }
         }
 
         private void RemovePlaylist()
@@ -132,6 +145,12 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             {
                 this.playlists.Remove(playlist);
                 PlaylistDatabaseAccess.DeletePlaylist(playlist);
+            }
+
+            if (playlists.Count <= 0)
+            {
+                emptyPlaylistBorder.Visibility = Visibility.Visible;
+                newPlaylistBtn.Visibility = Visibility.Collapsed;
             }
         }
 
