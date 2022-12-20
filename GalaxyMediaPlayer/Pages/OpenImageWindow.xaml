@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:GalaxyMediaPlayer.Pages"
         xmlns:cvt="clr-namespace:GalaxyMediaPlayer.Converters"
         mc:Ignorable="d"
-        Title="OpenImageWindow" Height="800" Width="1000"
+        Title="OpenImgWindow" Height="800" Width="1000"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
         WindowStyle="None"
         BorderThickness="0"
         MouseDown="Window_MouseDown">
@@ -18,19 +19,80 @@
     </Window.Resources>
 
     <Window.Background>
-        <SolidColorBrush Color="#393735"/>
+        <SolidColorBrush x:Name="BackgroundOfPage" Color="#393735"/>
     </Window.Background>
-    
+
     <Grid>
+
+        <Grid.Resources>
+            <Style x:Key="btnIconStyle" TargetType="Button">
+                <Setter Property="Width" Value="24"></Setter>
+                <Setter Property="Height" Value="24"></Setter>
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="#ccc" />
+                <Setter Property="SnapsToDevicePixels" Value="True" />
+                <Setter Property="FontWeight" Value="Normal"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="4 0"></Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Background="{TemplateBinding Background}" 
+                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                    BorderThickness="{TemplateBinding BorderThickness}" 
+                                    CornerRadius="5">
+                                <Grid>
+                                    <ContentPresenter x:Name="MyContentPresenter" 
+                                                      Content="{TemplateBinding Content}" 
+                                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                    <Border Background="{TemplateBinding Background}"
+                                            CornerRadius="5">
+                                        <Rectangle Fill="{TemplateBinding Foreground}" 
+                                                   Width="{Binding ElementName=MyContentPresenter, Path=ActualWidth}" 
+                                                   Height="{Binding ElementName=MyContentPresenter, Path=ActualHeight}" 
+                                                   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                            <Rectangle.OpacityMask>
+                                                <VisualBrush Stretch="None" Visual="{Binding ElementName=MyContentPresenter}"/>
+                                            </Rectangle.OpacityMask>
+                                        </Rectangle>
+                                    </Border>
+                                </Grid>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#fff" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="TextBoxPercentZoomingStyle"  TargetType="TextBox">
+                <Setter Property="FontSize" Value="16"></Setter>
+                <Setter Property="Width" Value="50"></Setter>
+                <Setter Property="Height" Value="24"></Setter>
+                <Setter Property="Foreground" Value="White"></Setter>
+                <Setter Property="Background" Value="Transparent"></Setter>
+                <Setter Property="IsEnabled" Value="False"></Setter>
+                <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                <Setter Property="BorderThickness" Value="0"></Setter>
+            </Style>
+        </Grid.Resources>
+
         <Grid.RowDefinitions>
-            <RowDefinition Name="MainRow" Height="40"/>
+            <RowDefinition Name="ImageFeatureRow" Height="40"/>
             <RowDefinition Name="PictureRow" Height="*"/>
         </Grid.RowDefinitions>
 
         <Grid Name="ContentGrid"
               Background="Transparent"
               Grid.Row="0">
-            
+
             <TextBlock x:Name="TitleOfWindow" Foreground="White"
                        Width="auto"
                        HorizontalAlignment="Left"
@@ -41,19 +103,22 @@
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center">
                 <Button x:Name="btnZoomIn"
-                        Width="50"
-                        Height="50">
+                        Style="{StaticResource btnIconStyle}"
+                        Click="btnZoomIn_Click">
                     <Viewbox>
                         <Image Source="{StaticResource zoom_in}" Width="40" Height="40" Stretch="Uniform"/>
                     </Viewbox>
                 </Button>
                 <Button x:Name="btnZoomOut"
-                        Width="50"
-                        Height="50">
+                        Style="{StaticResource btnIconStyle}"
+                        Click="btnZoomOut_Click">
                     <Viewbox>
                         <Image Source="{StaticResource zoom_out}" Width="40" Height="40" Stretch="Uniform"/>
                     </Viewbox>
                 </Button>
+                <TextBox x:Name="tbPercentZooming"
+                         Style="{StaticResource TextBoxPercentZoomingStyle}"
+                         Text="32%"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Right">
@@ -77,10 +142,10 @@
 
         <Grid x:Name="PictureGrid"
               Background="Transparent"
-              Grid.Row ="1">
+              Grid.Row ="1"
+              ClipToBounds="True">
             <Image x:Name="OpenImg" 
                    RenderOptions.BitmapScalingMode="Fant"
-                   Width="{Binding ElementName=PictureGrid,Path=Width,Mode=TwoWay}"
                    Stretch="Uniform"/>
         </Grid>
     </Grid>

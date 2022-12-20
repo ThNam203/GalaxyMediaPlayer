@@ -181,7 +181,8 @@
                     </Setter>
                 </Style.Setters>
             </Style>
-
+           
+            
             <!-- Slider Style -->
             
             <Style x:Key="UncompletedSliderRepeatButton" TargetType="RepeatButton">
