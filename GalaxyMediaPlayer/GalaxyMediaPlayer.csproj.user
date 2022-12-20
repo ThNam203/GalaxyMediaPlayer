@@ -39,6 +39,9 @@
     <Page Update="Pages\NavContentPages\MusicDetailPage.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Pages\VideoMediaPLayer.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Windows\SongMinimizedWindow.xaml">
       <SubType>Designer</SubType>
     </Page>

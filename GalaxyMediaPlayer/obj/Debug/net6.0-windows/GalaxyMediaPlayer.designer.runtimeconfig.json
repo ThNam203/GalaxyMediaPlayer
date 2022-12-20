@@ -12,8 +12,8 @@
       }
     ],
     "additionalProbingPaths": [
-      "C:\\Users\\hthna\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\hthna\\.nuget\\packages",
+      "C:\\Users\\GIGA\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\GIGA\\.nuget\\packages",
       "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
     ],
     "configProperties": {

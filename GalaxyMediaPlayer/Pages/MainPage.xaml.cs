@@ -449,5 +449,11 @@ namespace GalaxyMediaPlayer.Pages
         {
             minimizeImageBorder.Visibility = Visibility.Hidden;
         }
+
+        private void NavButton_Selected(object sender, RoutedEventArgs e)
+        {
+           ContentFrame.Navigate(new Uri("/Pages/VideoMediaPlayerPages/Page.xaml", UriKind.Relative));
+
+        }
     }
 }
