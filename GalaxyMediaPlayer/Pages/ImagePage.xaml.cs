@@ -15,8 +15,9 @@ using Microsoft.Win32;
 using System.IO;
 using System.Collections.ObjectModel;
 using GalaxyMediaPlayer.Models;
-
-
+using System.Data;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.SqlClient;
 
 namespace GalaxyMediaPlayer.Pages
 {
@@ -34,7 +35,6 @@ namespace GalaxyMediaPlayer.Pages
             listViewImage.ItemsSource = Images;
         }
 
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
@@ -48,11 +48,25 @@ namespace GalaxyMediaPlayer.Pages
                 btn_Addmore.Visibility = Visibility.Visible;
                 foreach (string file in dialog.FileNames)
                 {
+                    //add filePath to listview
                     ImageModel imgModel = new ImageModel(file);
                     Images.Add(imgModel);
+
+                    //add filePath to database
+                    
                 }
             }
         }
+
+
+        //void ConnectDB()
+        //{
+        //    string cn_String = Properties.Settings.Default.connectionString;
+        //}
+        //void InsertToDB()
+        //{
+            
+        //}
 
         private void Image_MouseDown(object sender, MouseButtonEventArgs e)
         {

@@ -10,7 +10,8 @@
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         WindowStyle="None"
         BorderThickness="0"
-        MouseDown="Window_MouseDown">
+        MouseDown="Window_MouseDown"
+        MouseWheel="Window_MouseWheel">
     <Window.Resources>
         <cvt:SystemEntityToImageSource x:Key="SystemEntityToImageSource"></cvt:SystemEntityToImageSource>
         <cvt:ImagePathToImageSource x:Key="ImagePathToImageSource"></cvt:ImagePathToImageSource>
@@ -89,7 +90,7 @@
             <RowDefinition Name="PictureRow" Height="*"/>
         </Grid.RowDefinitions>
 
-        <Grid Name="ContentGrid"
+        <Grid Name="ToolGrid"
               Background="Transparent"
               Grid.Row="0">
 
@@ -118,7 +119,7 @@
                 </Button>
                 <TextBox x:Name="tbPercentZooming"
                          Style="{StaticResource TextBoxPercentZoomingStyle}"
-                         Text="32%"/>
+                         Text="{Binding PercentageZoomingString}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Right">
@@ -146,7 +147,11 @@
               ClipToBounds="True">
             <Image x:Name="OpenImg" 
                    RenderOptions.BitmapScalingMode="Fant"
-                   Stretch="Uniform"/>
+                   Stretch="Uniform"
+                   MouseWheel="OpenImg_MouseWheel"
+                   MouseLeftButtonDown="OpenImg_MouseLeftButtonDown"
+                   MouseLeftButtonUp="OpenImg_MouseLeftButtonUp"
+                   MouseMove="OpenImg_MouseMove"/>
         </Grid>
     </Grid>
 </Window>

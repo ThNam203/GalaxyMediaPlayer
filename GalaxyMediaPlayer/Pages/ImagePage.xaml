@@ -77,6 +77,55 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+
+            <Style TargetType="CheckBox" x:Key="CheckBoxStyle">
+                <Setter Property="Margin" Value="10 30 0 0"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="VerticalAlignment" Value="Top"/>
+                <Setter Property="Visibility" Value="{Binding Type, Converter={StaticResource EntityTypeToVisibility}}"/>
+                <Setter Property="IsChecked" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="CheckBox">
+                            <!-- BulletDecorator is used to provide baseline alignment between the checkmark and the Content -->
+                            <BulletDecorator Background="Transparent" x:Name="Decorator">
+                                <BulletDecorator.Bullet>
+                                    <Grid Width="18" Height="18">
+                                        <Border Width="15" Height="15" x:Name="Border" Background="White" CornerRadius="1"/>
+
+                                        <Path Width="16" Height="16" x:Name="CheckMark"
+                                                                          SnapsToDevicePixels="False" 
+                                                                          Fill="#0096c7"
+                                                                          Data="M14.2222 0H1.77778C0.791111 0 0 0.8 0 1.77778V14.2222C0 15.2 0.791111 16 1.77778 16H14.2222C15.2089 16 16 15.2 16 14.2222V1.77778C16 0.8 15.2089 0 14.2222 0ZM6.22222 12.4444L1.77778 8L3.03111 6.74667L6.22222 9.92889L12.9689 3.18222L14.2222 4.44444L6.22222 12.4444Z" 
+                                                                          ClipToBounds="False" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                                    </Grid>
+                                </BulletDecorator.Bullet>
+                            </BulletDecorator>
+
+                            <!-- This uses Visibility to hide and show the CheckMark on IsChecked -->
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="false">
+                                    <Setter Property="Visibility" Value="Hidden" TargetName="CheckMark"/>
+                                    <Setter Property="Visibility" Value="Hidden" TargetName="Decorator"/>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" TargetName="Decorator"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter Property="Background" Value="DarkGray" TargetName="Border"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="true">
+                                    <Setter Property="Background" Value="#0096c7" TargetName="Border"/>
+                                </Trigger>
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=IsMouseOver}" 
+                                                                     Value="True">
+                                    <Setter Property="Visibility" Value="Visible" TargetName="Decorator"/>
+                                </DataTrigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </Grid.Resources>
         <Grid Grid.Row="0"
               Margin="50 0 0 0 ">
@@ -150,68 +199,23 @@
                     </Style.Triggers>
                 </Style>
             </ListBox.Resources>
+            
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <virtualizingwrappanel:VirtualizingWrapPanel
                         IsItemsHost="True"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
+            
             <ListView.ItemTemplate>
                 <DataTemplate x:Name="DatatemplateImage">
                     <Grid Width="200" Height="150">
-                        <CheckBox x:Name="checkBoxImage" Panel.ZIndex="2">
-                            <CheckBox.Style>
-                                <Style TargetType="CheckBox">
-                                    <Setter Property="Margin" Value="10 30 0 0"/>
-                                    <Setter Property="HorizontalAlignment" Value="Left"/>
-                                    <Setter Property="VerticalAlignment" Value="Top"/>
-                                    <Setter Property="Visibility" Value="{Binding Type, Converter={StaticResource EntityTypeToVisibility}}"/>
-                                    <Setter Property="IsChecked" Value="{Binding IsSelected, Mode=TwoWay}"/>
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="CheckBox">
-                                                <!-- BulletDecorator is used to provide baseline alignment between the checkmark and the Content -->
-                                                <BulletDecorator Background="Transparent" x:Name="Decorator">
-                                                    <BulletDecorator.Bullet>
-                                                        <Grid Width="18" Height="18">
-                                                            <Border Width="15" Height="15" x:Name="Border" Background="White" CornerRadius="1"/>
-
-                                                            <Path Width="16" Height="16" x:Name="CheckMark"
-                                                                          SnapsToDevicePixels="False" 
-                                                                          Fill="#0096c7"
-                                                                          Data="M14.2222 0H1.77778C0.791111 0 0 0.8 0 1.77778V14.2222C0 15.2 0.791111 16 1.77778 16H14.2222C15.2089 16 16 15.2 16 14.2222V1.77778C16 0.8 15.2089 0 14.2222 0ZM6.22222 12.4444L1.77778 8L3.03111 6.74667L6.22222 9.92889L12.9689 3.18222L14.2222 4.44444L6.22222 12.4444Z" 
-                                                                          ClipToBounds="False" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
-                                                        </Grid>
-                                                    </BulletDecorator.Bullet>
-                                                </BulletDecorator>
-
-                                                <!-- This uses Visibility to hide and show the CheckMark on IsChecked -->
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsChecked" Value="false">
-                                                        <Setter Property="Visibility" Value="Hidden" TargetName="CheckMark"/>
-                                                        <Setter Property="Visibility" Value="Hidden" TargetName="Decorator"/>
-                                                    </Trigger>
-                                                    <Trigger Property="IsChecked" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible" TargetName="Decorator"/>
-                                                    </Trigger>
-                                                    <Trigger Property="IsMouseOver" Value="true">
-                                                        <Setter Property="Background" Value="DarkGray" TargetName="Border"/>
-                                                    </Trigger>
-                                                    <Trigger Property="IsPressed" Value="true">
-                                                        <Setter Property="Background" Value="#0096c7" TargetName="Border"/>
-                                                    </Trigger>
-                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=IsMouseOver}" 
-                                                                     Value="True">
-                                                        <Setter Property="Visibility" Value="Visible" TargetName="Decorator"/>
-                                                    </DataTrigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </CheckBox.Style>
-                        </CheckBox>
-                        <Image x:Name="img" Source="{Binding path, Converter={StaticResource ImagePathToThumbnailImage}}" Panel.ZIndex="1" Width="200" Height="200" MouseDown="Image_MouseDown"/>
+                        <CheckBox x:Name="checkBoxImage" Panel.ZIndex="2"
+                                  Style="{StaticResource CheckBoxStyle}"/>
+                        <Image x:Name="img" 
+                               Source="{Binding path, Converter={StaticResource ImagePathToThumbnailImage}}" 
+                               Panel.ZIndex="1" 
+                               Width="200" Height="200" MouseDown="Image_MouseDown"/>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
