@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 
@@ -14,8 +15,8 @@ namespace GalaxyMediaPlayer
         {
             Instance = this;
             InitializeComponent();
-            MainFrame.Navigate(new Uri("/Pages/VideoMediaPlayer.xaml", UriKind.Relative));
-           // this.WindowState = WindowState.Maximized;
+           MainFrame.Navigate(new Uri("/Pages/VideoMediaPlayer.xaml", UriKind.Relative));
+          //  MainFrame.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)

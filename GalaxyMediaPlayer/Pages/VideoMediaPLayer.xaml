@@ -6,11 +6,28 @@
       xmlns:local="clr-namespace:GalaxyMediaPlayer.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450"  d:DesignWidth="800" Background="BurlyWood"
-      Title="VideoMediaPLayer" >
+      Title="VideoMediaPLayer" ShowsNavigationUI="True" >
 
-    <Grid AllowDrop="True">
-        <MediaElement Margin="50,50,379,143" Name="media" MediaEnded="media_MediaEnded" MediaOpened="media_MediaOpened" />
-        <Grid x:Name="MusicPlayerGrid" Margin="0,370,0,0">
+    <Grid AllowDrop="True" Margin="0,0,0,0" >
+        <Grid>
+            <MediaElement 
+                       
+                Name="media"
+                MediaEnded="media_MediaEnded" 
+                MediaOpened="media_MediaOpened" 
+                Margin="0,40,0,50" />
+            <Slider 
+            x:Name="SliderSeek" 
+                GotMouseCapture="SliderSeek_GotMouseCapture" 
+                LostMouseCapture="SliderSeek_LostMouseCapture" MinHeight="3" 
+                Margin="50,0,50,32" VerticalAlignment="Bottom"/>
+            <DockPanel x:Name="DockPanel" LastChildFill="False" 
+                       VerticalAlignment="Top" Height="40"
+             
+                       />
+        </Grid>
+
+        <Grid x:Name="VideoPlayerGrid" Margin="0,370,0,0" VerticalAlignment="Bottom">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="250"/>
                 <ColumnDefinition Width="*"/>
@@ -138,7 +155,7 @@
                 Grid.Row="1">
 
                 <Button x:Name="btnRepeat"
-                    Style="{StaticResource btnMediaControlStyle}" Click="btnRepeat_Click"
+                    Style="{StaticResource btnMediaControlStyle}" Click="btnRepeat_Click" 
                             >
                     <Button.Background>
                         <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/repeat_32.png"/>
@@ -156,7 +173,9 @@
                 <Button x:Name="btnPlayPause"
                     Style="{StaticResource btnMediaControlStyle}" Click="btnPlayPause_Click">
                     <Button.Background>
-                        <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/play_32.png"/>
+                        <ImageBrush x:Name="Play_PauseIcon"
+                            Opacity="0.5" 
+                            ImageSource="/Resources/Icons/MediaControlIcons/play_32.png"/>
                     </Button.Background>
                 </Button>
 
@@ -186,28 +205,27 @@
             <StackPanel x:Name="VolumnControlPanel"
                 Orientation="Horizontal"
                 Grid.Column="2"
-                Grid.Row="1">
+                Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Button x:Name="btnVolumn"
                     Style="{StaticResource btnMediaControlStyle}" Click="btnVolumn_Click"
                             >
                     <Button.Background>
-                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/volume_32.png"/>
+                        <ImageBrush x:Name="VolumeIcon" ImageSource="/Resources/Icons/MediaControlIcons/volume_32.png"/>
                     </Button.Background>
                 </Button>
 
                 <Slider x:Name="VolumeSlider"
                    
                     Style="{StaticResource Horizontal_Slider}"
-                    HorizontalAlignment="Center"
+                    HorizontalAlignment="Left"
                     Maximum="1"
                     Minimum="0"
                     Width="100"
                     Margin="8 0" ValueChanged="VolumeSlider_ValueChanged" IsEnabled="True" LargeChange="0.1" SmallChange="0.01" Value="1"/>
             </StackPanel>
-            <Label x:Name="Video_Duration" HorizontalAlignment="Left" Margin="85,0,0,0" Grid.Row="1" VerticalAlignment="Center" Height="40" Width="155" FontSize="20" FontFamily="Times New Roman" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+            <Label x:Name="Video_Duration" HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Center" Height="40" Width="150" FontSize="20" FontFamily="Times New Roman" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+
         </Grid>
-        <Slider 
-            x:Name="SliderSeek" HorizontalAlignment="Left" Margin="46,320,0,0" VerticalAlignment="Top" Width="619" GotMouseCapture="SliderSeek_GotMouseCapture" LostMouseCapture="SliderSeek_LostMouseCapture"/>
 
     </Grid>
 </Page>

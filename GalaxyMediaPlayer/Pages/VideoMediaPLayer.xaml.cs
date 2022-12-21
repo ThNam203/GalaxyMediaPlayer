@@ -17,6 +17,8 @@ using System.Windows.Shapes;
 using TagLib.Id3v2;
 using Wpf.Ui.Controls;
 using System.Windows.Threading;
+using System.Drawing;
+using System.IO;
 
 namespace GalaxyMediaPlayer.Pages
 {
@@ -54,11 +56,12 @@ namespace GalaxyMediaPlayer.Pages
             try
             {
                 System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
-
+                
                 if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     media.Source = new Uri(ofd.FileName);
                     media.LoadedBehavior=MediaState.Play;
+                    var text = new Uri(@"C:\Users\GIGA\Videos\[English] How To Create an SRT File - Detailed Subtitling Tutorial [DownSub.com].srt");
                     
                 }
             }catch(Exception ex)
@@ -71,12 +74,18 @@ namespace GalaxyMediaPlayer.Pages
         {
          
             if (media.LoadedBehavior != MediaState.Play)
-            { 
+            {   
+
                 media.LoadedBehavior= MediaState.Play;
-            }   
+                Play_PauseIcon.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/pause_32.png"));
+                btnPlayPause.Opacity = 1;
+
+            }
             else
             {
                 media.LoadedBehavior= MediaState.Pause;
+                Play_PauseIcon.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/play_32.png"));
+
             }
         }
 
@@ -93,17 +102,17 @@ namespace GalaxyMediaPlayer.Pages
                 VolumeSlider.IsEnabled = false;
                 VolumeSlider.Opacity = 0.5;
                 media.Volume = 0;
-                
+                VolumeIcon.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/no_sound_32.png"));
             }
             else
             {
                 VolumeSlider.IsEnabled = true;
                 VolumeSlider.Opacity = 1;
                 media.Volume = VolumeSlider.Value;
+                VolumeIcon.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/volume_32.png"));
             }
-           
         }
-        
+
         private void btnRepeat_Click(object sender, RoutedEventArgs e)//H.Nam: Repear Function
         {
             if (repeatIsOn)
