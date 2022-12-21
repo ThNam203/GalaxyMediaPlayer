@@ -1,9 +1,9 @@
 ﻿using GalaxyMediaPlayer.Helpers;
 using GalaxyMediaPlayer.Pages.NavContentPages;
+using GalaxyMediaPlayer.Windows;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -20,7 +20,9 @@ namespace GalaxyMediaPlayer.Pages
         public static MainPage Instance { get; set; }
         // Nam: use for navigate back to lastest frame back stack
         public static Stack<Uri> frameStack = new Stack<Uri>();
-
+        // Nam: use to hold information about where user are navigating (which is for showing MUSIC AdditionalGridInfor)
+        public static string currentMusicBrowsingFolder;
+        
         private double totalTimeInSecond;
         private bool isDragging = false; // Nam: if user is dragging, we are not updating the slider value, see more below
         private bool isMuted = false;
@@ -52,15 +54,17 @@ namespace GalaxyMediaPlayer.Pages
             AddSongInformationToInfoGrid();
             changeAllBtnPlayPauseBackgroundImage();
             ActivateControlButtons();
-            ChangeAdditionControlVisibilityInInforGrid(Computer.currentBrowsingFolder, false);
+
+            ChangeAdditionControlVisibilityInInforGrid(false);
 
             durationFormat = DurationFormatHelper.GetDurationFormatFromTotalSeconds(totalTimeInSecond);
 
             tbSongDuration.Text = MyMediaPlayer.mediaPlayer.NaturalDuration.TimeSpan.ToString(durationFormat);
             tbCurrentSongPosition.Text = TimeSpan.FromSeconds(0).ToString(durationFormat);
 
+            // Slider update timer
             DispatcherTimer timerVideoTime = new DispatcherTimer();
-            timerVideoTime.Interval = TimeSpan.FromSeconds(1);
+            timerVideoTime.Interval = TimeSpan.FromSeconds(0.05);
             timerVideoTime.Tick += TimerVideoTime_Tick;
             timerVideoTime.Start();
         }
@@ -68,13 +72,26 @@ namespace GalaxyMediaPlayer.Pages
         private void TimerVideoTime_Tick(object? sender, EventArgs e)
         {
             // Nam: If user is dragging slider, we are not updating the slider value
-            if (!isDragging) SongDurationSlider.Value = (MyMediaPlayer.mediaPlayer.Position.TotalSeconds / totalTimeInSecond) * 100;
+            if (!isDragging && MyMediaPlayer.isSongPlaying)
+            {
+                SongDurationSlider.Value = (MyMediaPlayer.mediaPlayer.Position.TotalSeconds / totalTimeInSecond) * 100;
+            }
         }
 
-        private void mediaListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        // Nam: Computer.isUserBrowsing mainly use for playing music outside the computer page
+        // which prevent SetPlaylistFromTempPlaylist method to provoke in MyMediaPlayer
+        private void navButtonsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            NavButton? selectedItem = mediaListBox.SelectedItem as NavButton;
-            if (selectedItem != null) ContentFrame.Navigate(selectedItem.NavLink);
+            NavButton? selectedItem = navButtonsListBox.SelectedItem as NavButton;
+            if (selectedItem != null)
+            {
+                ContentFrame.Navigate(selectedItem.NavLink);
+                if (selectedItem.Title == "Computer")
+                {
+                    Computer.isUserBrowsing = true;
+                }
+                else Computer.isUserBrowsing = false;
+            }
         }
 
         private void SongDurationSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -87,14 +104,28 @@ namespace GalaxyMediaPlayer.Pages
             MyMediaPlayer.isSongPlaying = !MyMediaPlayer.isSongPlaying;
             changeAllBtnPlayPauseBackgroundImage();
 
-            if (MyMediaPlayer.folderCurrentlyInUse != Computer.currentBrowsingFolder)
+            // Nam: if User is not browsing, we won't call SetPlaylistFromTempPlaylist method
+            // cause we need to SetNewPlaylist manually
+            if (!Computer.isUserBrowsing)
+            {
+                if (MyMediaPlayer.isSongPlaying)
+                {
+                    if (MyMediaPlayer.isSongOpened) MyMediaPlayer.Continue();
+                    else MyMediaPlayer.PlayCurrentSong();
+                }
+                else
+                {
+                    MyMediaPlayer.Pause();
+                }
+            }
+            else if (MyMediaPlayer.pathCurrentlyInUse != currentMusicBrowsingFolder)
             {
                 MyMediaPlayer.SetPlaylistFromTempPlaylist();
                 MyMediaPlayer.PlayCurrentSong();
             }
             else if (MyMediaPlayer.isSongPlaying)
             {
-                if (MyMediaPlayer.folderCurrentlyInUse == Computer.currentBrowsingFolder)
+                if (MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder)
                 {
                     if (MyMediaPlayer.isSongOpened)
                     {
@@ -116,19 +147,17 @@ namespace GalaxyMediaPlayer.Pages
         private void btnPlayPauseInGridInfo_Click(object sender, RoutedEventArgs e)
         {
             MyMediaPlayer.isSongPlaying = !MyMediaPlayer.isSongPlaying;
-            if (MyMediaPlayer.folderCurrentlyInUse == Computer.currentBrowsingFolder)
+            if (MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder)
             {
                 changeAllBtnPlayPauseBackgroundImage();
-
-                if (MyMediaPlayer.isSongPlaying) MyMediaPlayer.Continue();
-                else MyMediaPlayer.Pause();
             }
             else
             {
-                if (MyMediaPlayer.isSongPlaying) MyMediaPlayer.Continue();
-                else MyMediaPlayer.Pause();
                 changeBtnPlayPauseBackgroundInGridInfo();
             }
+
+            if (MyMediaPlayer.isSongPlaying) MyMediaPlayer.Continue();
+            else MyMediaPlayer.Pause();
         }
 
         private void btnRepeat_Click(object sender, RoutedEventArgs e)
@@ -233,13 +262,13 @@ namespace GalaxyMediaPlayer.Pages
         // Nam: forceShow indicates if we are NOT browsing the computer
         // which means we are in the defaut scene (drives and fav folders)
         // then we need to show it anyway
-        public void ChangeAdditionControlVisibilityInInforGrid(string newOpenedFolder, bool forceShow)
+        public void ChangeAdditionControlVisibilityInInforGrid(bool forceShow)
         {
-            if (MyMediaPlayer.folderCurrentlyInUse == newOpenedFolder && forceShow == false)
+            if (MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder && forceShow == false)
             {
                 ExtraControlGridInfo.Visibility = Visibility.Collapsed;
             }
-            else if (MyMediaPlayer.folderCurrentlyInUse != newOpenedFolder || forceShow)
+            else if (MyMediaPlayer.pathCurrentlyInUse != currentMusicBrowsingFolder || forceShow)
             {
                 ExtraControlGridInfo.Visibility = Visibility.Visible;
             }
@@ -337,7 +366,7 @@ namespace GalaxyMediaPlayer.Pages
             {
                 DisableControlButtons();
             }
-            else if (MyMediaPlayer.isSongOpened && MyMediaPlayer.isSongPlaying && MyMediaPlayer.folderCurrentlyInUse == Computer.currentBrowsingFolder)
+            else if (MyMediaPlayer.isSongOpened && MyMediaPlayer.isSongPlaying && MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder)
             {
                 brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/pause_32.png"));
                 btnPlayPause.Background = brush;
@@ -403,7 +432,7 @@ namespace GalaxyMediaPlayer.Pages
             MyMediaPlayer.Stop();
             SongInfoDisplayGrid.Visibility = Visibility.Collapsed;
             SongSliderPanel.Visibility = Visibility.Collapsed;
-            if (MyMediaPlayer.folderCurrentlyInUse == Computer.currentBrowsingFolder)
+            if (MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder)
                 changeAllBtnPlayPauseBackgroundImage();
             else changeBtnPlayPauseBackgroundInGridInfo();
         }
@@ -418,12 +447,33 @@ namespace GalaxyMediaPlayer.Pages
 
         private void SongInfoDisplayGrid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            SongInfoDisplayGrid.Visibility = Visibility.Collapsed;
             ContentFrame.Navigate(new Uri("Pages/NavContentPages/MusicDetailPage.xaml", UriKind.Relative));
         }
 
         private void ContentFrame_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
-            frameStack.Push(e.Uri);
+            // Nam: limit the frameStack, we won't want IT to happen
+            if (frameStack.Count <= 100)
+                frameStack.Push(e.Uri);
+        }
+
+        private void minimizeImageBorder_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            e.Handled = true;
+            MainWindow.Instance.Visibility = Visibility.Hidden;
+            SongMinimizedWindow newWindow = new SongMinimizedWindow();
+            newWindow.Show();
+        }
+
+        private void SongInfoDisplayGrid_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            minimizeImageBorder.Visibility = Visibility.Visible;
+        }
+
+        private void SongInfoDisplayGrid_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            minimizeImageBorder.Visibility = Visibility.Hidden;
         }
     }
 }

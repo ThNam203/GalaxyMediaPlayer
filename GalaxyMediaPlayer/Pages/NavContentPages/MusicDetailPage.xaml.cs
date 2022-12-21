@@ -3,6 +3,8 @@ using HtmlAgilityPack;
 using ScrapySharp.Extensions;
 using System;
 using System.Drawing;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -24,7 +26,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             SetFontSize();
         }
 
-        private async Task<string> SetLyrics()
+        private async Task<string> SetLyricsOnline()
         {
             string DEFAULT_RETURN_VALUE = "Sorry we couldn't fetch lyrics for your song.";
 
@@ -49,7 +51,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
                     foreach (var lyrics in lyricsNode.Descendants())
                     {
-                        if (lyrics.Name == "#text") resultSongLyrics += lyrics.InnerText.CleanInnerHtmlAscii();
+                        if (lyrics.Name == "#text") resultSongLyrics += HtmlEntity.DeEntitize(lyrics.InnerText.CleanInnerHtmlAscii());
                     }
 
                     resultSongLyrics.TrimStart('\r', '\n');
@@ -61,6 +63,68 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             });
 
             return resultSongLyrics.TrimStart('\r', '\n');
+        }
+
+        private async Task<string> GetLyricsFromFile(string filePath)
+        {
+            string resultLyrics = "";
+
+            if (Path.GetExtension(filePath) == ".lrc")
+            {
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        var parser = new LrcParser.Parser.Lrc.LrcParser();
+                        const Int32 BufferSize = 128;
+                        string rawLyrics = "";
+                        using (var fileStream = File.OpenRead(filePath))
+                        using (var streamReader = new StreamReader(fileStream, Encoding.UTF8, true, BufferSize))
+                        {
+                            String line;
+                            while ((line = streamReader.ReadLine()) != null)
+                            {
+                                rawLyrics += line + "\n";
+                            }
+                        }
+
+                        var result = parser.Decode(rawLyrics);
+                        foreach (var item in result.Lyrics)
+                        {
+                            resultLyrics += item.Text + "\n";
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        resultLyrics = "Can't fetch lyrics from your file";
+                    }
+                });
+            }
+            else await Task.Run(() =>
+            {
+                try
+                {
+                    var parser = new SubtitlesParser.Classes.Parsers.SubParser();
+                    using (var fileStream = File.OpenRead(filePath))
+                    {
+                        var items = parser.ParseStream(fileStream);
+                        foreach (var item in items)
+                        {
+                            foreach (var line in item.Lines)
+                            {
+                                resultLyrics += line + " ";
+                            }
+                            resultLyrics += "\n";
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    resultLyrics = "Can't fetch lyrics from your file";
+                }
+            });
+
+            return resultLyrics;
         }
 
         private void SetFontSize()
@@ -84,6 +148,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 MainPage.frameStack.Pop();
                 Uri lastestPage = MainPage.frameStack.Peek();
                 MainPage.Instance.ContentFrame.Navigate(lastestPage);
+                MainPage.Instance.SongInfoDisplayGrid.Visibility = System.Windows.Visibility.Visible;
             }
         }
 
@@ -103,15 +168,42 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
         private void btnFetchLyrics_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            SetLyrics().ContinueWith(result =>
+            spFetchLyricsOptions.Visibility = System.Windows.Visibility.Collapsed;
+            SetLyricsOnline().ContinueWith(result =>
             {
                 this.Dispatcher.Invoke(() =>
                 {
-                    tbSongLyrics.Text = result.Result;
+                    tbSongLyrics.Text = result.Result; 
                 });
             });
+        }
 
-            btnFetchLyrics.Visibility = System.Windows.Visibility.Collapsed;
+        private void btnOpenLyricsFile_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            spFetchLyricsOptions.Visibility = System.Windows.Visibility.Collapsed;
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "Subtitles|*.srt;*.lrc;*.vtt;*.sub;*.ssa;*.ttml";
+            dialog.Multiselect = false;
+
+            DialogResult result = dialog.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                GetLyricsFromFile(dialog.FileName).ContinueWith(result =>
+                {
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        tbSongLyrics.Text = result.Result;
+                    });
+                });
+            }
+        }
+
+        private void btnFetchLyricsOptions_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (spFetchLyricsOptions.Visibility == System.Windows.Visibility.Collapsed)
+                spFetchLyricsOptions.Visibility = System.Windows.Visibility.Visible;
+            else spFetchLyricsOptions.Visibility = System.Windows.Visibility.Collapsed;
         }
     }
 }
