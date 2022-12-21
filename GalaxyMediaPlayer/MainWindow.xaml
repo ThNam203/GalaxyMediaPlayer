@@ -14,12 +14,53 @@
         Width="1120"
         MinHeight="540"
         MinWidth="960">
-    <Window.Background>
-        <ImageBrush 
-            ImageSource="Resources/Images/background_1.jpg"
-            Stretch="UniformToFill"/>
-    </Window.Background>
-    
-    <Frame  Name="MainFrame"
+
+    <Grid Name="MainWindowGrid">
+        <Grid Background="Transparent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal" 
+                        Grid.Column="1"
+                        HorizontalAlignment="Right">
+                <Button Name="btnMinimizeApp"
+                            Click="btnMinimizeApp_Click"
+                            Style="{StaticResource AppControlButtonStyle}"
+                            Content="__"/>
+
+                <Button Name="btnMaximizeApp"
+                            Click="btnMaximizeApp_Click"
+                            Style="{StaticResource AppControlButtonStyle}"
+                            Content="▭" />
+
+                <Button Name="btnCloseApp" 
+                            Click="btnCloseApp_Click"
+                            Style="{StaticResource AppControlButtonStyle}"
+                            Content="✕"
+                            Margin="0 0 8 0"/>
+            </StackPanel>
+        </Grid>
+        
+        <Frame  Name="MainFrame"
             NavigationUIVisibility ="Hidden"/>
+        
+        <!-- Use this to show custom "message box" in the MIDDLE -->
+        <!-- Use background transparent to prevent user's outside click when
+            showing "message box" -->
+        <Grid Name="MessageBoxGrid"
+              Background="Transparent"
+              Visibility="Collapsed"
+              MouseDown="MessageBoxGrid_MouseDown">
+        </Grid>
+
+        <!-- Use this to show custom "message box" with LEFT TOP modifiers -->
+        <Canvas 
+            Name="MessageBoxCanvas"
+            Background="Transparent"
+              Visibility="Collapsed"
+            MouseDown="MessageBoxCanvas_MouseDown">
+        </Canvas>
+        </Grid>
 </Window>
