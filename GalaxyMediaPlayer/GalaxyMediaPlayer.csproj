@@ -36,6 +36,8 @@
     <None Remove="Resources\Icons\ComputerPageIcons\unknown_fle_16.png" />
     <None Remove="Resources\Icons\ComputerPageIcons\video_16.png" />
     <None Remove="Resources\Icons\ic_folder_128.png" />
+    <None Remove="Resources\Icons\ImagePageIcons\zoom_in.png" />
+    <None Remove="Resources\Icons\ImagePageIcons\zoom_out.png" />
     <None Remove="Resources\Icons\loop_32.png" />
     <None Remove="Resources\Icons\MediaControlIcons\close_32.png" />
     <None Remove="Resources\Icons\MediaControlIcons\minimize_32.png" />
@@ -112,6 +114,8 @@
     <Resource Include="Resources\Icons\ComputerPageIcons\photo_16.png" />
     <Resource Include="Resources\Icons\ComputerPageIcons\unknown_fle_16.png" />
     <Resource Include="Resources\Icons\ComputerPageIcons\video_16.png" />
+    <Resource Include="Resources\Icons\ImagePageIcons\zoom_in.png" />
+    <Resource Include="Resources\Icons\ImagePageIcons\zoom_out.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\close_32.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\minimize_32.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
@@ -143,6 +147,21 @@
 
   <ItemGroup>
     <Folder Include="UserControls\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
 </Project>
