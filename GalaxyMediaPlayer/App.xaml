@@ -181,7 +181,8 @@
                     </Setter>
                 </Style.Setters>
             </Style>
-
+           
+            
             <!-- Slider Style -->
             
             <Style x:Key="UncompletedSliderRepeatButton" TargetType="RepeatButton">
@@ -259,6 +260,14 @@
 
             <!-- End Slider Style -->
             
+            
+            
+            <!-- Icon Image Pages -->
+
+            <BitmapImage x:Key="zoom_in" UriSource="Resources/Icons/ImagePageIcons/zoom_in.png"></BitmapImage>
+            <BitmapImage x:Key="zoom_out" UriSource="Resources/Icons/ImagePageIcons/zoom_out.png"></BitmapImage>
+            
+            <!-- End Icon Image Pages-->
             <!--#region ScrollBar ScrollViewer-->
             <ControlTemplate x:Key="VerticalScrollViewer" TargetType="{x:Type ScrollViewer}">
                 <Grid x:Name="Grid" Background="{TemplateBinding Background}">
