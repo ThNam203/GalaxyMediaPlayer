@@ -2,6 +2,19 @@
   "version": 3,
   "targets": {
     "net6.0-windows7.0": {
+      "Dapper/2.0.123": {
+        "type": "package",
+        "compile": {
+          "lib/net5.0/Dapper.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net5.0/Dapper.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "FSharp.Core/4.5.2": {
         "type": "package",
         "compile": {
@@ -151,6 +164,29 @@
           }
         }
       },
+      "Microsoft.WindowsAPICodePack-Core/1.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/Microsoft.WindowsAPICodePack.dll": {}
+        },
+        "runtime": {
+          "lib/Microsoft.WindowsAPICodePack.dll": {}
+        }
+      },
+      "Microsoft.WindowsAPICodePack-Shell/1.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.WindowsAPICodePack-Core": "1.1.0"
+        },
+        "compile": {
+          "lib/Microsoft.WindowsAPICodePack.Shell.dll": {},
+          "lib/Microsoft.WindowsAPICodePack.ShellExtensions.dll": {}
+        },
+        "runtime": {
+          "lib/Microsoft.WindowsAPICodePack.Shell.dll": {},
+          "lib/Microsoft.WindowsAPICodePack.ShellExtensions.dll": {}
+        }
+      },
       "MuxicMatchApi/2.5.0": {
         "type": "package",
         "dependencies": {
@@ -193,6 +229,37 @@
           "lib/netstandard2.0/ScrapySharp.dll": {}
         }
       },
+      "Stub.System.Data.SQLite.Core.NetStandard/1.0.116": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.1/System.Data.SQLite.dll": {
+            "related": ".dll.altconfig;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.1/System.Data.SQLite.dll": {
+            "related": ".dll.altconfig;.xml"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/linux-x64/native/SQLite.Interop.dll": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/osx-x64/native/SQLite.Interop.dll": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/win-x64/native/SQLite.Interop.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x86/native/SQLite.Interop.dll": {
+            "assetType": "native",
+            "rid": "win-x86"
+          }
+        }
+      },
       "SubtitlesParser/1.5.1": {
         "type": "package",
         "compile": {
@@ -214,6 +281,12 @@
         },
         "runtime": {
           "lib/netstandard2.0/System.Configuration.ConfigurationManager.dll": {}
+        }
+      },
+      "System.Data.SQLite.Core/1.0.116": {
+        "type": "package",
+        "dependencies": {
+          "Stub.System.Data.SQLite.Core.NetStandard": "[1.0.116]"
         }
       },
       "System.Drawing.Common/6.0.0": {
@@ -312,6 +385,24 @@
     }
   },
   "libraries": {
+    "Dapper/2.0.123": {
+      "sha512": "RDFF4rBLLmbpi6pwkY7q/M6UXHRJEOerplDGE5jwEkP/JGJnBauAClYavNKJPW1yOTWRPIyfj4is3EaJxQXILQ==",
+      "type": "package",
+      "path": "dapper/2.0.123",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Dapper.png",
+        "dapper.2.0.123.nupkg.sha512",
+        "dapper.nuspec",
+        "lib/net461/Dapper.dll",
+        "lib/net461/Dapper.xml",
+        "lib/net5.0/Dapper.dll",
+        "lib/net5.0/Dapper.xml",
+        "lib/netstandard2.0/Dapper.dll",
+        "lib/netstandard2.0/Dapper.xml"
+      ]
+    },
     "FSharp.Core/4.5.2": {
       "sha512": "apbdQOjzsjQ637kTWQuW29jqwY18jsHMyNC5A+TPJZKFEIE2cIfQWf3V7+mXrxlbX69BueYkv293/g70wuXuRw==",
       "type": "package",
@@ -513,6 +604,37 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "Microsoft.WindowsAPICodePack-Core/1.1.0": {
+      "sha512": "jU5Y9fvuC/USod2RCCHhs1PJ/T5ANBIXPhNpew53s5SDfRzvIE97XcIt9U8Wm+DF0bTJAdF9v9PD0cgbTi7uMg==",
+      "type": "package",
+      "path": "microsoft.windowsapicodepack-core/1.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/Microsoft.WindowsAPICodePack.XML",
+        "lib/Microsoft.WindowsAPICodePack.dll",
+        "lib/Microsoft.WindowsAPICodePack.pdb",
+        "microsoft.windowsapicodepack-core.1.1.0.nupkg.sha512",
+        "microsoft.windowsapicodepack-core.nuspec"
+      ]
+    },
+    "Microsoft.WindowsAPICodePack-Shell/1.1.0": {
+      "sha512": "8WvLG0TNTylzMB8gnZeZDG68/DsagAF64K35RC2Y/zocHp4e03Uj/kba6egQlq1+0uVv04FpLG+CmENEIN53rg==",
+      "type": "package",
+      "path": "microsoft.windowsapicodepack-shell/1.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/Microsoft.WindowsAPICodePack.Shell.dll",
+        "lib/Microsoft.WindowsAPICodePack.Shell.pdb",
+        "lib/Microsoft.WindowsAPICodePack.Shell.xml",
+        "lib/Microsoft.WindowsAPICodePack.ShellExtensions.XML",
+        "lib/Microsoft.WindowsAPICodePack.ShellExtensions.dll",
+        "lib/Microsoft.WindowsAPICodePack.ShellExtensions.pdb",
+        "microsoft.windowsapicodepack-shell.1.1.0.nupkg.sha512",
+        "microsoft.windowsapicodepack-shell.nuspec"
+      ]
+    },
     "MuxicMatchApi/2.5.0": {
       "sha512": "cv0CVafseEQR+QMDuvCJRwbQ+qwtMC26gs1jfM5hMpRdc+WLI7371K7yIHiE5Mp3bzAqDRa6IbZu0uE5dvgzcw==",
       "type": "package",
@@ -565,6 +687,27 @@
         "scrapysharp.nuspec"
       ]
     },
+    "Stub.System.Data.SQLite.Core.NetStandard/1.0.116": {
+      "sha512": "VEe/vzvn2ECKovtyb+nf8fsnNQ4EYOUms7gnp9729NN7FSR/0v/uVoBDO7DETzV7YCquRVwRnSnYuoOwAoTEKA==",
+      "type": "package",
+      "path": "stub.system.data.sqlite.core.netstandard/1.0.116",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/System.Data.SQLite.dll",
+        "lib/netstandard2.0/System.Data.SQLite.dll.altconfig",
+        "lib/netstandard2.0/System.Data.SQLite.xml",
+        "lib/netstandard2.1/System.Data.SQLite.dll",
+        "lib/netstandard2.1/System.Data.SQLite.dll.altconfig",
+        "lib/netstandard2.1/System.Data.SQLite.xml",
+        "runtimes/linux-x64/native/SQLite.Interop.dll",
+        "runtimes/osx-x64/native/SQLite.Interop.dll",
+        "runtimes/win-x64/native/SQLite.Interop.dll",
+        "runtimes/win-x86/native/SQLite.Interop.dll",
+        "stub.system.data.sqlite.core.netstandard.1.0.116.nupkg.sha512",
+        "stub.system.data.sqlite.core.netstandard.nuspec"
+      ]
+    },
     "SubtitlesParser/1.5.1": {
       "sha512": "IPgRapnlAtKkh+P5eg6qCqUsj8211mYNq+Fg7FPGzUqFUxVbkAua8kU85S3pgo+8mnNzNeflejNfk21LSw8iCg==",
       "type": "package",
@@ -598,6 +741,17 @@
         "system.configuration.configurationmanager.nuspec",
         "useSharedDesignerContext.txt",
         "version.txt"
+      ]
+    },
+    "System.Data.SQLite.Core/1.0.116": {
+      "sha512": "djwmo97syWCpUPJbDS0e2qUFUa8cDLeIfMotVkaRkAC5gpfBSZLMzvoLkLp1prY8waAuH1jEC3wcB2ymVVQWtA==",
+      "type": "package",
+      "path": "system.data.sqlite.core/1.0.116",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "system.data.sqlite.core.1.0.116.nupkg.sha512",
+        "system.data.sqlite.core.nuspec"
       ]
     },
     "System.Drawing.Common/6.0.0": {
@@ -755,11 +909,14 @@
   },
   "projectFileDependencyGroups": {
     "net6.0-windows7.0": [
+      "Dapper >= 2.0.123",
       "HtmlAgilityPack >= 1.11.46",
       "LrcParser >= 2022.529.1",
       "Microsoft-WindowsAPICodePack-Shell >= 1.1.4",
+      "Microsoft.WindowsAPICodePack-Shell >= 1.1.0",
       "MuxicMatchApi >= 2.5.0",
       "SubtitlesParser >= 1.5.1",
+      "System.Data.SQLite.Core >= 1.0.116",
       "System.Drawing.Common >= 6.0.0",
       "WPF-UI >= 2.0.3",
       "taglib-sharp-netstandard2.0 >= 2.1.0"
@@ -809,6 +966,10 @@
       "net6.0-windows7.0": {
         "targetAlias": "net6.0-windows",
         "dependencies": {
+          "Dapper": {
+            "target": "Package",
+            "version": "[2.0.123, )"
+          },
           "HtmlAgilityPack": {
             "target": "Package",
             "version": "[1.11.46, )"
@@ -821,6 +982,10 @@
             "target": "Package",
             "version": "[1.1.4, )"
           },
+          "Microsoft.WindowsAPICodePack-Shell": {
+            "target": "Package",
+            "version": "[1.1.0, )"
+          },
           "MuxicMatchApi": {
             "target": "Package",
             "version": "[2.5.0, )"
@@ -828,6 +993,10 @@
           "SubtitlesParser": {
             "target": "Package",
             "version": "[1.5.1, )"
+          },
+          "System.Data.SQLite.Core": {
+            "target": "Package",
+            "version": "[1.0.116, )"
           },
           "System.Drawing.Common": {
             "target": "Package",
@@ -864,5 +1033,27 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Microsoft.WindowsAPICodePack-Core 1.1.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0-windows7.0'. This package may not be fully compatible with your project.",
+      "libraryId": "Microsoft.WindowsAPICodePack-Core",
+      "targetGraphs": [
+        "net6.0-windows7.0"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Microsoft.WindowsAPICodePack-Shell 1.1.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0-windows7.0'. This package may not be fully compatible with your project.",
+      "libraryId": "Microsoft.WindowsAPICodePack-Shell",
+      "targetGraphs": [
+        "net6.0-windows7.0"
+      ]
+    }
+  ]
 }

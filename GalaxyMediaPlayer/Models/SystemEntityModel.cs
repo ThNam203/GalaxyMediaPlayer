@@ -33,6 +33,7 @@ namespace GalaxyMediaPlayer
         public string DateCreated { get; set; }
         public long Size { get; set; }
         public string Extension { get; set; }
+
         private bool _IsSelected;
         public bool IsSelected
         {

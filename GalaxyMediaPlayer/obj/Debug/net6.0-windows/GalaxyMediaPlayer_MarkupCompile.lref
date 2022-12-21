@@ -4,6 +4,13 @@ FC:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\MainWindow.xaml
 FC:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\Pages\MainPage.xaml;;
 FC:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\Pages\NavContentPages\Computer.xaml;;
 FC:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\Pages\NavContentPages\MusicDetailPage.xaml;;
+FC:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\Pages\NavContentPages\PlaylistPage.xaml;;
 FC:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\Themes\Generic.xaml;;
+FC:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\UserControls\PlaylistControls\NewPlaylistControl.xaml;;
+FC:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\UserControls\PlaylistControls\PlaylistRightClickDialog.xaml;;
+FC:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\UserControls\PlaylistControls\RenameDialog.xaml;;
+FC:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\UserControls\ShowMessageControl.xaml;;
 FC:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\Windows\SongMinimizedWindow.xaml;;
+FC:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\UserControls\ConfirmDialog.xaml;;
+FC:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\Pages\NavContentPages\MusicPage.xaml;;
 

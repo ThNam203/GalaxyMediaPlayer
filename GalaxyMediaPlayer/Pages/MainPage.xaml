@@ -1,4 +1,4 @@
-﻿<Page x:Class="GalaxyMediaPlayer.Pages.MainPage"
+﻿  <Page x:Class="GalaxyMediaPlayer.Pages.MainPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,7 +7,13 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MainPage">
- 
+
+    <Page.Background>
+        <ImageBrush 
+            ImageSource="/Resources/Images/background_1.jpg"
+            Stretch="UniformToFill"/>
+    </Page.Background>
+
     <Canvas Name="canvas">
         <Grid Name="MainGrid"
               Width="{Binding ActualWidth, ElementName=canvas}"
@@ -56,9 +62,9 @@
                     </StackPanel>
 
                 <!--Dat: Row 1 is list of app-->
-                <ListBox Name="mediaListBox" 
+                <ListBox Name="navButtonsListBox" 
                          Grid.Row="1"
-                         SelectionChanged="mediaListBox_SelectionChanged"
+                         SelectionChanged="navButtonsListBox_SelectionChanged"
                          SelectionMode="Single" 
                          Background="{DynamicResource brushPrimary}"
                          BorderThickness="0">
@@ -67,7 +73,8 @@
                     <local:NavButton Title="Movies" ImageUri="ic_movie.png"/>
                     <local:NavButton Title="Videos" ImageUri="ic_video.png"/>
                     <local:NavButton Title="Photos" ImageUri="ic_image.png"/>
-                    <local:NavButton Title="Music" ImageUri="ic_note.png"/>
+                    <local:NavButton Title="Music" ImageUri="ic_note.png" NavLink="Pages/NavContentPages/MusicPage.xaml"/>
+                    <local:NavButton Title="Playlist" ImageUri="ic_playlist.png" NavLink="Pages/NavContentPages/PlaylistPage.xaml"/>
                     <local:NavButton Title="Computer" ImageUri="ic_computer.png" NavLink="Pages/NavContentPages/Computer.xaml"/>
                 </ListBox>
             </Grid>
