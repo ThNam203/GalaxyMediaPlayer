@@ -25,6 +25,12 @@
     <Compile Update="Pages\NavContentPages\PlaylistPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Pages\PlaylistPagePages\MusicPlaylistPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\PlaylistPagePages\Page1.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControls\ConfirmDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -70,6 +76,12 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\NavContentPages\PlaylistPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\PlaylistPagePages\MusicPlaylistPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\PlaylistPagePages\Page1.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControls\ConfirmDialog.xaml">
