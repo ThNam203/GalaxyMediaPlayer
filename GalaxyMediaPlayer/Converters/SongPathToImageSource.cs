@@ -2,17 +2,21 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 
 namespace GalaxyMediaPlayer.Converters
 {
-    internal class ArtistItemToImageConverter : IValueConverter
+    internal class SongPathToImageSource : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            List<SystemEntityModel> item = (List<SystemEntityModel>)value;
-            TagLib.File file = TagLib.File.Create(item[0].Path);
+            string path = (string)value;
+
+            TagLib.File file = TagLib.File.Create(path);
             try
             {
                 TagLib.IPicture pic = file.Tag.Pictures[0];
@@ -27,7 +31,7 @@ namespace GalaxyMediaPlayer.Converters
             }
             catch (IndexOutOfRangeException)
             {
-                return new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/ComputerPageIcons/ic_audio_file.png"));
+                return new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/PlaylistPageIcons/user.png"));
             }
         }
 

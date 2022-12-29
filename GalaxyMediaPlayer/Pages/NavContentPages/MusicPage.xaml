@@ -14,7 +14,7 @@
     <Page.Resources>
         <!--#region Converters -->
         <cvt:SystemEntityToImageSource x:Key="SystemEntityToImageSource"></cvt:SystemEntityToImageSource>
-        <cvt:ArtistItemToImageConverter x:Key="ArtistItemToImageConverter"></cvt:ArtistItemToImageConverter>
+        <cvt:SongPathToImageSource x:Key="SongPathToImageSource"></cvt:SongPathToImageSource>
         <!--#endregion-->
         <!--#region ComboBox -->
         <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
@@ -422,7 +422,7 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.ColumnSpan="2"/>
 
-                <StackPanel Orientation="Horizontal" Margin="1,1,1,1" Grid.ColumnSpan="2">
+                <StackPanel Orientation="Horizontal" Height="40" Margin="1,1,1,1" Grid.ColumnSpan="2">
                     <Label  Name="showByArtirsts"
                             Padding="8"
                             BorderBrush="White" 
@@ -454,7 +454,7 @@
                 <!--SelectionChanged="cbSortByOptions_SelectionChanged"-->
                 <ComboBox   Name="cbSortPlaylistBy"
                         Width="80"
-                        Margin="0,0,50,0"
+                        Margin="0,0,50,5"
                         Grid.Column="2"
                         VerticalAlignment="Center">
                     <ComboBoxItem>Name</ComboBoxItem>
@@ -468,33 +468,6 @@
                 Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"
                 Grid.ColumnSpan="2"/>
         </Grid>
-
-        <Border Grid.Row="2"
-                Name="emptyMusicBorder"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center">
-            <StackPanel>
-                <TextBlock Margin="0 0 0 8" Foreground="White" Width="300" Height="40" TextWrapping="Wrap" TextAlignment="Center">
-                    Import music into the library and listen while you browse photos or work on your computer.
-                </TextBlock>
-                <Button 
-                    Name="AddNewBtn"
-                    Click="AddNewBtn_Click">
-                    <Button.Template>
-                        <ControlTemplate>
-                            <Border Width="100" 
-                                    Background="#2a9d8f" 
-                                    Padding="4" 
-                                    CornerRadius="10"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center">
-                                <TextBlock HorizontalAlignment="Center" Foreground="White">Add Folder</TextBlock>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            </StackPanel>
-        </Border>
 
         <ListBox
             Grid.Row="2"
@@ -532,14 +505,14 @@
                         Margin="8 16"    
                         Name="listboxArtirstsItem">
                         <Border x:Name="border"
-                                Width="100" Height="100"
                                 CornerRadius="50"
+                                Width="100" Height="100"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 BorderBrush="Transparent"
                                 BorderThickness="3">
                             <Border.Background>
-                                <ImageBrush Stretch="Fill" ImageSource="{Binding Songs, Converter={StaticResource ArtistItemToImageConverter}}"/>
+                                <ImageBrush Stretch="Fill" ImageSource="{Binding FirstSongPath, Converter={StaticResource SongPathToImageSource}}"/>
                             </Border.Background>
                         </Border>
 
@@ -550,7 +523,7 @@
                                     Background="Transparent"
                                     Foreground="{DynamicResource brushSecondary}"
                                     HorizontalAlignment="Left"
-                                    Text="{Binding ArtistsName}"
+                                    Text="{Binding Name}"
                                     TextAlignment="Center"
                                     TextTrimming="CharacterEllipsis"/>
                     </StackPanel>
@@ -585,7 +558,96 @@
             </ListBox.ItemContainerStyle>
         </ListBox>
 
-        <DataGrid Name="songsListBox"
+        <ListBox
+            Grid.Row="2"
+            x:Name="albumsListBox"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            ScrollViewer.VerticalScrollBarVisibility="Auto"
+            Background="{DynamicResource brushPrimary}"
+            Visibility="Collapsed"
+            BorderThickness="0"
+            SelectionMode="Extended"
+            Grid.ColumnSpan="2">
+            <ListBox.Resources>
+                <Style TargetType="ScrollBar">
+                    <Setter Property="SnapsToDevicePixels" Value="True"/>
+                    <Setter Property="OverridesDefaultStyle" Value="true"/>
+                    <Style.Triggers>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter Property="Width" Value="10"/>
+                            <Setter Property="Height" Value="Auto" />
+                            <Setter Property="Margin" Value="8 24" />
+                            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.Resources>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <virtualizingwrappanel:VirtualizingWrapPanel
+                        IsItemsHost="True"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel 
+                        Margin="8 16"    
+                        Name="listboxArtirstsItem">
+                        <Border x:Name="border"
+                                CornerRadius="50"
+                                Width="100" Height="100"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                BorderBrush="Transparent"
+                                BorderThickness="3">
+                            <Border.Background>
+                                <ImageBrush Stretch="Fill" ImageSource="{Binding FirstSongPath, Converter={StaticResource SongPathToImageSource}}"/>
+                            </Border.Background>
+                        </Border>
+
+                        <TextBlock  Grid.Row="1" 
+                                    FontSize="13"
+                                    Width="100"
+                                    Margin="4 4 0 0"
+                                    Background="Transparent"
+                                    Foreground="{DynamicResource brushSecondary}"
+                                    HorizontalAlignment="Left"
+                                    Text="{Binding Name}"
+                                    TextAlignment="Center"
+                                    TextTrimming="CharacterEllipsis"/>
+                    </StackPanel>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="#219ebc"/>
+                        </DataTrigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="False"/>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsMouseOver}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#8ecae6"/>
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="IsSelected" Value="{Binding Content.IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Self}}"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <ContentPresenter/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
+
+        <DataGrid Name="songsDataGrid"
                   Visibility="Collapsed"
                   Style="{DynamicResource DataGridBrowseStyle}" 
                   CellStyle="{DynamicResource DataGridCellStyle1}" 
@@ -595,8 +657,8 @@
                   SelectionUnit="FullRow"
                   VirtualizingPanel.VirtualizationMode="Standard"
                   Margin="16 4"
-                  Grid.Row="3"
-                  ItemsSource="{Binding systemEntities}">
+                  MouseDoubleClick="DataGridRow_MouseDoubleClick"
+                  Grid.Row="3">
             <DataGrid.Resources>
                 <Style TargetType="ScrollBar">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -612,7 +674,7 @@
             </DataGrid.Resources>
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Music Name" 
+                <DataGridTextColumn Header="Title" 
                                     IsReadOnly="True" 
                                     Width="*" 
                                     CanUserResize="True"
@@ -626,9 +688,9 @@
                                     MinWidth="150"
                                     Binding="{Binding Performer}"/>
 
-                <DataGridTextColumn Header="Artist" 
-                                    IsReadOnly="True" 
-                                    Width="*" 
+                <DataGridTextColumn Header="Artist"
+                                    IsReadOnly="True"
+                                    Width="*"
                                     CanUserResize="True"
                                     MinWidth="100"
                                     Binding="{Binding Artist}"/>
@@ -648,5 +710,33 @@
                                     Binding="{Binding Length}"/>
             </DataGrid.Columns>
         </DataGrid>
+
+        <Border Grid.Row="2"
+                Name="emptyMusicBorder"
+                Visibility="Collapsed"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+            <StackPanel>
+                <TextBlock Margin="0 0 0 8" Foreground="White" Width="300" Height="40" TextWrapping="Wrap" TextAlignment="Center">
+                    Import music into the library and listen while you browse photos or work on your computer.
+                </TextBlock>
+                <Button 
+                    Name="AddNewBtn"
+                    Click="AddNewBtn_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Border Width="100" 
+                                    Background="#2a9d8f" 
+                                    Padding="4" 
+                                    CornerRadius="10"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center">
+                                <TextBlock HorizontalAlignment="Center" Foreground="White">Add Folder</TextBlock>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </StackPanel>
+        </Border>
     </Grid>
 </Page>

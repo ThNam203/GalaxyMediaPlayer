@@ -1,12 +1,16 @@
 ﻿using GalaxyMediaPlayer.Helpers;
+using GalaxyMediaPlayer.Models;
+using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace GalaxyMediaPlayer.Pages.NavContentPages
 {
@@ -15,26 +19,38 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
     /// </summary>
     public partial class MusicPage : Page
     {
-        public class ArtistListItem
+        public class ArtistAndAlbumListItem
         {
-            public string ArtistsName { get; set; }
-            public List<SystemEntityModel> Songs { get; set; }
+            public string Name { get; set; }
 
-            public ArtistListItem(string artistsName, SystemEntityModel firstModel)
+            // Nam: use this property to get image
+            public string FirstSongPath { get; set; }
+
+            public ArtistAndAlbumListItem(string name, string firstSongPath)
             {
-                ArtistsName = artistsName;
-                Songs = new List<SystemEntityModel> { firstModel };
+                Name = name;
+                FirstSongPath = firstSongPath;
             }
         }
 
-        private ObservableCollection<SystemEntityModel> musicList = new ObservableCollection<SystemEntityModel>();
-        private ObservableCollection<ArtistListItem> artistsList = new ObservableCollection<ArtistListItem>();
+        private ObservableCollection<SongInfor> musicList = new ObservableCollection<SongInfor>();
+        private ObservableCollection<ArtistAndAlbumListItem> artistsList = new ObservableCollection<ArtistAndAlbumListItem>();
+        private ObservableCollection<ArtistAndAlbumListItem> albumList = new ObservableCollection<ArtistAndAlbumListItem>();
 
-        private const string dateFormat = "MM/dd/yyyy hh:mm tt";
+        private int currentPageIndex = 1; // Nam: 1 is Artist, 2 is Album, 3 is Songs
 
         public MusicPage()
         {
             InitializeComponent();
+
+            artirstListBox.ItemsSource = artistsList;
+            albumsListBox.ItemsSource = albumList;
+            songsDataGrid.ItemsSource = musicList;
+
+            if (musicList.Count == 0)
+            {
+                emptyMusicBorder.Visibility = Visibility.Visible;
+            }
         }
 
         private void AddNewBtn_Click(object sender, RoutedEventArgs e)
@@ -44,25 +60,71 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             {
                 OpenFolder(new DirectoryInfo(dialog.SelectedPath));
                 SetArtirstsListBox();
+                SetAlbumsListBox();
             }
-            
-            emptyMusicBorder.Visibility = Visibility.Collapsed;
-            artirstListBox.Visibility = Visibility.Visible;
+
+            if (musicList.Count > 0)
+            {
+                emptyMusicBorder.Visibility = Visibility.Collapsed;
+
+                if (currentPageIndex == 1) artirstListBox.Visibility = Visibility.Visible;
+                else if (currentPageIndex == 2) albumsListBox.Visibility = Visibility.Visible;
+                else if (currentPageIndex == 3) songsDataGrid.Visibility = Visibility.Visible;
+            }
         }
 
         private void showByArtirsts_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (currentPageIndex != 1)
+            {
+                showByArtirsts.BorderBrush = Brushes.White;
+                showByAlbums.BorderBrush = Brushes.Transparent;
+                showBySongs.BorderBrush = Brushes.Transparent;
+                currentPageIndex = 1;
 
+                if (musicList.Count > 0)
+                {
+                    artirstListBox.Visibility = Visibility.Visible;
+                    songsDataGrid.Visibility = Visibility.Collapsed;
+                    albumsListBox.Visibility = Visibility.Collapsed;
+                }
+            }
         }
 
         private void showByAlbums_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (currentPageIndex != 2)
+            {
+                showByArtirsts.BorderBrush = Brushes.Transparent;
+                showByAlbums.BorderBrush = Brushes.White;
+                showBySongs.BorderBrush = Brushes.Transparent;
+                currentPageIndex = 2;
 
+                if (musicList.Count > 0)
+                {
+                    artirstListBox.Visibility = Visibility.Collapsed;
+                    songsDataGrid.Visibility = Visibility.Collapsed;
+                    albumsListBox.Visibility = Visibility.Visible;
+                }
+            }
         }
 
         private void showBySongs_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (currentPageIndex != 3)
+            {
+                showByArtirsts.BorderBrush = Brushes.Transparent;
+                showByAlbums.BorderBrush = Brushes.Transparent;
+                showBySongs.BorderBrush = Brushes.White;
+                currentPageIndex = 3;
 
+                if (musicList.Count > 0)
+                {
+                    songsDataGrid.Visibility = Visibility.Visible;
+                    artirstListBox.Visibility = Visibility.Collapsed;
+                    albumsListBox.Visibility = Visibility.Collapsed;
+                }
+            }
         }
 
         private void OpenFolder(DirectoryInfo di)
@@ -90,13 +152,37 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
                         if (SupportedExtensions.MUSIC_EXTENSION.Contains(fileExtension))
                         {
-                            musicList.Add(new SystemEntityModel(
-                                name: fi.Name,
-                                type: EntityType.Music,
-                                path: fi.FullName,
-                                dateCreated: fi.CreationTime.ToString(dateFormat),
-                                size: fi.Length,
-                                extension: fi.Extension));
+                            TagLib.File music = TagLib.File.Create(fi.FullName);
+
+                            // Nam: if we cant get the song title, we use its name shown on disk
+                            string songName;
+                            if (music.Tag.Title == "" || music.Tag.Title == null) songName = Path.GetFileName(fi.FullName);
+                            else songName = music.Tag.Title;
+
+                            string albumName = music.Tag.Album;
+                            if (albumName == null || albumName == "") albumName = "Unknown Album";
+
+                            string artistsName = music.Tag.JoinedAlbumArtists;
+                            if (artistsName == null || artistsName == "") artistsName = music.Tag.JoinedArtists;
+                            if (artistsName == null || artistsName == "") artistsName = "Unknown Artists";
+
+                            // Nam: get media file's length
+                            IShellProperty prop = Microsoft.WindowsAPICodePack.Shell.ShellObject.FromParsingName(fi.FullName).Properties.System.Media.Duration;
+                            var t = (ulong)prop.ValueAsObject;
+                            double secondsDuration = TimeSpan.FromTicks((long)t).TotalSeconds;
+                            string durationFormat = DurationFormatHelper.GetDurationFormatFromTotalSeconds(secondsDuration);
+                            string length = TimeSpan.FromSeconds(secondsDuration).ToString(durationFormat);
+
+                            // Nam: SongInfor contains songplaylistId WHICH IS WE DON'T NEED, we put garbage value to it
+                            musicList.Add(new SongInfor(
+                                playlistId: "xxx_id_kekw",
+                                name: songName,
+                                album: albumName,
+                                artist: artistsName,
+                                performer: music.Tag.JoinedPerformers,
+                                length: length,
+                                path: fi.FullName
+                            ));
                         }
                     }
                 }
@@ -106,21 +192,15 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
         private void SetArtirstsListBox()
         {
-            foreach (SystemEntityModel model in musicList)
+            artistsList.Clear();
+
+            foreach (SongInfor song in musicList)
             {
-                TagLib.File file = TagLib.File.Create(model.Path);
-
-                string artistsName = file.Tag.JoinedAlbumArtists;
-
-                if (artistsName == null || artistsName == "") artistsName = file.Tag.JoinedArtists;
-                if (artistsName == null || artistsName == "") artistsName = "Unknown Artists";
-
                 bool isAdded = false;
                 for (int i = 0; i < artistsList.Count; i++)
                 {
-                    if (artistsList[i].ArtistsName == artistsName)
+                    if (artistsList[i].Name == song.Artist)
                     {
-                        artistsList[i].Songs.Add(model);
                         isAdded = true;
                         break;
                     }
@@ -128,11 +208,49 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
                 if (!isAdded)
                 {
-                    artistsList.Add(new ArtistListItem(artistsName, model));
+                    artistsList.Add(new ArtistAndAlbumListItem(song.Artist, song.Path));
                 }
             }
+        }
 
-            artirstListBox.ItemsSource = artistsList;
+        private void SetAlbumsListBox()
+        {
+            albumList.Clear();
+
+            foreach (SongInfor song in musicList)
+            {
+                bool isAdded = false;
+                for (int i = 0; i < albumList.Count; i++)
+                {
+                    if (albumList[i].Name == song.Album)
+                    {
+                        isAdded = true;
+                        break;
+                    }
+                }
+
+                if (!isAdded)
+                {
+                    albumList.Add(new ArtistAndAlbumListItem(song.Album, song.Path));
+                }
+            }
+        }
+
+        // DataGridRow hold songs that is currently in the chosen playlist
+        private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            SongInfor? chosenSong;
+            chosenSong = songsDataGrid.SelectedItem as SongInfor;
+
+            // Nam: indicates that a song is chosen (not outside)
+            if (chosenSong != null)
+            {
+                List<string> songs = songsDataGrid.Items.Cast<SongInfor>().Select(s => s.Path).ToList();
+                MyMediaPlayer.SetNewPlaylist(songs);
+                MyMediaPlayer.SetPositionInPlaylist(songsDataGrid.SelectedIndex);
+                MyMediaPlayer.PlayCurrentSong();
+                e.Handled = true;
+            }
         }
     }
 }

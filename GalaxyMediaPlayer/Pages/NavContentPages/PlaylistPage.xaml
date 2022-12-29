@@ -233,6 +233,7 @@
 
                     <Button
                     Name="newPlaylistBtn"
+                        Margin="0 0 0 5"
                     Click="newPlaylistBtn_Click">
                         <Button.Template>
                             <ControlTemplate>
@@ -254,6 +255,7 @@
                     <Button
                     Name="addNewSongToPlaylistBtn"
                     Click="addNewSongToPlaylistBtn_Click"
+                    Margin="0 0 0 5"
                     Visibility="Collapsed">
                         <Button.Template>
                             <ControlTemplate>
@@ -276,7 +278,7 @@
                 <!--SelectionChanged="cbSortByOptions_SelectionChanged"-->
                 <ComboBox   Name="cbSortPlaylistBy"
                         Width="80"
-                        Margin="0 0 50 0"
+                        Margin="0 0 50 5"
                         Grid.Column="1"
                         VerticalAlignment="Center"
                             SelectionChanged="cbSortPlaylistBy_SelectionChanged">

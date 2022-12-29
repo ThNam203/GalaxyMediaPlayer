@@ -1,10 +1,6 @@
 ﻿using GalaxyMediaPlayer.Databases.SongPlaylist;
-using GalaxyMediaPlayer.Helpers;
 using GalaxyMediaPlayer.Models;
-using GalaxyMediaPlayer.UserControls;
 using GalaxyMediaPlayer.UserControls.PlaylistControls;
-using Microsoft.Win32;
-using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
