@@ -17,6 +17,7 @@ namespace GalaxyMediaPlayer
             InitializeComponent();
            MainFrame.Navigate(new Uri("/Pages/VideoMediaPlayer.xaml", UriKind.Relative));
           //  MainFrame.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
+          
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)

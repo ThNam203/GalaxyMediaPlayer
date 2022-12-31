@@ -164,5 +164,55 @@ namespace GalaxyMediaPlayer.Pages
             media.Position = TimeSpan.FromSeconds(SliderSeek.Value);//H.Nam: Allow user to change the video position according to progress bar
             timer.Start();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            // System.Windows.Forms.MessageBox.Show(this.ToString());
+            try
+            {
+                GalaxyMediaPlayer.MainWindow.GetWindow(this).Close();
+            }
+            catch(Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show(ex.ToString());
+            }
+
+        }
+
+        private void VideoPlayerGrid_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            control_panel.Visibility = Visibility.Hidden;
+            VolumeControlPanel.Visibility = Visibility.Hidden;
+            VideoPlayerGrid.Background.Opacity = 0;
+        }
+
+        private void VideoPlayerGrid_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            control_panel.Visibility= Visibility.Visible;
+            VolumeControlPanel.Visibility = Visibility.Visible;
+            VideoPlayerGrid.Background.Opacity = 0.12;
+
+        }
+
+ 
+   
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            GalaxyMediaPlayer.MainWindow.GetWindow(this).WindowState = System.Windows.WindowState.Maximized;
+        }
+
+        private void Minimize_Button_Click(object sender, RoutedEventArgs e)
+        {
+            GalaxyMediaPlayer.MainWindow.GetWindow(this).WindowState = System.Windows.WindowState.Normal;
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            GalaxyMediaPlayer.MainWindow.GetWindow(this).WindowState = System.Windows.WindowState.Minimized;
+
+        }
+
+
     }
 }
