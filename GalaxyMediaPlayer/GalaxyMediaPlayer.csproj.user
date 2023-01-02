@@ -19,7 +19,13 @@
     <Compile Update="Pages\NavContentPages\MusicDetailPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\NavContentPages\MusicPage.xaml.cs">
+    <Compile Update="Pages\NavContentPages\MusicPages\ListBoxItemContentShowPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\NavContentPages\MusicPages\MainContentPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\NavContentPages\MusicPages\MainPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Pages\NavContentPages\PlaylistPage.xaml.cs">
@@ -72,7 +78,13 @@
     <Page Update="Pages\NavContentPages\MusicDetailPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\NavContentPages\MusicPage.xaml">
+    <Page Update="Pages\NavContentPages\MusicPages\ListBoxItemContentShowPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\NavContentPages\MusicPages\MainContentPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\NavContentPages\MusicPages\MainPage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\NavContentPages\PlaylistPage.xaml">

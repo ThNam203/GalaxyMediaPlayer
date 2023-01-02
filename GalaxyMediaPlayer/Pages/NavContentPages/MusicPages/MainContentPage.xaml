@@ -1,0 +1,348 @@
+﻿<Page x:Class="GalaxyMediaPlayer.Pages.NavContentPages.MusicPage.MainContentPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:GalaxyMediaPlayer.Pages.NavContentPages.MusicPage"
+      xmlns:cvt="clr-namespace:GalaxyMediaPlayer.Converters"
+      xmlns:localCvt="clr-namespace:GalaxyMediaPlayer.Converters.MusicPageConverters"
+      xmlns:virtualizingwrappanel="clr-namespace:GalaxyMediaPlayer.CustomControls.VirtualizingWrapPanel"
+      xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" 
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="MainContentPage">
+    <Page.Resources>
+        <!--#region Converters -->
+        <localCvt:SongPathToArtistImageSource x:Key="SongPathToArtistImageSource"/>
+        <localCvt:SongPathToAlbumImageSource x:Key="SongPathToAlbumImageSource"/>
+        <!--#endregion-->
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0"
+            Margin="8 0" 
+            Grid.ColumnSpan="2">
+            <Grid Panel.ZIndex="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="37*"/>
+                    <ColumnDefinition Width="617*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.ColumnSpan="2"/>
+
+                <StackPanel Orientation="Horizontal" Height="40" Margin="1,1,1,1" Grid.ColumnSpan="2">
+                    <Label  Name="showByArtirsts"
+                            Padding="8"
+                            BorderBrush="White" 
+                            BorderThickness="0 0 0 3" 
+                            Foreground="{DynamicResource brushSecondary}"
+                            MouseDown="showByArtirsts_MouseDown">
+                        Artists
+                    </Label>
+
+                    <Label Name="showByAlbums"
+                           Padding="8"
+                           BorderBrush="Transparent" 
+                           BorderThickness="0 0 0 3" 
+                           Foreground="{DynamicResource brushSecondary}"
+                           MouseDown="showByAlbums_MouseDown">
+                        Albums
+                    </Label>
+
+                    <Label  Name="showBySongs"
+                            Padding="8"
+                            BorderBrush="Transparent" 
+                            BorderThickness="0 0 0 3" 
+                            Foreground="{DynamicResource brushSecondary}"
+                            MouseDown="showBySongs_MouseDown">
+                        Songs
+                    </Label>
+                </StackPanel>
+            </Grid>
+
+            <Separator
+                Panel.ZIndex="-10"
+                VerticalAlignment="Bottom"
+                Height="1"
+                Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"
+                Grid.ColumnSpan="2"/>
+        </Grid>
+
+        <ListBox
+            Grid.Row="1"
+            x:Name="artirstListBox"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            ScrollViewer.VerticalScrollBarVisibility="Auto"
+            Background="{DynamicResource brushPrimary}"
+            Visibility="Collapsed"
+            BorderThickness="0"
+            SelectionMode="Extended"
+            Grid.ColumnSpan="2">
+            <ListBox.Resources>
+                <Style TargetType="ScrollBar">
+                    <Setter Property="SnapsToDevicePixels" Value="True"/>
+                    <Setter Property="OverridesDefaultStyle" Value="true"/>
+                    <Style.Triggers>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter Property="Width" Value="10"/>
+                            <Setter Property="Height" Value="Auto" />
+                            <Setter Property="Margin" Value="8 24" />
+                            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.Resources>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <virtualizingwrappanel:VirtualizingWrapPanel
+                        IsItemsHost="True"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel 
+                        Margin="8 16"    
+                        Name="listboxItem"
+                        MouseDown="listboxItem_MouseDown">
+                        <Border x:Name="border"
+                                CornerRadius="50"
+                                Width="100" Height="100"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                BorderBrush="Transparent"
+                                BorderThickness="3">
+                            <Border.Background>
+                                <ImageBrush Stretch="Fill" ImageSource="{Binding FirstSongPath, Converter={StaticResource SongPathToArtistImageSource}}"/>
+                            </Border.Background>
+                        </Border>
+
+                        <TextBlock  Grid.Row="1" 
+                                    FontSize="11"
+                                    Width="100"
+                                    Margin="4 4 0 0"
+                                    Background="Transparent"
+                                    Foreground="{DynamicResource brushSecondary}"
+                                    HorizontalAlignment="Left"
+                                    Text="{Binding Name}"
+                                    TextAlignment="Center"
+                                    TextTrimming="CharacterEllipsis"/>
+                    </StackPanel>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="#219ebc"/>
+                        </DataTrigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="False"/>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsMouseOver}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#8ecae6"/>
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="IsSelected" Value="{Binding Content.IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Self}}"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <ContentPresenter/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
+
+        <ListBox
+            Grid.Row="1"
+            x:Name="albumsListBox"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            ScrollViewer.VerticalScrollBarVisibility="Auto"
+            Background="{DynamicResource brushPrimary}"
+            Visibility="Collapsed"
+            BorderThickness="0"
+            SelectionMode="Extended"
+            Grid.ColumnSpan="2">
+            <ListBox.Resources>
+                <Style TargetType="ScrollBar">
+                    <Setter Property="SnapsToDevicePixels" Value="True"/>
+                    <Setter Property="OverridesDefaultStyle" Value="true"/>
+                    <Style.Triggers>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter Property="Width" Value="10"/>
+                            <Setter Property="Height" Value="Auto" />
+                            <Setter Property="Margin" Value="8 24" />
+                            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.Resources>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <virtualizingwrappanel:VirtualizingWrapPanel
+                        IsItemsHost="True"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel 
+                        Margin="8 16"    
+                        Name="listboxItem"
+                        MouseDown="listboxItem_MouseDown">
+                        <Border x:Name="border"
+                                CornerRadius="10"
+                                Width="100" Height="100"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                BorderBrush="Transparent"
+                                BorderThickness="3">
+                            <Border.Background>
+                                <ImageBrush Stretch="Fill" ImageSource="{Binding FirstSongPath, Converter={StaticResource SongPathToAlbumImageSource}}"/>
+                            </Border.Background>
+                        </Border>
+
+                        <TextBlock  Grid.Row="1" 
+                                    FontSize="11"
+                                    Width="100"
+                                    Margin="4 4 0 0"
+                                    Background="Transparent"
+                                    Foreground="{DynamicResource brushSecondary}"
+                                    HorizontalAlignment="Left"
+                                    Text="{Binding Name}"
+                                    TextAlignment="Center"
+                                    TextTrimming="CharacterEllipsis"/>
+                    </StackPanel>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="#219ebc"/>
+                        </DataTrigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="False"/>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsMouseOver}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#8ecae6"/>
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="IsSelected" Value="{Binding Content.IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Self}}"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <ContentPresenter/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
+
+        <DataGrid Name="songsDataGrid"
+                  Visibility="Collapsed"
+                  Style="{StaticResource DataGridBrowseStyle}" 
+                  CellStyle="{StaticResource DataGridCellStyle1}" 
+                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderBrowseStyle}" 
+                  RowStyle="{StaticResource DataGridRowBrowseStyle}"
+                  SelectionMode="Extended"
+                  SelectionUnit="FullRow"
+                  VirtualizingPanel.VirtualizationMode="Standard"
+                  Margin="16 4"
+                  MouseDoubleClick="DataGridRow_MouseDoubleClick"
+                  Grid.Row="1">
+            <DataGrid.Resources>
+                <Style TargetType="ScrollBar">
+                    <Setter Property="SnapsToDevicePixels" Value="True"/>
+                    <Setter Property="OverridesDefaultStyle" Value="true"/>
+                    <Style.Triggers>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter Property="Width" Value="10"/>
+                            <Setter Property="Margin" Value="8 2" />
+                            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Title" 
+                                    IsReadOnly="True" 
+                                    Width="*" 
+                                    CanUserResize="True"
+                                    MinWidth="150"
+                                    Binding="{Binding Name}"/>
+
+                <DataGridTextColumn Header="Performer" 
+                                    IsReadOnly="True" 
+                                    Width="*" 
+                                    CanUserResize="True"
+                                    MinWidth="150"
+                                    Binding="{Binding Performer}"/>
+
+                <DataGridTextColumn Header="Artist"
+                                    IsReadOnly="True"
+                                    Width="*"
+                                    CanUserResize="True"
+                                    MinWidth="100"
+                                    Binding="{Binding Artist}"/>
+
+                <DataGridTextColumn Header="Album" 
+                                    IsReadOnly="True" 
+                                    Width="*" 
+                                    CanUserResize="True"
+                                    MinWidth="100"
+                                    Binding="{Binding Album}"/>
+
+                <DataGridTextColumn Header="Length" 
+                                    IsReadOnly="True" 
+                                    Width="*" 
+                                    CanUserResize="True"
+                                    MinWidth="100"
+                                    Binding="{Binding Length}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Border Grid.Row="1"
+                Name="emptyMusicBorder"
+                Visibility="Collapsed"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+            <StackPanel>
+                <TextBlock Margin="0 0 0 8" Foreground="White" Width="300" Height="40" TextWrapping="Wrap" TextAlignment="Center">
+                    Import music into the library and listen while you browse photos or work on your computer.
+                </TextBlock>
+                <Button 
+                    Name="AddNewBtn"
+                    Click="AddNewBtn_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Border Width="100" 
+                                    Background="#2a9d8f" 
+                                    Padding="4" 
+                                    CornerRadius="10"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center">
+                                <TextBlock HorizontalAlignment="Center" Foreground="White">Add Folder</TextBlock>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>

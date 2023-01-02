@@ -16,6 +16,9 @@ namespace GalaxyMediaPlayer
             Instance.MessageBoxGrid.Children.Add(messageBox);
             Instance.MessageBoxGrid.Visibility = Visibility.Visible;
 
+            // Nam: disable 'backspace' button can go back in frame's stack
+            NavigationCommands.BrowseBack.InputGestures.Clear();
+            NavigationCommands.BrowseForward.InputGestures.Clear();
         }
         
         public static void ShowCustomMessageBox(UIElement messageBox, int left, int top)

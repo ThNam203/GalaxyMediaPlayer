@@ -1,5 +1,6 @@
 ﻿using GalaxyMediaPlayer.Helpers;
 using GalaxyMediaPlayer.Models;
+using GalaxyMediaPlayer.Pages.NavContentPages.MusicPages;
 using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using System;
 using System.Collections.Generic;
@@ -12,12 +13,12 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace GalaxyMediaPlayer.Pages.NavContentPages
+namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPage
 {
     /// <summary>
-    /// Interaction logic for MusicPage.xaml
+    /// Interaction logic for MainContentPage.xaml
     /// </summary>
-    public partial class MusicPage : Page
+    public partial class MainContentPage : Page
     {
         public class ArtistAndAlbumListItem
         {
@@ -33,13 +34,15 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             }
         }
 
+        // Nam: showing all music being contained
         private ObservableCollection<SongInfor> musicList = new ObservableCollection<SongInfor>();
+
         private ObservableCollection<ArtistAndAlbumListItem> artistsList = new ObservableCollection<ArtistAndAlbumListItem>();
         private ObservableCollection<ArtistAndAlbumListItem> albumList = new ObservableCollection<ArtistAndAlbumListItem>();
 
         private int currentPageIndex = 1; // Nam: 1 is Artist, 2 is Album, 3 is Songs
 
-        public MusicPage()
+        public MainContentPage()
         {
             InitializeComponent();
 
@@ -250,6 +253,34 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 MyMediaPlayer.SetPositionInPlaylist(songsDataGrid.SelectedIndex);
                 MyMediaPlayer.PlayCurrentSong();
                 e.Handled = true;
+            }
+        }
+
+        private void listboxItem_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender == null) return;
+
+            // Nam: which is artist listbox
+            if (currentPageIndex == 1)
+            {
+                if (artirstListBox.SelectedIndex == -1 || artirstListBox.SelectedItem == null) return;
+
+                ArtistAndAlbumListItem chosenItem = (ArtistAndAlbumListItem)artirstListBox.SelectedItem;
+                List<SongInfor> chosenListboxSongs = musicList.Where(x => x.Artist == chosenItem.Name).ToList();
+
+                ListBoxItemContentShowPage showPage = new ListBoxItemContentShowPage(chosenListboxSongs);
+                MusicPages.MainPage.contentFrame.Navigate(showPage);
+            }
+            // Nam: which is album listbox
+            else if (currentPageIndex == 2)
+            {
+                if (albumsListBox.SelectedIndex == -1 || albumsListBox.SelectedItem == null) return;
+
+                ArtistAndAlbumListItem chosenItem = (ArtistAndAlbumListItem)albumsListBox.SelectedItem;
+                List<SongInfor> chosenListboxSongs = musicList.Where(x => x.Artist == chosenItem.Name).ToList();
+
+                ListBoxItemContentShowPage showPage = new ListBoxItemContentShowPage(chosenListboxSongs);
+                MusicPages.MainPage.contentFrame.Navigate(showPage);
             }
         }
     }

@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 
-namespace GalaxyMediaPlayer.Converters
+namespace GalaxyMediaPlayer.Converters.MusicPageConverters
 {
-    internal class SongPathToImageSource : IValueConverter
+    public class SongPathToAlbumImageSource: IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -31,7 +27,7 @@ namespace GalaxyMediaPlayer.Converters
             }
             catch (IndexOutOfRangeException)
             {
-                return new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/PlaylistPageIcons/user.png"));
+                return new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/PlaylistPageIcons/album.png"));
             }
         }
 

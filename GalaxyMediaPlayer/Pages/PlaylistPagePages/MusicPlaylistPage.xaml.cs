@@ -125,8 +125,9 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             if (playlist != null)
             {
                 SongPlaylistModel renamedPlaylist = new SongPlaylistModel(playlist);
-                PlaylistDatabaseAccess.RenamePlaylist(renamedPlaylist);
                 renamedPlaylist.Name = newName;
+
+                PlaylistDatabaseAccess.RenamePlaylist(renamedPlaylist);
 
                 for (int i = 0; i < playlists.Count; i++)
                 {

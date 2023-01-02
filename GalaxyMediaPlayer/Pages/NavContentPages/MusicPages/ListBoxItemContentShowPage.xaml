@@ -1,0 +1,77 @@
+﻿<Page x:Class="GalaxyMediaPlayer.Pages.NavContentPages.MusicPages.ListBoxItemContentShowPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:GalaxyMediaPlayer.Pages.NavContentPages.MusicPages"
+      xmlns:virtualizingwrappanel="clr-namespace:GalaxyMediaPlayer.CustomControls.VirtualizingWrapPanel"
+      xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" 
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ListBoxItemContentShowPage">
+    <Grid>
+        <DataGrid Name="songsDataGrid"
+                  Style="{StaticResource DataGridBrowseStyle}" 
+                  CellStyle="{StaticResource DataGridCellStyle1}" 
+                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderBrowseStyle}" 
+                  RowStyle="{StaticResource DataGridRowBrowseStyle}"
+                  SelectionMode="Extended"
+                  SelectionUnit="FullRow"
+                  VirtualizingPanel.VirtualizationMode="Standard"
+                  Margin="16 4"
+                  MouseDoubleClick="DataGridRow_MouseDoubleClick"
+                  Grid.Row="1">
+            <DataGrid.Resources>
+                <Style TargetType="ScrollBar">
+                    <Setter Property="SnapsToDevicePixels" Value="True"/>
+                    <Setter Property="OverridesDefaultStyle" Value="true"/>
+                    <Style.Triggers>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter Property="Width" Value="10"/>
+                            <Setter Property="Margin" Value="8 2" />
+                            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Title" 
+                                    IsReadOnly="True" 
+                                    Width="*" 
+                                    CanUserResize="True"
+                                    MinWidth="150"
+                                    Binding="{Binding Name}"/>
+
+                <DataGridTextColumn Header="Performer" 
+                                    IsReadOnly="True" 
+                                    Width="*" 
+                                    CanUserResize="True"
+                                    MinWidth="150"
+                                    Binding="{Binding Performer}"/>
+
+                <DataGridTextColumn Header="Artist"
+                                    IsReadOnly="True"
+                                    Width="*"
+                                    CanUserResize="True"
+                                    MinWidth="100"
+                                    Binding="{Binding Artist}"/>
+
+                <DataGridTextColumn Header="Album" 
+                                    IsReadOnly="True" 
+                                    Width="*" 
+                                    CanUserResize="True"
+                                    MinWidth="100"
+                                    Binding="{Binding Album}"/>
+
+                <DataGridTextColumn Header="Length" 
+                                    IsReadOnly="True" 
+                                    Width="*" 
+                                    CanUserResize="True"
+                                    MinWidth="100"
+                                    Binding="{Binding Length}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
+</Page>

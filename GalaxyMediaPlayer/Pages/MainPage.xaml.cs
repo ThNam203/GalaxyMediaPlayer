@@ -1,11 +1,12 @@
-﻿using GalaxyMediaPlayer.Helpers;
-using GalaxyMediaPlayer.Pages.NavContentPages;
+﻿using GalaxyMediaPlayer.Pages.NavContentPages;
+using GalaxyMediaPlayer.Helpers;
 using GalaxyMediaPlayer.Windows;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -18,8 +19,10 @@ namespace GalaxyMediaPlayer.Pages
     public partial class MainPage : Page
     {
         public static MainPage Instance { get; set; }
+
         // Nam: use for navigate back to lastest frame back stack
         public static Stack<Uri> frameStack = new Stack<Uri>();
+
         // Nam: use to hold information about where user are navigating (which is for showing MUSIC AdditionalGridInfor)
         public static string currentMusicBrowsingFolder;
         
@@ -42,6 +45,10 @@ namespace GalaxyMediaPlayer.Pages
             InitializeMediaControlButtonsView(); // Nam: if buttons are not active, we grey them out and change volumn slider position
             MyMediaPlayer.Initialize();
             MyMediaPlayer.mediaPlayer.MediaOpened += MediaPlayer_MediaOpened;
+
+            // Nam: disable 'backspace' button can go back in frame's stack
+            NavigationCommands.BrowseBack.InputGestures.Clear();
+            NavigationCommands.BrowseForward.InputGestures.Clear();
         }
 
         private void MediaPlayer_MediaOpened(object? sender, EventArgs e)
@@ -51,14 +58,13 @@ namespace GalaxyMediaPlayer.Pages
             totalTimeInSecond = MyMediaPlayer.GetTotalTimeInSecond();
 
             SongSliderPanel.Visibility = Visibility.Visible;
+
             AddSongInformationToInfoGrid();
             changeAllBtnPlayPauseBackgroundImage();
             ActivateControlButtons();
-
             ChangeAdditionControlVisibilityInInforGrid(false);
 
             durationFormat = DurationFormatHelper.GetDurationFormatFromTotalSeconds(totalTimeInSecond);
-
             tbSongDuration.Text = MyMediaPlayer.mediaPlayer.NaturalDuration.TimeSpan.ToString(durationFormat);
             tbCurrentSongPosition.Text = TimeSpan.FromSeconds(0).ToString(durationFormat);
 
