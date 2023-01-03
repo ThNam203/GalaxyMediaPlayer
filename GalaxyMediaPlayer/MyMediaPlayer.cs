@@ -124,6 +124,7 @@ namespace GalaxyMediaPlayer
                 positionInPlaylist = 0;
             }
             else { positionInPlaylist++; }
+
             PlayCurrentSong();
         }
 
@@ -140,6 +141,7 @@ namespace GalaxyMediaPlayer
                 positionInPlaylist = playlist.Count - 1;
             }
             else { positionInPlaylist--; }
+
             PlayCurrentSong();
         }
 

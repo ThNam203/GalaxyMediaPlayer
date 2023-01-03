@@ -64,7 +64,6 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         }
         private void IntializeBrowseFoldersAndDisksAndMediaControlButtonsView()
         {
-            MainPage.currentMusicBrowsingFolder = "";
             MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid(true);
             MainPage.Instance.ChangeButtonsViewOnOpenFolder(true);
 

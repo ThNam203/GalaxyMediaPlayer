@@ -257,7 +257,6 @@
                         Grid.ColumnSpan="3"
                         Background="{DynamicResource mainBrush}"
                         Grid.Row="1">
-                    
                     <Button Name="btnRepeat"
                             Style="{StaticResource btnMediaControlStyle}"
                             Click="btnRepeat_Click">
@@ -265,17 +264,23 @@
                             <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/repeat_32.png"/>
                         </Button.Background>
                     </Button>
-
-                        <Button Name="btnPrevious"
+                    <Button Name="btnPrevious"
                             Style="{StaticResource btnMediaControlStyle}"
                             Click="btnPrevious_Click"
                             IsEnabled="False">
                         <Button.Background>
-                                <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/previous_32.png"/>
+                            <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/previous_32.png"/>
                         </Button.Background>
                     </Button>
-
-                        <Button Name="btnPlayPause"
+                    <Button Name="btnStop"
+                            Style="{StaticResource btnMediaControlStyle}"
+                            Click="btnStop_Click"
+                            IsEnabled="False">
+                        <Button.Background>
+                            <ImageBrush Opacity="0.5" ImageSource="/Resources/Icons/MediaControlIcons/ic_stop_32.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button Name="btnPlayPause"
                             Style="{StaticResource btnMediaControlStyle}"
                             Click="btnPlayPause_Click"
                             IsEnabled="False">

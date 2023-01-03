@@ -128,6 +128,7 @@ namespace GalaxyMediaPlayer.Pages
             {
                 MyMediaPlayer.SetPlaylistFromTempPlaylist();
                 MyMediaPlayer.PlayCurrentSong();
+                MyMediaPlayer.isSongPlaying = true;
             }
             else if (MyMediaPlayer.isSongPlaying)
             {
@@ -153,14 +154,8 @@ namespace GalaxyMediaPlayer.Pages
         private void btnPlayPauseInGridInfo_Click(object sender, RoutedEventArgs e)
         {
             MyMediaPlayer.isSongPlaying = !MyMediaPlayer.isSongPlaying;
-            if (MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder)
-            {
-                changeAllBtnPlayPauseBackgroundImage();
-            }
-            else
-            {
-                changeBtnPlayPauseBackgroundInGridInfo();
-            }
+            if (MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder) changeAllBtnPlayPauseBackgroundImage();
+            else changeBtnPlayPauseBackgroundInGridInfo();
 
             if (MyMediaPlayer.isSongPlaying) MyMediaPlayer.Continue();
             else MyMediaPlayer.Pause();
@@ -280,63 +275,6 @@ namespace GalaxyMediaPlayer.Pages
             }
         }
 
-        private void SongDurationSlider_Thumb_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
-        {
-            isDragging = false;
-            try
-            {
-                MyMediaPlayer.mediaPlayer.Position = TimeSpan.FromSeconds(totalTimeInSecond * (sender as Slider).Value / 100);
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("There is something wrong, please feed it back");
-            }
-        }
-
-        private void SongDurationSlider_Thumb_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
-        {
-            isDragging = true;
-        }
-
-        private void btnMinimizeApp_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.MainWindow.WindowState = WindowState.Minimized;
-        }
-
-        private void btnMaximizeApp_Click(object sender, RoutedEventArgs e)
-        {
-            if (Application.Current.MainWindow.WindowState == WindowState.Maximized)
-            {
-                Application.Current.MainWindow.WindowState = WindowState.Normal;
-            }
-            else
-            {
-                Application.Current.MainWindow.WindowState = WindowState.Maximized;
-            }
-        }
-
-        private void btnCloseApp_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
-
-        private void btnVolumn_Click(object sender, RoutedEventArgs e)
-        {
-            isMuted = !isMuted;
-            if (isMuted)
-            {
-                volumnBeforeMute = MyMediaPlayer.GetVolumn;
-                MyMediaPlayer.SetVolumn(0);
-                VolumeSlider.Value = 0;
-            }
-            else
-            {
-                MyMediaPlayer.SetVolumn(volumnBeforeMute);
-                VolumeSlider.Value = volumnBeforeMute;
-            }
-            SetVolumnIcon();
-        }
-
         private void SetVolumnIcon()
         {
             if (MyMediaPlayer.GetVolumn == 0) isMuted = true;
@@ -400,10 +338,12 @@ namespace GalaxyMediaPlayer.Pages
             btnPlayPause.Background.Opacity = opacityNotActiveValue;
             btnPrevious.Background.Opacity = opacityNotActiveValue;
             btnNext.Background.Opacity = opacityNotActiveValue;
+            btnStop.Background.Opacity = opacityNotActiveValue;
 
             btnPlayPause.IsEnabled = false;
             btnPrevious.IsEnabled = false;
             btnNext.IsEnabled = false;
+            btnStop.IsEnabled = false;
         }
 
         public void ActivateControlButtons()
@@ -411,10 +351,12 @@ namespace GalaxyMediaPlayer.Pages
             btnPlayPause.Background.Opacity = 1;
             btnPrevious.Background.Opacity = 1;
             btnNext.Background.Opacity = 1;
+            btnStop.Background.Opacity = 1;
 
             btnPlayPause.IsEnabled = true;
             btnPrevious.IsEnabled = true;
             btnNext.IsEnabled = true;
+            btnStop.IsEnabled = true;
         }
 
         private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -438,9 +380,27 @@ namespace GalaxyMediaPlayer.Pages
             MyMediaPlayer.Stop();
             SongInfoDisplayGrid.Visibility = Visibility.Collapsed;
             SongSliderPanel.Visibility = Visibility.Collapsed;
-            if (MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder)
-                changeAllBtnPlayPauseBackgroundImage();
+
+            if (MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder) changeAllBtnPlayPauseBackgroundImage();
             else changeBtnPlayPauseBackgroundInGridInfo();
+        }
+
+        private void btnStop_Click(object sender, RoutedEventArgs e)
+        {
+            MyMediaPlayer.Stop();
+            SongInfoDisplayGrid.Visibility = Visibility.Collapsed;
+            SongSliderPanel.Visibility = Visibility.Collapsed;
+
+            if (MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder) changeAllBtnPlayPauseBackgroundImage();
+            else changeBtnPlayPauseBackgroundInGridInfo();
+
+            btnStop.Background.Opacity = opacityNotActiveValue;
+            btnPrevious.Background.Opacity = opacityNotActiveValue;
+            btnNext.Background.Opacity = opacityNotActiveValue;
+
+            btnStop.IsEnabled = false;
+            btnPrevious.IsEnabled = false;
+            btnNext.IsEnabled = false;
         }
 
         private void btnRandom_Click(object sender, RoutedEventArgs e)
@@ -457,19 +417,23 @@ namespace GalaxyMediaPlayer.Pages
             ContentFrame.Navigate(new Uri("Pages/NavContentPages/MusicDetailPage.xaml", UriKind.Relative));
         }
 
-        private void ContentFrame_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
-        {
-            // Nam: limit the frameStack, we won't want IT to happen
-            if (frameStack.Count <= 100)
-                frameStack.Push(e.Uri);
-        }
-
         private void minimizeImageBorder_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             e.Handled = true;
             MainWindow.Instance.Visibility = Visibility.Hidden;
             SongMinimizedWindow newWindow = new SongMinimizedWindow();
             newWindow.Show();
+        }
+
+        private void ContentFrame_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+            // Nam: limit the frameStack, we won't want IT to happen
+            if (frameStack.Count > 100)
+            {
+                frameStack.Pop();
+                frameStack.Push(e.Uri);
+            }
+            else frameStack.Push(e.Uri);
         }
 
         private void SongInfoDisplayGrid_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
@@ -480,6 +444,63 @@ namespace GalaxyMediaPlayer.Pages
         private void SongInfoDisplayGrid_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             minimizeImageBorder.Visibility = Visibility.Hidden;
+        }
+
+        private void SongDurationSlider_Thumb_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        {
+            isDragging = false;
+            try
+            {
+                MyMediaPlayer.mediaPlayer.Position = TimeSpan.FromSeconds(totalTimeInSecond * (sender as Slider).Value / 100);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("There is something wrong, please feed it back");
+            }
+        }
+
+        private void SongDurationSlider_Thumb_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
+        {
+            isDragging = true;
+        }
+
+        private void btnMinimizeApp_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.MainWindow.WindowState = WindowState.Minimized;
+        }
+
+        private void btnMaximizeApp_Click(object sender, RoutedEventArgs e)
+        {
+            if (Application.Current.MainWindow.WindowState == WindowState.Maximized)
+            {
+                Application.Current.MainWindow.WindowState = WindowState.Normal;
+            }
+            else
+            {
+                Application.Current.MainWindow.WindowState = WindowState.Maximized;
+            }
+        }
+
+        private void btnCloseApp_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void btnVolumn_Click(object sender, RoutedEventArgs e)
+        {
+            isMuted = !isMuted;
+            if (isMuted)
+            {
+                volumnBeforeMute = MyMediaPlayer.GetVolumn;
+                MyMediaPlayer.SetVolumn(0);
+                VolumeSlider.Value = 0;
+            }
+            else
+            {
+                MyMediaPlayer.SetVolumn(volumnBeforeMute);
+                VolumeSlider.Value = volumnBeforeMute;
+            }
+            SetVolumnIcon();
         }
     }
 }
