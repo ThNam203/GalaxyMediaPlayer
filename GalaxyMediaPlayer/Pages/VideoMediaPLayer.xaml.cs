@@ -27,8 +27,42 @@ namespace GalaxyMediaPlayer.Pages
     /// </summary>
     public partial class VideoMediaPLayer : Page
     {
+        public class SrtContent
+        {
+            public string Text { get; set; }
+            public string StartTime { get; set; }
+            public string EndTime { get; set; }
+            public string Segment { get; set; }
+        }
+        private List<SrtContent> ParseSRT(string srtFilePath)
+        {
+            var fileContent = File.ReadAllLines(srtFilePath);
+
+            var content = new List<SrtContent>();
+            var segment = 1;
+            for (int item = 0; item < fileContent.Length; item++)
+            {
+                if (segment.ToString() == fileContent[item])
+                {
+                    content.Add(new SrtContent
+                    {
+                        Segment = segment.ToString(),
+                        StartTime = fileContent[item + 1].Substring(0, fileContent[item + 1].LastIndexOf("-->")).Trim(),
+                        EndTime = fileContent[item + 1].Substring(fileContent[item + 1].LastIndexOf("-->") + 3).Trim(),
+                        Text = fileContent[item + 2]
+
+                    });
+                    // The block numbers of SRT like 1, 2, 3, ... and so on
+                    segment++;
+                    // Iterate one block at a time
+                    item += 3;
+                }
+            }
+            return content;
+        }
         bool repeatIsOn=false;
         DispatcherTimer timer;
+        string subtiles;
         public VideoMediaPLayer()
         {
             InitializeComponent();
@@ -61,10 +95,24 @@ namespace GalaxyMediaPlayer.Pages
                 {
                     media.Source = new Uri(ofd.FileName);
                     media.LoadedBehavior=MediaState.Play;
-                    var text = new Uri(@"C:\Users\GIGA\Videos\[English] How To Create an SRT File - Detailed Subtitling Tutorial [DownSub.com].srt");
-                    
+                    Uri text = new Uri(@"C:\Users\GIGA\Videos\[English] How To Create an SRT File - Detailed Subtitling Tutorial [DownSub.com].srt");
+                    StreamReader reader = new StreamReader(@"C:\Users\GIGA\Videos\[English] How To Create an SRT File - Detailed Subtitling Tutorial [DownSub.com].srt");
+                     string[] line = reader.ReadToEnd().Split(" ");
+                   // string[] line = File.ReadAllLines(@"C:\Users\GIGA\Videos\[English] How To Create an SRT File - Detailed Subtitling Tutorial [DownSub.com].srt");
+                    reader.Close();
+                    List<SrtContent> test = new List<SrtContent>();
+                    test = ParseSRT(@"C:\Users\GIGA\Videos\[English] How To Create an SRT File - Detailed Subtitling Tutorial [DownSub.com].srt");
+                    foreach(SrtContent testItem in test)
+                    {
+                        TimeSpan time = TimeSpan.Parse(testItem.StartTime.Substring(0,testItem.StartTime.IndexOf(",")));
+
+                            
+                        Sub.Text = time.ToString();
+                    }
+
                 }
-            }catch(Exception ex)
+            }
+            catch(Exception ex)
             {
                 System.Windows.Forms.MessageBox.Show(ex.Message);
             }

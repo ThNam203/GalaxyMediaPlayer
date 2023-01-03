@@ -18,23 +18,14 @@
                 MediaEnded="media_MediaEnded" 
                 MediaOpened="media_MediaOpened" 
                 Margin="0,0,0,0" />
-            <Slider 
-            x:Name="SliderSeek" 
-                
-                GotMouseCapture="SliderSeek_GotMouseCapture" 
-                LostMouseCapture="SliderSeek_LostMouseCapture" MinHeight="3" 
-                Margin="50,0,50,60" VerticalAlignment="Bottom" />
+
             <StackPanel
                 x:Name="StackPanel1"
       
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top" Width="800"
                 Height="40" Orientation="Horizontal" FlowDirection="RightToLeft"
-                
-                
-                
-                
-                    >
+             >
                 <Button x:Name="Close_Button" Click="Button_Click" FontFamily="Raleway Black" FontSize="30" FontWeight="Bold" Width="40">
                     <Button.Background>
                         <ImageBrush/>
@@ -47,6 +38,8 @@
 
 
             </StackPanel>
+            <ui:TextBox x:Name="Sub" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="650" Height="30" Background="{x:Null}" FontFamily="Times New Roman" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,60" Text="vfdfvdfv" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+
         </Grid>
 
         <Grid x:Name="VideoPlayerGrid" Margin="0,370,0,0" VerticalAlignment="Bottom" 
@@ -64,6 +57,12 @@
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+            <Slider 
+            x:Name="SliderSeek" 
+                
+                GotMouseCapture="SliderSeek_GotMouseCapture" 
+                LostMouseCapture="SliderSeek_LostMouseCapture" MinHeight="3" 
+                Margin="50,0,50,0" VerticalAlignment="Center" Grid.Column="0" Grid.ColumnSpan="3"/>
 
             <Border x:Name="SongInfoDisplayGrid"
                 Visibility="Visible"
@@ -178,6 +177,7 @@
                     Margin="8 0" ValueChanged="VolumeSlider_ValueChanged" IsEnabled="True" LargeChange="0.1" SmallChange="0.01" Value="1"/>
             </StackPanel>
             <Label x:Name="Video_Duration" HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Center" Height="40" Width="150" FontSize="20" FontFamily="Times New Roman" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+
 
         </Grid>
 
