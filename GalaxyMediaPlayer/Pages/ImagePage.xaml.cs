@@ -49,85 +49,80 @@ namespace GalaxyMediaPlayer.Pages
                 BorderlistView.Visibility = Visibility.Collapsed;
                 listViewImage.Visibility = Visibility.Visible;
                 btn_Addmore.Visibility = Visibility.Visible;
+                btn_DeleteImage.Visibility = Visibility.Visible;
                 foreach (string file in dialog.FileNames)
                 {
                     //add filePath to listview
                     ImageModel imgModel = new ImageModel(file);
                     Images.Add(imgModel);
-
-                    //add filePath to database
-
                 }
+                //add filePath to database
                 InsertToDB();
             }
         }
 
         private void Image_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ClickCount == 2)
+            if (e.ClickCount >= 2)
             {
                 ImageModel imageModelSelected = Images[listViewImage.SelectedIndex];
                 string ImagePath = imageModelSelected.path;
                 OpenImageWindow openImageWindow = new OpenImageWindow(ImagePath);
 
-                //MainWindow main = Application.Current.MainWindow as MainWindow;
-                //if (main != null)
-                //{
-                //    main.WindowState = WindowState.Minimized;
-                //}
-
                 openImageWindow.WindowState = WindowState.Maximized;
                 openImageWindow.Show();
             }
-            else if (e.ClickCount == 1)
-            {
-                if (sender != null)
-                {
-                    if (e.OriginalSource is not CheckBox)
-                    {
-                        FrameworkElement frameworkElement = e.OriginalSource as FrameworkElement;
-                        ImageModel model = (ImageModel)frameworkElement.DataContext;
-                        if (model != null)
-                        {
-                            if (model.imgIsSelected) model.imgIsSelected = false;
-                            else model.imgIsSelected = true;
-                        }
-                    }
-                }
-            }
         }
+
+
 
         private void btn_DeleteImage_Click(object sender, RoutedEventArgs e)
         {
-            int index = -1;
             foreach (ImageModel item in Images.ToList())
             {
-                index++;
                 if (item.imgIsSelected)
                 {
                     DeleteFromDB(item.path);
-                    Images.RemoveAt(index);
+                    Images.Remove(item);
                 }
+            }
+            if(Images.Count == 0)
+            {
+                BorderlistView.Visibility = Visibility.Visible;
+                listViewImage.Visibility = Visibility.Collapsed;
+                btn_Addmore.Visibility = Visibility.Collapsed;
+                btn_DeleteImage.Visibility = Visibility.Collapsed;
             }
         }
 
         private void LoadFromDB()
         {
             dtImagePath = new DataTable();
-            dtImagePath = DataConfig.DataTransport("SELECT * FROM ImageList WHERE ImagePath IS NOT NULL");
-            if(dtImagePath != null)
+            dtImagePath = DataConfig.DataTransport("SELECT DISTINCT * FROM ImageList WHERE ImagePath IS NOT NULL");
+            if (dtImagePath.Rows.Count > 0)
             {
                 BorderlistView.Visibility = Visibility.Collapsed;
                 listViewImage.Visibility = Visibility.Visible;
-            }
-            foreach (DataRow row in dtImagePath.Rows)
-            {
-                if (row != null)
+                btn_Addmore.Visibility = Visibility.Visible;
+                btn_DeleteImage.Visibility = Visibility.Visible;
+
+                foreach (DataRow row in dtImagePath.Rows)
                 {
-                    ImageModel model = new ImageModel(row[0].ToString());
-                    Images.Add(model);
+                    if (row != null)
+                    {
+                        ImageModel model = new ImageModel(row[0].ToString());
+                        Images.Add(model);
+                    }
                 }
             }
+            else
+            {
+                BorderlistView.Visibility = Visibility.Visible;
+                listViewImage.Visibility = Visibility.Collapsed;
+                btn_Addmore.Visibility = Visibility.Collapsed;
+                btn_DeleteImage.Visibility = Visibility.Collapsed;
+            }
+
         }
 
         private void InsertToDB()
@@ -167,6 +162,20 @@ namespace GalaxyMediaPlayer.Pages
         private string ConvertToSQL(string sValue)
         {
             return "'" + sValue + "'";
+        }
+
+        private void img_MouseLeave(object sender, MouseEventArgs e)
+        {
+            foreach(ImageModel item in listViewImage.Items)
+            {
+                int index = listViewImage.Items.IndexOf(item);
+                Images[index].imgIsSelected = false;
+            }
+            foreach(ImageModel item in listViewImage.SelectedItems)
+            {
+                int index = listViewImage.Items.IndexOf(item);
+                Images[index].imgIsSelected = true;
+            }
         }
     }
 }

@@ -148,13 +148,12 @@
             </StackPanel>
         </Border>
         
-        <!--/////////////////////////////////////////////////////////////-->
         <Button Content="Add more images"
                 Grid.Row="1"
                 x:Name="btn_Addmore"
                 HorizontalAlignment="Right"
                 Margin="0 0 50 0"
-                Visibility="Visible"
+                Visibility="Collapsed"
                 Style="{StaticResource ButtonAddNowStyle}"
                 Click="btn_Addmore_Click"/>
         <Button Content="Delete"
@@ -162,12 +161,10 @@
                 x:Name="btn_DeleteImage"
                 HorizontalAlignment="Right"
                 Margin="0 0 250 0"
-                Visibility="Visible"
+                Visibility="Collapsed"
                 Style="{StaticResource ButtonAddNowStyle}"
                 Click="btn_DeleteImage_Click"/>
-        <!--/////////////////////////////////////////////////////////////-->
 
-        <!--/////////////////////////////////////////////////////////////-->
         <Border x:Name="BorderlistView"
                 Visibility="Visible"
                 Grid.Row="2"
@@ -178,7 +175,6 @@
                     Style="{StaticResource ButtonAddNowStyle}"
                     Click="btn_Addmore_Click"/>
         </Border>
-        <!--/////////////////////////////////////////////////////////////-->
 
         <ListView Name="listViewImage"
                   Grid.Row="2"
@@ -220,7 +216,7 @@
                         <Image x:Name="img" 
                                Source="{Binding path, Converter={StaticResource ImagePathToThumbnailImage}}" 
                                Panel.ZIndex="1" 
-                               Width="200" Height="200" MouseDown="Image_MouseDown"/>
+                               Width="200" Height="200" MouseDown="Image_MouseDown" MouseLeave="img_MouseLeave"/>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
