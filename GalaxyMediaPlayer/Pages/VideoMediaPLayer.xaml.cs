@@ -19,6 +19,8 @@ using Wpf.Ui.Controls;
 using System.Windows.Threading;
 using System.Drawing;
 using System.IO;
+using Microsoft.VisualBasic.ApplicationServices;
+using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
 
 namespace GalaxyMediaPlayer.Pages
 {
@@ -37,7 +39,6 @@ namespace GalaxyMediaPlayer.Pages
         private List<SrtContent> ParseSRT(string srtFilePath)
         {
             var fileContent = File.ReadAllLines(srtFilePath);
-
             var content = new List<SrtContent>();
             var segment = 1;
             for (int item = 0; item < fileContent.Length; item++)
@@ -49,36 +50,54 @@ namespace GalaxyMediaPlayer.Pages
                         Segment = segment.ToString(),
                         StartTime = fileContent[item + 1].Substring(0, fileContent[item + 1].LastIndexOf("-->")).Trim(),
                         EndTime = fileContent[item + 1].Substring(fileContent[item + 1].LastIndexOf("-->") + 3).Trim(),
-                        Text = fileContent[item + 2]
+                        Text = fileContent[item + 2] + fileContent[item + 3]
 
-                    });
-                    // The block numbers of SRT like 1, 2, 3, ... and so on
+                    }); ;
+                    //H.nam The block numbers of SRT like 1, 2, 3, ... and so on
                     segment++;
-                    // Iterate one block at a time
+                    //H.Nam Iterate one block at a time
                     item += 3;
                 }
             }
             return content;
         }
-        bool repeatIsOn=false;
+        List<SrtContent> test = new List<SrtContent>();
+
+        bool repeatIsOn =false;
         DispatcherTimer timer;
         string subtiles;
         public VideoMediaPLayer()
         {
             InitializeComponent();
             timer = new DispatcherTimer(); //H.Nam: DispatcherTimer for displaying video current position
-            timer.Interval= TimeSpan.FromMilliseconds(500); 
+            timer.Interval= TimeSpan.FromMilliseconds(200); 
             timer.Tick += new EventHandler(Timer_Tick);
         }
         private void Timer_Tick(object sender,EventArgs e)
         {
+            bool flag=true;
             try
             {
-                
                 SliderSeek.Value = media.Position.TotalSeconds;//update the current video position to progress bar
                 string a=TimeSpan.FromMinutes(SliderSeek.Value).ToString();//H.Nam: remove miliseconds from Timespan
                 string b=TimeSpan.FromMinutes(SliderSeek.Maximum).ToString();    
                 Video_Duration.Content = a.Substring(0, a.LastIndexOf(':'))+" / "+  b.Substring(0,b.LastIndexOf(':')); 
+                    foreach(SrtContent testItem in test)
+                    {
+                        TimeSpan start = TimeSpan.Parse(testItem.StartTime.Substring(0,testItem.StartTime.IndexOf(',')));
+                         TimeSpan end = TimeSpan.Parse(testItem.EndTime.Substring(0, testItem.StartTime.IndexOf(',')));
+
+                    if (end >media.Position && start<media.Position)
+                    {
+                        Sub.Background.Opacity = 0.3;
+                        Sub.Text = testItem.Text.ToString();
+                        flag = false;
+                    }
+                }
+                if (flag==true)
+                {
+                    Sub.Background.Opacity=0;
+                }
             }
             catch (Exception ex)
             {                
@@ -90,25 +109,22 @@ namespace GalaxyMediaPlayer.Pages
             try
             {
                 System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
-                
+
                 if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     media.Source = new Uri(ofd.FileName);
-                    media.LoadedBehavior=MediaState.Play;
-                    Uri text = new Uri(@"C:\Users\GIGA\Videos\[English] How To Create an SRT File - Detailed Subtitling Tutorial [DownSub.com].srt");
-                    StreamReader reader = new StreamReader(@"C:\Users\GIGA\Videos\[English] How To Create an SRT File - Detailed Subtitling Tutorial [DownSub.com].srt");
-                     string[] line = reader.ReadToEnd().Split(" ");
-                   // string[] line = File.ReadAllLines(@"C:\Users\GIGA\Videos\[English] How To Create an SRT File - Detailed Subtitling Tutorial [DownSub.com].srt");
-                    reader.Close();
-                    List<SrtContent> test = new List<SrtContent>();
-                    test = ParseSRT(@"C:\Users\GIGA\Videos\[English] How To Create an SRT File - Detailed Subtitling Tutorial [DownSub.com].srt");
-                    foreach(SrtContent testItem in test)
+                    media.LoadedBehavior = MediaState.Play;
+                    Uri uri = new Uri(ofd.FileName);
+                    DirectoryInfo directory = new DirectoryInfo(ofd.FileName);
+                    string[] x = Directory.GetFiles(@"C:\Users\GIGA\Videos", "*.srt",SearchOption.AllDirectories);;
+                    foreach (string item in x)
                     {
-                        TimeSpan time = TimeSpan.Parse(testItem.StartTime.Substring(0,testItem.StartTime.IndexOf(",")));
-
-                            
-                        Sub.Text = time.ToString();
+                        if (ofd.FileName.Contains(System.IO.Path.GetFileName(ofd.FileName)))
+                        {
+                            test = ParseSRT(item);
+                        }
                     }
+
 
                 }
             }

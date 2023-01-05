@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:GalaxyMediaPlayer.Pages"
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" x:Name="Video_Page" x:Class="GalaxyMediaPlayer.Pages.VideoMediaPLayer"
       mc:Ignorable="d" 
-      d:DesignHeight="450"  d:DesignWidth="800" Background="BurlyWood"
+      d:DesignHeight="450"  d:DesignWidth="800"
       Title="VideoMediaPLayer" ShowsNavigationUI="True" >
 
     <Grid AllowDrop="True" Margin="0,0,0,0" >
@@ -38,7 +38,20 @@
 
 
             </StackPanel>
-            <ui:TextBox x:Name="Sub" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="650" Height="30" Background="{x:Null}" FontFamily="Times New Roman" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,60" Text="vfdfvdfv" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            <ui:TextBox x:Name="Sub" TextWrapping="Wrap" FontFamily="Times New Roman" 
+                        FontSize="24" 
+                        Margin="0,0,0,70" Text="" 
+                        HorizontalContentAlignment="Center" 
+                        VerticalContentAlignment="Center" 
+                        MaxLines="2" MinLines="1" VerticalAlignment="Bottom" 
+                        BorderBrush="{x:Null}" 
+                        HorizontalAlignment="Center" 
+                        >
+                <ui:TextBox.Background>
+                    <SolidColorBrush Color="#FFE5D9D9" Opacity="0"/>
+                </ui:TextBox.Background>
+            </ui:TextBox>
+
 
         </Grid>
 
@@ -166,9 +179,7 @@
                         <ImageBrush x:Name="VolumeIcon" ImageSource="/Resources/Icons/MediaControlIcons/volume_32.png"/>
                     </Button.Background>
                 </Button>
-
                 <Slider x:Name="VolumeSlider"
-                   
                     Style="{StaticResource Horizontal_Slider}"
                     HorizontalAlignment="Left"
                     Maximum="1"
@@ -176,8 +187,17 @@
                     Width="100"
                     Margin="8 0" ValueChanged="VolumeSlider_ValueChanged" IsEnabled="True" LargeChange="0.1" SmallChange="0.01" Value="1"/>
             </StackPanel>
-            <Label x:Name="Video_Duration" HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Center" Height="40" Width="150" FontSize="20" FontFamily="Times New Roman" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-
+            <Label x:Name="Video_Duration" HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Center" Height="40" Width="150" FontSize="20" FontFamily="Times New Roman" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontStyle="Italic"/>
+            <StackPanel
+                x:Name="SubtitlesPanel"
+                Grid.Column="1" Grid.ColumnSpan="1"
+                Grid.Row="1">
+                <ComboBox x:Name="subtitles_cbb" Width="150" FlowDirection="RightToLeft" 
+                          Margin="0,5,0,0"
+                      VerticalContentAlignment="Bottom" 
+                      HorizontalAlignment="Right" Opacity="0"
+                          />
+            </StackPanel>
 
         </Grid>
 
