@@ -63,9 +63,9 @@ namespace GalaxyMediaPlayer.Pages
         void UpdatePercentageZooming()
         {
             PercentageZoomingString = ((int)(ZoomScale * 100)).ToString() + "%";
-            if (ZoomScale <= 1)
+            if (ZoomScale <= 0.6)
             {
-                PercentageZoomingString = "100%";
+                PercentageZoomingString = "60%";
             }
             if (ZoomScale >= 50)
             {
@@ -116,7 +116,7 @@ namespace GalaxyMediaPlayer.Pages
         }
         private void btnZoomOut_Click(object sender, RoutedEventArgs e)
         {
-            if(ZoomScale > 1)
+            if(ZoomScale > 0.6)
             {
                 Point center = new Point(this.Width / 2, (this.Height - 40) / 2);
 
@@ -140,7 +140,7 @@ namespace GalaxyMediaPlayer.Pages
                 m.ScaleAtPrepend(1.1, 1.1, PointWheel.X, PointWheel.Y);
                 ZoomScale *= 1.1;
             }
-            else if(ZoomScale > 1)
+            else if(ZoomScale > 0.6)
             {
                 m.ScaleAtPrepend(1 / 1.1, 1 / 1.1, PointWheel.X, PointWheel.Y);
                 ZoomScale /= 1.1;
@@ -193,7 +193,7 @@ namespace GalaxyMediaPlayer.Pages
                 m.ScaleAtPrepend(1.1, 1.1, PointWheel.X, PointWheel.Y);
                 ZoomScale *= 1.1;
             }
-            else if (ZoomScale > 1)
+            else if (ZoomScale > 0.6)
             {
                 m.ScaleAtPrepend(1 / 1.1, 1 / 1.1, PointWheel.X, PointWheel.Y);
                 ZoomScale /= 1.1;

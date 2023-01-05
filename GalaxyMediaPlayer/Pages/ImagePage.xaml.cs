@@ -18,6 +18,7 @@ using GalaxyMediaPlayer.Models;
 using System.Data;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.SqlClient;
+using GalaxyMediaPlayer.ConnectDB;
 
 namespace GalaxyMediaPlayer.Pages
 {
@@ -28,14 +29,16 @@ namespace GalaxyMediaPlayer.Pages
     {
 
         private ObservableCollection<ImageModel> Images;
+        DataTable dtImagePath;
         public ImagePage()
         {
             InitializeComponent();
             Images = new ObservableCollection<ImageModel>();
             listViewImage.ItemsSource = Images;
+            LoadFromDB();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void btn_Addmore_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Multiselect = true;
@@ -53,20 +56,11 @@ namespace GalaxyMediaPlayer.Pages
                     Images.Add(imgModel);
 
                     //add filePath to database
-                    
+
                 }
+                InsertToDB();
             }
         }
-
-
-        //void ConnectDB()
-        //{
-        //    string cn_String = Properties.Settings.Default.connectionString;
-        //}
-        //void InsertToDB()
-        //{
-            
-        //}
 
         private void Image_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -82,10 +76,97 @@ namespace GalaxyMediaPlayer.Pages
                 //    main.WindowState = WindowState.Minimized;
                 //}
 
+                openImageWindow.WindowState = WindowState.Maximized;
                 openImageWindow.Show();
+            }
+            else if (e.ClickCount == 1)
+            {
+                if (sender != null)
+                {
+                    if (e.OriginalSource is not CheckBox)
+                    {
+                        FrameworkElement frameworkElement = e.OriginalSource as FrameworkElement;
+                        ImageModel model = (ImageModel)frameworkElement.DataContext;
+                        if (model != null)
+                        {
+                            if (model.imgIsSelected) model.imgIsSelected = false;
+                            else model.imgIsSelected = true;
+                        }
+                    }
+                }
             }
         }
 
-        
+        private void btn_DeleteImage_Click(object sender, RoutedEventArgs e)
+        {
+            int index = -1;
+            foreach (ImageModel item in Images.ToList())
+            {
+                index++;
+                if (item.imgIsSelected)
+                {
+                    DeleteFromDB(item.path);
+                    Images.RemoveAt(index);
+                }
+            }
+        }
+
+        private void LoadFromDB()
+        {
+            dtImagePath = new DataTable();
+            dtImagePath = DataConfig.DataTransport("SELECT * FROM ImageList WHERE ImagePath IS NOT NULL");
+            if(dtImagePath != null)
+            {
+                BorderlistView.Visibility = Visibility.Collapsed;
+                listViewImage.Visibility = Visibility.Visible;
+            }
+            foreach (DataRow row in dtImagePath.Rows)
+            {
+                if (row != null)
+                {
+                    ImageModel model = new ImageModel(row[0].ToString());
+                    Images.Add(model);
+                }
+            }
+        }
+
+        private void InsertToDB()
+        {
+            foreach (ImageModel imageModel in Images.ToList())
+            {
+                DataConfig.DataExecution(InsertImagePathToDatatable(imageModel.path).ToString());
+            }
+        }
+
+        private void DeleteFromDB(string imagePath)
+        {
+            DataConfig.DataExecution(DeleteImagePathFromDatatable(imagePath).ToString());
+        }
+
+        private StringBuilder InsertImagePathToDatatable(string imagePath)
+        {
+            StringBuilder sSQL = new StringBuilder();
+
+            sSQL.Append("INSERT INTO ImageList (");
+            sSQL.Append("ImagePath");
+            sSQL.Append(") VALUES (");
+            sSQL.Append(ConvertToSQL(imagePath) + ")");
+
+            return sSQL;
+        }
+
+        private StringBuilder DeleteImagePathFromDatatable(string imagePath)
+        {
+            StringBuilder sSQL = new StringBuilder();
+
+            sSQL.Append("DELETE FROM ImageList WHERE ImagePath = ");
+            sSQL.Append(ConvertToSQL(imagePath));
+            return sSQL;
+        }
+
+        private string ConvertToSQL(string sValue)
+        {
+            return "'" + sValue + "'";
+        }
     }
 }

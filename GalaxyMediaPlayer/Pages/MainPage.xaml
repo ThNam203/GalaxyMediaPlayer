@@ -66,7 +66,7 @@
                     <local:NavButton Title="Home" ImageUri="ic_home.png"/>
                     <local:NavButton Title="Movies" ImageUri="ic_movie.png"/>
                     <local:NavButton Title="Videos" ImageUri="ic_video.png"/>
-                        <local:NavButton Title="Photos" ImageUri="ic_image.png" NavLink="Pages/ImagePage.xaml"/>
+                    <local:NavButton Title="Photos" ImageUri="ic_image.png" NavLink="Pages/ImagePage.xaml"/>
                     <local:NavButton Title="Music" ImageUri="ic_note.png"/>
                     <local:NavButton Title="Computer" ImageUri="ic_computer.png" NavLink="Pages/NavContentPages/Computer.xaml"/>
                 </ListBox>

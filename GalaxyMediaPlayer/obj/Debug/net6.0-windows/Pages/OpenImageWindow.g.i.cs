@@ -167,7 +167,7 @@ namespace GalaxyMediaPlayer.Pages {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/GalaxyMediaPlayer;V1.0.0.0;component/pages/openimagewindow.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/GalaxyMediaPlayer;component/pages/openimagewindow.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Pages\OpenImageWindow.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

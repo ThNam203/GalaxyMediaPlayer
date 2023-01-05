@@ -83,7 +83,7 @@
                 <Setter Property="HorizontalAlignment" Value="Left"/>
                 <Setter Property="VerticalAlignment" Value="Top"/>
                 <Setter Property="Visibility" Value="{Binding Type, Converter={StaticResource EntityTypeToVisibility}}"/>
-                <Setter Property="IsChecked" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                <Setter Property="IsChecked" Value="{Binding imgIsSelected, Mode=TwoWay}"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="CheckBox">
@@ -143,26 +143,31 @@
                 BorderThickness="0 0 0 2"
                 Margin="50 0 50 0">
             <StackPanel Orientation="Horizontal">
-                <Button Content="Folders"
-                    Style="{StaticResource ItemBar}"/>
-                <Button Content="Folders"
-                    Style="{StaticResource ItemBar}"/>
-                <Button Content="Folders"
+                <Button Content="Images"
                     Style="{StaticResource ItemBar}"/>
             </StackPanel>
         </Border>
         
-        
+        <!--/////////////////////////////////////////////////////////////-->
         <Button Content="Add more images"
                 Grid.Row="1"
                 x:Name="btn_Addmore"
                 HorizontalAlignment="Right"
                 Margin="0 0 50 0"
-                Visibility="Collapsed"
+                Visibility="Visible"
                 Style="{StaticResource ButtonAddNowStyle}"
-                Click="Button_Click"/>
-        
-        
+                Click="btn_Addmore_Click"/>
+        <Button Content="Delete"
+                Grid.Row="1"
+                x:Name="btn_DeleteImage"
+                HorizontalAlignment="Right"
+                Margin="0 0 250 0"
+                Visibility="Visible"
+                Style="{StaticResource ButtonAddNowStyle}"
+                Click="btn_DeleteImage_Click"/>
+        <!--/////////////////////////////////////////////////////////////-->
+
+        <!--/////////////////////////////////////////////////////////////-->
         <Border x:Name="BorderlistView"
                 Visibility="Visible"
                 Grid.Row="2"
@@ -171,9 +176,9 @@
                 Margin="50 10 50 10">
             <Button Content="Add now"
                     Style="{StaticResource ButtonAddNowStyle}"
-                    Click="Button_Click"/>
+                    Click="btn_Addmore_Click"/>
         </Border>
-
+        <!--/////////////////////////////////////////////////////////////-->
 
         <ListView Name="listViewImage"
                   Grid.Row="2"
