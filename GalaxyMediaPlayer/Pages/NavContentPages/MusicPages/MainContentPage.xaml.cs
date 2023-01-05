@@ -20,6 +20,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPage
     /// </summary>
     public partial class MainContentPage : Page
     {
+        private readonly string DATABASE_PATH = AppDomain.CurrentDomain.BaseDirectory + "Databases\\MusicPage\\Database.txt";
         public class ArtistAndAlbumListItem
         {
             public string Name { get; set; }
@@ -46,6 +47,10 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPage
         {
             InitializeComponent();
 
+            GetDataFromDatabase();
+            ResetArtistsList();
+            ResetAlbumsList();
+
             artirstListBox.ItemsSource = artistsList;
             albumsListBox.ItemsSource = albumList;
             songsDataGrid.ItemsSource = musicList;
@@ -56,14 +61,30 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPage
             }
         }
 
+        public void ResetPageData()
+        {
+            musicList.Clear();
+            GetDataFromDatabase();
+            ResetAlbumsList();
+            ResetArtistsList();
+        }
+        private void GetDataFromDatabase()
+        {
+            CreateDatabaseFileIfNotExist();
+            string[] lines = File.ReadAllLines(DATABASE_PATH);
+
+            foreach (string line in lines) if (line != null && line.Length != 0) OpenFolder(new DirectoryInfo(line));
+        }
+
         private void AddNewBtn_Click(object sender, RoutedEventArgs e)
         {
             FolderBrowserDialog dialog = new FolderBrowserDialog();
             if (dialog.ShowDialog() == DialogResult.OK)
             {
+                SaveFolderToDatabase(dialog.SelectedPath);
                 OpenFolder(new DirectoryInfo(dialog.SelectedPath));
-                SetArtirstsListBox();
-                SetAlbumsListBox();
+                ResetAlbumsList();
+                ResetArtistsList();
             }
 
             if (musicList.Count > 0)
@@ -74,6 +95,28 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPage
                 else if (currentPageIndex == 2) albumsListBox.Visibility = Visibility.Visible;
                 else if (currentPageIndex == 3) songsDataGrid.Visibility = Visibility.Visible;
             }
+        }
+
+        private void CreateDatabaseFileIfNotExist()
+        {
+            if (!File.Exists(DATABASE_PATH))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(DATABASE_PATH));
+
+                FileStream fs = File.Create(DATABASE_PATH);
+                fs.Close();
+            }
+        }
+
+        private void SaveFolderToDatabase(string newFolderPath)
+        {
+            CreateDatabaseFileIfNotExist();
+
+            // Nam: check if it existed, if yes then exit, not saving
+            string[] folders = File.ReadAllLines(DATABASE_PATH);
+            foreach (string folderPath in folders) if (folderPath == newFolderPath) return; 
+
+            File.AppendAllText(DATABASE_PATH, newFolderPath + Environment.NewLine);
         }
 
         private void showByArtirsts_MouseDown(object sender, MouseButtonEventArgs e)
@@ -132,10 +175,6 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPage
 
         private void OpenFolder(DirectoryInfo di)
         {
-            MainPage.currentMusicBrowsingFolder = di.FullName;
-
-            if (!MyMediaPlayer.isSongOpened) MyMediaPlayer.pathCurrentlyInUse = di.FullName;
-
             try
             {
                 foreach (DirectoryInfo direcInfo in di.EnumerateDirectories())
@@ -193,7 +232,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPage
             catch (Exception) { }
         }
 
-        private void SetArtirstsListBox()
+        private void ResetArtistsList()
         {
             artistsList.Clear();
 
@@ -216,7 +255,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPage
             }
         }
 
-        private void SetAlbumsListBox()
+        private void ResetAlbumsList()
         {
             albumList.Clear();
 

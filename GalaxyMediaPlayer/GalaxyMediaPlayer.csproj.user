@@ -52,6 +52,9 @@
     <Compile Update="UserControls\ShowMessageControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Windows\SettingWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Windows\SongMinimizedWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -109,6 +112,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControls\ShowMessageControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Windows\SettingWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Windows\SongMinimizedWindow.xaml">

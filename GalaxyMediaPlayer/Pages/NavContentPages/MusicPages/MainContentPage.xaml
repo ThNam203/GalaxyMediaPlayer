@@ -79,7 +79,7 @@
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             ScrollViewer.VerticalScrollBarVisibility="Auto"
             Background="{DynamicResource brushPrimary}"
-            Visibility="Collapsed"
+            Visibility="Visible"
             BorderThickness="0"
             SelectionMode="Extended"
             Grid.ColumnSpan="2">

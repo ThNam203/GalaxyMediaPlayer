@@ -28,6 +28,14 @@
                        FontSize="26"
                        Margin="4 0 16 4"
                        Foreground="{DynamicResource brushSecondary}"/>
+
+            <Button Name="openSettingBtn"
+                    Style="{StaticResource btnMediaControlStyle}"
+                    Click="openSettingBtn_Click">
+                <Button.Background>
+                    <ImageBrush ImageSource="\Resources\Icons\ic_setting_64.png"/>
+                </Button.Background>
+            </Button>
         </StackPanel>
 
         <Frame Name="ContentFrame"

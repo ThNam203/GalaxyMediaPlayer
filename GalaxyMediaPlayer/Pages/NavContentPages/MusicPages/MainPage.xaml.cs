@@ -1,5 +1,7 @@
-﻿using System;
+﻿using GalaxyMediaPlayer.Pages.NavContentPages.MusicPage;
+using GalaxyMediaPlayer.Windows;
 using System.Windows.Controls;
+
 namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPages
 {
     /// <summary>
@@ -8,13 +10,23 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPages
     public partial class MainPage : Page
     {
         public static Frame contentFrame;
+        private MainContentPage _contentPage = new MainContentPage();
 
         public MainPage()
         {
             InitializeComponent();
 
             contentFrame = this.ContentFrame;
-            ContentFrame.Navigate(new Uri("Pages/NavContentPages/MusicPages/MainContentPage.xaml", UriKind.Relative));
+            ContentFrame.Navigate(_contentPage);
+        }
+
+        private void openSettingBtn_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            bool? value = new SettingWindow().ShowDialog();
+            if (value == true)
+            {
+                _contentPage.ResetPageData();
+            }
         }
     }
 }
