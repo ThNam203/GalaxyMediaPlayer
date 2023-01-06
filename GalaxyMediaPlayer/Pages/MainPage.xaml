@@ -122,7 +122,8 @@
             <Frame Name="ContentFrame" 
                    LoadCompleted="ContentFrame_LoadCompleted"
                    Grid.Column="1"
-                   Grid.Row="1"/>
+                   Grid.Row="1"
+                   NavigationUIVisibility="Hidden"/>
         </Grid>
 
         <Grid Name="MusicPlayerGrid"

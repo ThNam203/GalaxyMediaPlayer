@@ -20,6 +20,7 @@
                     Margin="8 0 0 0"
                     Visibility="Collapsed"
                     Content="&lt;"
+                    Click="BackBtn_Click"
                     Style="{StaticResource BackButtonArrowStyle}">
             </Button>
 

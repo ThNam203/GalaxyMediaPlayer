@@ -51,9 +51,9 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             SongPlaylistModel? playlist;
             playlist = playlistListBox.SelectedItem as SongPlaylistModel;
 
-            if (playlist != null && e.ClickCount == 2)
+            if (playlist != null && e.ClickCount >= 2)
             {
-                MainPage.currentMusicBrowsingFolder = "Playlist/" + playlist.Name;
+                MainPage.currentMusicBrowsingFolder += playlist.Name;
 
                 currentChosenPlaylistSongs.Clear();
                 foreach (SongInfor songInfor in PlaylistSongsDatabaseAccess.LoadSongsFromPlaylistId(playlist.Id))
@@ -63,7 +63,8 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                     else PlaylistSongsDatabaseAccess.DeleteSong(songInfor);
                 }
 
-                MainPage.Instance.ChangeButtonsViewOnOpenFolder(forceShow: false);
+                MyMediaPlayer.SetTempPlaylist(currentChosenPlaylistSongs.Select(s => s.Path).ToList());
+                MainPage.Instance.ChangeButtonsViewOnOpenFolder(forceDisable: false);
                 MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid(false);
 
                 playlistSongsDataGrid.Visibility = Visibility.Visible;
@@ -151,7 +152,7 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             if (chosenSong != null)
             {
                 List<string> songs = playlistSongsDataGrid.Items.Cast<SongInfor>().Select(s => s.Path).ToList();
-                MyMediaPlayer.SetNewPlaylist(songs);
+                MyMediaPlayer.SetPlaylistFromTempPlaylist();
                 MyMediaPlayer.SetPositionInPlaylist(playlistSongsDataGrid.SelectedIndex);
                 MyMediaPlayer.PlayCurrentSong();
                 e.Handled = true;

@@ -273,7 +273,6 @@ namespace GalaxyMediaPlayer.Windows
             {
                 // really moved
                 _lastMove = p;
-                Trace.WriteLine(sender);
                 ShowUI();
                 ResetShowUITimer();
             }

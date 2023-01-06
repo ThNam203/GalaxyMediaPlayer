@@ -98,13 +98,6 @@ namespace GalaxyMediaPlayer
             SetPositionInPlaylist(0);
         }
 
-        public static void SetNewPlaylist(List<string> songPaths)
-        {
-            playlist.Clear();
-            playlist.AddRange(songPaths);
-            SetPositionInPlaylist(0);
-        }
-
         public static void SetTempPlaylist(List<string> songPaths)
         {
             tempPlaylist.Clear();

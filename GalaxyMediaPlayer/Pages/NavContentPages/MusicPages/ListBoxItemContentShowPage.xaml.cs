@@ -1,20 +1,8 @@
 ﻿using GalaxyMediaPlayer.Models;
-using GalaxyMediaPlayer.Pages.NavContentPages.MusicPage;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPages
 {
@@ -23,11 +11,17 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPages
     /// </summary>
     public partial class ListBoxItemContentShowPage : Page
     {
-        public ListBoxItemContentShowPage(List<SongInfor> songsToShow)
+        // Nam: currentBrowsingName is stupid, keeping track of what the songs playing is located
+        public ListBoxItemContentShowPage(List<SongInfor> songsToShow, string currentBrowsingName)
         {
             InitializeComponent();
 
             songsDataGrid.ItemsSource = songsToShow;
+            Pages.MainPage.currentMusicBrowsingFolder += currentBrowsingName;
+
+            MyMediaPlayer.SetTempPlaylist(songsToShow.Select(x => x.Path).ToList());
+            Pages.MainPage.Instance.ChangeButtonsViewOnOpenFolder(forceDisable: false);
+            Pages.MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid(forceShow: false);
         }
 
 
@@ -40,8 +34,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPages
             // Nam: indicates that a song is chosen (not outside)
             if (chosenSong != null)
             {
-                List<string> songs = songsDataGrid.Items.Cast<SongInfor>().Select(s => s.Path).ToList();
-                MyMediaPlayer.SetNewPlaylist(songs);
+                MyMediaPlayer.SetPlaylistFromTempPlaylist();
                 MyMediaPlayer.SetPositionInPlaylist(songsDataGrid.SelectedIndex);
                 MyMediaPlayer.PlayCurrentSong();
                 e.Handled = true;

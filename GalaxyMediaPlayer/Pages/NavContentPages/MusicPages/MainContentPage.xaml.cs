@@ -1,4 +1,5 @@
-﻿using GalaxyMediaPlayer.Helpers;
+﻿using GalaxyMediaPlayer.Databases.MusicPage;
+using GalaxyMediaPlayer.Helpers;
 using GalaxyMediaPlayer.Models;
 using GalaxyMediaPlayer.Pages.NavContentPages.MusicPages;
 using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
@@ -20,7 +21,6 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPage
     /// </summary>
     public partial class MainContentPage : Page
     {
-        private readonly string DATABASE_PATH = AppDomain.CurrentDomain.BaseDirectory + "Databases\\MusicPage\\Database.txt";
         public class ArtistAndAlbumListItem
         {
             public string Name { get; set; }
@@ -37,7 +37,6 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPage
 
         // Nam: showing all music being contained
         private ObservableCollection<SongInfor> musicList = new ObservableCollection<SongInfor>();
-
         private ObservableCollection<ArtistAndAlbumListItem> artistsList = new ObservableCollection<ArtistAndAlbumListItem>();
         private ObservableCollection<ArtistAndAlbumListItem> albumList = new ObservableCollection<ArtistAndAlbumListItem>();
 
@@ -54,11 +53,6 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPage
             artirstListBox.ItemsSource = artistsList;
             albumsListBox.ItemsSource = albumList;
             songsDataGrid.ItemsSource = musicList;
-
-            if (musicList.Count == 0)
-            {
-                emptyMusicBorder.Visibility = Visibility.Visible;
-            }
         }
 
         public void ResetPageData()
@@ -70,10 +64,11 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPage
         }
         private void GetDataFromDatabase()
         {
-            CreateDatabaseFileIfNotExist();
-            string[] lines = File.ReadAllLines(DATABASE_PATH);
-
+            string[] lines = MusicPageDatabaseAccess.GetAllData();
             foreach (string line in lines) if (line != null && line.Length != 0) OpenFolder(new DirectoryInfo(line));
+
+            if (musicList.Count == 0) emptyMusicBorder.Visibility = Visibility.Visible;
+            else emptyMusicBorder.Visibility = Visibility.Collapsed;
         }
 
         private void AddNewBtn_Click(object sender, RoutedEventArgs e)
@@ -81,7 +76,8 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPage
             FolderBrowserDialog dialog = new FolderBrowserDialog();
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                SaveFolderToDatabase(dialog.SelectedPath);
+                MusicPageDatabaseAccess.SaveFolderToDatabase(dialog.SelectedPath);
+                // Nam: this button appear only when there is no folder path in database, so we open it immediately after saving
                 OpenFolder(new DirectoryInfo(dialog.SelectedPath));
                 ResetAlbumsList();
                 ResetArtistsList();
@@ -95,28 +91,6 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPage
                 else if (currentPageIndex == 2) albumsListBox.Visibility = Visibility.Visible;
                 else if (currentPageIndex == 3) songsDataGrid.Visibility = Visibility.Visible;
             }
-        }
-
-        private void CreateDatabaseFileIfNotExist()
-        {
-            if (!File.Exists(DATABASE_PATH))
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(DATABASE_PATH));
-
-                FileStream fs = File.Create(DATABASE_PATH);
-                fs.Close();
-            }
-        }
-
-        private void SaveFolderToDatabase(string newFolderPath)
-        {
-            CreateDatabaseFileIfNotExist();
-
-            // Nam: check if it existed, if yes then exit, not saving
-            string[] folders = File.ReadAllLines(DATABASE_PATH);
-            foreach (string folderPath in folders) if (folderPath == newFolderPath) return; 
-
-            File.AppendAllText(DATABASE_PATH, newFolderPath + Environment.NewLine);
         }
 
         private void showByArtirsts_MouseDown(object sender, MouseButtonEventArgs e)
@@ -135,6 +109,9 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPage
                     albumsListBox.Visibility = Visibility.Collapsed;
                 }
             }
+
+            MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid(true);
+            MainPage.Instance.ChangeButtonsViewOnOpenFolder(true);
         }
 
         private void showByAlbums_MouseDown(object sender, MouseButtonEventArgs e)
@@ -153,6 +130,9 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPage
                     albumsListBox.Visibility = Visibility.Visible;
                 }
             }
+
+            MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid(true);
+            MainPage.Instance.ChangeButtonsViewOnOpenFolder(true);
         }
 
         private void showBySongs_MouseDown(object sender, MouseButtonEventArgs e)
@@ -171,6 +151,10 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPage
                     albumsListBox.Visibility = Visibility.Collapsed;
                 }
             }
+
+            MyMediaPlayer.SetTempPlaylist(musicList.Select(x => x.Path).ToList());
+            MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid(false);
+            MainPage.Instance.ChangeButtonsViewOnOpenFolder(false);
         }
 
         private void OpenFolder(DirectoryInfo di)
@@ -287,8 +271,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPage
             // Nam: indicates that a song is chosen (not outside)
             if (chosenSong != null)
             {
-                List<string> songs = songsDataGrid.Items.Cast<SongInfor>().Select(s => s.Path).ToList();
-                MyMediaPlayer.SetNewPlaylist(songs);
+                MyMediaPlayer.SetPlaylistFromTempPlaylist();
                 MyMediaPlayer.SetPositionInPlaylist(songsDataGrid.SelectedIndex);
                 MyMediaPlayer.PlayCurrentSong();
                 e.Handled = true;
@@ -299,27 +282,32 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPage
         {
             if (sender == null) return;
 
-            // Nam: which is artist listbox
-            if (currentPageIndex == 1)
+            if (e.ClickCount >= 2)
             {
-                if (artirstListBox.SelectedIndex == -1 || artirstListBox.SelectedItem == null) return;
+                // Nam: which is artist listbox
+                if (currentPageIndex == 1)
+                {
+                    if (artirstListBox.SelectedIndex == -1 || artirstListBox.SelectedItem == null) return;
 
-                ArtistAndAlbumListItem chosenItem = (ArtistAndAlbumListItem)artirstListBox.SelectedItem;
-                List<SongInfor> chosenListboxSongs = musicList.Where(x => x.Artist == chosenItem.Name).ToList();
+                    ArtistAndAlbumListItem chosenItem = (ArtistAndAlbumListItem)artirstListBox.SelectedItem;
+                    List<SongInfor> chosenListboxSongs = musicList.Where(x => x.Artist == chosenItem.Name).ToList();
 
-                ListBoxItemContentShowPage showPage = new ListBoxItemContentShowPage(chosenListboxSongs);
-                MusicPages.MainPage.contentFrame.Navigate(showPage);
-            }
-            // Nam: which is album listbox
-            else if (currentPageIndex == 2)
-            {
-                if (albumsListBox.SelectedIndex == -1 || albumsListBox.SelectedItem == null) return;
+                    ListBoxItemContentShowPage showPage = new ListBoxItemContentShowPage(chosenListboxSongs, chosenItem.Name);
+                    MusicPages.MainPage.backBtn.Visibility = Visibility.Visible;
+                    MusicPages.MainPage.contentFrame.Navigate(showPage);
+                }
+                // Nam: which is album listbox
+                else if (currentPageIndex == 2)
+                {
+                    if (albumsListBox.SelectedIndex == -1 || albumsListBox.SelectedItem == null) return;
 
-                ArtistAndAlbumListItem chosenItem = (ArtistAndAlbumListItem)albumsListBox.SelectedItem;
-                List<SongInfor> chosenListboxSongs = musicList.Where(x => x.Artist == chosenItem.Name).ToList();
+                    ArtistAndAlbumListItem chosenItem = (ArtistAndAlbumListItem)albumsListBox.SelectedItem;
+                    List<SongInfor> chosenListboxSongs = musicList.Where(x => x.Album == chosenItem.Name).ToList();
 
-                ListBoxItemContentShowPage showPage = new ListBoxItemContentShowPage(chosenListboxSongs);
-                MusicPages.MainPage.contentFrame.Navigate(showPage);
+                    ListBoxItemContentShowPage showPage = new ListBoxItemContentShowPage(chosenListboxSongs, chosenItem.Name);
+                    MusicPages.MainPage.backBtn.Visibility = Visibility.Visible;
+                    MusicPages.MainPage.contentFrame.Navigate(showPage);
+                }
             }
         }
     }

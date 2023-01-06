@@ -19,8 +19,6 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
     }
     public partial class Computer : Page
     {
-        MediaPlayer mediaPlayer = new MediaPlayer();
-        public static bool isUserBrowsing = false;
         // Nam: which is used for navigating back
         private static Stack<string> pathStack = new Stack<string>();
 
@@ -173,7 +171,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             if (pathStack.Count == 0)
             {
                 IntializeBrowseFoldersAndDisksAndMediaControlButtonsView();
-                MainPage.currentMusicBrowsingFolder = "";
+                MainPage.currentMusicBrowsingFolder = "ComputerBrowse";
                 currentFolderName.Text = "My Computer";
                 BackBtn.Visibility = Visibility.Hidden;
             }
@@ -189,7 +187,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         // (instead we pop it, but on the original function that do)
         private void OpenFolder(DirectoryInfo di, bool IsOnBackButtonPress)
         {
-            MainPage.currentMusicBrowsingFolder = di.FullName;
+            MainPage.currentMusicBrowsingFolder += di.FullName;
             if (!MyMediaPlayer.isSongOpened) MyMediaPlayer.pathCurrentlyInUse = di.FullName;
 
             if (!IsOnBackButtonPress)
@@ -273,7 +271,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
                 MyMediaPlayer.SetTempPlaylist(allMusicPathsInFolder);
                 // Nam: mediaPlayer need to update first so ui can change accordingly
-                MainPage.Instance.ChangeButtonsViewOnOpenFolder(forceShow: false);
+                MainPage.Instance.ChangeButtonsViewOnOpenFolder(forceDisable: false);
                 MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid(false);
             }
             catch(UnauthorizedAccessException) 
@@ -307,7 +305,6 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             {
                 if (entity.Type == EntityType.Music)
                 {
-                    MyMediaPlayer.pathCurrentlyInUse = MainPage.currentMusicBrowsingFolder;
                     if (isUsingListBox)
                     {
                         MyMediaPlayer.SetTempPlaylist(allMusicPathsInFolder);

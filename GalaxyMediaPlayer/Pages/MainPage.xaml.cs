@@ -20,9 +20,6 @@ namespace GalaxyMediaPlayer.Pages
     {
         public static MainPage Instance { get; set; }
 
-        // Nam: use for navigate back to lastest frame back stack
-        public static Stack<Uri> frameStack = new Stack<Uri>();
-
         // Nam: use to hold information about where user are navigating (which is for showing MUSIC AdditionalGridInfor)
         public static string currentMusicBrowsingFolder;
         
@@ -45,6 +42,7 @@ namespace GalaxyMediaPlayer.Pages
             InitializeMediaControlButtonsView(); // Nam: if buttons are not active, we grey them out and change volumn slider position
             MyMediaPlayer.Initialize();
             MyMediaPlayer.mediaPlayer.MediaOpened += MediaPlayer_MediaOpened;
+            this.ContentFrame.JournalOwnership = System.Windows.Navigation.JournalOwnership.OwnsJournal;
 
             // Nam: disable 'backspace' button can go back in frame's stack
             NavigationCommands.BrowseBack.InputGestures.Clear();
@@ -92,11 +90,6 @@ namespace GalaxyMediaPlayer.Pages
             if (selectedItem != null)
             {
                 ContentFrame.Navigate(selectedItem.NavLink);
-                if (selectedItem.Title == "Computer")
-                {
-                    Computer.isUserBrowsing = true;
-                }
-                else Computer.isUserBrowsing = false;
             }
         }
 
@@ -110,21 +103,7 @@ namespace GalaxyMediaPlayer.Pages
             MyMediaPlayer.isSongPlaying = !MyMediaPlayer.isSongPlaying;
             changeAllBtnPlayPauseBackgroundImage();
 
-            // Nam: if User is not browsing, we won't call SetPlaylistFromTempPlaylist method
-            // cause we need to SetNewPlaylist manually
-            if (!Computer.isUserBrowsing)
-            {
-                if (MyMediaPlayer.isSongPlaying)
-                {
-                    if (MyMediaPlayer.isSongOpened) MyMediaPlayer.Continue();
-                    else MyMediaPlayer.PlayCurrentSong();
-                }
-                else
-                {
-                    MyMediaPlayer.Pause();
-                }
-            }
-            else if (MyMediaPlayer.pathCurrentlyInUse != currentMusicBrowsingFolder)
+            if (MyMediaPlayer.pathCurrentlyInUse != currentMusicBrowsingFolder)
             {
                 MyMediaPlayer.SetPlaylistFromTempPlaylist();
                 MyMediaPlayer.PlayCurrentSong();
@@ -259,10 +238,6 @@ namespace GalaxyMediaPlayer.Pages
 
         // Nam: when we browse to another folder,
         // we need to separate the infor grid to the previous played folder
-
-        // Nam: forceShow indicates if we are NOT browsing the computer
-        // which means we are in the defaut scene (drives and fav folders)
-        // then we need to show it anyway
         public void ChangeAdditionControlVisibilityInInforGrid(bool forceShow)
         {
             if (MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder && forceShow == false)
@@ -298,7 +273,7 @@ namespace GalaxyMediaPlayer.Pages
 
         // Nam: forceShow is use to indicate if we are on the default sreen (drives and fav folders)
         // which is always not active
-        public void ChangeButtonsViewOnOpenFolder(bool forceShow)
+        public void ChangeButtonsViewOnOpenFolder(bool forceDisable)
         {
             int number = MyMediaPlayer.GetTempPlaylistSize();
 
@@ -306,7 +281,7 @@ namespace GalaxyMediaPlayer.Pages
             brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/play_32.png"));
             btnPlayPause.Background = brush;
 
-            if (forceShow)
+            if (forceDisable)
             {
                 DisableControlButtons();
             }
@@ -411,10 +386,11 @@ namespace GalaxyMediaPlayer.Pages
             else btnRandom.Background.Opacity = opacityNotActiveValue;
         }
 
-        private void SongInfoDisplayGrid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void SongInfoDisplayGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             SongInfoDisplayGrid.Visibility = Visibility.Collapsed;
-            ContentFrame.Navigate(new Uri("Pages/NavContentPages/MusicDetailPage.xaml", UriKind.Relative));
+            MusicDetailPage newPage = new MusicDetailPage();
+            ContentFrame.Navigate(newPage);
         }
 
         private void minimizeImageBorder_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -423,17 +399,6 @@ namespace GalaxyMediaPlayer.Pages
             MainWindow.Instance.Visibility = Visibility.Hidden;
             SongMinimizedWindow newWindow = new SongMinimizedWindow();
             newWindow.Show();
-        }
-
-        private void ContentFrame_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
-        {
-            // Nam: limit the frameStack, we won't want IT to happen
-            if (frameStack.Count > 100)
-            {
-                frameStack.Pop();
-                frameStack.Push(e.Uri);
-            }
-            else frameStack.Push(e.Uri);
         }
 
         private void SongInfoDisplayGrid_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
@@ -501,6 +466,24 @@ namespace GalaxyMediaPlayer.Pages
                 VolumeSlider.Value = volumnBeforeMute;
             }
             SetVolumnIcon();
+        }
+
+        private void ContentFrame_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+            var p = ((Frame)sender).Content as Page;
+            if (p != null)
+            {
+                // Nam: we doing this non-sense thing to remember the name to set it later in 
+                // actual context (when press back button on playlist list, we use "PlaylistPage" to set
+                // the currentMusic... to "PlaylistPage" again
+                if (p.Title == "PlaylistPage") currentMusicBrowsingFolder = p.Title;
+                else if (p.Title == "MusicPage") currentMusicBrowsingFolder = p.Title;
+                else if (p.Title == "ComputerBrowse") currentMusicBrowsingFolder = p.Title;
+            }
+
+
+            ChangeButtonsViewOnOpenFolder(true);
+            ChangeAdditionControlVisibilityInInforGrid(true);
         }
     }
 }

@@ -123,9 +123,9 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
             }
 
-            MainPage.currentMusicBrowsingFolder = "Playlist";
-            MainPage.Instance.ChangeButtonsViewOnOpenFolder(forceShow: true);
-            MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid(false);
+            MainPage.currentMusicBrowsingFolder = "PlaylistPage";
+            MainPage.Instance.ChangeButtonsViewOnOpenFolder(forceDisable: true);
+            MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid(forceShow: true);
         }
 
         private void AddNewMusicPlaylist(string playlistName)
