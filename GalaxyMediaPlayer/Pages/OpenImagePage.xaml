@@ -1,60 +1,34 @@
-﻿<Window x:Class="GalaxyMediaPlayer.Pages.OpenImageWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<Page x:Class="GalaxyMediaPlayer.Pages.OpenImagePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GalaxyMediaPlayer.Pages"
         xmlns:cvt="clr-namespace:GalaxyMediaPlayer.Converters"
-        xmlns:fa="http://schemas.fontawesome.io/icons/"
-        mc:Ignorable="d"
-        Title="OpenImgWindow" Height="800" Width="1000"
-        DataContext="{Binding RelativeSource={RelativeSource Self}}"
-        WindowStyle="None"
-        BorderThickness="0"
-        MouseDown="Window_MouseDown"
-        MouseWheel="Window_MouseWheel">
-    <Window.Resources>
+        mc:Ignorable="d" Width="1000" Height="800"
+        Title="OpenImagePage"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Page.Resources>
         <cvt:SystemEntityToImageSource x:Key="SystemEntityToImageSource"></cvt:SystemEntityToImageSource>
         <cvt:ImagePathToImageSource x:Key="ImagePathToImageSource"></cvt:ImagePathToImageSource>
         <cvt:EntityTypeToVisibility x:Key="EntityTypeToVisibility"></cvt:EntityTypeToVisibility>
         <cvt:ImagePathToThumbnailImage x:Key="ImagePathToThumbnailImage"></cvt:ImagePathToThumbnailImage>
-    </Window.Resources>
-
-    <Window.Background>
-        <SolidColorBrush x:Name="BackgroundOfPage" Color="#393735"/>
-    </Window.Background>
-
+    </Page.Resources>
     <Grid>
-
         <Grid.Resources>
             <Style x:Key="btnIconStyle" TargetType="Button">
-                <Setter Property="Width" Value="20"></Setter>
-                <Setter Property="Height" Value="20"></Setter>
-                <Setter Property="Background" Value="Transparent" />
-                <Setter Property="Foreground" Value="#ccc" />
-                <Setter Property="SnapsToDevicePixels" Value="True" />
-                <Setter Property="FontWeight" Value="Normal"/>
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="VerticalContentAlignment" Value="Center"/>
-                <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                <Setter Property="Margin" Value="4 0"></Setter>
+                <Setter Property="Width" Value="24"/>
+                <Setter Property="Height" Value="24"/>
+                <Setter Property="Margin" Value="4 0"/>
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type Button}">
-                            <Border Background="{TemplateBinding Background}" 
-                                    BorderBrush="{TemplateBinding BorderBrush}" 
-                                    BorderThickness="{TemplateBinding BorderThickness}" 
-                                    CornerRadius="5">
-                                <Grid>
-                                    <ContentPresenter x:Name="MyContentPresenter" 
-                                                      Content="{TemplateBinding Content}" 
-                                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                                </Grid>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="outerBorder" Padding="4" CornerRadius="5">
+                                <Border x:Name="innerBorder" Background="{TemplateBinding Background}"/>
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="red" />
+                                    <Setter TargetName="outerBorder" Property="Background" Value="{DynamicResource brushLightAccent}"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -103,30 +77,12 @@
                         Style="{StaticResource btnIconStyle}"
                         Click="btnZoomOut_Click">
                     <Button.Background>
-                        <ImageBrush x:Name="IconZoomOut" ImageSource="/Resources/Icons/ImagePageIcons/zoom_out.png"></ImageBrush>        
+                        <ImageBrush x:Name="IconZoomOut" ImageSource="/Resources/Icons/ImagePageIcons/zoom_out.png"></ImageBrush>
                     </Button.Background>
                 </Button>
                 <TextBox x:Name="tbPercentZooming"
                          Style="{StaticResource TextBoxPercentZoomingStyle}"
-                         Text="{Binding PercentageZoomingString}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" 
-                        HorizontalAlignment="Right">
-                <Button Name="btnMinimizeApp"
-                            Click="btnMinimizeApp_Click"
-                            Style="{StaticResource AppControlButtonStyle}"
-                            Content="__"/>
-
-                <Button Name="btnMaximizeApp"
-                            Click="btnMaximizeApp_Click"
-                            Style="{StaticResource AppControlButtonStyle}"
-                            Content="▭" />
-
-                <Button Name="btnCloseApp" 
-                            Click="btnCloseApp_Click"
-                            Style="{StaticResource AppControlButtonStyle}"
-                            Content="✕"
-                            Margin="0 0 8 0"/>
+                         Text="100%"/>
             </StackPanel>
         </Grid>
 
@@ -143,4 +99,4 @@
                    MouseMove="OpenImg_MouseMove"/>
         </Grid>
     </Grid>
-</Window>
+</Page>

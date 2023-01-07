@@ -10,6 +10,19 @@ namespace GalaxyMediaPlayer.Models
     {
         private string _path;
         public string path { get { return _path; } set { _path = value; } }
+
+        private bool _IsSelected = false;
+        public bool imgIsSelected 
+        { 
+            get
+            {
+                return _IsSelected;
+            } 
+            set
+            {
+                _IsSelected = value;
+            }
+        }
         public ImageModel(string fileName)
         {
             _path = fileName;

@@ -12,24 +12,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Microsoft.Win32;
-using System.IO;
-using System.Collections.ObjectModel;
-using GalaxyMediaPlayer.Models;
-using System.Globalization;
-using Microsoft.WindowsAPICodePack.Shell;
-using System.Drawing.Imaging;
-using System.Reflection;
-using System.Security.Policy;
 
 namespace GalaxyMediaPlayer.Pages
 {
     /// <summary>
-    /// Interaction logic for OpenImageWindow.xaml
+    /// Interaction logic for OpenImagePage.xaml
     /// </summary>
-    public partial class OpenImageWindow : Window
+    public partial class OpenImagePage : Page
     {
-        public OpenImageWindow(string img)
+        public OpenImagePage(string img)
         {
             InitializeComponent();
             this.TitleOfWindow.Text = System.IO.Path.GetFileName(img);
@@ -37,6 +28,7 @@ namespace GalaxyMediaPlayer.Pages
             imgPath = img;
             ZoomScale = 1;
         }
+
         public string _imgPath { get; set; }
         public string imgPath
         {
@@ -72,37 +64,10 @@ namespace GalaxyMediaPlayer.Pages
                 PercentageZoomingString = "5000%";
             }
         }
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left && !OpenImg.IsMouseCaptured)
-                this.DragMove();
-        }
-
-        private void btnMinimizeApp_Click(object sender, RoutedEventArgs e)
-        {
-            this.WindowState = WindowState.Minimized;
-        }
-
-        private void btnMaximizeApp_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.WindowState == WindowState.Maximized)
-            {
-                this.WindowState = WindowState.Normal;
-            }
-            else
-            {
-                this.WindowState = WindowState.Maximized;
-            }
-        }
-
-        private void btnCloseApp_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
 
         private void btnZoomIn_Click(object sender, RoutedEventArgs e)
         {
-            if(ZoomScale < 50)
+            if (ZoomScale < 50)
             {
                 Point center = new Point(this.Width / 2, (this.Height - 40) / 2);
 
@@ -116,7 +81,7 @@ namespace GalaxyMediaPlayer.Pages
         }
         private void btnZoomOut_Click(object sender, RoutedEventArgs e)
         {
-            if(ZoomScale > 0.6)
+            if (ZoomScale > 0.6)
             {
                 Point center = new Point(this.Width / 2, (this.Height - 40) / 2);
 
@@ -129,7 +94,7 @@ namespace GalaxyMediaPlayer.Pages
             }
         }
 
-        
+
         private void OpenImg_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             PointWheel = e.MouseDevice.GetPosition(OpenImg);
@@ -140,7 +105,7 @@ namespace GalaxyMediaPlayer.Pages
                 m.ScaleAtPrepend(1.1, 1.1, PointWheel.X, PointWheel.Y);
                 ZoomScale *= 1.1;
             }
-            else if(ZoomScale > 0.6)
+            else if (ZoomScale > 0.6)
             {
                 m.ScaleAtPrepend(1 / 1.1, 1 / 1.1, PointWheel.X, PointWheel.Y);
                 ZoomScale /= 1.1;
@@ -150,7 +115,7 @@ namespace GalaxyMediaPlayer.Pages
             OpenImg.RenderTransform = new MatrixTransform(m);
         }
 
-        
+
 
         private void OpenImg_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -179,28 +144,6 @@ namespace GalaxyMediaPlayer.Pages
 
                 OpenImg.RenderTransform = new MatrixTransform(m);
             }
-        }
-
-        private void Window_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            if (OpenImg.IsMouseOver)
-                return;
-            PointWheel = new Point(this.Width / 2, (this.Height - 40) / 2);
-
-            Matrix m = OpenImg.RenderTransform.Value;
-            if (e.Delta > 0 && ZoomScale < 50)
-            {
-                m.ScaleAtPrepend(1.1, 1.1, PointWheel.X, PointWheel.Y);
-                ZoomScale *= 1.1;
-            }
-            else if (ZoomScale > 0.6)
-            {
-                m.ScaleAtPrepend(1 / 1.1, 1 / 1.1, PointWheel.X, PointWheel.Y);
-                ZoomScale /= 1.1;
-            }
-            UpdatePercentageZooming();
-            tbPercentZooming.Text = PercentageZoomingString;
-            OpenImg.RenderTransform = new MatrixTransform(m);
         }
     }
 }
