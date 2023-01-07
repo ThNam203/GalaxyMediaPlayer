@@ -301,10 +301,12 @@ namespace GalaxyMediaPlayer.Pages
                 btnPlayPause.Background.Opacity = 1;
                 btnPrevious.Background.Opacity = opacityNotActiveValue;
                 btnNext.Background.Opacity = opacityNotActiveValue;
+                btnStop.Background.Opacity = opacityNotActiveValue;
 
                 btnPlayPause.IsEnabled = true;
                 btnPrevious.IsEnabled = false;
                 btnNext.IsEnabled = false;
+                btnStop.IsEnabled = false;
             }
         }
 
@@ -361,6 +363,11 @@ namespace GalaxyMediaPlayer.Pages
         }
 
         private void btnStop_Click(object sender, RoutedEventArgs e)
+        {
+            StopMusic();
+        }
+
+        public void StopMusic()
         {
             MyMediaPlayer.Stop();
             SongInfoDisplayGrid.Visibility = Visibility.Collapsed;
@@ -479,11 +486,16 @@ namespace GalaxyMediaPlayer.Pages
                 if (p.Title == "PlaylistPage") currentMusicBrowsingFolder = p.Title;
                 else if (p.Title == "MusicPage") currentMusicBrowsingFolder = p.Title;
                 else if (p.Title == "ComputerBrowse") currentMusicBrowsingFolder = p.Title;
+
+                if (p.Title == "MusicDetailPage")
+                {
+                    ActivateControlButtons();
+                } else
+                {
+                    ChangeButtonsViewOnOpenFolder(true);
+                    ChangeAdditionControlVisibilityInInforGrid(true);
+                }
             }
-
-
-            ChangeButtonsViewOnOpenFolder(true);
-            ChangeAdditionControlVisibilityInInforGrid(true);
         }
     }
 }
