@@ -23,7 +23,7 @@ namespace GalaxyMediaPlayer.Windows
         private bool isDragging = false; // Nam: if user is dragging, we are not updating the slider value, see more below
 
         private DispatcherTimer showInfoTimer; // Nam: use on mouseEnter, it will hide UI if user is not moving for CollapseTime
-        private const float DEFAULT_COLLAPSE_TIME = 1; // if user is not moving for 2 seconds, we hide UI
+        private const float DEFAULT_COLLAPSE_TIME = 2; // if user is not moving for 2 seconds, we hide UI
         private float collapseTime = DEFAULT_COLLAPSE_TIME;
 
         // Nam: due to some issue with ALT F4 (not shutdown entire app (remain mainwindow)), we need to check
@@ -273,7 +273,6 @@ namespace GalaxyMediaPlayer.Windows
             {
                 // really moved
                 _lastMove = p;
-                Trace.WriteLine(sender);
                 ShowUI();
                 ResetShowUITimer();
             }

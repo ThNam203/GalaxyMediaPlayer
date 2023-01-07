@@ -1,12 +1,12 @@
-﻿using GalaxyMediaPlayer.Helpers;
-using GalaxyMediaPlayer.Pages.NavContentPages;
+﻿using GalaxyMediaPlayer.Pages.NavContentPages;
+using GalaxyMediaPlayer.Helpers;
 using GalaxyMediaPlayer.Windows;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -19,9 +19,10 @@ namespace GalaxyMediaPlayer.Pages
     public partial class MainPage : Page
     {
         public static MainPage Instance { get; set; }
-        // Nam: use for navigate back to lastest frame back stack
-        public static Stack<Uri> frameStack = new Stack<Uri>();
 
+        // Nam: use to hold information about where user are navigating (which is for showing MUSIC AdditionalGridInfor)
+        public static string currentMusicBrowsingFolder;
+        
         private double totalTimeInSecond;
         private bool isDragging = false; // Nam: if user is dragging, we are not updating the slider value, see more below
         private bool isMuted = false;
@@ -41,6 +42,11 @@ namespace GalaxyMediaPlayer.Pages
             InitializeMediaControlButtonsView(); // Nam: if buttons are not active, we grey them out and change volumn slider position
             MyMediaPlayer.Initialize();
             MyMediaPlayer.mediaPlayer.MediaOpened += MediaPlayer_MediaOpened;
+            this.ContentFrame.JournalOwnership = System.Windows.Navigation.JournalOwnership.OwnsJournal;
+
+            // Nam: disable 'backspace' button can go back in frame's stack
+            NavigationCommands.BrowseBack.InputGestures.Clear();
+            NavigationCommands.BrowseForward.InputGestures.Clear();
         }
 
         private void MediaPlayer_MediaOpened(object? sender, EventArgs e)
@@ -50,13 +56,13 @@ namespace GalaxyMediaPlayer.Pages
             totalTimeInSecond = MyMediaPlayer.GetTotalTimeInSecond();
 
             SongSliderPanel.Visibility = Visibility.Visible;
+
             AddSongInformationToInfoGrid();
             changeAllBtnPlayPauseBackgroundImage();
             ActivateControlButtons();
-            ChangeAdditionControlVisibilityInInforGrid(Computer.currentBrowsingFolder, false);
+            ChangeAdditionControlVisibilityInInforGrid(false);
 
             durationFormat = DurationFormatHelper.GetDurationFormatFromTotalSeconds(totalTimeInSecond);
-
             tbSongDuration.Text = MyMediaPlayer.mediaPlayer.NaturalDuration.TimeSpan.ToString(durationFormat);
             tbCurrentSongPosition.Text = TimeSpan.FromSeconds(0).ToString(durationFormat);
 
@@ -76,10 +82,15 @@ namespace GalaxyMediaPlayer.Pages
             }
         }
 
-        private void mediaListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        // Nam: Computer.isUserBrowsing mainly use for playing music outside the computer page
+        // which prevent SetPlaylistFromTempPlaylist method to provoke in MyMediaPlayer
+        private void navButtonsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            NavButton? selectedItem = mediaListBox.SelectedItem as NavButton;
-            if (selectedItem != null) ContentFrame.Navigate(selectedItem.NavLink);
+            NavButton? selectedItem = navButtonsListBox.SelectedItem as NavButton;
+            if (selectedItem != null)
+            {
+                ContentFrame.Navigate(selectedItem.NavLink);
+            }
         }
 
         private void SongDurationSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -92,14 +103,15 @@ namespace GalaxyMediaPlayer.Pages
             MyMediaPlayer.isSongPlaying = !MyMediaPlayer.isSongPlaying;
             changeAllBtnPlayPauseBackgroundImage();
 
-            if (MyMediaPlayer.folderCurrentlyInUse != Computer.currentBrowsingFolder)
+            if (MyMediaPlayer.pathCurrentlyInUse != currentMusicBrowsingFolder)
             {
                 MyMediaPlayer.SetPlaylistFromTempPlaylist();
                 MyMediaPlayer.PlayCurrentSong();
+                MyMediaPlayer.isSongPlaying = true;
             }
             else if (MyMediaPlayer.isSongPlaying)
             {
-                if (MyMediaPlayer.folderCurrentlyInUse == Computer.currentBrowsingFolder)
+                if (MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder)
                 {
                     if (MyMediaPlayer.isSongOpened)
                     {
@@ -121,14 +133,8 @@ namespace GalaxyMediaPlayer.Pages
         private void btnPlayPauseInGridInfo_Click(object sender, RoutedEventArgs e)
         {
             MyMediaPlayer.isSongPlaying = !MyMediaPlayer.isSongPlaying;
-            if (MyMediaPlayer.folderCurrentlyInUse == Computer.currentBrowsingFolder)
-            {
-                changeAllBtnPlayPauseBackgroundImage();
-            }
-            else
-            {
-                changeBtnPlayPauseBackgroundInGridInfo();
-            }
+            if (MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder) changeAllBtnPlayPauseBackgroundImage();
+            else changeBtnPlayPauseBackgroundInGridInfo();
 
             if (MyMediaPlayer.isSongPlaying) MyMediaPlayer.Continue();
             else MyMediaPlayer.Pause();
@@ -232,20 +238,177 @@ namespace GalaxyMediaPlayer.Pages
 
         // Nam: when we browse to another folder,
         // we need to separate the infor grid to the previous played folder
-
-        // Nam: forceShow indicates if we are NOT browsing the computer
-        // which means we are in the defaut scene (drives and fav folders)
-        // then we need to show it anyway
-        public void ChangeAdditionControlVisibilityInInforGrid(string newOpenedFolder, bool forceShow)
+        public void ChangeAdditionControlVisibilityInInforGrid(bool forceShow)
         {
-            if (MyMediaPlayer.folderCurrentlyInUse == newOpenedFolder && forceShow == false)
+            if (MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder && forceShow == false)
             {
                 ExtraControlGridInfo.Visibility = Visibility.Collapsed;
             }
-            else if (MyMediaPlayer.folderCurrentlyInUse != newOpenedFolder || forceShow)
+            else if (MyMediaPlayer.pathCurrentlyInUse != currentMusicBrowsingFolder || forceShow)
             {
                 ExtraControlGridInfo.Visibility = Visibility.Visible;
             }
+        }
+
+        private void SetVolumnIcon()
+        {
+            if (MyMediaPlayer.GetVolumn == 0) isMuted = true;
+            else isMuted = false;
+            if (isMuted)
+            {
+                ImageBrush brush = new ImageBrush();
+                brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/no_sound_32.png"));
+                btnVolumn.Background = brush;
+            }
+            else
+            {
+                ImageBrush brush = new ImageBrush();
+                brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/volume_32.png"));
+                btnVolumn.Background = brush;
+            }
+        }
+
+        // Nam: change prev, next, playPause, shuffle(random) btn activeness and opacity
+        // base on number of songs in current folder
+
+        // Nam: forceShow is use to indicate if we are on the default sreen (drives and fav folders)
+        // which is always not active
+        public void ChangeButtonsViewOnOpenFolder(bool forceDisable)
+        {
+            int number = MyMediaPlayer.GetTempPlaylistSize();
+
+            ImageBrush brush = new ImageBrush();
+            brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/play_32.png"));
+            btnPlayPause.Background = brush;
+
+            if (forceDisable)
+            {
+                DisableControlButtons();
+            }
+            else if (MyMediaPlayer.isSongOpened && MyMediaPlayer.isSongPlaying && MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder)
+            {
+                brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/pause_32.png"));
+                btnPlayPause.Background = brush;
+                ActivateControlButtons();
+            }
+            // Nam: read the comment of the function, forceShow is the name which is easy to misunderstand
+            else if (number <= 0)
+            {
+                DisableControlButtons();
+            }
+            else
+            {
+                btnPlayPause.Background.Opacity = 1;
+                btnPrevious.Background.Opacity = opacityNotActiveValue;
+                btnNext.Background.Opacity = opacityNotActiveValue;
+
+                btnPlayPause.IsEnabled = true;
+                btnPrevious.IsEnabled = false;
+                btnNext.IsEnabled = false;
+            }
+        }
+
+        private void DisableControlButtons()
+        {
+            btnPlayPause.Background.Opacity = opacityNotActiveValue;
+            btnPrevious.Background.Opacity = opacityNotActiveValue;
+            btnNext.Background.Opacity = opacityNotActiveValue;
+            btnStop.Background.Opacity = opacityNotActiveValue;
+
+            btnPlayPause.IsEnabled = false;
+            btnPrevious.IsEnabled = false;
+            btnNext.IsEnabled = false;
+            btnStop.IsEnabled = false;
+        }
+
+        public void ActivateControlButtons()
+        {
+            btnPlayPause.Background.Opacity = 1;
+            btnPrevious.Background.Opacity = 1;
+            btnNext.Background.Opacity = 1;
+            btnStop.Background.Opacity = 1;
+
+            btnPlayPause.IsEnabled = true;
+            btnPrevious.IsEnabled = true;
+            btnNext.IsEnabled = true;
+            btnStop.IsEnabled = true;
+        }
+
+        private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            MyMediaPlayer.SetVolumn(e.NewValue);
+            SetVolumnIcon();
+        }
+
+        private void btnNext_Click(object sender, RoutedEventArgs e)
+        {
+            MyMediaPlayer.PlayNextSong();
+        }
+
+        private void btnPrevious_Click(object sender, RoutedEventArgs e)
+        {
+            MyMediaPlayer.PlayPreviousSong();
+        }
+
+        private void btnClose_Click(object sender, RoutedEventArgs e)
+        {
+            MyMediaPlayer.Stop();
+            SongInfoDisplayGrid.Visibility = Visibility.Collapsed;
+            SongSliderPanel.Visibility = Visibility.Collapsed;
+
+            if (MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder) changeAllBtnPlayPauseBackgroundImage();
+            else changeBtnPlayPauseBackgroundInGridInfo();
+        }
+
+        private void btnStop_Click(object sender, RoutedEventArgs e)
+        {
+            MyMediaPlayer.Stop();
+            SongInfoDisplayGrid.Visibility = Visibility.Collapsed;
+            SongSliderPanel.Visibility = Visibility.Collapsed;
+
+            if (MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder) changeAllBtnPlayPauseBackgroundImage();
+            else changeBtnPlayPauseBackgroundInGridInfo();
+
+            btnStop.Background.Opacity = opacityNotActiveValue;
+            btnPrevious.Background.Opacity = opacityNotActiveValue;
+            btnNext.Background.Opacity = opacityNotActiveValue;
+
+            btnStop.IsEnabled = false;
+            btnPrevious.IsEnabled = false;
+            btnNext.IsEnabled = false;
+        }
+
+        private void btnRandom_Click(object sender, RoutedEventArgs e)
+        {
+            MyMediaPlayer.isRandoming = !MyMediaPlayer.isRandoming;
+
+            if (MyMediaPlayer.isRandoming) btnRandom.Background.Opacity = 1;
+            else btnRandom.Background.Opacity = opacityNotActiveValue;
+        }
+
+        private void SongInfoDisplayGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            SongInfoDisplayGrid.Visibility = Visibility.Collapsed;
+            MusicDetailPage newPage = new MusicDetailPage();
+            ContentFrame.Navigate(newPage);
+        }
+
+        private void minimizeImageBorder_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            e.Handled = true;
+            MainWindow.Instance.Visibility = Visibility.Hidden;
+            SongMinimizedWindow newWindow = new SongMinimizedWindow();
+            newWindow.Show();
+        }
+
+        private void SongInfoDisplayGrid_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            minimizeImageBorder.Visibility = Visibility.Visible;
+        }
+
+        private void SongInfoDisplayGrid_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            minimizeImageBorder.Visibility = Visibility.Hidden;
         }
 
         private void SongDurationSlider_Thumb_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
@@ -305,149 +468,22 @@ namespace GalaxyMediaPlayer.Pages
             SetVolumnIcon();
         }
 
-        private void SetVolumnIcon()
-        {
-            if (MyMediaPlayer.GetVolumn == 0) isMuted = true;
-            else isMuted = false;
-            if (isMuted)
-            {
-                ImageBrush brush = new ImageBrush();
-                brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/no_sound_32.png"));
-                btnVolumn.Background = brush;
-            }
-            else
-            {
-                ImageBrush brush = new ImageBrush();
-                brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/volume_32.png"));
-                btnVolumn.Background = brush;
-            }
-        }
-
-        // Nam: change prev, next, playPause, shuffle(random) btn activeness and opacity
-        // base on number of songs in current folder
-
-        // Nam: forceShow is use to indicate if we are on the default sreen (drives and fav folders)
-        // which is always not active
-        public void ChangeButtonsViewOnOpenFolder(bool forceShow)
-        {
-            int number = MyMediaPlayer.GetTempPlaylistSize();
-
-            ImageBrush brush = new ImageBrush();
-            brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/play_32.png"));
-            btnPlayPause.Background = brush;
-
-            if (forceShow)
-            {
-                DisableControlButtons();
-            }
-            else if (MyMediaPlayer.isSongOpened && MyMediaPlayer.isSongPlaying && MyMediaPlayer.folderCurrentlyInUse == Computer.currentBrowsingFolder)
-            {
-                brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/pause_32.png"));
-                btnPlayPause.Background = brush;
-                ActivateControlButtons();
-            }
-            // Nam: read the comment of the function, forceShow is the name which is easy to misunderstand
-            else if (number <= 0)
-            {
-                DisableControlButtons();
-            }
-            else
-            {
-                btnPlayPause.Background.Opacity = 1;
-                btnPrevious.Background.Opacity = opacityNotActiveValue;
-                btnNext.Background.Opacity = opacityNotActiveValue;
-
-                btnPlayPause.IsEnabled = true;
-                btnPrevious.IsEnabled = false;
-                btnNext.IsEnabled = false;
-            }
-        }
-
-        private void DisableControlButtons()
-        {
-            btnPlayPause.Background.Opacity = opacityNotActiveValue;
-            btnPrevious.Background.Opacity = opacityNotActiveValue;
-            btnNext.Background.Opacity = opacityNotActiveValue;
-
-            btnPlayPause.IsEnabled = false;
-            btnPrevious.IsEnabled = false;
-            btnNext.IsEnabled = false;
-        }
-
-        public void ActivateControlButtons()
-        {
-            btnPlayPause.Background.Opacity = 1;
-            btnPrevious.Background.Opacity = 1;
-            btnNext.Background.Opacity = 1;
-
-            btnPlayPause.IsEnabled = true;
-            btnPrevious.IsEnabled = true;
-            btnNext.IsEnabled = true;
-        }
-
-        private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            MyMediaPlayer.SetVolumn(e.NewValue);
-            SetVolumnIcon();
-        }
-
-        private void btnNext_Click(object sender, RoutedEventArgs e)
-        {
-            MyMediaPlayer.PlayNextSong();
-        }
-
-        private void btnPrevious_Click(object sender, RoutedEventArgs e)
-        {
-            MyMediaPlayer.PlayPreviousSong();
-        }
-
-        private void btnClose_Click(object sender, RoutedEventArgs e)
-        {
-            MyMediaPlayer.Stop();
-            SongInfoDisplayGrid.Visibility = Visibility.Collapsed;
-            SongSliderPanel.Visibility = Visibility.Collapsed;
-            if (MyMediaPlayer.folderCurrentlyInUse == Computer.currentBrowsingFolder)
-                changeAllBtnPlayPauseBackgroundImage();
-            else changeBtnPlayPauseBackgroundInGridInfo();
-        }
-
-        private void btnRandom_Click(object sender, RoutedEventArgs e)
-        {
-            MyMediaPlayer.isRandoming = !MyMediaPlayer.isRandoming;
-
-            if (MyMediaPlayer.isRandoming) btnRandom.Background.Opacity = 1;
-            else btnRandom.Background.Opacity = opacityNotActiveValue;
-        }
-
-        private void SongInfoDisplayGrid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            SongInfoDisplayGrid.Visibility = Visibility.Collapsed;
-            ContentFrame.Navigate(new Uri("Pages/NavContentPages/MusicDetailPage.xaml", UriKind.Relative));
-        }
-
         private void ContentFrame_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
-            // Nam: limit the frameStack, we won't want IT to happen
-            if (frameStack.Count <= 100)
-                frameStack.Push(e.Uri);
-        }
+            var p = ((Frame)sender).Content as Page;
+            if (p != null)
+            {
+                // Nam: we doing this non-sense thing to remember the name to set it later in 
+                // actual context (when press back button on playlist list, we use "PlaylistPage" to set
+                // the currentMusic... to "PlaylistPage" again
+                if (p.Title == "PlaylistPage") currentMusicBrowsingFolder = p.Title;
+                else if (p.Title == "MusicPage") currentMusicBrowsingFolder = p.Title;
+                else if (p.Title == "ComputerBrowse") currentMusicBrowsingFolder = p.Title;
+            }
 
-        private void minimizeImageBorder_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            e.Handled = true;
-            MainWindow.Instance.Visibility = Visibility.Hidden;
-            SongMinimizedWindow newWindow = new SongMinimizedWindow();
-            newWindow.Show();
-        }
 
-        private void SongInfoDisplayGrid_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            minimizeImageBorder.Visibility = Visibility.Visible;
-        }
-
-        private void SongInfoDisplayGrid_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            minimizeImageBorder.Visibility = Visibility.Hidden;
+            ChangeButtonsViewOnOpenFolder(true);
+            ChangeAdditionControlVisibilityInInforGrid(true);
         }
     }
 }

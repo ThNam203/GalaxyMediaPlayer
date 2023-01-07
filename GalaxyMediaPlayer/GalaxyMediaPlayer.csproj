@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Databases\MusicPage\Database.txt" />
+    <None Remove="Databases\Playlist.db" />
     <None Remove="Fonts\Raleway\Raleway-Black.ttf" />
     <None Remove="Fonts\Raleway\Raleway-BlackItalic.ttf" />
     <None Remove="Fonts\Raleway\Raleway-Bold.ttf" />
@@ -30,12 +32,14 @@
     <None Remove="Resources\Icons\ComputerPageIcons\folder_16.png" />
     <None Remove="Resources\Icons\ComputerPageIcons\four_squares_32.png" />
     <None Remove="Resources\Icons\ComputerPageIcons\ic_audio_file.png" />
+    <None Remove="Resources\Icons\ComputerPageIcons\ic_stop_32.png" />
     <None Remove="Resources\Icons\ComputerPageIcons\list_32.png" />
     <None Remove="Resources\Icons\ComputerPageIcons\music_16.png" />
     <None Remove="Resources\Icons\ComputerPageIcons\photo_16.png" />
     <None Remove="Resources\Icons\ComputerPageIcons\unknown_fle_16.png" />
     <None Remove="Resources\Icons\ComputerPageIcons\video_16.png" />
     <None Remove="Resources\Icons\ic_folder_128.png" />
+    <None Remove="Resources\Icons\ic_setting_64.png" />
     <None Remove="Resources\Icons\ImagePageIcons\zoom_in.png" />
     <None Remove="Resources\Icons\ImagePageIcons\zoom_out.png" />
     <None Remove="Resources\Icons\loop_32.png" />
@@ -60,9 +64,15 @@
     <None Remove="Resources\Icons\NavIcons\ic_youtube.png" />
     <None Remove="Resources\Icons\next_32.png" />
     <None Remove="Resources\Icons\pause_32.png" />
+    <None Remove="Resources\Icons\PlaylistPageIcons\album.png" />
+    <None Remove="Resources\Icons\PlaylistPageIcons\ic_audio_file.png" />
+    <None Remove="Resources\Icons\PlaylistPageIcons\playlist.png" />
+    <None Remove="Resources\Icons\PlaylistPageIcons\trash_bin.png" />
+    <None Remove="Resources\Icons\PlaylistPageIcons\user.png" />
     <None Remove="Resources\Icons\play_32.png" />
     <None Remove="Resources\Icons\previous_32.png" />
     <None Remove="Resources\Icons\random_32.png" />
+    <None Remove="Resources\Icons\trash_bin.png" />
     <None Remove="Resources\Icons\volume_32.png" />
   </ItemGroup>
 
@@ -76,12 +86,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Databases\MusicPage\Database.txt" />
+    <Content Include="Databases\SongPlaylist\Playlist.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
     <PackageReference Include="LrcParser" Version="2022.529.1" />
     <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4" />
+    <PackageReference Include="Microsoft.WindowsAPICodePack-Shell" Version="1.1.0" />
     <PackageReference Include="MuxicMatchApi" Version="2.5.0" />
     <PackageReference Include="SubtitlesParser" Version="1.5.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.116" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />
     <PackageReference Include="WPF-UI" Version="2.0.3" />
@@ -110,6 +130,8 @@
     <Resource Include="Resources\Icons\ComputerPageIcons\four_squares_32.png" />
     <Resource Include="Resources\Icons\ComputerPageIcons\ic_audio_file.png" />
     <Resource Include="Resources\Icons\ComputerPageIcons\ic_folder_128.png" />
+    <Resource Include="Resources\Icons\ic_setting_64.png" />
+    <Resource Include="Resources\Icons\MediaControlIcons\ic_stop_32.png" />
     <Resource Include="Resources\Icons\ComputerPageIcons\list_32.png" />
     <Resource Include="Resources\Icons\ComputerPageIcons\music_16.png" />
     <Resource Include="Resources\Icons\ComputerPageIcons\photo_16.png" />
@@ -143,11 +165,19 @@
     <Resource Include="Resources\Icons\MediaControlIcons\previous_32.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\random_32.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\volume_32.png" />
+    <Resource Include="Resources\Icons\PlaylistPageIcons\album.png" />
+    <Resource Include="Resources\Icons\PlaylistPageIcons\ic_audio_file.png" />
+    <Resource Include="Resources\Icons\PlaylistPageIcons\playlist.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icons\PlaylistPageIcons\trash_bin.png" />
+    <Resource Include="Resources\Icons\PlaylistPageIcons\user.png" />
+    <Resource Include="Resources\Icons\trash_bin.png" />
     <Resource Include="Resources\Images\background_1.jpg" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="UserControls\" />
+    <EditorConfigFiles Remove="C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\.editorconfig" />
   </ItemGroup>
 
   <ItemGroup>

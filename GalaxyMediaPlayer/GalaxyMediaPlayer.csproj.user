@@ -7,6 +7,9 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Pages\HomePage\MainPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Pages\ImagePage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -20,6 +23,40 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Pages\OpenImagePage.xaml.cs">
+    <Compile Update="Pages\NavContentPages\MusicPages\ListBoxItemContentShowPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\NavContentPages\MusicPages\MainContentPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\NavContentPages\MusicPages\MainPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\NavContentPages\PlaylistPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\PlaylistPagePages\MusicPlaylistPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\PlaylistPagePages\Page1.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\ConfirmDialog.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\PlaylistControls\NewPlaylistControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\PlaylistControls\PlaylistRightClickDialog.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\PlaylistControls\RenameDialog.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\ShowMessageControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Windows\SettingWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Windows\SongMinimizedWindow.xaml.cs">
@@ -36,6 +73,9 @@
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Pages\HomePage\MainPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Pages\ImagePage.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -49,6 +89,40 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\OpenImagePage.xaml">
+    <Page Update="Pages\NavContentPages\MusicPages\ListBoxItemContentShowPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\NavContentPages\MusicPages\MainContentPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\NavContentPages\MusicPages\MainPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\NavContentPages\PlaylistPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\PlaylistPagePages\MusicPlaylistPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\PlaylistPagePages\Page1.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\ConfirmDialog.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\PlaylistControls\NewPlaylistControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\PlaylistControls\PlaylistRightClickDialog.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\PlaylistControls\RenameDialog.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\ShowMessageControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Windows\SettingWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Windows\SongMinimizedWindow.xaml">

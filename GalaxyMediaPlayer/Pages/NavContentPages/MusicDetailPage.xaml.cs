@@ -143,13 +143,8 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
         private void btnGoBack_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (MainPage.frameStack.Count > 1)
-            {
-                MainPage.frameStack.Pop();
-                Uri lastestPage = MainPage.frameStack.Peek();
-                MainPage.Instance.ContentFrame.Navigate(lastestPage);
-                MainPage.Instance.SongInfoDisplayGrid.Visibility = System.Windows.Visibility.Visible;
-            }
+            MainPage.Instance.ContentFrame.GoBack();
+            MainPage.Instance.SongInfoDisplayGrid.Visibility = System.Windows.Visibility.Visible;
         }
 
         private string FormatStringToGetLyrics(string _str)
