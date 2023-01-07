@@ -182,7 +182,7 @@
                     </Setter>
                 </Style.Setters>
             </Style>
-
+            <!-- Slider Style -->
 
             <!--#region Grid Style -->
             <Style x:Key="DataGridRowBrowseStyle" TargetType="{x:Type DataGridRow}">
@@ -482,6 +482,8 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
+
+            <!-- End Slider Style -->
 
             <!--#endregion End Slider Style -->
             
