@@ -10,6 +10,7 @@
   <ItemGroup>
     <None Remove="Databases\MusicPage\Database.txt" />
     <None Remove="Databases\Playlist.db" />
+    <None Remove="Databases\VideoPage\Database.txt" />
     <None Remove="Fonts\Raleway\Raleway-Black.ttf" />
     <None Remove="Fonts\Raleway\Raleway-BlackItalic.ttf" />
     <None Remove="Fonts\Raleway\Raleway-Bold.ttf" />
@@ -107,6 +108,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Databases\VideoPage\Database.txt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Fonts\Raleway\Raleway-Black.ttf" />
     <Resource Include="Fonts\Raleway\Raleway-BlackItalic.ttf" />
     <Resource Include="Fonts\Raleway\Raleway-Bold.ttf" />

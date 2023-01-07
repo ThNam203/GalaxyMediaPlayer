@@ -1,5 +1,4 @@
-﻿using GalaxyMediaPlayer.Windows;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -16,10 +15,6 @@ namespace GalaxyMediaPlayer
         {
             Instance.MessageBoxGrid.Children.Add(messageBox);
             Instance.MessageBoxGrid.Visibility = Visibility.Visible;
-
-            // Nam: disable 'backspace' button can go back in frame's stack
-            NavigationCommands.BrowseBack.InputGestures.Clear();
-            NavigationCommands.BrowseForward.InputGestures.Clear();
         }
         
         public static void ShowCustomMessageBox(UIElement messageBox, int left, int top)
@@ -44,6 +39,10 @@ namespace GalaxyMediaPlayer
             Instance = this;
             InitializeComponent();
             MainFrame.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
+
+            // Nam: disable 'backspace' button can go back in frame's stack
+            NavigationCommands.BrowseBack.InputGestures.Clear();
+            NavigationCommands.BrowseForward.InputGestures.Clear();
         }
 
         private void btnMinimizeApp_Click(object sender, RoutedEventArgs e)

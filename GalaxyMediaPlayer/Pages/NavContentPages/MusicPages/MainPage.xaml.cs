@@ -24,7 +24,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPages
 
         private void openSettingBtn_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            bool? value = new SettingWindow().ShowDialog();
+            bool? value = new SettingWindow(SettingWindow.SettingPage.Music).ShowDialog();
             if (value == true)
             {
                 _contentPage.ResetPageData();
