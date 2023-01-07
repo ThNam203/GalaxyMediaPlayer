@@ -181,10 +181,10 @@
                     </Setter>
                 </Style.Setters>
             </Style>
-           
-            
+
+
             <!-- Slider Style -->
-            
+
             <Style x:Key="UncompletedSliderRepeatButton" TargetType="RepeatButton">
                 <Setter Property="SnapsToDevicePixels" Value="true" />
                 <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -259,15 +259,8 @@
             </Style>
 
             <!-- End Slider Style -->
-            
-            
-            
-            <!-- Icon Image Pages -->
 
-            <BitmapImage x:Key="zoom_in" UriSource="Resources/Icons/ImagePageIcons/zoom_in.png"></BitmapImage>
-            <BitmapImage x:Key="zoom_out" UriSource="Resources/Icons/ImagePageIcons/zoom_out.png"></BitmapImage>
-            
-            <!-- End Icon Image Pages-->
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -164,3 +164,4 @@ C:\Users\User\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\bin\Debug\net6.0-
 C:\Users\User\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\bin\Debug\net6.0-windows\runtimes\win-x86\native\sni.dll
 C:\Users\User\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\bin\Debug\net6.0-windows\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\User\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\bin\Debug\net6.0-windows\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\User\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\obj\Debug\net6.0-windows\FontAwesomeDictionary.baml

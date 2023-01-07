@@ -30,6 +30,9 @@
     <Page Update="ColorSkins\TransparentSkin.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="FontAwesomeDictionary.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>

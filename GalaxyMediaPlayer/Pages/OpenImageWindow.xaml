@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GalaxyMediaPlayer.Pages"
         xmlns:cvt="clr-namespace:GalaxyMediaPlayer.Converters"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         Title="OpenImgWindow" Height="800" Width="1000"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
@@ -27,8 +28,8 @@
 
         <Grid.Resources>
             <Style x:Key="btnIconStyle" TargetType="Button">
-                <Setter Property="Width" Value="24"></Setter>
-                <Setter Property="Height" Value="24"></Setter>
+                <Setter Property="Width" Value="20"></Setter>
+                <Setter Property="Height" Value="20"></Setter>
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="Foreground" Value="#ccc" />
                 <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -49,23 +50,11 @@
                                                       Content="{TemplateBinding Content}" 
                                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
                                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                                    <Border Background="{TemplateBinding Background}"
-                                            CornerRadius="5">
-                                        <Rectangle Fill="{TemplateBinding Foreground}" 
-                                                   Width="{Binding ElementName=MyContentPresenter, Path=ActualWidth}" 
-                                                   Height="{Binding ElementName=MyContentPresenter, Path=ActualHeight}" 
-                                                   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-                                            <Rectangle.OpacityMask>
-                                                <VisualBrush Stretch="None" Visual="{Binding ElementName=MyContentPresenter}"/>
-                                            </Rectangle.OpacityMask>
-                                        </Rectangle>
-                                    </Border>
                                 </Grid>
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#fff" />
+                                    <Setter Property="Background" Value="red" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -106,16 +95,16 @@
                 <Button x:Name="btnZoomIn"
                         Style="{StaticResource btnIconStyle}"
                         Click="btnZoomIn_Click">
-                    <Viewbox>
-                        <Image Source="{StaticResource zoom_in}" Width="40" Height="40" Stretch="Uniform"/>
-                    </Viewbox>
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/ImagePageIcons/zoom_in.png"></ImageBrush>
+                    </Button.Background>
                 </Button>
                 <Button x:Name="btnZoomOut"
                         Style="{StaticResource btnIconStyle}"
                         Click="btnZoomOut_Click">
-                    <Viewbox>
-                        <Image Source="{StaticResource zoom_out}" Width="40" Height="40" Stretch="Uniform"/>
-                    </Viewbox>
+                    <Button.Background>
+                        <ImageBrush x:Name="IconZoomOut" ImageSource="/Resources/Icons/ImagePageIcons/zoom_out.png"></ImageBrush>        
+                    </Button.Background>
                 </Button>
                 <TextBox x:Name="tbPercentZooming"
                          Style="{StaticResource TextBoxPercentZoomingStyle}"

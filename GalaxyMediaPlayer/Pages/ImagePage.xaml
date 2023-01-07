@@ -99,7 +99,7 @@
             </StackPanel>
         </Border>
         
-        <Button Content="Add more images"
+        <Button Content="Add more"
                 Grid.Row="1"
                 x:Name="btn_Addmore"
                 HorizontalAlignment="Right"
@@ -111,7 +111,7 @@
                 Grid.Row="1"
                 x:Name="btn_DeleteImage"
                 HorizontalAlignment="Right"
-                Margin="0 0 250 0"
+                Margin="0 0 170 0"
                 Visibility="Collapsed"
                 Style="{StaticResource ButtonAddNowStyle}"
                 Click="btn_DeleteImage_Click"/>
