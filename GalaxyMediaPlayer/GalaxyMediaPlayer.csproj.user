@@ -19,6 +19,9 @@
     <Compile Update="Pages\NavContentPages\MusicDetailPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Pages\OpenImagePage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Windows\SongMinimizedWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -28,9 +31,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="ColorSkins\TransparentSkin.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="FontAwesomeDictionary.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
@@ -46,6 +46,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\NavContentPages\MusicDetailPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\OpenImagePage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Windows\SongMinimizedWindow.xaml">
