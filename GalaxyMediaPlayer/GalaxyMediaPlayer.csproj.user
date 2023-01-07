@@ -23,6 +23,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Pages\OpenImagePage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Pages\NavContentPages\MusicPages\ListBoxItemContentShowPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -89,6 +91,8 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\OpenImagePage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Pages\NavContentPages\MusicPages\ListBoxItemContentShowPage.xaml">
       <SubType>Designer</SubType>
     </Page>
