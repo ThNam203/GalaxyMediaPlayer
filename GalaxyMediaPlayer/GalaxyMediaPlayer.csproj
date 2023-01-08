@@ -41,6 +41,7 @@
     <None Remove="Resources\Icons\ComputerPageIcons\video_16.png" />
     <None Remove="Resources\Icons\ic_folder_128.png" />
     <None Remove="Resources\Icons\ic_setting_64.png" />
+    <None Remove="Resources\Icons\ImagePageIcons\caret_down.png" />
     <None Remove="Resources\Icons\ImagePageIcons\Left_Arrow.png" />
     <None Remove="Resources\Icons\ImagePageIcons\zoom_in.png" />
     <None Remove="Resources\Icons\ImagePageIcons\zoom_out.png" />
@@ -136,6 +137,7 @@
     <Resource Include="Resources\Icons\ComputerPageIcons\ic_audio_file.png" />
     <Resource Include="Resources\Icons\ComputerPageIcons\ic_folder_128.png" />
     <Resource Include="Resources\Icons\ic_setting_64.png" />
+    <Resource Include="Resources\Icons\ImagePageIcons\Caret_down.png" />
     <Resource Include="Resources\Icons\ImagePageIcons\Left_Arrow.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\ic_stop_32.png" />
     <Resource Include="Resources\Icons\ComputerPageIcons\list_32.png" />

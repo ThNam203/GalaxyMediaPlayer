@@ -182,5 +182,24 @@ namespace GalaxyMediaPlayer.Pages
         {
             ItemBarImages.BorderBrush = Brushes.White;
         }
+
+        private void ComboboxFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int sortIndex = ComboboxFilter.SelectedIndex;
+            if (sortIndex == 0)
+            {
+                List<ImageModel> list = new List<ImageModel>(Images);
+                list.Sort((x, y) => x.path.CompareTo(y.path));
+                Images.Clear();
+                foreach (ImageModel model in list)
+                {
+                    Images.Add(model);
+                }
+            }
+            else if(sortIndex == 1)
+            {
+
+            }
+        }
     }
 }
