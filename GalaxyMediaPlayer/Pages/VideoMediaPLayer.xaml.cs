@@ -21,6 +21,8 @@ using System.Drawing;
 using System.IO;
 using Microsoft.VisualBasic.ApplicationServices;
 using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
+using System.Threading;
+using System.Windows.Media.Animation;
 
 namespace GalaxyMediaPlayer.Pages
 {
@@ -29,6 +31,7 @@ namespace GalaxyMediaPlayer.Pages
     /// </summary>
     public partial class VideoMediaPLayer : Page
     {
+        
         public class SrtContent
         {
             public string Text { get; set; }
@@ -60,19 +63,53 @@ namespace GalaxyMediaPlayer.Pages
                 }
             }
             return content;
+          
         }
         List<SrtContent> test = new List<SrtContent>();
 
         bool repeatIsOn =false;
+        bool subtitlesIsOn=false;
         DispatcherTimer timer;
+        System.Windows.Forms.Timer timer2;
         string subtiles;
+        string[] filepath;
+        string[] filename;
+        
         public VideoMediaPLayer()
         {
             InitializeComponent();
-            timer = new DispatcherTimer(); //H.Nam: DispatcherTimer for displaying video current position
+            timer = new DispatcherTimer();
+            timer2 = new System.Windows.Forms.Timer();
+            timer2.Interval = 50;
+            timer2.Tick += Timer2_Tick;
+            //H.Nam: DispatcherTimer for displaying video current position
             timer.Interval= TimeSpan.FromMilliseconds(200); 
             timer.Tick += new EventHandler(Timer_Tick);
+            Play_PauseIcon1.Opacity = 0;
+            
         }
+
+        private void Timer2_Tick(object? sender, EventArgs e)
+        {
+            bool flag = false;
+            if (Play_PauseIcon1.Opacity > 0)
+            {
+                Play_PauseIcon1.Opacity -= 0.1; flag = true;
+            }
+            if(Forward15seconds.Opacity > 0)
+            {
+                Forward15seconds.Opacity -= 0.1; flag = true;
+            }
+             if(Backward15seconds.Opacity > 0)
+            {
+                Backward15seconds.Opacity -= 0.1; flag = true;
+            }
+            if (flag==false)
+            {
+                timer2.Stop();
+            }
+        }
+
         private void Timer_Tick(object sender,EventArgs e)
         {
             bool flag=true;
@@ -81,22 +118,32 @@ namespace GalaxyMediaPlayer.Pages
                 SliderSeek.Value = media.Position.TotalSeconds;//update the current video position to progress bar
                 string a=TimeSpan.FromMinutes(SliderSeek.Value).ToString();//H.Nam: remove miliseconds from Timespan
                 string b=TimeSpan.FromMinutes(SliderSeek.Maximum).ToString();    
-                Video_Duration.Content = a.Substring(0, a.LastIndexOf(':'))+" / "+  b.Substring(0,b.LastIndexOf(':')); 
-                    foreach(SrtContent testItem in test)
+                Video_Duration.Content = a.Substring(0, a.LastIndexOf(':'))+" / "+  b.Substring(0,b.LastIndexOf(':'));
+                if (subtitlesIsOn)
+                {
+                    foreach (SrtContent testItem in test)
                     {
-                        TimeSpan start = TimeSpan.Parse(testItem.StartTime.Substring(0,testItem.StartTime.IndexOf(',')));
-                         TimeSpan end = TimeSpan.Parse(testItem.EndTime.Substring(0, testItem.StartTime.IndexOf(',')));
+                        TimeSpan start = TimeSpan.Parse(testItem.StartTime.Substring(0, testItem.StartTime.IndexOf(',')));
+                        TimeSpan end = TimeSpan.Parse(testItem.EndTime.Substring(0, testItem.StartTime.IndexOf(',')));
 
-                    if (end >media.Position && start<media.Position)
+                        if (end > media.Position && start < media.Position)
+                        {
+                            Sub.Background.Opacity = 0.3;
+                            Sub.Text = testItem.Text.ToString();
+                            flag = false;
+                        }
+                    }
+                    if (flag == true)
                     {
-                        Sub.Background.Opacity = 0.3;
-                        Sub.Text = testItem.Text.ToString();
-                        flag = false;
+                        Sub.Background.Opacity = 0;
+                        Sub.Text = "";
                     }
                 }
-                if (flag==true)
+                else
                 {
-                    Sub.Background.Opacity=0;
+                    Sub.Background.Opacity = 0;
+                    Sub.Text = "";
+                  
                 }
             }
             catch (Exception ex)
@@ -109,20 +156,31 @@ namespace GalaxyMediaPlayer.Pages
             try
             {
                 System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
+                ofd.Multiselect = true;
+                ofd.Filter = "Video files |*.wmv; *.3g2; *.3gp; *.3gp2; *.3gpp; *.amv; *.asf;  *.avi; *.bin; *.cue; *.divx; *.dv; *.flv; *.gxf; *.iso; *.m1v; *.m2v; *.m2t; *.m2ts; *.m4v; " +
+                 " *.mkv; *.mov; *.mp2; *.mp2v; *.mp4; *.mp4v; *.mpa; *.mpe; *.mpeg; *.mpeg1; *.mpeg2; *.mpeg4; *.mpg; *.mpv2; *.mts; *.nsv; *.nuv; *.ogg; *.ogm;" +
+                 " *.ogv; *.ogx; *.ps; *.rec; *.rm; *.rmvb; *.tod; *.ts; *.tts; *.vob; *.vro; *.webm; *.dat; ";
+
 
                 if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
+                    filename = ofd.SafeFileNames;
+                    filepath = ofd.FileNames;
                     media.Source = new Uri(ofd.FileName);
                     media.LoadedBehavior = MediaState.Play;
                     Uri uri = new Uri(ofd.FileName);
                     DirectoryInfo directory = new DirectoryInfo(ofd.FileName);
-                    string[] x = Directory.GetFiles(@"C:\Users\GIGA\Videos", "*.srt",SearchOption.AllDirectories);;
+                    string[] x = Directory.GetFiles(System.IO.Path.GetDirectoryName(ofd.FileName), "*.srt",SearchOption.AllDirectories);;
                     foreach (string item in x)
-                    {
-                        if (ofd.FileName.Contains(System.IO.Path.GetFileName(ofd.FileName)))
+                    { 
+
+                        if (System.IO.Path.GetFileName(item).Contains(System.IO.Path.GetFileName(ofd.FileName).Substring(0, System.IO.Path.GetFileName(ofd.FileName).LastIndexOf("."))))
                         {
+                          subtitlesIsOn=true;
                             test = ParseSRT(item);
+                            break;
                         }
+                        subtitlesIsOn = false;
                     }
 
 
@@ -139,18 +197,22 @@ namespace GalaxyMediaPlayer.Pages
          
             if (media.LoadedBehavior != MediaState.Play)
             {   
-
                 media.LoadedBehavior= MediaState.Play;
                 Play_PauseIcon.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/pause_32.png"));
-                btnPlayPause.Opacity = 1;
+                Play_PauseIcon1.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/pause_32.png"));
+
 
             }
             else
             {
                 media.LoadedBehavior= MediaState.Pause;
                 Play_PauseIcon.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/play_32.png"));
-
+                Play_PauseIcon1.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/play_32.png"));
             }
+            Play_PauseIcon1.Opacity = 1;
+            timer2.Start();
+            
+
         }
 
 
@@ -247,6 +309,7 @@ namespace GalaxyMediaPlayer.Pages
         {
             control_panel.Visibility = Visibility.Hidden;
             VolumeControlPanel.Visibility = Visibility.Hidden;
+            SliderSeek.Visibility = Visibility.Hidden;
             VideoPlayerGrid.Background.Opacity = 0;
         }
 
@@ -254,7 +317,8 @@ namespace GalaxyMediaPlayer.Pages
         {
             control_panel.Visibility= Visibility.Visible;
             VolumeControlPanel.Visibility = Visibility.Visible;
-            VideoPlayerGrid.Background.Opacity = 0.12;
+            SliderSeek.Visibility= Visibility.Visible;
+            VideoPlayerGrid.Background.Opacity = 0.15;
 
         }
 
@@ -277,6 +341,50 @@ namespace GalaxyMediaPlayer.Pages
 
         }
 
+        private void btnSubtitles_Click(object sender, RoutedEventArgs e)
+        {
+            if (subtitlesIsOn)
+            {
+                subtitlesIsOn = false;
+            }
+            else
+            {
+                subtitlesIsOn = true;
+            }
+
+        }
+
+        private void btnSkip15Seconds_Click(object sender, RoutedEventArgs e)
+        {
+            Forward15seconds.Opacity = 1;
+            timer.Stop();
+            media.Position = TimeSpan.FromSeconds(SliderSeek.Value+15);
+            timer.Start();
+            timer2.Start();
+        }
+
+        private void btnSkip15Seconds_Copy_Click(object sender, RoutedEventArgs e)
+        {
+            Backward15seconds.Opacity = 1;
+            timer.Stop();
+            media.Position = TimeSpan.FromSeconds(SliderSeek.Value -15);
+            timer.Start();
+            timer2.Start();
+
+        }
+
+        private void Video_Page_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if(e.Key == Key.Right)
+            {
+               // media.Position = TimeSpan.FromMilliseconds(200);
+                btnSkip15Seconds_Click(sender, e);
+            }
+            if (e.Key == Key.Left)
+            {
+                btnSkip15Seconds_Copy_Click(sender, e);
+            }
+        }
 
     }
 }

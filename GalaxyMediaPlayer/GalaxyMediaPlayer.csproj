@@ -39,12 +39,17 @@
     <None Remove="Resources\Icons\ic_folder_128.png" />
     <None Remove="Resources\Icons\loop_32.png" />
     <None Remove="Resources\Icons\MediaControlIcons\close_32.png" />
+    <None Remove="Resources\Icons\MediaControlIcons\minimize.png" />
     <None Remove="Resources\Icons\MediaControlIcons\minimize_32.png" />
+    <None Remove="Resources\Icons\MediaControlIcons\next.png" />
     <None Remove="Resources\Icons\MediaControlIcons\no_sound_32.png" />
     <None Remove="Resources\Icons\MediaControlIcons\repeat_32.png" />
     <None Remove="Resources\Icons\MediaControlIcons\repeat_one_32.png" />
     <None Remove="Resources\Icons\MediaControlIcons\settings_32.png" />
+    <None Remove="Resources\Icons\MediaControlIcons\Skip15seconds.png" />
     <None Remove="Resources\Icons\MediaControlIcons\square_32.png" />
+    <None Remove="Resources\Icons\MediaControlIcons\subtitle.png" />
+    <None Remove="Resources\Icons\MediaControlIcons\subtitles.png" />
     <None Remove="Resources\Icons\more_32.png" />
     <None Remove="Resources\Icons\music_note_64.png" />
     <None Remove="Resources\Icons\NavIcons\blank_square.png" />
@@ -72,6 +77,10 @@
       <VersionMajor>2</VersionMajor>
       <Guid>d37e2a3e-8545-3a39-9f4f-31827c9124ab</Guid>
     </COMReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Icons\MediaControlIcons\minimize.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -120,11 +129,15 @@
     </Resource>
     <Resource Include="Resources\Icons\MediaControlIcons\more_32.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\music_note_64.png" />
+    <Resource Include="Resources\Icons\MediaControlIcons\next.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\no_sound_32.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\repeat_32.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\repeat_one_32.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\settings_32.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\square_32.png" />
+    <Resource Include="Resources\Icons\MediaControlIcons\Skip15seconds.png" />
+    <Resource Include="Resources\Icons\MediaControlIcons\subtitle.png" />
+    <Resource Include="Resources\Icons\MediaControlIcons\subtitles.png" />
     <Resource Include="Resources\Icons\NavIcons\blank_square.png" />
     <Resource Include="Resources\Icons\NavIcons\ic_computer.png" />
     <Resource Include="Resources\Icons\NavIcons\ic_home.png" />
