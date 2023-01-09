@@ -19,6 +19,7 @@ using System.Data;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.SqlClient;
 using GalaxyMediaPlayer.ConnectDB;
+using GalaxyMediaPlayer.Databases.ImagePage;
 
 namespace GalaxyMediaPlayer.Pages
 {
@@ -28,13 +29,12 @@ namespace GalaxyMediaPlayer.Pages
     public partial class ImagePage : Page
     {
 
-        private ObservableCollection<ImageModel> Images;
+        private List<ImageModel> Images;
         DataTable dtImagePath;
         public ImagePage()
         {
             InitializeComponent();
-            Images = new ObservableCollection<ImageModel>();
-            listViewImage.ItemsSource = Images;
+            Images = new List<ImageModel>();
             LoadFromDB();
             ItemBarImages.BorderBrush = Brushes.White;
         }
@@ -54,11 +54,15 @@ namespace GalaxyMediaPlayer.Pages
                 foreach (string file in dialog.FileNames)
                 {
                     //add filePath to listview
-                    ImageModel imgModel = new ImageModel(file);
+                    FileInfo fi = new FileInfo(file);
+                    string date = fi.CreationTime.ToString();
+                    ImageModel imgModel = new ImageModel(file,date);
                     Images.Add(imgModel);
+                    listViewImage.Items.Add(imgModel);
+
+                    //insert to database
+                    ImagesDBAccess.SaveImage(imgModel);
                 }
-                //add filePath to database
-                InsertToDB();
             }
         }
 
@@ -97,23 +101,13 @@ namespace GalaxyMediaPlayer.Pages
 
         private void LoadFromDB()
         {
-            dtImagePath = new DataTable();
-            dtImagePath = DataConfig.DataTransport("SELECT DISTINCT * FROM ImageList WHERE ImagePath IS NOT NULL");
-            if (dtImagePath.Rows.Count > 0)
+            Images = ImagesDBAccess.LoadImageList();
+            if (Images.Count > 0)
             {
                 BorderlistView.Visibility = Visibility.Collapsed;
                 listViewImage.Visibility = Visibility.Visible;
                 btn_Addmore.Visibility = Visibility.Visible;
                 btn_DeleteImage.Visibility = Visibility.Visible;
-
-                foreach (DataRow row in dtImagePath.Rows)
-                {
-                    if (row != null)
-                    {
-                        ImageModel model = new ImageModel(row[0].ToString());
-                        Images.Add(model);
-                    }
-                }
             }
             else
             {
@@ -123,14 +117,6 @@ namespace GalaxyMediaPlayer.Pages
                 btn_DeleteImage.Visibility = Visibility.Collapsed;
             }
 
-        }
-
-        private void InsertToDB()
-        {
-            foreach (ImageModel imageModel in Images.ToList())
-            {
-                DataConfig.DataExecution(InsertImagePathToDatatable(imageModel.path).ToString());
-            }
         }
 
         private void DeleteFromDB(string imagePath)

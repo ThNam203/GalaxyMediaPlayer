@@ -8,7 +8,7 @@ namespace GalaxyMediaPlayer.Models
 {
     public class ImageModel
     {
-        private string _path;
+        private string _path = "";
         public string path { get { return _path; } set { _path = value; } }
 
         private bool _IsSelected = false;
@@ -23,9 +23,32 @@ namespace GalaxyMediaPlayer.Models
                 _IsSelected = value;
             }
         }
-        public ImageModel(string fileName)
+
+
+
+        private string _dateCreated = "";
+        public string dateCreated
         {
-            _path = fileName;
+            get
+            {
+                return _dateCreated;
+            }
+            set
+            {
+                _dateCreated = value;
+            }
+        }
+
+        public ImageModel()
+        {
+            path = "";
+            dateCreated = "";
+        }
+
+        public ImageModel(string fileName="", string date="")
+        {
+            path = fileName;
+            dateCreated = date;
         }
     }
 }
