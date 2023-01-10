@@ -31,7 +31,10 @@ namespace GalaxyMediaPlayer.Pages
     /// </summary>
     public partial class VideoMediaPLayer : Page
     {
-        
+        VideoMediaPLayer(string[] videoPath)
+        {
+            this.videoPaths = videoPath;
+        }
         public class SrtContent
         {
             public string Text { get; set; }
@@ -69,11 +72,13 @@ namespace GalaxyMediaPlayer.Pages
 
         bool repeatIsOn =false;
         bool subtitlesIsOn=false;
+        bool randomIsOn = false;
         DispatcherTimer timer;
         System.Windows.Forms.Timer timer2;
         string subtiles;
-        string[] filepath;
-        string[] filename;
+        string[] videoPaths;
+        string[] videoNames;
+        int VideoPathsIndex=0;
         
         public VideoMediaPLayer()
         {
@@ -145,6 +150,7 @@ namespace GalaxyMediaPlayer.Pages
                     Sub.Text = "";
                   
                 }
+                
             }
             catch (Exception ex)
             {                
@@ -164,12 +170,14 @@ namespace GalaxyMediaPlayer.Pages
 
                 if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    filename = ofd.SafeFileNames;
-                    filepath = ofd.FileNames;
-                    media.Source = new Uri(ofd.FileName);
+
+                    videoPaths = ofd.FileNames;
+                    videoNames = ofd.SafeFileNames;
+
+                    media.Source = new Uri(videoPaths[VideoPathsIndex]);
                     media.LoadedBehavior = MediaState.Play;
-                    Uri uri = new Uri(ofd.FileName);
-                    DirectoryInfo directory = new DirectoryInfo(ofd.FileName);
+                 //   Uri uri = new Uri(ofd.FileName);
+                 //   DirectoryInfo directory = new DirectoryInfo(ofd.FileName);
                     string[] x = Directory.GetFiles(System.IO.Path.GetDirectoryName(ofd.FileName), "*.srt",SearchOption.AllDirectories);;
                     foreach (string item in x)
                     { 
@@ -256,6 +264,12 @@ namespace GalaxyMediaPlayer.Pages
 
         private void media_MediaEnded(object sender, RoutedEventArgs e)
         {
+
+            if (randomIsOn)
+            {
+                Random random = new Random();
+                media.Source =new Uri(videoPaths[random.Next(0, videoPaths.Count())]) ;
+            }
             if (repeatIsOn)
             {
                 media.Position = TimeSpan.Zero;
@@ -375,16 +389,57 @@ namespace GalaxyMediaPlayer.Pages
 
         private void Video_Page_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if(e.Key == Key.Right)
+            if(e.Key == Key.D)
             {
-               // media.Position = TimeSpan.FromMilliseconds(200);
-                btnSkip15Seconds_Click(sender, e);
-            }
-            if (e.Key == Key.Left)
+                //btnSkip15Seconds_Click(sender, e);
+                media.Position = TimeSpan.FromSeconds(SliderSeek.Value + 15);
+                            }
+            if (e.Key == Key.A)
             {
-                btnSkip15Seconds_Copy_Click(sender, e);
+               btnSkip15Seconds_Copy_Click(sender, e);
             }
         }
 
+        private void Close_Button_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            
+        }
+
+        private void btnNext_Click(object sender, RoutedEventArgs e)
+        {
+
+                if(VideoPathsIndex<videoPaths.Count()-1)
+                media.Source = new Uri(videoPaths[++VideoPathsIndex]);
+            else
+            {
+                VideoPathsIndex = 0;
+                media.Source = new Uri(videoPaths[VideoPathsIndex]);
+
+            }
+        }
+
+        private void btnPrevious_Click(object sender, RoutedEventArgs e)
+        {
+            if (VideoPathsIndex >0)
+                media.Source = new Uri(videoPaths[--VideoPathsIndex]);
+            else
+            {
+                VideoPathsIndex = videoPaths.Count();
+                media.Source = new Uri(videoPaths[--VideoPathsIndex]);
+            }
+        }
+
+        private void btnRandom_Click(object sender, RoutedEventArgs e)
+        {
+            if (randomIsOn)
+            {
+                btnRandom.Opacity = 0.5;
+            }
+            else
+            {
+                btnRandom.Opacity = 1;
+            }
+            randomIsOn=!randomIsOn;
+        }
     }
 }

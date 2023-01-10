@@ -7,10 +7,10 @@
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" x:Name="Video_Page" x:Class="GalaxyMediaPlayer.Pages.VideoMediaPLayer"
       mc:Ignorable="d" 
       d:DesignHeight="450"  d:DesignWidth="800" 
-      Title="VideoMediaPLayer" ShowsNavigationUI="True" KeyDown="Video_Page_KeyDown" >
+      Title="VideoMediaPLayer" ShowsNavigationUI="True" >
 
 
-    <Grid AllowDrop="True" Margin="0,0,0,0" >
+    <Grid AllowDrop="True" Margin="0,0,0,0" KeyDown="Video_Page_KeyDown" >
 
         <Grid 
               x:Name="videoGrid"
@@ -77,7 +77,7 @@
                 </Button.Background>
             </Button>
             <Button x:Name="btnPlayPause_Copy"
-                Style="{StaticResource btnMediaControlStyle}" 
+                Style="{StaticResource btnMediaControlStyle2}" 
                         RenderTransformOrigin="0.5,0.5" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Button.Background>
                     <ImageBrush x:Name="Play_PauseIcon1"
@@ -101,6 +101,10 @@
                             ImageSource="/Resources/Icons/MediaControlIcons/Skip15seconds.png" Opacity="1"/>
                 </Button.Background>
             </Button>
+            <Expander HorizontalAlignment="Right" Margin="0,0,0,0" 
+                      VerticalAlignment="Center" ExpandDirection="Right" FlowDirection="RightToLeft" Background="#FF923636" VerticalContentAlignment="Stretch" UseLayoutRounding="False" Visibility="Hidden"
+                      
+                      />
 
 
 
@@ -177,7 +181,7 @@
 
                 <Button x:Name="btnPrevious"
                     Style="{StaticResource btnMediaControlStyle}"
-                    IsEnabled="False">
+                    IsEnabled="True" Click="btnPrevious_Click">
                     <Button.Background>
                         <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/previous_32.png"/>
                     </Button.Background>
@@ -225,15 +229,14 @@
                 </Button>
 
                 <Button x:Name="btnNext"
-                    Style="{StaticResource btnMediaControlStyle}"
-                    IsEnabled="False">
+                    Style="{StaticResource btnMediaControlStyle}" Click="btnNext_Click">
                     <Button.Background>
                         <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/next_32.png"/>
                     </Button.Background>
                 </Button>
 
                 <Button x:Name="btnRandom"
-                    Style="{StaticResource btnMediaControlStyle}"
+                    Style="{StaticResource btnMediaControlStyle}" Click="btnRandom_Click"
                         >
                     <Button.Background>
                         <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/random_32.png"/>
@@ -283,6 +286,7 @@
                 Grid.Column="1" Grid.ColumnSpan="1"
                 Grid.Row="1">
             </StackPanel>
+
 
         </Grid>
 

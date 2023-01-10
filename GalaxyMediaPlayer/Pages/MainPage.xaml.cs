@@ -453,7 +453,6 @@ namespace GalaxyMediaPlayer.Pages
         private void NavButton_Selected(object sender, RoutedEventArgs e)
         {
            ContentFrame.Navigate(new Uri("/Pages/VideoMediaPlayerPages/Page.xaml", UriKind.Relative));
-
         }
     }
 }
