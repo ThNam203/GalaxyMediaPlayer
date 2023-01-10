@@ -1,0 +1,290 @@
+﻿<Page
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:GalaxyMediaPlayer.Pages"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" x:Name="Video_Page" x:Class="GalaxyMediaPlayer.Pages.VideoMediaPLayer"
+      mc:Ignorable="d" 
+      d:DesignHeight="450"  d:DesignWidth="800" 
+      Title="VideoMediaPLayer" ShowsNavigationUI="True" KeyDown="Video_Page_KeyDown" >
+
+
+    <Grid AllowDrop="True" Margin="0,0,0,0" >
+
+        <Grid 
+              x:Name="videoGrid"
+              >
+            <MediaElement 
+                x:Name="media"
+                MediaEnded="media_MediaEnded" 
+                MediaOpened="media_MediaOpened" 
+                 />
+
+            <ui:TextBox x:Name="Sub" TextWrapping="Wrap" 
+                        FontFamily="Times New Roman" 
+                        FontSize="24" 
+                        Margin="0,0,0,70" Text="" 
+                        HorizontalContentAlignment="Center" 
+                        VerticalContentAlignment="Center" 
+                        MaxLines="2" MinLines="1" VerticalAlignment="Bottom" 
+                        BorderBrush="{x:Null}" 
+                        HorizontalAlignment="Center" Cursor="Arrow" AllowDrop="False" Focusable="False" IsHitTestVisible="False" ToolTip="{Binding FontStyle, ElementName=Sub}" 
+                        >
+                <ui:TextBox.Background>
+                    <SolidColorBrush Color="#FFE5D9D9" Opacity="0"/>
+                </ui:TextBox.Background>
+            </ui:TextBox>
+
+
+        </Grid>
+        <Grid x:Name="controlVideoGrid" Grid.ColumnSpan="1" RenderTransformOrigin="0.5,0.5"   >
+            <StackPanel
+                x:Name="StackPanel1"
+                HorizontalAlignment="Center" Width="800" Orientation="Horizontal" 
+                FlowDirection="RightToLeft" Height="40" VerticalAlignment="Top"
+             >
+                <Button x:Name="Close_Button" Click="Button_Click" FontFamily="Raleway Black" FontSize="30" FontWeight="Bold" Width="40">
+                    <Button.Background>
+                        <ImageBrush/>
+                    </Button.Background>
+                </Button>
+                <ui:Button Width="39" Background="{x:Null}" FontSize="25" Height="40" Click="Button_Click_1"/>
+                <ui:Button x:Name="Maximize_Button" Content="Button" Click="Minimize_Button_Click" Background="{x:Null}"/>
+                <ui:Button x:Name="Minimize_btn" 
+                        Click="Button_Click_2" Height="40" Width="40"
+                    Style="{StaticResource btnMediaControlStyle}" Background="{x:Null}" 
+                />
+
+
+            </StackPanel>
+
+            <Button x:Name="Backward15seconds"
+                    Style="{StaticResource btnMediaControlStyle}" 
+                   Width="50" Height="50" Margin="250,200,0,200" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" VerticalAlignment="Center" IsHitTestVisible="False" Opacity="0">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="1.3" ScaleY="1.3"/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="180"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+                <Button.Background>
+                    <ImageBrush x:Name="Play_PauseIcon2"
+                            Opacity="1" 
+                            ImageSource="/Resources/Icons/MediaControlIcons/Skip15seconds.png"/>
+                </Button.Background>
+            </Button>
+            <Button x:Name="btnPlayPause_Copy"
+                Style="{StaticResource btnMediaControlStyle}" 
+                        RenderTransformOrigin="0.5,0.5" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button.Background>
+                    <ImageBrush x:Name="Play_PauseIcon1"
+                        Opacity="1" 
+                        ImageSource="/Resources/Icons/MediaControlIcons/play_32.png"/>
+                </Button.Background>
+            </Button>
+            <Button x:Name="Forward15seconds"
+                    Style="{StaticResource btnMediaControlStyle}" 
+                    RenderTransformOrigin="0.5,0.5" Width="50" Height="50" HorizontalAlignment="Right" Margin="0,200,250,200" Opacity="0">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="1.3" ScaleY="1.3"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+                <Button.Background>
+                    <ImageBrush x:Name="Play_PauseIcon3" 
+                            ImageSource="/Resources/Icons/MediaControlIcons/Skip15seconds.png" Opacity="1"/>
+                </Button.Background>
+            </Button>
+
+
+
+        </Grid>
+
+        <Grid x:Name="VideoPlayerGrid" Margin="0,0,0,0" 
+              VerticalAlignment="Bottom" 
+              MouseLeave="VideoPlayerGrid_MouseLeave" 
+              MouseEnter="VideoPlayerGrid_MouseEnter"
+               Height="70" >
+            <Grid.Background>
+                <SolidColorBrush Color="Black" Opacity="0.15"/>
+            </Grid.Background>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+                
+            
+            <Slider 
+             x:Name="SliderSeek" 
+                Style="{StaticResource Horizontal_Slider2}"           
+                
+                GotMouseCapture="SliderSeek_GotMouseCapture" 
+                LostMouseCapture="SliderSeek_LostMouseCapture" MinHeight="3" 
+                Margin="50,0,50,0" VerticalAlignment="Center" Grid.Column="0" Grid.ColumnSpan="3">
+
+            </Slider>
+            <StackPanel x:Name="SongSliderPanel"
+                Visibility="Collapsed"
+                Orientation="Horizontal"
+                Grid.ColumnSpan="3"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+
+                <TextBlock x:Name="tbCurrentSongPosition"
+                    Style="{StaticResource tbDurationShow}"
+                    Text="00:00:00"/>
+
+                <Slider x:Name="SongDurationSlider"
+                    Style="{StaticResource Horizontal_Slider}"
+                    HorizontalAlignment="Center"
+                    Maximum="100"
+                    Minimum="0"
+                    Width="250"
+                    Margin="8 0"/>
+
+                <TextBlock x:Name="tbSongDuration"
+                    Style="{StaticResource tbDurationShow}"
+                    Text="00:00:00"
+                           Visibility="Visible"
+                           />
+            </StackPanel>
+
+            <StackPanel
+                x:Name="control_panel"
+                Orientation="Horizontal"
+                HorizontalAlignment="Center"
+                Grid.ColumnSpan="3"
+                Grid.Row="1">
+
+                <Button x:Name="btnRepeat"
+                    Style="{StaticResource btnMediaControlStyle}" Click="btnRepeat_Click" 
+                            >
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/repeat_32.png"/>
+                    </Button.Background>
+                </Button>
+
+                <Button x:Name="btnPrevious"
+                    Style="{StaticResource btnMediaControlStyle}"
+                    IsEnabled="False">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/previous_32.png"/>
+                    </Button.Background>
+                </Button>
+                <Button x:Name="btnSkip15Seconds_Copy"
+                    Style="{StaticResource btnMediaControlStyle}" Click="btnSkip15Seconds_Copy_Click" RenderTransformOrigin="0.5,0.5" ToolTip="Skip Backward()">
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="1.2" ScaleY="1.2"/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="180"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
+                    <Button.Background>
+                        <ImageBrush x:Name="Play_PauseIcon5"
+                            Opacity="1" 
+                            ImageSource="/Resources/Icons/MediaControlIcons/Skip15seconds.png"/>
+                    </Button.Background>
+                </Button>
+
+                <Button x:Name="btnPlayPause"
+                    Style="{StaticResource btnMediaControlStyle}" Click="btnPlayPause_Click">
+                    <Button.Background>
+                        <ImageBrush x:Name="Play_PauseIcon"
+                            Opacity="1" 
+                            ImageSource="/Resources/Icons/MediaControlIcons/play_32.png"/>
+                    </Button.Background>
+                </Button>
+                <Button x:Name="btnSkip15Seconds"
+                    Style="{StaticResource btnMediaControlStyle}" RenderTransformOrigin="0.6,0.6" Click="btnSkip15Seconds_Click" ToolTip="Skip Forward (→)">
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="1.2" ScaleY="1.2"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform X="0.48" Y="0.48"/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
+                    <Button.Background>
+                        <ImageBrush x:Name="Play_PauseIcon4"
+                            Opacity="1" 
+                            ImageSource="/Resources/Icons/MediaControlIcons/Skip15seconds.png"/>
+                    </Button.Background>
+                </Button>
+
+                <Button x:Name="btnNext"
+                    Style="{StaticResource btnMediaControlStyle}"
+                    IsEnabled="False">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/next_32.png"/>
+                    </Button.Background>
+                </Button>
+
+                <Button x:Name="btnRandom"
+                    Style="{StaticResource btnMediaControlStyle}"
+                        >
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/random_32.png"/>
+                    </Button.Background>
+                </Button>
+
+                <Button x:Name="btnMore"
+                    Style="{StaticResource btnMediaControlStyle}" Click="btnMore_Click">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/more_32.png"/>
+                    </Button.Background>
+                </Button>
+                <Button x:Name="btnSubtitles"
+                    Style="{StaticResource btnMediaControlStyle}" >
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/subtitle.png"/>
+                    </Button.Background>
+                </Button>
+            </StackPanel>
+            <StackPanel x:Name="VolumeControlPanel"
+                Orientation="Horizontal"
+                Grid.Column="2"
+                Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="22,0,0,0">
+                <Button x:Name="btnVolumn"
+                    Style="{StaticResource btnMediaControlStyle}" Click="btnVolumn_Click"
+                           >
+                    <Button.Background>
+                        <ImageBrush x:Name="VolumeIcon" ImageSource="/Resources/Icons/MediaControlIcons/volume_32.png"/>
+                    </Button.Background>
+                </Button>
+                <Slider x:Name="VolumeSlider"
+                    Style="{StaticResource Horizontal_Slider}"
+                        
+                    HorizontalAlignment="Center"
+                    Maximum="1"
+                    Minimum="0"
+                    Width="100"
+                    Margin="8 0" ValueChanged="VolumeSlider_ValueChanged" IsEnabled="True" LargeChange="0.1" SmallChange="0.01" Value="1"/>
+            </StackPanel>
+            <Label x:Name="Video_Duration" HorizontalAlignment="Right" 
+                   Grid.Row="1" VerticalAlignment="Center" 
+                   Height="40" Width="150" FontSize="20" 
+                   FontFamily="Times New Roman" VerticalContentAlignment="Center" 
+                   HorizontalContentAlignment="Center" FontStyle="Italic"/>
+            <StackPanel
+                x:Name="SubtitlesPanel"
+                Grid.Column="1" Grid.ColumnSpan="1"
+                Grid.Row="1">
+            </StackPanel>
+
+        </Grid>
+
+    </Grid>
+</Page>
