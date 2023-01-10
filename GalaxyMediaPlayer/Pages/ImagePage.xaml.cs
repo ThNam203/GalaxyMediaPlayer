@@ -38,6 +38,24 @@ namespace GalaxyMediaPlayer.Pages
             ItemBarImages.BorderBrush = Brushes.White;
         }
 
+        void ShowButtonWhenDoNotHaveImage()
+        {
+            BorderlistView.Visibility = Visibility.Visible;
+            listViewImage.Visibility = Visibility.Collapsed;
+            btn_Addmore.Visibility = Visibility.Collapsed;
+            btn_DeleteImage.Visibility = Visibility.Collapsed;
+            ComboboxFilter.Visibility = Visibility.Collapsed;
+        }
+
+        void ShowButtonWhenHaveImage()
+        {
+            BorderlistView.Visibility = Visibility.Collapsed;
+            listViewImage.Visibility = Visibility.Visible;
+            btn_Addmore.Visibility = Visibility.Visible;
+            btn_DeleteImage.Visibility = Visibility.Visible;
+            ComboboxFilter.Visibility = Visibility.Visible;
+        }
+
         private void btn_Addmore_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
@@ -46,10 +64,6 @@ namespace GalaxyMediaPlayer.Pages
             dialog.Filter = "jpg files (*.jpg)|*.jpg|png files (*.png)|*.png|jpeg files (*.jpeg)|*.jpeg";
             if (dialog.ShowDialog() == true)
             {
-                BorderlistView.Visibility = Visibility.Collapsed;
-                listViewImage.Visibility = Visibility.Visible;
-                btn_Addmore.Visibility = Visibility.Visible;
-                btn_DeleteImage.Visibility = Visibility.Visible;
                 foreach (string file in dialog.FileNames)
                 {
                     //add filePath to listview
@@ -64,6 +78,7 @@ namespace GalaxyMediaPlayer.Pages
                         int SavingResult = ImagesDBAccess.SaveImage(imgModel);
                         if (SavingResult == 1) listViewImage.Items.Add(imgModel);
                     }
+                    ShowButtonWhenHaveImage();
                 }
             }
         }
@@ -101,10 +116,7 @@ namespace GalaxyMediaPlayer.Pages
             }
             if (Images.Count == 0)
             {
-                BorderlistView.Visibility = Visibility.Visible;
-                listViewImage.Visibility = Visibility.Collapsed;
-                btn_Addmore.Visibility = Visibility.Collapsed;
-                btn_DeleteImage.Visibility = Visibility.Collapsed;
+                ShowButtonWhenDoNotHaveImage();
             }
         }
 
@@ -113,10 +125,7 @@ namespace GalaxyMediaPlayer.Pages
             Images = ImagesDBAccess.LoadImageList();
             if (Images.Count > 0)
             {
-                BorderlistView.Visibility = Visibility.Collapsed;
-                listViewImage.Visibility = Visibility.Visible;
-                btn_Addmore.Visibility = Visibility.Visible;
-                btn_DeleteImage.Visibility = Visibility.Visible;
+                ShowButtonWhenHaveImage();
 
                 foreach (ImageModel imageModel in Images)
                 {
@@ -124,13 +133,7 @@ namespace GalaxyMediaPlayer.Pages
                         listViewImage.Items.Add(imageModel);
                 }
             }
-            else
-            {
-                BorderlistView.Visibility = Visibility.Visible;
-                listViewImage.Visibility = Visibility.Collapsed;
-                btn_Addmore.Visibility = Visibility.Collapsed;
-                btn_DeleteImage.Visibility = Visibility.Collapsed;
-            }
+            else ShowButtonWhenDoNotHaveImage();
 
         }
 

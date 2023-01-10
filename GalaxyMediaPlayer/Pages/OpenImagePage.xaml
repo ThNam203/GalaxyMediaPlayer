@@ -91,6 +91,13 @@
                         Orientation="Horizontal"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center">
+                <Button x:Name="btnRotateRight"
+                        Style="{StaticResource btnIconStyle}"
+                        Click="btnRotateRight_Click">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/ImagePageIcons/Rotate_right.png"></ImageBrush>
+                    </Button.Background>
+                </Button>
                 <Button x:Name="btnZoomIn"
                         Style="{StaticResource btnIconStyle}"
                         Click="btnZoomIn_Click">

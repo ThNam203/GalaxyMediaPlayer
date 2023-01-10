@@ -176,5 +176,10 @@ namespace GalaxyMediaPlayer.Pages
         {
             MainWindow.Instance.MainFrame.NavigationService.GoBack();
         }
+
+        private void btnRotateRight_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
