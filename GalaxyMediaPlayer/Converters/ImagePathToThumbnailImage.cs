@@ -13,7 +13,7 @@ namespace GalaxyMediaPlayer.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string imagePath = (string)value;
-            if (imagePath != null)
+            if (imagePath != null && imagePath!="")
             {
                 // for images media files
                 Image image = Image.FromFile(imagePath);

@@ -343,7 +343,7 @@
                         <Image x:Name="img" 
                                Source="{Binding path, Converter={StaticResource ImagePathToThumbnailImage}}" 
                                Panel.ZIndex="1" 
-                               Width="200" Height="200" MouseDown="Image_MouseDown" MouseLeave="img_MouseLeave"/>
+                               Width="200" Height="200" MouseDown="Image_MouseDown"/>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

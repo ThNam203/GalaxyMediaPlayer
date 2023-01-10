@@ -29,8 +29,7 @@ namespace GalaxyMediaPlayer.Pages
     public partial class ImagePage : Page
     {
 
-        private List<ImageModel> Images;
-        DataTable dtImagePath;
+        private static List<ImageModel> Images;
         public ImagePage()
         {
             InitializeComponent();
@@ -56,12 +55,15 @@ namespace GalaxyMediaPlayer.Pages
                     //add filePath to listview
                     FileInfo fi = new FileInfo(file);
                     string date = fi.CreationTime.ToString();
-                    ImageModel imgModel = new ImageModel(file,date);
-                    Images.Add(imgModel);
-                    listViewImage.Items.Add(imgModel);
-
-                    //insert to database
-                    ImagesDBAccess.SaveImage(imgModel);
+                    ImageModel imgModel = new ImageModel(file, date);
+                    var FindingResult = Images.Find(img => img.path == imgModel.path);
+                    if (FindingResult == null)
+                    {
+                        Images.Add(imgModel);
+                        //insert to database
+                        int SavingResult = ImagesDBAccess.SaveImage(imgModel);
+                        if (SavingResult == 1) listViewImage.Items.Add(imgModel);
+                    }
                 }
             }
         }
@@ -70,7 +72,8 @@ namespace GalaxyMediaPlayer.Pages
         {
             if (e.ClickCount >= 2)
             {
-                ImageModel imageModelSelected = Images[listViewImage.SelectedIndex];
+                
+                ImageModel imageModelSelected = (ImageModel)listViewImage.SelectedItem;
                 string ImagePath = imageModelSelected.path;
                 OpenImagePage openImagePage = new OpenImagePage(ImagePath);
                 openImagePage.IsDoubleClick = true;
@@ -82,15 +85,21 @@ namespace GalaxyMediaPlayer.Pages
 
         private void btn_DeleteImage_Click(object sender, RoutedEventArgs e)
         {
+            foreach (ImageModel item in listViewImage.SelectedItems)
+            {
+                int index = listViewImage.Items.IndexOf(item);
+                Images[index].IsSelected = true;
+            }
             foreach (ImageModel item in Images.ToList())
             {
-                if (item.imgIsSelected)
+                if (item.IsSelected)
                 {
-                    DeleteFromDB(item.path);
                     Images.Remove(item);
+                    listViewImage.Items.Remove(item);
+                    ImagesDBAccess.DeleteImage(item);
                 }
             }
-            if(Images.Count == 0)
+            if (Images.Count == 0)
             {
                 BorderlistView.Visibility = Visibility.Visible;
                 listViewImage.Visibility = Visibility.Collapsed;
@@ -108,6 +117,12 @@ namespace GalaxyMediaPlayer.Pages
                 listViewImage.Visibility = Visibility.Visible;
                 btn_Addmore.Visibility = Visibility.Visible;
                 btn_DeleteImage.Visibility = Visibility.Visible;
+
+                foreach (ImageModel imageModel in Images)
+                {
+                    if (imageModel.path != "" && imageModel.path != null)
+                        listViewImage.Items.Add(imageModel);
+                }
             }
             else
             {
@@ -117,51 +132,6 @@ namespace GalaxyMediaPlayer.Pages
                 btn_DeleteImage.Visibility = Visibility.Collapsed;
             }
 
-        }
-
-        private void DeleteFromDB(string imagePath)
-        {
-            DataConfig.DataExecution(DeleteImagePathFromDatatable(imagePath).ToString());
-        }
-
-        private StringBuilder InsertImagePathToDatatable(string imagePath)
-        {
-            StringBuilder sSQL = new StringBuilder();
-
-            sSQL.Append("INSERT INTO ImageList (");
-            sSQL.Append("ImagePath");
-            sSQL.Append(") VALUES (");
-            sSQL.Append(ConvertToSQL(imagePath) + ")");
-
-            return sSQL;
-        }
-
-        private StringBuilder DeleteImagePathFromDatatable(string imagePath)
-        {
-            StringBuilder sSQL = new StringBuilder();
-
-            sSQL.Append("DELETE FROM ImageList WHERE ImagePath = ");
-            sSQL.Append(ConvertToSQL(imagePath));
-            return sSQL;
-        }
-
-        private string ConvertToSQL(string sValue)
-        {
-            return "'" + sValue + "'";
-        }
-
-        private void img_MouseLeave(object sender, MouseEventArgs e)
-        {
-            foreach(ImageModel item in listViewImage.Items)
-            {
-                int index = listViewImage.Items.IndexOf(item);
-                Images[index].imgIsSelected = false;
-            }
-            foreach(ImageModel item in listViewImage.SelectedItems)
-            {
-                int index = listViewImage.Items.IndexOf(item);
-                Images[index].imgIsSelected = true;
-            }
         }
 
         private void ItemBarImages_MouseDown(object sender, MouseButtonEventArgs e)
@@ -175,16 +145,22 @@ namespace GalaxyMediaPlayer.Pages
             if (sortIndex == 0)
             {
                 List<ImageModel> list = new List<ImageModel>(Images);
-                list.Sort((x, y) => x.path.CompareTo(y.path));
-                Images.Clear();
+                list.Sort((x, y) => Path.GetFileName(x.path).CompareTo(Path.GetFileName(y.path)));
+                listViewImage.Items.Clear();
                 foreach (ImageModel model in list)
                 {
-                    Images.Add(model);
+                    listViewImage.Items.Add(model);
                 }
             }
-            else if(sortIndex == 1)
+            else if (sortIndex == 1)
             {
-
+                List<ImageModel> list = new List<ImageModel>(Images);
+                list.Sort((x, y) => x.CompareDate(y));
+                listViewImage.Items.Clear();
+                foreach (ImageModel model in list)
+                {
+                    listViewImage.Items.Add(model);
+                }
             }
         }
     }

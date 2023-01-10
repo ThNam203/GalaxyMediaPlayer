@@ -1,14 +1,10 @@
-﻿using GalaxyMediaPlayer.Models;
-using System;
+﻿using Dapper;
+using GalaxyMediaPlayer.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Configuration;
-using System.Data.SQLite;
 using System.Data;
-using Dapper;
-using System.Collections.ObjectModel;
+using System.Data.SQLite;
+using System.Linq;
 
 namespace GalaxyMediaPlayer.Databases.ImagePage
 {
@@ -18,16 +14,25 @@ namespace GalaxyMediaPlayer.Databases.ImagePage
         {
             using(IDbConnection connStr = new SQLiteConnection(GetConnectionStr()))
             {
-                var output = connStr.Query<ImageModel>("select * from ImagesInfo", new DynamicParameters());
+                var output = connStr.Query<ImageModel>("select distinct * from ImagesTable");
                 return output.ToList();
             }    
         }
 
         public static int SaveImage(ImageModel newImage)
         {
-            using (IDbConnection connection = new SQLiteConnection(GetConnectionStr()))
+            using (IDbConnection connStr = new SQLiteConnection(GetConnectionStr()))
             {
-                int rowAffected = connection.Execute("insert into ImagesInfo (ImagePath, DateCreated) values (@path, @dateCreated)", newImage);
+                int rowAffected = connStr.Execute("insert into ImagesTable (Path, DateCreated) values (@path, @dateCreated)",newImage);
+                return rowAffected;
+            }
+        }
+
+        public static int DeleteImage(ImageModel newImage)
+        {
+            using (IDbConnection connStr = new SQLiteConnection(GetConnectionStr()))
+            {
+                int rowAffected = connStr.Execute("Delete from ImagesTable where Path=@path", newImage);
                 return rowAffected;
             }
         }
