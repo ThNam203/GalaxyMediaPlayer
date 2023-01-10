@@ -8,24 +8,46 @@ namespace GalaxyMediaPlayer.Models
 {
     public class ImageModel
     {
-        private string _path;
+        private string _path = "";
         public string path { get { return _path; } set { _path = value; } }
 
         private bool _IsSelected = false;
-        public bool imgIsSelected 
+        public bool IsSelected 
         { 
-            get
-            {
-                return _IsSelected;
-            } 
-            set
-            {
-                _IsSelected = value;
-            }
+            get { return _IsSelected; } 
+            set { _IsSelected = value; }
         }
-        public ImageModel(string fileName)
+
+        private string _dateCreated = "";
+        public string dateCreated
         {
-            _path = fileName;
+            get { return _dateCreated; }
+            set { _dateCreated = value; }
+        }
+
+        public ImageModel()
+        {
+            path = "";
+            dateCreated = "";
+        }
+
+        public ImageModel(string fileName, string date)
+        {
+            path = fileName;
+            dateCreated = date;
+        }
+
+        public int CompareDate(ImageModel model)
+        {
+            string date1 = this.dateCreated;
+            string date2 = model.dateCreated;
+
+            DateTime.TryParse(date1, out DateTime dt1);
+            DateTime.TryParse(date2, out DateTime dt2);
+
+            if (dt1 > dt2) return 1;
+            if (dt1 < dt2) return -1;
+            else return 0;
         }
     }
 }

@@ -30,6 +30,7 @@
     <None Remove="Fonts\Raleway\Raleway-Thin.ttf" />
     <None Remove="Fonts\Raleway\Raleway-ThinItalic.ttf" />
     <None Remove="Pages\close_32.png" />
+	<None Remove="ImagesDB.db" />
     <None Remove="Resources\background_1.jpg" />
     <None Remove="Resources\Icons\ComputerPageIcons\folder_16.png" />
     <None Remove="Resources\Icons\ComputerPageIcons\four_squares_32.png" />
@@ -42,6 +43,10 @@
     <None Remove="Resources\Icons\ComputerPageIcons\video_16.png" />
     <None Remove="Resources\Icons\ic_folder_128.png" />
     <None Remove="Resources\Icons\ic_setting_64.png" />
+    <None Remove="Resources\Icons\ImagePageIcons\Filter.png" />
+    <None Remove="Resources\Icons\ImagePageIcons\Left_Arrow.png" />
+    <None Remove="Resources\Icons\ImagePageIcons\rotate_left.png" />
+    <None Remove="Resources\Icons\ImagePageIcons\Rotate_right.png" />
     <None Remove="Resources\Icons\ImagePageIcons\zoom_in.png" />
     <None Remove="Resources\Icons\ImagePageIcons\zoom_out.png" />
     <None Remove="Resources\Icons\loop_32.png" />
@@ -97,6 +102,9 @@
     <Content Include="Databases\SongPlaylist\Playlist.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+	  <Content Include="Databases\ImagePage\ImagesDB.db">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
 	  <Resource Include="Resources\Icons\MediaControlIcons\minimize.png" />
   </ItemGroup>
 
@@ -143,6 +151,10 @@
     <Resource Include="Resources\Icons\ComputerPageIcons\ic_audio_file.png" />
     <Resource Include="Resources\Icons\ComputerPageIcons\ic_folder_128.png" />
     <Resource Include="Resources\Icons\ic_setting_64.png" />
+    <Resource Include="Resources\Icons\ImagePageIcons\Filter.png" />
+    <Resource Include="Resources\Icons\ImagePageIcons\Left_Arrow.png" />
+    <Resource Include="Resources\Icons\ImagePageIcons\rotate_left.png" />
+    <Resource Include="Resources\Icons\ImagePageIcons\rotate_right.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\ic_stop_32.png" />
     <Resource Include="Resources\Icons\ComputerPageIcons\list_32.png" />
     <Resource Include="Resources\Icons\ComputerPageIcons\music_16.png" />

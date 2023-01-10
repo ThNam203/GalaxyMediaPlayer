@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaxyMediaPlayer.Pages;
+using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,6 +13,7 @@ namespace GalaxyMediaPlayer
     public partial class MainWindow : Window
     {
         public static MainWindow Instance;
+        public bool CanDrag = true;
         public static void ShowCustomMessageBoxInMiddle(UIElement messageBox)
         {
             Instance.MessageBoxGrid.Children.Add(messageBox);
@@ -70,7 +72,11 @@ namespace GalaxyMediaPlayer
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed) DragMove();
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                if (CanDrag == false) return;
+                DragMove();
+            }
         }
 
         private void MessageBoxGrid_MouseDown(object sender, MouseButtonEventArgs e)
