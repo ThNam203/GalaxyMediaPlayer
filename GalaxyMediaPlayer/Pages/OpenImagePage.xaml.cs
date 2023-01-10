@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaxyMediaPlayer.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -46,17 +47,17 @@ namespace GalaxyMediaPlayer.Pages
         }
 
         Point PointWheel = new Point(); // position to zoom image by wheeling mouse
-        private Point PointStart;   // Start Position of the mouse on image
 
         public double ZoomScale;
         public string PercentageZoomingString;
         public bool IsDoubleClick = false;
+
         void UpdatePercentageZooming()
         {
             PercentageZoomingString = ((int)(ZoomScale * 100)).ToString() + "%";
-            if (ZoomScale <= 0.5)
+            if (ZoomScale <= 0)
             {
-                PercentageZoomingString = "50%";
+                PercentageZoomingString = "0%";
             }
             if (ZoomScale >= 50)
             {
@@ -102,7 +103,7 @@ namespace GalaxyMediaPlayer.Pages
         }
         private void btnZoomOut_Click(object sender, RoutedEventArgs e)
         {
-            if (ZoomScale / 1.1 >= 0.5)
+            if (ZoomScale / 1.1 >= 0.1)
             {
                 Point center = new Point(OpenImg.ActualWidth / 2, OpenImg.ActualHeight / 2);
 
@@ -126,7 +127,7 @@ namespace GalaxyMediaPlayer.Pages
                 m.ScaleAtPrepend(1.1, 1.1, PointWheel.X, PointWheel.Y);
                 ZoomScale *= 1.1;
             }
-            else if (ZoomScale / 1.1 >= 0.5)
+            else if (ZoomScale / 1.1 >= 0.1)
             {
                 m.ScaleAtPrepend(1 / 1.1, 1 / 1.1, PointWheel.X, PointWheel.Y);
                 ZoomScale /= 1.1;
@@ -136,42 +137,6 @@ namespace GalaxyMediaPlayer.Pages
             OpenImg.RenderTransform = new MatrixTransform(m);
         }
 
-
-
-        private void OpenImg_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            MainWindow mainWindow = Application.Current.Windows.OfType<MainWindow>().FirstOrDefault();
-            mainWindow.CanDrag = false;
-            IsDoubleClick = false;
-            PointStart = e.GetPosition(OpenImg);
-            OpenImg.CaptureMouse();
-        }
-
-        private void OpenImg_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            OpenImg.ReleaseMouseCapture();
-            MainWindow mainWindow = Application.Current.Windows.OfType<MainWindow>().FirstOrDefault();
-            mainWindow.CanDrag = true;
-        }
-
-        private void OpenImg_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed && IsDoubleClick == false)
-            {
-                Point PointNow = e.GetPosition(OpenImg);
-
-                Point origin = new Point();
-                origin.X = OpenImg.RenderTransform.Value.OffsetX;
-                origin.Y = OpenImg.RenderTransform.Value.OffsetY;
-
-                Matrix m = OpenImg.RenderTransform.Value;
-                m.OffsetX = origin.X + (PointNow.X - PointStart.X);
-                m.OffsetY = origin.Y + (PointNow.Y - PointStart.Y);
-
-                OpenImg.RenderTransform = new MatrixTransform(m);
-            }   
-        }
-
         private void btnLeftArrow_Click(object sender, RoutedEventArgs e)
         {
             MainWindow.Instance.MainFrame.NavigationService.GoBack();
@@ -179,7 +144,49 @@ namespace GalaxyMediaPlayer.Pages
 
         private void btnRotateRight_Click(object sender, RoutedEventArgs e)
         {
+            Point center = new Point(OpenImg.ActualWidth / 2, OpenImg.ActualHeight / 2);
+            Matrix m = OpenImg.RenderTransform.Value;
+            m.RotateAt(90,center.X,center.Y);
+            OpenImg.RenderTransform = new MatrixTransform(m);
+        }
 
+        private void btnRotateLeft_Click(object sender, RoutedEventArgs e)
+        {
+            Point center = new Point(OpenImg.ActualWidth / 2, OpenImg.ActualHeight / 2);
+            Matrix m = OpenImg.RenderTransform.Value;
+            m.RotateAt(-90, center.X, center.Y);
+            OpenImg.RenderTransform = new MatrixTransform(m);
+        }
+
+        private Point? mousePosition;
+
+        private void CanvasImg_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (CanvasImg.CaptureMouse())
+            {
+                mousePosition = e.GetPosition(CanvasImg); // position in Canvas
+            }
+        }
+
+        private void CanvasImg_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            CanvasImg.ReleaseMouseCapture();
+            mousePosition = null;
+        }
+
+        private void CanvasImg_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (mousePosition.HasValue)
+            {
+                var position = e.GetPosition(CanvasImg); // position in Canvas
+                var translation = position - mousePosition.Value;
+                mousePosition = position;
+
+                var transform = (MatrixTransform)OpenImg.RenderTransform;
+                var matrix = transform.Matrix;
+                matrix.Translate(translation.X, translation.Y);
+                OpenImg.RenderTransform = new MatrixTransform(matrix);
+            }
         }
     }
 }

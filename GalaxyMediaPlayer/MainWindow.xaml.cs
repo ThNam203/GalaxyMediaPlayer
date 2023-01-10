@@ -71,7 +71,7 @@ namespace GalaxyMediaPlayer
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed && CanDrag) DragMove();
+            //if (e.LeftButton == MouseButtonState.Pressed && CanDrag) DragMove();
         }
 
         private void MessageBoxGrid_MouseDown(object sender, MouseButtonEventArgs e)

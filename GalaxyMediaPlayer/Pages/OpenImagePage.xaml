@@ -91,11 +91,18 @@
                         Orientation="Horizontal"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center">
+                <Button x:Name="btnRotateLeft"
+                        Style="{StaticResource btnIconStyle}"
+                        Click="btnRotateLeft_Click">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/ImagePageIcons/rotate_left.png"></ImageBrush>
+                    </Button.Background>
+                </Button>
                 <Button x:Name="btnRotateRight"
                         Style="{StaticResource btnIconStyle}"
                         Click="btnRotateRight_Click">
                     <Button.Background>
-                        <ImageBrush ImageSource="/Resources/Icons/ImagePageIcons/Rotate_right.png"></ImageBrush>
+                        <ImageBrush ImageSource="/Resources/Icons/ImagePageIcons/rotate_right.png"></ImageBrush>
                     </Button.Background>
                 </Button>
                 <Button x:Name="btnZoomIn"
@@ -140,16 +147,17 @@
               Background="Transparent"
               Grid.Row ="1"
               ClipToBounds="True">
-            <Canvas x:Name="CanvasImg">
+            <Canvas x:Name="CanvasImg"
+                    MouseLeftButtonDown="CanvasImg_MouseLeftButtonDown"
+                    MouseLeftButtonUp="CanvasImg_MouseLeftButtonUp"
+                    MouseMove="CanvasImg_MouseMove">
                 <Image x:Name="OpenImg" 
                        Width="{Binding ElementName=PageOpenImage,Path=ActualWidth}" 
                        Height="{Binding ElementName=PageOpenImage,Path=ActualHeight}"
                    RenderOptions.BitmapScalingMode="Fant"
                    Stretch="Uniform"
                    MouseWheel="OpenImg_MouseWheel"
-                   MouseLeftButtonDown="OpenImg_MouseLeftButtonDown"
-                   MouseLeftButtonUp="OpenImg_MouseLeftButtonUp"
-                   MouseMove="OpenImg_MouseMove"/>
+                   />
             </Canvas>
         </Grid>
     </Grid>

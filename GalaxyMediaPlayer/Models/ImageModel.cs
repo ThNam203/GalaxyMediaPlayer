@@ -14,29 +14,15 @@ namespace GalaxyMediaPlayer.Models
         private bool _IsSelected = false;
         public bool IsSelected 
         { 
-            get
-            {
-                return _IsSelected;
-            } 
-            set
-            {
-                _IsSelected = value;
-            }
+            get { return _IsSelected; } 
+            set { _IsSelected = value; }
         }
-
-
 
         private string _dateCreated = "";
         public string dateCreated
         {
-            get
-            {
-                return _dateCreated;
-            }
-            set
-            {
-                _dateCreated = value;
-            }
+            get { return _dateCreated; }
+            set { _dateCreated = value; }
         }
 
         public ImageModel()
