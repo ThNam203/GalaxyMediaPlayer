@@ -150,7 +150,10 @@
             <Canvas x:Name="CanvasImg"
                     MouseLeftButtonDown="CanvasImg_MouseLeftButtonDown"
                     MouseLeftButtonUp="CanvasImg_MouseLeftButtonUp"
-                    MouseMove="CanvasImg_MouseMove">
+                    MouseMove="CanvasImg_MouseMove"
+                    Cursor="Hand"
+                    Canvas.Left="0"
+                    Canvas.Top="0">
                 <Image x:Name="OpenImg" 
                        Width="{Binding ElementName=PageOpenImage,Path=ActualWidth}" 
                        Height="{Binding ElementName=PageOpenImage,Path=ActualHeight}"

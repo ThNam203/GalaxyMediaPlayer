@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -55,9 +56,9 @@ namespace GalaxyMediaPlayer.Pages
         void UpdatePercentageZooming()
         {
             PercentageZoomingString = ((int)(ZoomScale * 100)).ToString() + "%";
-            if (ZoomScale <= 0)
+            if (ZoomScale <= 0.1)
             {
-                PercentageZoomingString = "0%";
+                PercentageZoomingString = "10%";
             }
             if (ZoomScale >= 50)
             {
@@ -144,9 +145,10 @@ namespace GalaxyMediaPlayer.Pages
 
         private void btnRotateRight_Click(object sender, RoutedEventArgs e)
         {
+            double left = Canvas.GetLeft(CanvasImg);
             Point center = new Point(OpenImg.ActualWidth / 2, OpenImg.ActualHeight / 2);
             Matrix m = OpenImg.RenderTransform.Value;
-            m.RotateAt(90,center.X,center.Y);
+            m.RotateAt(90, center.X, center.Y);
             OpenImg.RenderTransform = new MatrixTransform(m);
         }
 
@@ -164,6 +166,7 @@ namespace GalaxyMediaPlayer.Pages
         {
             if (CanvasImg.CaptureMouse())
             {
+                MainWindow.Instance.CanDrag = false;
                 mousePosition = e.GetPosition(CanvasImg); // position in Canvas
             }
         }
@@ -172,6 +175,7 @@ namespace GalaxyMediaPlayer.Pages
         {
             CanvasImg.ReleaseMouseCapture();
             mousePosition = null;
+            MainWindow.Instance.CanDrag = true;
         }
 
         private void CanvasImg_MouseMove(object sender, MouseEventArgs e)
