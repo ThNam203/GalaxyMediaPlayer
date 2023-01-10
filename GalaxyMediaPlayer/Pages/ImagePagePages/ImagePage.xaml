@@ -262,11 +262,11 @@
             <StackPanel x:Name="LeftBar" Orientation="Horizontal"
                         HorizontalAlignment="Left"
                         Width="auto">
-                <Label x:Name="ItemBarImages"
+                <!--<Label x:Name="ItemBarImages"
                        Content="Images"
                        Style="{StaticResource ItemBar}"
                        MouseDown="ItemBarImages_MouseDown">
-                </Label>
+                </Label>-->
 
                 <Button Content="Add more" 
                         x:Name="btn_Addmore"
@@ -303,12 +303,17 @@
         <Border x:Name="BorderlistView"
                 Visibility="Visible"
                 Grid.Row="2"
-                Background="#20c2c2c2"
+                Background="Transparent"
                 CornerRadius="10"
                 Margin="10">
-            <Button Content="Add now"
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Margin="0 0 0 12" Foreground="White" Width="300" Height="auto" TextWrapping="Wrap" TextAlignment="Center">
+                    Add images to have a nice look on them!
+                </TextBlock>
+                <Button Content="Add now"
                     Style="{StaticResource FirstButtonAddNowStyle}"
                     Click="btn_Addmore_Click"/>
+            </StackPanel>
         </Border>
 
         <ListView Name="listViewImage"

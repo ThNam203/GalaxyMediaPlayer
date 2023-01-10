@@ -10,7 +10,7 @@
     <Compile Update="Pages\NavContentPages\HomePage\MainPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\ImagePage.xaml.cs">
+    <Compile Update="Pages\ImagePagePages\ImagePage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Pages\MainPage.xaml.cs">
@@ -22,7 +22,7 @@
     <Compile Update="Pages\NavContentPages\MusicDetailPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\OpenImagePage.xaml.cs">
+    <Compile Update="Pages\ImagePagePages\OpenImagePage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Pages\NavContentPages\MusicPages\ListBoxItemContentShowPage.xaml.cs">
@@ -78,7 +78,7 @@
     <Page Update="Pages\NavContentPages\HomePage\MainPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\ImagePage.xaml">
+    <Page Update="Pages\ImagePagePages\ImagePage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\MainPage.xaml">
@@ -90,7 +90,7 @@
     <Page Update="Pages\NavContentPages\MusicDetailPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\OpenImagePage.xaml">
+    <Page Update="Pages\ImagePagePages\OpenImagePage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\NavContentPages\MusicPages\ListBoxItemContentShowPage.xaml">

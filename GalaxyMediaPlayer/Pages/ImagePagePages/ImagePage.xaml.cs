@@ -35,7 +35,7 @@ namespace GalaxyMediaPlayer.Pages
             InitializeComponent();
             Images = new List<ImageModel>();
             LoadFromDB();
-            ItemBarImages.BorderBrush = Brushes.White;
+            //ItemBarImages.BorderBrush = Brushes.White;
         }
 
         void ShowButtonWhenDoNotHaveImage()
@@ -139,7 +139,7 @@ namespace GalaxyMediaPlayer.Pages
 
         private void ItemBarImages_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            ItemBarImages.BorderBrush = Brushes.White;
+            //ItemBarImages.BorderBrush = Brushes.White;
         }
 
         private void ComboboxFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
