@@ -29,8 +29,12 @@ namespace GalaxyMediaPlayer.UserControls.ImageControls
 
         private void deleteBtn_Click(object sender, RoutedEventArgs e)
         {
+            ConfirmDeleteImageDialog dialog = new ConfirmDeleteImageDialog(
+                "Delete image",
+                "Are you sure to delete it from photos ?",
+                onDeleteButtonClick);
             MainWindow.ClearAllMessageBox();
-            onDeleteButtonClick();
+            dialog.Show();
         }
     }
 }

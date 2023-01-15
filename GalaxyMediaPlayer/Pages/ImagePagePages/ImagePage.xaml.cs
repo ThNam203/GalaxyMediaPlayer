@@ -183,6 +183,10 @@ namespace GalaxyMediaPlayer.Pages
 
         private void DeleteImage()
         {
+            foreach (ImageModel item in Images)
+            {
+                item.IsSelected = false;
+            }
             foreach (ImageModel item in listViewImage.SelectedItems)
             {
                 int index = listViewImage.Items.IndexOf(item);

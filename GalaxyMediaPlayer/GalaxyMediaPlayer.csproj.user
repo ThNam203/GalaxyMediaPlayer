@@ -46,6 +46,9 @@
     <Compile Update="UserControls\ConfirmDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControls\ImageControls\ConfirmDeleteImageDialog.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControls\ImageControls\ImageRightClickDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -115,6 +118,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControls\ConfirmDialog.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\ImageControls\ConfirmDeleteImageDialog.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControls\ImageControls\ImageRightClickDialog.xaml">
