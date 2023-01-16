@@ -15,7 +15,7 @@
         <cvt:EntityTypeToVisibility x:Key="EntityTypeToVisibility"></cvt:EntityTypeToVisibility>
         <cvt:ImagePathToThumbnailImage x:Key="ImagePathToThumbnailImage"></cvt:ImagePathToThumbnailImage>
     </Page.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="37"/>
@@ -91,7 +91,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            
+
             <!--Combobox Style-->
             <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
                 <Grid>
@@ -109,7 +109,7 @@
                           Grid.Column="0"
                           Margin="1" 
                           Background="#FF3F3F3F" 
-                          BorderThickness="0">  
+                          BorderThickness="0">
                         <TextBlock HorizontalAlignment="Left"
                                    VerticalAlignment="Center"
                                    Foreground="White"
@@ -326,7 +326,7 @@
                   Margin="{Binding ElementName=BorderlistView, Path=Margin}"
                   BorderThickness="0"
                   IsSynchronizedWithCurrentItem="True">
-            <ListBox.Resources>
+            <ListView.Resources>
                 <Style TargetType="ScrollBar">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
                     <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -339,7 +339,34 @@
                         </Trigger>
                     </Style.Triggers>
                 </Style>
-            </ListBox.Resources>
+            </ListView.Resources>
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="Padding" Value="5" ></Setter>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                <Border Name="imgBorder"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="2"
+                                        Background="{TemplateBinding Background}">
+
+                                    <ContentPresenter Width="auto" Height="auto"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#40ffffff"></Setter>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#80ffffff"></Setter>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
 
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -350,13 +377,14 @@
 
             <ListView.ItemTemplate>
                 <DataTemplate x:Name="DatatemplateImage">
-                    <Grid Width="200" Height="150">
+                    <Grid Width="200" Height="120">
                         <Image x:Name="img" 
                                Source="{Binding path, Converter={StaticResource ImagePathToThumbnailImage}}" 
                                Panel.ZIndex="1" 
-                               Width="200" Height="200" 
                                MouseDown="Image_MouseDown"
-                               MouseRightButtonDown="img_MouseRightButtonDown"/>
+                               MouseRightButtonDown="img_MouseRightButtonDown"
+                               Margin="8"
+                               Width="200" Height="120"/>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
