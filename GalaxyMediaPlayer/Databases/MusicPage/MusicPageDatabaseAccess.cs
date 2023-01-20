@@ -16,7 +16,6 @@ namespace GalaxyMediaPlayer.Databases.MusicPage
             string[] lines = File.ReadAllLines(DATABASE_PATH);
             return lines;
         }
-
         public static void SaveFolderToDatabase(string newFolderPath)
         {
             CreateDatabaseFileIfNotExist();

@@ -199,6 +199,35 @@
                     </Setter>
                 </Style.Setters>
             </Style>
+
+            <Style x:Key="FirstButtonAddNowStyle" TargetType="Button">
+                <Setter Property="FontSize" Value="12"></Setter>
+                <Setter Property="Width" Value="auto"></Setter>
+                <Setter Property="Height" Value="25"></Setter>
+                <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                <Setter Property="Background" Value="#2a9d8f"></Setter>
+                <Setter Property="BorderBrush" Value="Transparent"></Setter>
+                <Setter Property="Foreground" Value="White"></Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="14"
+                                    Padding="20 0 20 0">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#6abab1"></Setter>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
             <!-- Slider Style -->
 
             <!--#region Grid Style -->
@@ -571,6 +600,7 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
+            
             <!-- End Slider Style -->
 
             <!--#endregion End Slider Style -->
