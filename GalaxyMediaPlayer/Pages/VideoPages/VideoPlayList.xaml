@@ -8,5 +8,15 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="VideoPlayList">
 
-    <Grid/>
+    <Grid>
+        <ListView d:ItemsSource="{Binding paths}"
+                  x:Name="videoview"
+                  >
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
 </Page>

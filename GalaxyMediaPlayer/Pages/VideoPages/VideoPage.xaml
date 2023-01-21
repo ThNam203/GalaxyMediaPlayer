@@ -27,7 +27,7 @@
             </Button>
 
             <TextBlock x:Name="title" 
-                       Text="Video"
+                       Text="Videos"
                        FontSize="26"
                        Margin="4 0 16 4"
                        Foreground="{DynamicResource brushSecondary}"/>
@@ -44,23 +44,36 @@
                     Style="{StaticResource FirstButtonAddNowStyle}" Click="Add"
                     />
         </StackPanel>
+        <Border Grid.Row="1"
+                x:Name="Bar"
+                BorderBrush="#95ffffff"
+                BorderThickness="0 0 0 1"
+                Margin="10 0 10 0" Visibility="Visible">
+            <StackPanel x:Name="LeftBar" Orientation="Horizontal"
+                        HorizontalAlignment="Left"
+                        Width="auto">
+
+                <Button Content="Add more" 
+                        x:Name="btn_Addmore"
+                        Visibility="Visible"
+                        Style="{StaticResource FirstButtonAddNowStyle}"
+                        Click="Add"/>
+
+                <Button Content="Delete"
+                x:Name="btn_DeleteImage"
+                Visibility="Visible"
+                Style="{StaticResource FirstButtonAddNowStyle}"
+                Click="btn_DeleteImage_Click"/>
+            </StackPanel>
+        </Border>
 
         <Frame
             x:Name="CC"
             Grid.Row="2">
-           
-            
         </Frame>
         <Border BorderBrush="White" BorderThickness="0,0.5,0,0" Grid.Row="2" Margin="10,0,10,0"/>
-          <ContentControl
-              x:Name="C"
-              Grid.Row="2"/>
-        <Image
-            x:Name="image"
-            Grid.Row="1"
-            >
-            
-        </Image>
+
+        
     </Grid>
 
 

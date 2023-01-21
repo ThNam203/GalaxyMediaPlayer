@@ -21,6 +21,7 @@ using System.Data.SqlClient;
 using GalaxyMediaPlayer.ConnectDB;
 using GalaxyMediaPlayer.Databases.ImagePage;
 
+
 namespace GalaxyMediaPlayer.Pages
 {
     /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,12 +22,12 @@ namespace GalaxyMediaPlayer.Pages.VideoPages
     /// </summary>
     public partial class VideoPlayList : Page
     {
-        string temp;
-        public VideoPlayList(string s)
+        List<string> paths;
+        public VideoPlayList(List<string> paths)
         {
-
             InitializeComponent();
-            temp = s;
+            this.paths = paths;
+          //  videoview.ItemsSource = paths;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
