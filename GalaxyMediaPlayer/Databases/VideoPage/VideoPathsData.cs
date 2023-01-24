@@ -45,6 +45,7 @@ namespace GalaxyMediaPlayer.Databases.VideoPage
                 if (item.InnerText == path)
                 {
                     root.RemoveChild(item);
+                    xmlDocument.Save(fileLocation);
                 }
             }
         }
@@ -94,9 +95,11 @@ namespace GalaxyMediaPlayer.Databases.VideoPage
     {
         public string pathToImg { get; set; }
         public string title { get; set; }
-
+        public string pathToVideo { get; set; }
+        public bool isSelected { get; set; }
         public VideoDisplay(string path)
         {
+            pathToVideo = path;
             using (var engine = new Engine())
             {
                 title = System.IO.Path.GetFileNameWithoutExtension(path);

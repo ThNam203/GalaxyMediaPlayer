@@ -20,7 +20,6 @@ using System.Xml.Serialization;
 using System.Xml;
 using System.Xml.Linq;
 using System.IO;
-using GalaxyMediaPlayer.Pages.VideoPages;
 using ExifLib;
 using System.Diagnostics;
 using Wpf.Ui.Interop.WinDef;
@@ -42,21 +41,12 @@ namespace GalaxyMediaPlayer.Pages
     {
         VideoPaths videoPaths;
         ImageList imageList;
+        ObservableCollection<VideoDisplay> source;
         public VideoPage()
         {
 
             InitializeComponent();
             DataBaseInit();
-
-            videoPaths = new VideoPaths();
-            if (!videoPaths.IsEmpty())
-            {
-                ChangeBtnVisibility();
-            }
-            
-            ObservableCollection<VideoDisplay> source = videoPaths.GetAllPathsObs();
-            VideoListView.ItemsSource =source ;
-
         }
         private void DataBaseInit()
         {
@@ -67,10 +57,21 @@ namespace GalaxyMediaPlayer.Pages
                 xmlDocument.AppendChild(root);
                 xmlDocument.Save(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\VideoPath.xml");
             }
+            videoPaths = new VideoPaths();
+            if (!videoPaths.IsEmpty())
+            {
+                ChangeBtnVisibility();
+            }
+            source = new ObservableCollection<VideoDisplay>();
+             source = videoPaths.GetAllPathsObs();
+            VideoListView.ItemsSource =source ;
+           // videoPaths.DeletePath(@"C:\Users\GIGA\Videos\How To Create an SRT File - Detailed Subtitling Tutorial.mp4");
         }
 
         private void Add(object sender, RoutedEventArgs e)
         {
+            bool CreateList =false;
+            if (videoPaths.IsEmpty()) { CreateList = true; }
             System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
             openFileDialog.Multiselect = true;
             openFileDialog.Filter = ("Video Files|*.mp4");
@@ -79,6 +80,7 @@ namespace GalaxyMediaPlayer.Pages
                 List<string> paths = videoPaths.GetAllPaths();
                 foreach( string filename in openFileDialog.FileNames)
                 {
+                    
                     bool flag = true;
                     foreach( string path in paths)
                     {
@@ -88,11 +90,16 @@ namespace GalaxyMediaPlayer.Pages
                             flag = false;
                         }
                     }
-                    if (flag)
-                    videoPaths.AddPath(filename);
-                }
+                    if (flag) {
+                
+                     videoPaths.AddPath(filename);
+                     VideoDisplay videoDisplay = new VideoDisplay(filename);
+                        source.Add(videoDisplay);
+                    }
 
-                ChangeBtnVisibility();
+                }
+                if(CreateList)
+                ChangeBtnVisibility();                  
             }
             else
             {
@@ -126,7 +133,18 @@ namespace GalaxyMediaPlayer.Pages
 
         private void btn_DeleteImage_Click(object sender, RoutedEventArgs e)
         {
-
+            foreach (VideoDisplay video in VideoListView.SelectedItems)
+            {
+                source[VideoListView.Items.IndexOf(video)].isSelected = true;
+            }
+            foreach (VideoDisplay video in source.ToList())
+            {
+                if (video.isSelected)
+                {
+                    source.Remove(video);
+                  videoPaths.DeletePath(video.pathToVideo);
+                }
+            }
         }
     }
 }

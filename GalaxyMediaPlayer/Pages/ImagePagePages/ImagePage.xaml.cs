@@ -154,6 +154,7 @@ namespace GalaxyMediaPlayer.Pages
                 foreach (ImageModel model in list)
                 {
                     listViewImage.Items.Add(model);
+
                 }
             }
             else if (sortIndex == 1)

@@ -46,9 +46,6 @@
     <Compile Update="Pages\VideoPages\VideoPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\VideoPages\VideoPlayList.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="UserControls\ConfirmDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -118,9 +115,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\VideoPages\VideoPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Pages\VideoPages\VideoPlayList.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControls\ConfirmDialog.xaml">
