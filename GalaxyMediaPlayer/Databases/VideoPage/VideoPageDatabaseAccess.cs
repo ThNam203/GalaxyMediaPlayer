@@ -74,7 +74,6 @@ namespace GalaxyMediaPlayer.Databases.VideoPage
                 }
                 else di2 = di2.Parent;
             }
-
             return isParent;
         }
 

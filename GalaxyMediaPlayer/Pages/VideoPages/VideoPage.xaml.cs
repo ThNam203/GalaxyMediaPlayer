@@ -29,6 +29,8 @@ using System.Drawing;
 using MediaToolkit.Model;
 using MediaToolkit.Options;
 using MediaToolkit;
+using System.Collections.ObjectModel;
+using System.Security.Cryptography;
 
 //using System.Windows.Forms;
 namespace GalaxyMediaPlayer.Pages
@@ -39,21 +41,31 @@ namespace GalaxyMediaPlayer.Pages
     public partial class VideoPage : Page
     {
         VideoPaths videoPaths;
+        ImageList imageList;
         public VideoPage()
         {
+
             InitializeComponent();
+            DataBaseInit();
+
+            videoPaths = new VideoPaths();
+            if (!videoPaths.IsEmpty())
+            {
+                ChangeBtnVisibility();
+            }
+            
+            ObservableCollection<VideoDisplay> source = videoPaths.GetAllPathsObs();
+            VideoListView.ItemsSource =source ;
+
+        }
+        private void DataBaseInit()
+        {
             if (!IsDataBaseExists())//H.Nam if the database is not exists, create new one
             {
                 XmlDocument xmlDocument = new XmlDocument();
                 XmlElement root = xmlDocument.CreateElement("root");
                 xmlDocument.AppendChild(root);
                 xmlDocument.Save(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\VideoPath.xml");
-            }
-            videoPaths = new VideoPaths();
-            if (!videoPaths.IsEmpty())
-            {
-                CC.Content = new VideoPlayList(videoPaths.GetAllPaths());
-                ChangeBtnVisibility();
             }
         }
 
@@ -79,6 +91,7 @@ namespace GalaxyMediaPlayer.Pages
                     if (flag)
                     videoPaths.AddPath(filename);
                 }
+
                 ChangeBtnVisibility();
             }
             else
@@ -94,7 +107,6 @@ namespace GalaxyMediaPlayer.Pages
         private void test_Click(object sender, RoutedEventArgs e)
         {
             string pathToVideoFile = @"C:\Users\GIGA\Videos\Ben Tren Tang Lau - Uyen Linh.mp4";
-            TagLib.File songFile = TagLib.File.Create(@"C:\Users\GIGA\Videos\Ben Tren Tang Lau - Uyen Linh.mp4");
             using (var engine = new Engine())
             {
                 var mp4 = new MediaFile { Filename = pathToVideoFile };
@@ -102,8 +114,6 @@ namespace GalaxyMediaPlayer.Pages
                 var options = new ConversionOptions { Seek = TimeSpan.FromSeconds(1) };
                 var outputFile = new MediaFile { Filename =  @"C:\Users\GIGA\Videos\123.jpeg" };
                 engine.GetThumbnail(mp4, outputFile, options);
-              //  image.Source =new BitmapImage(new Uri( outputFile.Filename));
-
             }
         }
         private void ChangeBtnVisibility()
@@ -111,6 +121,7 @@ namespace GalaxyMediaPlayer.Pages
             var x = addPanel.Visibility;
             addPanel.Visibility = Bar.Visibility;
             Bar.Visibility = x;
+            VideoListView.Visibility = x;
         }
 
         private void btn_DeleteImage_Click(object sender, RoutedEventArgs e)

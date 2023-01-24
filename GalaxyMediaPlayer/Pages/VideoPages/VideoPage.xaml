@@ -4,19 +4,23 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:GalaxyMediaPlayer.Pages"
-        
+      xmlns:virtualizingwrappanel="clr-namespace:GalaxyMediaPlayer.CustomControls.VirtualizingWrapPanel"
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" x:Class="GalaxyMediaPlayer.Pages.VideoPage"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="VideoPage">
-
+    <Page.Resources>
+        <Style x:Name="ListViewStyle" TargetType="ListView">
+            <Setter Property="Background" Value="{DynamicResource brushPrimary}"> </Setter>
+            <Setter Property="BorderThickness"  Value="0"></Setter>
+        </Style>
+    </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="37"/>
             <RowDefinition Height="37"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
         <StackPanel Orientation="Horizontal"
                     Margin="8,0,0,0">
             <Button x:Name="BackBtn" 
@@ -48,7 +52,7 @@
                 x:Name="Bar"
                 BorderBrush="#95ffffff"
                 BorderThickness="0 0 0 1"
-                Margin="10 0 10 0" Visibility="Visible">
+                Margin="10 0 10 0" Visibility="Collapsed">
             <StackPanel x:Name="LeftBar" Orientation="Horizontal"
                         HorizontalAlignment="Left"
                         Width="auto">
@@ -72,8 +76,49 @@
             Grid.Row="2">
         </Frame>
         <Border BorderBrush="White" BorderThickness="0,0.5,0,0" Grid.Row="2" Margin="10,0,10,0"/>
+        <ListView x:Name="VideoListView" 
+            Background="Transparent" Visibility="Collapsed"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            ScrollViewer.VerticalScrollBarVisibility="Auto"
+            Grid.Row="2">
 
-        
+            <ListBox.Resources>
+                <Style TargetType="ScrollBar">
+                    <Setter Property="SnapsToDevicePixels" Value="True"/>
+                    <Setter Property="OverridesDefaultStyle" Value="true"/>
+                    <Style.Triggers>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter Property="Width" Value="10"/>
+                            <Setter Property="Height" Value="Auto" />
+                            <Setter Property="Margin" Value="8 24" />
+                            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.Resources>
+
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <virtualizingwrappanel:VirtualizingWrapPanel
+                        IsItemsHost="False"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ListView.ItemTemplate >
+                <DataTemplate x:Name="DatatemplateImage" >
+                    <Grid Width="200" Height="150" >
+                        <Image x:Name="img" 
+                               Source="{Binding pathToImg}" 
+                               Panel.ZIndex="0"
+                               Width="200" Height="200" />
+
+                    </Grid>
+                    
+                </DataTemplate>
+                
+            </ListView.ItemTemplate>
+        </ListView>
+
     </Grid>
 
 
