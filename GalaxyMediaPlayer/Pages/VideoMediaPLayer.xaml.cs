@@ -23,6 +23,7 @@ using Microsoft.VisualBasic.ApplicationServices;
 using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
 using System.Threading;
 using System.Windows.Media.Animation;
+using GalaxyMediaPlayer.Databases.VideoPage;
 
 namespace GalaxyMediaPlayer.Pages
 {
@@ -31,7 +32,7 @@ namespace GalaxyMediaPlayer.Pages
     /// </summary>
     public partial class VideoMediaPLayer : Page
     {
-        
+
         public class SrtContent
         {
             public string Text { get; set; }
@@ -63,62 +64,127 @@ namespace GalaxyMediaPlayer.Pages
                 }
             }
             return content;
-          
+
         }
         List<SrtContent> test = new List<SrtContent>();
-
-        bool repeatIsOn =false;
-        bool subtitlesIsOn=false;
+        
+        bool repeatIsOn = false;
+        bool subtitlesIsOn = false;
+        bool randomIsOn = false;
+        bool fullSizeIsOn = true;
+        bool sliderSeekIsDown = false;
         DispatcherTimer timer;
+        DispatcherTimer timer1;
         System.Windows.Forms.Timer timer2;
         string subtiles;
-        string[] filepath;
-        string[] filename;
-        
-        public VideoMediaPLayer()
+        List<string> videoPaths;
+        List<string> subtitlePaths;
+        int VideoPathIndex = 0;
+        Thickness thickness = new Thickness(0, 40, 0, 60);
+        public VideoMediaPLayer(List<string> videoPath)
         {
             InitializeComponent();
-            timer = new DispatcherTimer();
+            videoPaths = new List<string>();
+            this.videoPaths = videoPath;
+            Load();
+        }
+        private void Load()
+        {
+            timer = new DispatcherTimer(); //H.Nam: DispatcherTimer for displaying video current position and subtitles
+            timer1 = new DispatcherTimer(); //H.nam: Create fade effect in FullScreen mode
+            timer1.Interval = TimeSpan.FromMilliseconds(20);
+            timer1.Tick += new EventHandler(Timer1_Tick);
             timer2 = new System.Windows.Forms.Timer();
-            timer2.Interval = 50;
-            timer2.Tick += Timer2_Tick;
-            //H.Nam: DispatcherTimer for displaying video current position
-            timer.Interval= TimeSpan.FromMilliseconds(200); 
+            timer2.Interval = 30;
+            timer2.Tick += Timer2_Tick;    
+            timer.Interval = TimeSpan.FromMilliseconds(200);
             timer.Tick += new EventHandler(Timer_Tick);
             Play_PauseIcon1.Opacity = 0;
             
+            btnSubtitles.Opacity = 0.5;
+            btnRandom.Opacity = 0.5;
+            btnRepeat.Opacity = 0.5;
+            subtitlePaths = new List<string>();
+            if (videoPaths.Count > 0)
+            {
+                media.Source = new Uri(videoPaths[0]);
+                labelVideoTitle.Content = System.IO.Path.GetFileNameWithoutExtension(videoPaths[VideoPathIndex]);
+            }
+            getSrtPath();
         }
-
-        private void Timer2_Tick(object? sender, EventArgs e)
+        private void Timer2_Tick(object? sender, EventArgs e) //For animation transform
         {
             bool flag = false;
             if (Play_PauseIcon1.Opacity > 0)
             {
                 Play_PauseIcon1.Opacity -= 0.1; flag = true;
             }
-            if(Forward15seconds.Opacity > 0)
+            if (Forward15seconds.Opacity > 0)
             {
                 Forward15seconds.Opacity -= 0.1; flag = true;
             }
-             if(Backward15seconds.Opacity > 0)
+            if (Backward15seconds.Opacity > 0)
             {
                 Backward15seconds.Opacity -= 0.1; flag = true;
             }
-            if (flag==false)
+
+            if (fullSizeIsOn)
+            {
+                if (media.Margin.Top < 40)
+                {
+                    media.Margin = new Thickness(0, media.Margin.Top + 4, 0, media.Margin.Bottom + 70 / 10);
+                    flag = true;
+                }
+
+            }
+            else
+            {
+                if (media.Margin.Top > 0)
+                {
+                    media.Margin = new Thickness(0, media.Margin.Top - 4, 0, media.Margin.Bottom - 70 / 10);
+                    flag = true;
+                }
+            }
+            if (sliderSeekIsDown)
+            {
+                string a = TimeSpan.FromMinutes(SliderSeek.Value).ToString();
+                string b = TimeSpan.FromMinutes(SliderSeek.Maximum).ToString();
+                Video_Duration.Content = a.Substring(0, a.LastIndexOf(':')) + " / " + b.Substring(0, b.LastIndexOf(':'));
+                media.Position = TimeSpan.FromSeconds(SliderSeek.Value);
+                flag = true;
+            }
+            if (flag == false)
             {
                 timer2.Stop();
             }
         }
-
-        private void Timer_Tick(object sender,EventArgs e)
+        private void Timer1_Tick(object sender, EventArgs e)
         {
-            bool flag=true;
+            bool flag = false;
+            if (VideoPlayerGrid.Height > 0)
+            {
+                VideoPlayerGrid.Height -=5;
+                   flag = true;
+            }
+            if(labelVideoTitle.Height > 0)
+            {
+                labelVideoTitle.Height-=5;
+                flag = true;
+            }
+            if (!flag)
+            {
+                timer1.Stop();
+            }
+        }
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            bool flag = true;
             try
             {
                 SliderSeek.Value = media.Position.TotalSeconds;//update the current video position to progress bar
-                string a=TimeSpan.FromMinutes(SliderSeek.Value).ToString();//H.Nam: remove miliseconds from Timespan
-                string b=TimeSpan.FromMinutes(SliderSeek.Maximum).ToString();    
-                Video_Duration.Content = a.Substring(0, a.LastIndexOf(':'))+" / "+  b.Substring(0,b.LastIndexOf(':'));
+                string a = TimeSpan.FromMinutes(SliderSeek.Value).ToString();//H.Nam: remove miliseconds from Timespan
+                string b = TimeSpan.FromMinutes(SliderSeek.Maximum).ToString();
+                Video_Duration.Content = a.Substring(0, a.LastIndexOf(':')) + " / " + b.Substring(0, b.LastIndexOf(':'));
                 if (subtitlesIsOn)
                 {
                     foreach (SrtContent testItem in test)
@@ -143,11 +209,12 @@ namespace GalaxyMediaPlayer.Pages
                 {
                     Sub.Background.Opacity = 0;
                     Sub.Text = "";
-                  
+
                 }
+
             }
             catch (Exception ex)
-            {                
+            {
                 System.Windows.Forms.MessageBox.Show(ex.Message);
             }
         }
@@ -161,58 +228,56 @@ namespace GalaxyMediaPlayer.Pages
                  " *.mkv; *.mov; *.mp2; *.mp2v; *.mp4; *.mp4v; *.mpa; *.mpe; *.mpeg; *.mpeg1; *.mpeg2; *.mpeg4; *.mpg; *.mpv2; *.mts; *.nsv; *.nuv; *.ogg; *.ogm;" +
                  " *.ogv; *.ogx; *.ps; *.rec; *.rm; *.rmvb; *.tod; *.ts; *.tts; *.vob; *.vro; *.webm; *.dat; ";
 
-
                 if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    filename = ofd.SafeFileNames;
-                    filepath = ofd.FileNames;
-                    media.Source = new Uri(ofd.FileName);
+
+                    videoPaths = ofd.FileNames.ToList();
+                    VideoPathIndex = 0;
+                    media.Source = new Uri(videoPaths[VideoPathIndex]);
+                    labelVideoTitle.Content = System.IO.Path.GetFileNameWithoutExtension(videoPaths[VideoPathIndex]);
                     media.LoadedBehavior = MediaState.Play;
-                    Uri uri = new Uri(ofd.FileName);
-                    DirectoryInfo directory = new DirectoryInfo(ofd.FileName);
-                    string[] x = Directory.GetFiles(System.IO.Path.GetDirectoryName(ofd.FileName), "*.srt",SearchOption.AllDirectories);;
-                    foreach (string item in x)
-                    { 
-
-                        if (System.IO.Path.GetFileName(item).Contains(System.IO.Path.GetFileName(ofd.FileName).Substring(0, System.IO.Path.GetFileName(ofd.FileName).LastIndexOf("."))))
-                        {
-                          subtitlesIsOn=true;
-                            test = ParseSRT(item);
-                            break;
-                        }
-                        subtitlesIsOn = false;
-                    }
-
-
+                    getSrtPath();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 System.Windows.Forms.MessageBox.Show(ex.Message);
             }
         }
-
+        private void getSrtPath()
+        {
+            subtitlePaths.Clear();
+            foreach (string videoPath in videoPaths)
+            {
+                string[] x = Directory.GetFiles(System.IO.Path.GetDirectoryName(videoPath), "*.srt", SearchOption.AllDirectories); ;
+                foreach (string item in x)
+                {
+                    if (System.IO.Path.GetFileName(item).Contains(System.IO.Path.GetFileNameWithoutExtension(videoPath)))
+                    {
+                        subtitlePaths.Add(item);
+                        break;
+                    }
+                }
+            }
+        }
         private void btnPlayPause_Click(object sender, RoutedEventArgs e)
         {
-         
+
             if (media.LoadedBehavior != MediaState.Play)
-            {   
-                media.LoadedBehavior= MediaState.Play;
+            {
+                media.LoadedBehavior = MediaState.Play;
                 Play_PauseIcon.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/pause_32.png"));
                 Play_PauseIcon1.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/pause_32.png"));
-
 
             }
             else
             {
-                media.LoadedBehavior= MediaState.Pause;
+                media.LoadedBehavior = MediaState.Pause;
                 Play_PauseIcon.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/play_32.png"));
                 Play_PauseIcon1.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/play_32.png"));
             }
             Play_PauseIcon1.Opacity = 1;
             timer2.Start();
-            
-
         }
 
 
@@ -223,7 +288,7 @@ namespace GalaxyMediaPlayer.Pages
 
         private void btnVolumn_Click(object sender, RoutedEventArgs e) //H.Nam: Mute funtion
         {
-            if(VolumeSlider.IsEnabled == true)
+            if (VolumeSlider.IsEnabled == true)
             {
                 VolumeSlider.IsEnabled = false;
                 VolumeSlider.Opacity = 0.5;
@@ -239,23 +304,15 @@ namespace GalaxyMediaPlayer.Pages
             }
         }
 
-        private void btnRepeat_Click(object sender, RoutedEventArgs e)//H.Nam: Repear Function
-        {
-            if (repeatIsOn)
-            {
-                repeatIsOn = false;
-                btnRepeat.Opacity = 0.5;
-            }
-            else
-            {
-                repeatIsOn = true;
-                btnRepeat.Opacity = 1;
-            }
-         
-        }
 
         private void media_MediaEnded(object sender, RoutedEventArgs e)
         {
+
+            if (randomIsOn)
+            {
+                Random random = new Random();
+                media.Source = new Uri(videoPaths[random.Next(0, videoPaths.Count())]);
+            }
             if (repeatIsOn)
             {
                 media.Position = TimeSpan.Zero;
@@ -282,48 +339,47 @@ namespace GalaxyMediaPlayer.Pages
 
         private void SliderSeek_GotMouseCapture(object sender, System.Windows.Input.MouseEventArgs e)
         {
-                timer.Stop();
+            timer.Stop();
+            timer2.Start();
+            sliderSeekIsDown = true;
         }
 
         private void SliderSeek_LostMouseCapture(object sender, System.Windows.Input.MouseEventArgs e)
         {
             media.Position = TimeSpan.FromSeconds(SliderSeek.Value);//H.Nam: Allow user to change the video position according to progress bar
+            sliderSeekIsDown = false;
             timer.Start();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            // System.Windows.Forms.MessageBox.Show(this.ToString());
             try
             {
-                GalaxyMediaPlayer.MainWindow.GetWindow(this).Close();
+                System.Windows.Application.Current.Shutdown();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 System.Windows.Forms.MessageBox.Show(ex.ToString());
             }
-
         }
 
         private void VideoPlayerGrid_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            control_panel.Visibility = Visibility.Hidden;
-            VolumeControlPanel.Visibility = Visibility.Hidden;
-            SliderSeek.Visibility = Visibility.Hidden;
-            VideoPlayerGrid.Background.Opacity = 0;
+            if (fullSizeIsOn)
+            {
+                 wait(3000);
+                //control_panel.Visibility = Visibility.Hidden;
+                //VolumeControlPanel.Visibility = Visibility.Hidden;
+                //SliderSeek.Visibility = Visibility.Hidden;
+                timer1.Start();
+            }
         }
 
         private void VideoPlayerGrid_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            control_panel.Visibility= Visibility.Visible;
-            VolumeControlPanel.Visibility = Visibility.Visible;
-            SliderSeek.Visibility= Visibility.Visible;
-            VideoPlayerGrid.Background.Opacity = 0.15;
-
+            labelVideoTitle.Height = 40;
+            VideoPlayerGrid.Height=70;
         }
-
- 
-   
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
@@ -334,31 +390,15 @@ namespace GalaxyMediaPlayer.Pages
         {
             GalaxyMediaPlayer.MainWindow.GetWindow(this).WindowState = System.Windows.WindowState.Normal;
         }
-
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
             GalaxyMediaPlayer.MainWindow.GetWindow(this).WindowState = System.Windows.WindowState.Minimized;
-
         }
-
-        private void btnSubtitles_Click(object sender, RoutedEventArgs e)
-        {
-            if (subtitlesIsOn)
-            {
-                subtitlesIsOn = false;
-            }
-            else
-            {
-                subtitlesIsOn = true;
-            }
-
-        }
-
         private void btnSkip15Seconds_Click(object sender, RoutedEventArgs e)
         {
             Forward15seconds.Opacity = 1;
             timer.Stop();
-            media.Position = TimeSpan.FromSeconds(SliderSeek.Value+15);
+            media.Position = TimeSpan.FromSeconds(SliderSeek.Value + 15);
             timer.Start();
             timer2.Start();
         }
@@ -367,24 +407,147 @@ namespace GalaxyMediaPlayer.Pages
         {
             Backward15seconds.Opacity = 1;
             timer.Stop();
-            media.Position = TimeSpan.FromSeconds(SliderSeek.Value -15);
+            media.Position = TimeSpan.FromSeconds(SliderSeek.Value - 15);
             timer.Start();
             timer2.Start();
-
         }
 
         private void Video_Page_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if(e.Key == Key.Right)
+            if (e.Key == Key.D)
             {
-               // media.Position = TimeSpan.FromMilliseconds(200);
-                btnSkip15Seconds_Click(sender, e);
+                media.Position = TimeSpan.FromSeconds(SliderSeek.Value + 15);
             }
-            if (e.Key == Key.Left)
+            if (e.Key == Key.A)
             {
                 btnSkip15Seconds_Copy_Click(sender, e);
             }
         }
 
+        private void Close_Button_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+
+        }
+
+        private void btnNext_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (VideoPathIndex < videoPaths.Count() - 1)
+                media.Source = new Uri(videoPaths[++VideoPathIndex]);
+            else
+            {
+                VideoPathIndex = 0;
+                media.Source = new Uri(videoPaths[VideoPathIndex]);
+            }
+            labelVideoTitle.Content = System.IO.Path.GetFileNameWithoutExtension(videoPaths[VideoPathIndex]);
+        }
+
+        private void btnPrevious_Click(object sender, RoutedEventArgs e)
+        {
+            if (VideoPathIndex > 0)
+                media.Source = new Uri(videoPaths[--VideoPathIndex]);
+            else
+            {
+                VideoPathIndex = videoPaths.Count();
+                media.Source = new Uri(videoPaths[--VideoPathIndex]);
+            }
+            labelVideoTitle.Content = System.IO.Path.GetFileNameWithoutExtension(videoPaths[VideoPathIndex]);
+        }
+        private void btnRandom_Click(object sender, RoutedEventArgs e)
+        {
+            randomIsOn = !randomIsOn;
+            if (randomIsOn)
+            {
+                btnRandom.Opacity = 1;
+                if (repeatIsOn)
+                {
+                    btnRepeat_Click(sender, e);
+                }
+            }
+            else
+            {
+                btnRandom.Opacity = 0.5;
+            }
+
+        }
+        private void btnRepeat_Click(object sender, RoutedEventArgs e)//H.Nam: Repeat Function
+        {
+            if (repeatIsOn)
+            {
+                repeatIsOn = false;
+                btnRepeat.Opacity = 0.5;
+            }
+            else
+            {
+                
+                repeatIsOn = true;
+                if (randomIsOn)
+                {
+                    btnRandom_Click(sender, e);
+                }
+                btnRepeat.Opacity = 1;
+            }
+
+        }
+
+        private void btnFullScreen_Click(object sender, RoutedEventArgs e)
+        {
+            if (fullSizeIsOn)
+                ToggleScreenSizeIcon.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/full_screen_64.png"));
+            else
+            {
+                ToggleScreenSizeIcon.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/minimize_32.png"));
+            }
+
+            fullSizeIsOn = !fullSizeIsOn;
+            timer2.Start();
+
+
+        }
+
+        private void btnSubtitles_Click_1(object sender, RoutedEventArgs e)
+        {
+            if (subtitlesIsOn)
+            {
+                btnSubtitles.Opacity = 0.5;
+                subtitlesIsOn = false;
+            }
+            else
+            {
+                foreach (string subPath in subtitlePaths)
+                {
+                    if (System.IO.Path.GetFileName(subPath).Contains(System.IO.Path.GetFileNameWithoutExtension(videoPaths[VideoPathIndex])))
+                    {
+                        test = ParseSRT(subPath);
+                        subtitlesIsOn = true;
+                        btnSubtitles.Opacity = 1;
+                    }
+                }
+         
+            }
+
+        }
+        public void wait(int milliseconds)
+        {
+            var timer1 = new System.Windows.Forms.Timer();
+            if (milliseconds == 0 || milliseconds < 0) return;
+
+            // Console.WriteLine("start wait timer");
+            timer1.Interval = milliseconds;
+            timer1.Enabled = true;
+            timer1.Start();
+
+            timer1.Tick += (s, e) =>
+            {
+                timer1.Enabled = false;
+                timer1.Stop();
+                // Console.WriteLine("stop wait timer");
+            };
+
+            while (timer1.Enabled)
+            {
+                System.Windows.Forms.Application.DoEvents();
+            }
+        }
     }
 }

@@ -108,7 +108,6 @@ namespace GalaxyMediaPlayer.Databases.VideoPage
                 engine.GetMetadata(mp4);
                 var options = new ConversionOptions { Seek = TimeSpan.FromSeconds(1) };
                 var outputFile = new MediaFile { Filename = pathToImg};
-                
                 engine.GetThumbnail(mp4, outputFile, options);
             }
 

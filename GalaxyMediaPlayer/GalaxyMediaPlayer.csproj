@@ -57,6 +57,7 @@
     <None Remove="Resources\Icons\ImagePageIcons\zoom_out.png" />
     <None Remove="Resources\Icons\loop_32.png" />
     <None Remove="Resources\Icons\MediaControlIcons\close_32.png" />
+    <None Remove="Resources\Icons\MediaControlIcons\full_screen_64.png" />
     <None Remove="Resources\Icons\MediaControlIcons\minimize.png" />
     <None Remove="Resources\Icons\MediaControlIcons\minimize_32.png" />
     <None Remove="Resources\Icons\MediaControlIcons\next.png" />
@@ -67,7 +68,6 @@
     <None Remove="Resources\Icons\MediaControlIcons\Skip15seconds.png" />
     <None Remove="Resources\Icons\MediaControlIcons\square_32.png" />
     <None Remove="Resources\Icons\MediaControlIcons\subtitle.png" />
-    <None Remove="Resources\Icons\MediaControlIcons\subtitles.png" />
     <None Remove="Resources\Icons\more_32.png" />
     <None Remove="Resources\Icons\music_note_64.png" />
     <None Remove="Resources\Icons\NavIcons\blank_square.png" />
@@ -109,6 +109,7 @@
     <Content Include="Databases\ImagePage\ImagesDB.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\Icons\MediaControlIcons\full_screen_64.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\minimize.png" />
   </ItemGroup>
   <ItemGroup>
@@ -182,7 +183,6 @@
     <Resource Include="Resources\Icons\MediaControlIcons\square_32.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\Skip15seconds.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\subtitle.png" />
-    <Resource Include="Resources\Icons\MediaControlIcons\subtitles.png" />
     <Resource Include="Resources\Icons\NavIcons\blank_square.png" />
     <Resource Include="Resources\Icons\NavIcons\ic_computer.png" />
     <Resource Include="Resources\Icons\NavIcons\ic_home.png" />

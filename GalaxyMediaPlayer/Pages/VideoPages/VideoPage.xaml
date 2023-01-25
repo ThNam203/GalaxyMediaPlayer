@@ -64,10 +64,16 @@
                         Click="Add"/>
 
                 <Button Content="Delete"
-                x:Name="btn_DeleteImage"
+                x:Name="btn_Delete"
                 Visibility="Visible"
                 Style="{StaticResource FirstButtonAddNowStyle}"
-                Click="btn_DeleteImage_Click"/>
+                Click="btn_Delete_Click"/>
+               
+                <Button Content="Open"
+                x:Name="btn_Open"
+                Visibility="Visible"
+                Style="{StaticResource FirstButtonAddNowStyle}" Click="Open_Video" 
+                />
             </StackPanel>
         </Border>
 
@@ -100,13 +106,13 @@
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <virtualizingwrappanel:VirtualizingWrapPanel
-                        IsItemsHost="False"/>
+                        IsItemsHost="True"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 
             <ListView.ItemTemplate >
                 <DataTemplate x:Name="DatatemplateImage" >
-                    <Grid VerticalAlignment="Bottom"  Width="200">
+                    <Grid VerticalAlignment="Bottom"  Width="200" MouseDown="Open_Video">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="120"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>

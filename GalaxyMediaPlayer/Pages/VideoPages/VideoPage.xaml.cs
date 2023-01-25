@@ -30,6 +30,7 @@ using MediaToolkit.Options;
 using MediaToolkit;
 using System.Collections.ObjectModel;
 using System.Security.Cryptography;
+using GalaxyMediaPlayer.Models;
 
 //using System.Windows.Forms;
 namespace GalaxyMediaPlayer.Pages
@@ -103,6 +104,7 @@ namespace GalaxyMediaPlayer.Pages
             }
             else
             {
+                if(videoPaths.IsEmpty())
                 ChangeBtnVisibility();
             }
         }
@@ -131,8 +133,9 @@ namespace GalaxyMediaPlayer.Pages
             VideoListView.Visibility = x;
         }
 
-        private void btn_DeleteImage_Click(object sender, RoutedEventArgs e)
+        private void btn_Delete_Click(object sender, RoutedEventArgs e)
         {
+            bool flag = false;
             foreach (VideoDisplay video in VideoListView.SelectedItems)
             {
                 source[VideoListView.Items.IndexOf(video)].isSelected = true;
@@ -143,8 +146,37 @@ namespace GalaxyMediaPlayer.Pages
                 {
                     source.Remove(video);
                   videoPaths.DeletePath(video.pathToVideo);
+                    flag = true;
                 }
             }
+            if (flag )
+            {
+                if(videoPaths.IsEmpty())
+                    ChangeBtnVisibility();
+            }
+        }
+        private void Open_Video(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount >= 2)
+            {
+                MainWindow.Instance.MainFrame.Navigate( new VideoMediaPLayer(SelectedVideo()));
+            }
+        }
+        private List<string> SelectedVideo()
+        {
+            List<string> result = new List<string>();
+            foreach (VideoDisplay video in VideoListView.SelectedItems)
+            {
+                result.Add(video.pathToVideo);
+            }
+            return result;
+        }
+        private void Open_Video(object sender, RoutedEventArgs e)
+        {
+
+            if(VideoListView.SelectedItems.Count > 0)
+            MainWindow.Instance.MainFrame.Navigate(new VideoMediaPLayer(SelectedVideo()));
+
         }
     }
 }

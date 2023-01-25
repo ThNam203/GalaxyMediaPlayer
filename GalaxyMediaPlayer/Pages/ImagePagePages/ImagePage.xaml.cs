@@ -88,7 +88,7 @@ namespace GalaxyMediaPlayer.Pages
         {
             if (e.ClickCount >= 2)
             {
-                
+        
                 ImageModel imageModelSelected = (ImageModel)listViewImage.SelectedItem;
                 string ImagePath = imageModelSelected.path;
                 OpenImagePage openImagePage = new OpenImagePage(ImagePath);

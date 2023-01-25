@@ -114,6 +114,9 @@
     <Page Update="Pages\PlaylistPagePages\Page1.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Pages\VideoMediaPLayer.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Pages\VideoPages\VideoPage.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -136,9 +139,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Windows\SongMinimizedWindow.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Pages\VideoMediaPLayer.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
