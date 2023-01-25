@@ -3,12 +3,117 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:homePageCvt="clr-namespace:GalaxyMediaPlayer.Converters.HomePageConverters"
       xmlns:local="clr-namespace:GalaxyMediaPlayer.Pages.HomePage"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MainPage">
+    <Page.Resources>
+        <homePageCvt:PathToImageSource x:Key="PathToImageSource"/>
+    </Page.Resources>
 
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <TextBlock  Name="greetingTb" 
+                    FontFamily="{StaticResource Raleway}"
+                    Foreground="White"
+                    FontSize="16"
+                    Margin="16 0 0 0"/>
+
+        <StackPanel Grid.Row="1" Margin="16">
+            <TextBlock  FontFamily="{StaticResource Raleway}"
+                        Foreground="White"
+                        FontSize="13"
+                        Text="Most Watched"/>
+            <ListBox
+                x:Name="mostWatchListbox"
+                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                Background="{DynamicResource brushPrimary}"
+                Visibility="Visible"
+                BorderThickness="0"
+                SelectionMode="Extended"
+                Grid.ColumnSpan="2">
+                <ListBox.Resources>
+                    <Style TargetType="ScrollBar">
+                        <Setter Property="SnapsToDevicePixels" Value="True"/>
+                        <Setter Property="OverridesDefaultStyle" Value="true"/>
+                        <Style.Triggers>
+                            <Trigger Property="Orientation" Value="Vertical">
+                                <Setter Property="Width" Value="10"/>
+                                <Setter Property="Height" Value="Auto" />
+                                <Setter Property="Margin" Value="8 24" />
+                                <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.Resources>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border 
+                            Name="border"
+                            Margin="8 16"
+                            Padding="0 8"
+                            BorderBrush="Transparent"
+                            BorderThickness="2"
+                            MouseDown="listboxItem_MouseDown">
+                            <StackPanel>
+                                <Image  Width="200" Height="100" Stretch="Uniform"
+                                    Source="{Binding Path, Converter={StaticResource PathToImageSource}}">
+                                </Image>
+
+                                <TextBlock  FontSize="11"
+                                        Width="150"
+                                        Margin="4 4 0 0"
+                                        Background="Transparent"
+                                        Foreground="{DynamicResource brushSecondary}"
+                                        HorizontalAlignment="Center"
+                                        Text="{Binding Title}"
+                                        TextAlignment="Center"
+                                        TextTrimming="CharacterEllipsis"/>
+                            </StackPanel>
+                        </Border>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#219ebc"/>
+                            </DataTrigger>
+
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="False"/>
+                                    <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsMouseOver}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <MultiDataTrigger.Setters>
+                                    <Setter TargetName="border" Property="BorderBrush" Value="#8ecae6"/>
+                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource brushLightAccent}"/>
+                                </MultiDataTrigger.Setters>
+                            </MultiDataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="IsSelected" Value="{Binding Content.IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Self}}"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <ContentPresenter/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+        </StackPanel>
     </Grid>
 </Page>

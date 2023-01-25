@@ -47,6 +47,8 @@ namespace GalaxyMediaPlayer.Pages
             // Nam: disable 'backspace' button can go back in frame's stack
             NavigationCommands.BrowseBack.InputGestures.Clear();
             NavigationCommands.BrowseForward.InputGestures.Clear();
+
+            navButtonsListBox.SelectedIndex = 0;
         }
 
         private void MediaPlayer_MediaOpened(object? sender, EventArgs e)

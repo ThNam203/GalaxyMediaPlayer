@@ -4,7 +4,6 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
-using Microsoft.WindowsAPICodePack.Shell;
 using System.Drawing.Imaging;
 
 

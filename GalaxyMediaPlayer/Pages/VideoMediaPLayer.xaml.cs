@@ -86,7 +86,6 @@ namespace GalaxyMediaPlayer.Pages
             timer.Interval= TimeSpan.FromMilliseconds(200); 
             timer.Tick += new EventHandler(Timer_Tick);
             Play_PauseIcon1.Opacity = 0;
-            
         }
 
         private void Timer2_Tick(object? sender, EventArgs e)
@@ -161,7 +160,6 @@ namespace GalaxyMediaPlayer.Pages
                  " *.mkv; *.mov; *.mp2; *.mp2v; *.mp4; *.mp4v; *.mpa; *.mpe; *.mpeg; *.mpeg1; *.mpeg2; *.mpeg4; *.mpg; *.mpv2; *.mts; *.nsv; *.nuv; *.ogg; *.ogm;" +
                  " *.ogv; *.ogx; *.ps; *.rec; *.rm; *.rmvb; *.tod; *.ts; *.tts; *.vob; *.vro; *.webm; *.dat; ";
 
-
                 if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     filename = ofd.SafeFileNames;
@@ -182,8 +180,6 @@ namespace GalaxyMediaPlayer.Pages
                         }
                         subtitlesIsOn = false;
                     }
-
-
                 }
             }
             catch(Exception ex)
@@ -200,8 +196,6 @@ namespace GalaxyMediaPlayer.Pages
                 media.LoadedBehavior= MediaState.Play;
                 Play_PauseIcon.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/pause_32.png"));
                 Play_PauseIcon1.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/pause_32.png"));
-
-
             }
             else
             {
@@ -211,8 +205,6 @@ namespace GalaxyMediaPlayer.Pages
             }
             Play_PauseIcon1.Opacity = 1;
             timer2.Start();
-            
-
         }
 
 
@@ -321,9 +313,6 @@ namespace GalaxyMediaPlayer.Pages
             VideoPlayerGrid.Background.Opacity = 0.15;
 
         }
-
- 
-   
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
