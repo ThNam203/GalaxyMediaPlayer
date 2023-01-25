@@ -49,6 +49,9 @@
     <Compile Update="UserControls\ConfirmDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControls\HomePageControls\MostWatchMusic.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControls\PlaylistControls\NewPlaylistControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -121,6 +124,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControls\ConfirmDialog.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\HomePageControls\MostWatchMusic.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControls\PlaylistControls\NewPlaylistControl.xaml">
