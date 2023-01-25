@@ -102,21 +102,25 @@
                     <Border
                           x:Name="Border" 
                           Grid.ColumnSpan="2"
-                          CornerRadius="2"
+                          CornerRadius="3"
+                          Margin="0 0 0 3"
                           Background="#FF3F3F3F"
-                          BorderThickness="0" />
+                          BorderThickness="0"/>
                     <Border 
                           Grid.Column="0"
+                          CornerRadius="0" 
                           Margin="1" 
                           Background="#FF3F3F3F" 
                           BorderThickness="0">
-                        <TextBlock HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"
+                        <TextBlock x:Name="ComboboxContent"
                                    Foreground="White"
-                                   FontSize="12"
-                                   Margin="10 0 0 0">Filter</TextBlock>
+                                   FontSize="14"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center"
+                                   Margin="10 0 0 3"
+                                   Text="{Binding ElementName=TrickLabel,Path=Content}"/>
                     </Border>
-                    <Border x:Name="Filter"
+                    <Border x:Name="BorderFilterIcon"
                             Grid.Column="1"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
@@ -152,7 +156,8 @@
                                 Grid.Column="2" 
                                 Focusable="false"
                                 IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
-                                ClickMode="Press">
+                                ClickMode="Press" 
+                                Cursor="Hand">
                                 </ToggleButton>
                                 <ContentPresenter Name="ContentSite" IsHitTestVisible="False"  Content="{TemplateBinding SelectionBoxItem}"
                                 ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
@@ -288,12 +293,12 @@
                 Margin="0 0 10 0">
             <StackPanel x:Name="RightBar" Orientation="Horizontal"
                             Width="auto">
+                <Label Name="TrickLabel" Content="Filter" Visibility="Collapsed"></Label>
                 <ComboBox x:Name="ComboboxFilter"
                           Width="100"
                           Height="30"
                           Margin="0 0 10 10"
-                          SelectionChanged="ComboboxFilter_SelectionChanged"
-                          Visibility="Collapsed">
+                          SelectionChanged="ComboboxFilter_SelectionChanged">
                     <ComboBoxItem>By Name &#8595;</ComboBoxItem>
                     <ComboBoxItem>By Date &#8595;</ComboBoxItem>
                 </ComboBox>

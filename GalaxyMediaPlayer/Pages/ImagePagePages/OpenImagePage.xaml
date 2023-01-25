@@ -83,10 +83,12 @@
                 </Button.Background>
             </Button>
             <TextBlock x:Name="TitleOfWindow" Foreground="White"
-                       Width="auto"
+                       Width="300"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"
-                       Margin="50 0 0 0"/>
+                       Margin="50 0 0 0"
+                       TextTrimming="WordEllipsis" 
+                       TextWrapping="NoWrap"/>
             <StackPanel x:Name="ToolImage"
                         Orientation="Horizontal"
                         VerticalAlignment="Center"

@@ -22,6 +22,10 @@ using GalaxyMediaPlayer.ConnectDB;
 using GalaxyMediaPlayer.Databases.ImagePage;
 using GalaxyMediaPlayer.Helpers;
 using GalaxyMediaPlayer.UserControls.ImageControls;
+using System.Runtime.Serialization;
+using System.Net.Mime;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace GalaxyMediaPlayer.Pages
 {
@@ -32,12 +36,12 @@ namespace GalaxyMediaPlayer.Pages
     {
 
         private static List<ImageModel> Images;
+       
         public ImagePage()
         {
             InitializeComponent();
             Images = new List<ImageModel>();
             LoadFromDB();
-            //ItemBarImages.BorderBrush = Brushes.White;
         }
 
         void ShowButtonWhenDoNotHaveImage()
@@ -100,30 +104,6 @@ namespace GalaxyMediaPlayer.Pages
             }
         }
 
-
-
-        private void btn_DeleteImage_Click(object sender, RoutedEventArgs e)
-        {
-            foreach (ImageModel item in listViewImage.SelectedItems)
-            {
-                int index = listViewImage.Items.IndexOf(item);
-                Images[index].IsSelected = true;
-            }
-            foreach (ImageModel item in Images.ToList())
-            {
-                if (item.IsSelected)
-                {
-                    Images.Remove(item);
-                    listViewImage.Items.Remove(item);
-                    ImagesDBAccess.DeleteImage(item);
-                }
-            }
-            if (Images.Count == 0)
-            {
-                ShowButtonWhenDoNotHaveImage();
-            }
-        }
-
         private void LoadFromDB()
         {
             Images = ImagesDBAccess.LoadImageList();
@@ -145,10 +125,14 @@ namespace GalaxyMediaPlayer.Pages
         {
             //ItemBarImages.BorderBrush = Brushes.White;
         }
-
         private void ComboboxFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int sortIndex = ComboboxFilter.SelectedIndex;
+            if (sortIndex == -1)
+                TrickLabel.Content = "Filter";
+            else
+                TrickLabel.Content = "";
+
             if (sortIndex == 0)
             {
                 List<ImageModel> list = new List<ImageModel>(Images);
