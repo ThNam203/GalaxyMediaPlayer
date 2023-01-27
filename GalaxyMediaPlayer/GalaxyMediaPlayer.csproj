@@ -1,12 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+  <PropertyGroup>
+    <SSDTUnitTestPath Condition="'$(SSDTUnitTestPath)' == ''">$(VsInstallRoot)\Common7\IDE\Extensions\Microsoft\SQLDB</SSDTUnitTestPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SSDTPath Condition="'$(SSDTPath)' == ''">$(VsInstallRoot)\Common7\IDE\Extensions\Microsoft\SQLDB\DAC</SSDTPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
-
   <ItemGroup>
     <None Remove="Databases\HomePage\Stat.db" />
     <None Remove="Databases\MusicPage\Database.txt" />
@@ -30,12 +37,11 @@
     <None Remove="Fonts\Raleway\Raleway-SemiBoldItalic.ttf" />
     <None Remove="Fonts\Raleway\Raleway-Thin.ttf" />
     <None Remove="Fonts\Raleway\Raleway-ThinItalic.ttf" />
-	<None Remove="ImagesDB.db" />
+    <None Remove="ImagesDB.db" />
     <None Remove="Resources\background_1.jpg" />
     <None Remove="Resources\Icons\ComputerPageIcons\folder_16.png" />
     <None Remove="Resources\Icons\ComputerPageIcons\four_squares_32.png" />
     <None Remove="Resources\Icons\ComputerPageIcons\ic_audio_file.png" />
-    <None Remove="Resources\Icons\ComputerPageIcons\ic_film.png" />
     <None Remove="Resources\Icons\ComputerPageIcons\ic_stop_32.png" />
     <None Remove="Resources\Icons\ComputerPageIcons\list_32.png" />
     <None Remove="Resources\Icons\ComputerPageIcons\music_16.png" />
@@ -52,6 +58,7 @@
     <None Remove="Resources\Icons\ImagePageIcons\zoom_out.png" />
     <None Remove="Resources\Icons\loop_32.png" />
     <None Remove="Resources\Icons\MediaControlIcons\close_32.png" />
+    <None Remove="Resources\Icons\MediaControlIcons\full_screen_64.png" />
     <None Remove="Resources\Icons\MediaControlIcons\minimize.png" />
     <None Remove="Resources\Icons\MediaControlIcons\minimize_32.png" />
     <None Remove="Resources\Icons\MediaControlIcons\next.png" />
@@ -62,7 +69,6 @@
     <None Remove="Resources\Icons\MediaControlIcons\Skip15seconds.png" />
     <None Remove="Resources\Icons\MediaControlIcons\square_32.png" />
     <None Remove="Resources\Icons\MediaControlIcons\subtitle.png" />
-    <None Remove="Resources\Icons\MediaControlIcons\subtitles.png" />
     <None Remove="Resources\Icons\more_32.png" />
     <None Remove="Resources\Icons\music_note_64.png" />
     <None Remove="Resources\Icons\NavIcons\blank_square.png" />
@@ -88,7 +94,6 @@
     <None Remove="Resources\Icons\trash_bin.png" />
     <None Remove="Resources\Icons\volume_32.png" />
   </ItemGroup>
-
   <ItemGroup>
     <COMReference Include="{d37e2a3e-8545-3a39-9f4f-31827c9124ab}">
       <WrapperTool>tlbimp</WrapperTool>
@@ -97,7 +102,6 @@
       <Guid>d37e2a3e-8545-3a39-9f4f-31827c9124ab</Guid>
     </COMReference>
   </ItemGroup>
-
   <ItemGroup>
     <Content Include="Databases\HomePage\Stat.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -106,28 +110,30 @@
     <Content Include="Databases\SongPlaylist\Playlist.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-	  <Content Include="Databases\ImagePage\ImagesDB.db">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Resource Include="Resources\Icons\ComputerPageIcons\ic_film.png" />
-	  <Resource Include="Resources\Icons\MediaControlIcons\minimize.png" />
+    <Content Include="Databases\ImagePage\ImagesDB.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Resources\Icons\MediaControlIcons\full_screen_64.png" />
+    <Resource Include="Resources\Icons\MediaControlIcons\minimize.png" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="ExifLib" Version="1.7.0" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
     <PackageReference Include="LrcParser" Version="2022.529.1" />
+    <PackageReference Include="MediaToolkit" Version="1.1.0.1" />
     <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4" />
     <PackageReference Include="Microsoft.WindowsAPICodePack-Shell" Version="1.1.0" />
     <PackageReference Include="MuxicMatchApi" Version="2.5.0" />
+    <PackageReference Include="NReco.VideoConverter" Version="1.2.0" />
     <PackageReference Include="SubtitlesParser" Version="1.5.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.116" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
-    <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />
+    <PackageReference Include="TagLibSharp" Version="2.3.0" />
     <PackageReference Include="WPF-UI" Version="2.0.3" />
+    <PackageReference Include="Xabe.FFmpeg" Version="5.2.3" />
   </ItemGroup>
-
   <ItemGroup>
     <Resource Include="Databases\VideoPage\Database.txt">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
@@ -181,7 +187,6 @@
     <Resource Include="Resources\Icons\MediaControlIcons\square_32.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\Skip15seconds.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\subtitle.png" />
-    <Resource Include="Resources\Icons\MediaControlIcons\subtitles.png" />
     <Resource Include="Resources\Icons\NavIcons\blank_square.png" />
     <Resource Include="Resources\Icons\NavIcons\ic_computer.png" />
     <Resource Include="Resources\Icons\NavIcons\ic_home.png" />
@@ -207,11 +212,9 @@
     <Resource Include="Resources\Icons\trash_bin.png" />
     <Resource Include="Resources\Images\background_1.jpg" />
   </ItemGroup>
-
   <ItemGroup>
     <EditorConfigFiles Remove="C:\Users\hthna\source\repos\GalaxyMediaPlayer\GalaxyMediaPlayer\.editorconfig" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -219,12 +222,29 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-
+  <ItemGroup Condition="$(VisualStudioVersion) == '17.0'">
+    <Reference Include="Microsoft.Data.Tools.Schema.Sql, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SSDTPath)\Microsoft.Data.Tools.Schema.Sql.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.Tools.Schema.Sql.UnitTesting, Version=17.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SSDTUnitTestPath)\Microsoft.Data.Tools.Schema.Sql.UnitTesting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.Tools.Schema.Sql.UnitTestingAdapter, Version=17.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SSDTUnitTestPath)\Microsoft.Data.Tools.Schema.Sql.UnitTestingAdapter.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <PropertyGroup>
+    <SsdtUnitTestVersion>3.1</SsdtUnitTestVersion>
+  </PropertyGroup>
+  <Import Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.Sql.UnitTesting.targets" Condition="$(VisualStudioVersion) != '15.0' And '$(SQLDBExtensionsRefPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.Sql.UnitTesting.targets" Condition="$(VisualStudioVersion) != '15.0' And '$(SQLDBExtensionsRefPath)' == ''" />
 </Project>

@@ -21,6 +21,7 @@ using System.Data.SqlClient;
 using GalaxyMediaPlayer.ConnectDB;
 using GalaxyMediaPlayer.Databases.ImagePage;
 
+
 namespace GalaxyMediaPlayer.Pages
 {
     /// <summary>
@@ -87,7 +88,7 @@ namespace GalaxyMediaPlayer.Pages
         {
             if (e.ClickCount >= 2)
             {
-                
+        
                 ImageModel imageModelSelected = (ImageModel)listViewImage.SelectedItem;
                 string ImagePath = imageModelSelected.path;
                 OpenImagePage openImagePage = new OpenImagePage(ImagePath);
@@ -153,6 +154,7 @@ namespace GalaxyMediaPlayer.Pages
                 foreach (ImageModel model in list)
                 {
                     listViewImage.Items.Add(model);
+
                 }
             }
             else if (sortIndex == 1)

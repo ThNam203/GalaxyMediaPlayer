@@ -344,13 +344,13 @@
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <virtualizingwrappanel:VirtualizingWrapPanel
-                        IsItemsHost="True"/>
+                        IsItemsHost="False"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 
             <ListView.ItemTemplate>
                 <DataTemplate x:Name="DatatemplateImage">
-                    <Grid Width="200" Height="150">
+                    <Grid Width="200" Height="150" >
                         <Image x:Name="img" 
                                Source="{Binding path, Converter={StaticResource ImagePathToThumbnailImage}}" 
                                Panel.ZIndex="1" 

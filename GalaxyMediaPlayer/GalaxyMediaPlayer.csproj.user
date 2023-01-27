@@ -43,6 +43,9 @@
     <Compile Update="Pages\PlaylistPagePages\Page1.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Pages\VideoPages\VideoPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControls\ConfirmDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -114,6 +117,12 @@
     <Page Update="Pages\PlaylistPagePages\Page1.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Pages\VideoMediaPLayer.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\VideoPages\VideoPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="UserControls\ConfirmDialog.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -136,9 +145,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Windows\SongMinimizedWindow.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Pages\VideoMediaPLayer.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

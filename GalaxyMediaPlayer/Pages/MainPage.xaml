@@ -71,7 +71,7 @@
                          Margin="0 16 0 0">
 
                         <local:NavButton Margin="0 4" Title="Home" ImageUri="ic_home.png" NavLink="Pages/NavContentPages/HomePage/MainPage.xaml"/>
-                        <local:NavButton Margin="0 4" Title="Videos" ImageUri="ic_video.png"/>
+                        <local:NavButton Margin="0 4" Title="Videos" ImageUri="ic_video.png" NavLink="Pages/VideoPages/VideoPage.xaml" />
                         <local:NavButton Margin="0 4" Title="Photos" ImageUri="ic_image.png" NavLink="Pages/ImagePagePages/ImagePage.xaml"/>
                         <local:NavButton Margin="0 4" Title="Music" ImageUri="ic_note.png" NavLink="Pages/NavContentPages/MusicPages/MainPage.xaml"/>
                         <local:NavButton Margin="0 4" Title="Playlist" ImageUri="ic_playlist.png" NavLink="Pages/NavContentPages/PlaylistPage.xaml"/>

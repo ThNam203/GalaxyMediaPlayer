@@ -327,7 +327,7 @@
         </ListBox>
 
         <DataGrid Name="playlistSongsDataGrid"
-                  Visibility="Collapsed"
+                  Visibility="Hidden"
                   Style="{DynamicResource DataGridBrowseStyle}" 
                   CellStyle="{DynamicResource DataGridCellStyle1}" 
                   ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderBrowseStyle}" 
