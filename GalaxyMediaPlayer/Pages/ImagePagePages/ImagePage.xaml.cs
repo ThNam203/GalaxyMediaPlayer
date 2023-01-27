@@ -20,6 +20,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.SqlClient;
 using GalaxyMediaPlayer.ConnectDB;
 using GalaxyMediaPlayer.Databases.ImagePage;
+using GalaxyMediaPlayer.Helpers;
+using GalaxyMediaPlayer.UserControls.ImageControls;
+using System.Runtime.Serialization;
+using System.Net.Mime;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 
 namespace GalaxyMediaPlayer.Pages
@@ -31,12 +37,12 @@ namespace GalaxyMediaPlayer.Pages
     {
 
         private static List<ImageModel> Images;
+       
         public ImagePage()
         {
             InitializeComponent();
             Images = new List<ImageModel>();
             LoadFromDB();
-            //ItemBarImages.BorderBrush = Brushes.White;
         }
 
         void ShowButtonWhenDoNotHaveImage()
@@ -44,7 +50,6 @@ namespace GalaxyMediaPlayer.Pages
             BorderlistView.Visibility = Visibility.Visible;
             listViewImage.Visibility = Visibility.Collapsed;
             btn_Addmore.Visibility = Visibility.Collapsed;
-            btn_DeleteImage.Visibility = Visibility.Collapsed;
             ComboboxFilter.Visibility = Visibility.Collapsed;
         }
 
@@ -53,16 +58,20 @@ namespace GalaxyMediaPlayer.Pages
             BorderlistView.Visibility = Visibility.Collapsed;
             listViewImage.Visibility = Visibility.Visible;
             btn_Addmore.Visibility = Visibility.Visible;
-            btn_DeleteImage.Visibility = Visibility.Visible;
             ComboboxFilter.Visibility = Visibility.Visible;
         }
 
         private void btn_Addmore_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
+            string filter = "SupportedFormat|";
+            foreach (string extenstion in SupportedExtensions.IMAGE_EXTENSION)
+            {
+                filter += "*." + extenstion + ";";
+            }
+            dialog.Filter = filter;
             dialog.Multiselect = true;
             dialog.Title = "Open Image";
-            dialog.Filter = "jpg files (*.jpg)|*.jpg|png files (*.png)|*.png|jpeg files (*.jpeg)|*.jpeg";
             if (dialog.ShowDialog() == true)
             {
                 foreach (string file in dialog.FileNames)
@@ -86,38 +95,17 @@ namespace GalaxyMediaPlayer.Pages
 
         private void Image_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ClickCount >= 2)
+            if (e.ClickCount == 1)
             {
-        
+                Image img = (Image)sender;
+            }
+            else if (e.ClickCount >= 2)
+            {
                 ImageModel imageModelSelected = (ImageModel)listViewImage.SelectedItem;
                 string ImagePath = imageModelSelected.path;
                 OpenImagePage openImagePage = new OpenImagePage(ImagePath);
                 openImagePage.IsDoubleClick = true;
                 MainWindow.Instance.MainFrame.Navigate(openImagePage);
-            }
-        }
-
-
-
-        private void btn_DeleteImage_Click(object sender, RoutedEventArgs e)
-        {
-            foreach (ImageModel item in listViewImage.SelectedItems)
-            {
-                int index = listViewImage.Items.IndexOf(item);
-                Images[index].IsSelected = true;
-            }
-            foreach (ImageModel item in Images.ToList())
-            {
-                if (item.IsSelected)
-                {
-                    Images.Remove(item);
-                    listViewImage.Items.Remove(item);
-                    ImagesDBAccess.DeleteImage(item);
-                }
-            }
-            if (Images.Count == 0)
-            {
-                ShowButtonWhenDoNotHaveImage();
             }
         }
 
@@ -142,10 +130,14 @@ namespace GalaxyMediaPlayer.Pages
         {
             //ItemBarImages.BorderBrush = Brushes.White;
         }
-
         private void ComboboxFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int sortIndex = ComboboxFilter.SelectedIndex;
+            if (sortIndex == -1)
+                DefaultContentCombobox.Content = "Filter";
+            else
+                DefaultContentCombobox.Content = "";
+
             if (sortIndex == 0)
             {
                 List<ImageModel> list = new List<ImageModel>(Images);
@@ -166,6 +158,42 @@ namespace GalaxyMediaPlayer.Pages
                 {
                     listViewImage.Items.Add(model);
                 }
+            }
+        }
+
+        private void img_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ImageRightClickDialog dialog = new ImageRightClickDialog(
+                onDeleteButtonClick: DeleteImage);
+            int left = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).X);
+            int top = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).Y);
+            MainWindow.ShowCustomMessageBox(dialog, left: left, top: top);
+            e.Handled = true;
+        }
+
+        private void DeleteImage()
+        {
+            foreach (ImageModel item in Images)
+            {
+                item.IsSelected = false;
+            }
+            foreach (ImageModel item in listViewImage.SelectedItems)
+            {
+                int index = listViewImage.Items.IndexOf(item);
+                Images[index].IsSelected = true;
+            }
+            foreach (ImageModel item in Images.ToList())
+            {
+                if (item.IsSelected)
+                {
+                    Images.Remove(item);
+                    listViewImage.Items.Remove(item);
+                    ImagesDBAccess.DeleteImage(item);
+                }
+            }
+            if (Images.Count == 0)
+            {
+                ShowButtonWhenDoNotHaveImage();
             }
         }
     }
