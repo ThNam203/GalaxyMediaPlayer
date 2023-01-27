@@ -15,6 +15,7 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Databases\HomePage\Stat.db" />
     <None Remove="Databases\MusicPage\Database.txt" />
     <None Remove="Databases\Playlist.db" />
     <None Remove="Databases\VideoPage\Database.txt" />
@@ -102,6 +103,9 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Databases\HomePage\Stat.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Databases\MusicPage\Database.txt" />
     <Content Include="Databases\SongPlaylist\Playlist.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

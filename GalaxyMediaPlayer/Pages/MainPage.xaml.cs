@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using GalaxyMediaPlayer.Databases.HomePage;
 
 namespace GalaxyMediaPlayer.Pages
 {
@@ -56,6 +57,9 @@ namespace GalaxyMediaPlayer.Pages
             MyMediaPlayer.isSongOpened = true;
             MyMediaPlayer.isSongPlaying = true;
             totalTimeInSecond = MyMediaPlayer.GetTotalTimeInSecond();
+
+            // Nam: keeping track of most listened song
+            HomePageDatabaseAccess.SaveDataOnListeningMusic(Uri.UnescapeDataString(MyMediaPlayer.mediaPlayer.Source.AbsolutePath));
 
             SongSliderPanel.Visibility = Visibility.Visible;
 
