@@ -15,7 +15,7 @@
         <cvt:EntityTypeToVisibility x:Key="EntityTypeToVisibility"></cvt:EntityTypeToVisibility>
         <cvt:ImagePathToThumbnailImage x:Key="ImagePathToThumbnailImage"></cvt:ImagePathToThumbnailImage>
     </Page.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="37"/>
@@ -91,7 +91,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            
+
             <!--Combobox Style-->
             <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
                 <Grid>
@@ -102,21 +102,26 @@
                     <Border
                           x:Name="Border" 
                           Grid.ColumnSpan="2"
-                          CornerRadius="5"
+                          CornerRadius="3"
+                          Margin="0 0 0 3"
                           Background="#FF3F3F3F"
-                          BorderThickness="0" />
+                          BorderThickness="0"/>
                     <Border 
                           Grid.Column="0"
-                          Margin="1" 
+                          CornerRadius="0" 
+                          Width="auto"
+                          Height="15"
                           Background="#FF3F3F3F" 
-                          BorderThickness="0">  
-                        <TextBlock HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"
+                          BorderThickness="0">
+                        <TextBlock x:Name="ComboboxContent"
                                    Foreground="White"
                                    FontSize="12"
-                                   Margin="10 0 0 0">Filter</TextBlock>
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center"
+                                   Margin="10 0 0 3"
+                                   Text="{Binding ElementName=DefaultContentCombobox,Path=Content}"/>
                     </Border>
-                    <Border x:Name="Filter"
+                    <Border x:Name="BorderFilterIcon"
                             Grid.Column="1"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
@@ -152,7 +157,8 @@
                                 Grid.Column="2" 
                                 Focusable="false"
                                 IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
-                                ClickMode="Press">
+                                ClickMode="Press" 
+                                Cursor="Hand">
                                 </ToggleButton>
                                 <ContentPresenter Name="ContentSite" IsHitTestVisible="False"  Content="{TemplateBinding SelectionBoxItem}"
                                 ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
@@ -274,26 +280,25 @@
                         Style="{StaticResource SecondButtonAddNowStyle}"
                         Click="btn_Addmore_Click"/>
 
-                <Button Content="Delete"
+                <!--<Button Content="Delete"
                 x:Name="btn_DeleteImage"
                 Visibility="Collapsed"
                 Style="{StaticResource SecondButtonAddNowStyle}"
-                Click="btn_DeleteImage_Click"/>
+                Click="btn_DeleteImage_Click"/>-->
             </StackPanel>
         </Border>
 
         <Border x:Name="BorderRightBar"
                 Grid.Row="1"
                 HorizontalAlignment="Right"
-                Margin="0 0 10 0">
+                Margin="0 0 25 0">
             <StackPanel x:Name="RightBar" Orientation="Horizontal"
                             Width="auto">
+                <Label Name="DefaultContentCombobox" Content="Filter" Visibility="Collapsed"></Label>
                 <ComboBox x:Name="ComboboxFilter"
                           Width="100"
                           Height="30"
-                          Margin="0 0 10 10"
-                          SelectionChanged="ComboboxFilter_SelectionChanged"
-                          Visibility="Collapsed">
+                          SelectionChanged="ComboboxFilter_SelectionChanged">
                     <ComboBoxItem>By Name &#8595;</ComboBoxItem>
                     <ComboBoxItem>By Date &#8595;</ComboBoxItem>
                 </ComboBox>
@@ -326,7 +331,7 @@
                   Margin="{Binding ElementName=BorderlistView, Path=Margin}"
                   BorderThickness="0"
                   IsSynchronizedWithCurrentItem="True">
-            <ListBox.Resources>
+            <ListView.Resources>
                 <Style TargetType="ScrollBar">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
                     <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -339,22 +344,52 @@
                         </Trigger>
                     </Style.Triggers>
                 </Style>
-            </ListBox.Resources>
+            </ListView.Resources>
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="Padding" Value="5" ></Setter>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                <Border Name="imgBorder"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="2"
+                                        Background="{TemplateBinding Background}">
+
+                                    <ContentPresenter Width="auto" Height="auto"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#40ffffff"></Setter>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#80ffffff"></Setter>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
 
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <virtualizingwrappanel:VirtualizingWrapPanel
-                        IsItemsHost="True"/>
+                        IsItemsHost="False"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 
             <ListView.ItemTemplate>
                 <DataTemplate x:Name="DatatemplateImage">
-                    <Grid Width="200" Height="150">
+                    <Grid Width="200" Height="120">
                         <Image x:Name="img" 
                                Source="{Binding path, Converter={StaticResource ImagePathToThumbnailImage}}" 
                                Panel.ZIndex="1" 
-                               Width="200" Height="200" MouseDown="Image_MouseDown"/>
+                               MouseDown="Image_MouseDown"
+                               MouseRightButtonDown="img_MouseRightButtonDown"
+                               Margin="8"
+                               Width="200" Height="120"/>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

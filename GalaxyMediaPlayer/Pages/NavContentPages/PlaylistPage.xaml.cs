@@ -237,5 +237,10 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 }
             }
         }
+
+        private void PageFrame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+
+        }
     }
 }

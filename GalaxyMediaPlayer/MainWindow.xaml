@@ -16,7 +16,7 @@
         MinWidth="960">
 
     <Grid Name="MainWindowGrid">
-        <Grid Background="Transparent">
+        <Grid Height="30" Background="Transparent" Panel.ZIndex="999" VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="auto"/>

@@ -43,7 +43,16 @@
     <Compile Update="Pages\PlaylistPagePages\Page1.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Pages\VideoPages\VideoPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControls\ConfirmDialog.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\ImageControls\ConfirmDeleteImageDialog.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\ImageControls\ImageRightClickDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="UserControls\HomePageControls\MostWatchMusic.xaml.cs">
@@ -114,7 +123,19 @@
     <Page Update="Pages\PlaylistPagePages\Page1.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Pages\VideoMediaPLayer.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\VideoPages\VideoPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="UserControls\ConfirmDialog.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\ImageControls\ConfirmDeleteImageDialog.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\ImageControls\ImageRightClickDialog.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControls\HomePageControls\MostWatchMusic.xaml">
@@ -136,9 +157,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Windows\SongMinimizedWindow.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Pages\VideoMediaPLayer.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

@@ -29,7 +29,6 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
         public MusicPlaylistPage()
         {
             InitializeComponent();
-
             playlists = new ObservableCollection<SongPlaylistModel>(PlaylistDatabaseAccess.LoadPlaylists());
 
             PlaylistListBox = playlistListBox;

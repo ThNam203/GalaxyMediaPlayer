@@ -85,7 +85,7 @@ namespace GalaxyMediaPlayer.Pages
 
         private void btnCloseApp_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+           
         }
 
         private void btnZoomIn_Click(object sender, RoutedEventArgs e)
@@ -145,7 +145,6 @@ namespace GalaxyMediaPlayer.Pages
 
         private void btnRotateRight_Click(object sender, RoutedEventArgs e)
         {
-            double left = Canvas.GetLeft(CanvasImg);
             Point center = new Point(OpenImg.ActualWidth / 2, OpenImg.ActualHeight / 2);
             Matrix m = OpenImg.RenderTransform.Value;
             m.RotateAt(90, center.X, center.Y);
@@ -191,6 +190,26 @@ namespace GalaxyMediaPlayer.Pages
                 matrix.Translate(translation.X, translation.Y);
                 OpenImg.RenderTransform = new MatrixTransform(matrix);
             }
+        }
+
+        private void PageOpenImage_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            PointWheel = new Point(OpenImg.ActualWidth / 2, OpenImg.ActualHeight / 2);
+
+            Matrix m = OpenImg.RenderTransform.Value;
+            if (e.Delta > 0 && ZoomScale * 1.1 <= 50)
+            {
+                m.ScaleAtPrepend(1.1, 1.1, PointWheel.X, PointWheel.Y);
+                ZoomScale *= 1.1;
+            }
+            else if (ZoomScale / 1.1 >= 0.1)
+            {
+                m.ScaleAtPrepend(1 / 1.1, 1 / 1.1, PointWheel.X, PointWheel.Y);
+                ZoomScale /= 1.1;
+            }
+            UpdatePercentageZooming();
+            tbPercentZooming.Text = PercentageZoomingString;
+            OpenImg.RenderTransform = new MatrixTransform(m);
         }
     }
 }
