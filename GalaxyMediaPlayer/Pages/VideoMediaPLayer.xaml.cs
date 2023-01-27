@@ -345,18 +345,6 @@ namespace GalaxyMediaPlayer.Pages
             timer.Start();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                System.Windows.Application.Current.Shutdown();
-            }
-            catch (Exception ex)
-            {
-                System.Windows.Forms.MessageBox.Show(ex.ToString());
-            }
-        }
-
         private void VideoPlayerGrid_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             if (fullSizeIsOn)
@@ -373,20 +361,6 @@ namespace GalaxyMediaPlayer.Pages
         {
             labelVideoTitle.Height = 40;
             VideoPlayerGrid.Height=70;
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            GalaxyMediaPlayer.MainWindow.GetWindow(this).WindowState = System.Windows.WindowState.Maximized;
-        }
-
-        private void Minimize_Button_Click(object sender, RoutedEventArgs e)
-        {
-            GalaxyMediaPlayer.MainWindow.GetWindow(this).WindowState = System.Windows.WindowState.Normal;
-        }
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            GalaxyMediaPlayer.MainWindow.GetWindow(this).WindowState = System.Windows.WindowState.Minimized;
         }
         private void btnSkip15Seconds_Click(object sender, RoutedEventArgs e)
         {
@@ -542,6 +516,28 @@ namespace GalaxyMediaPlayer.Pages
             {
                 System.Windows.Forms.Application.DoEvents();
             }
+        }
+
+        private void btnMinimizeApp_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.MainWindow.WindowState = WindowState.Minimized;
+        }
+
+        private void btnMaximizeApp_Click(object sender, RoutedEventArgs e)
+        {
+            if (Application.Current.MainWindow.WindowState == WindowState.Maximized)
+            {
+                Application.Current.MainWindow.WindowState = WindowState.Normal;
+            }
+            else
+            {
+                Application.Current.MainWindow.WindowState = WindowState.Maximized;
+            }
+        }
+
+        private void btnCloseApp_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }

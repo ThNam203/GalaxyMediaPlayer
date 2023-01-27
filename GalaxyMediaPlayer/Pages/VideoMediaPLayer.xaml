@@ -35,7 +35,7 @@
                     <SolidColorBrush Color="#FFE5D9D9" Opacity="0"/>
                 </ui:TextBox.Background>
             </ui:TextBox>
-
+            
 
         </Grid>
         <Grid x:Name="controlVideoGrid" 
@@ -48,6 +48,31 @@
                    VerticalAlignment="Top" FontFamily="Times New Roman" FontSize="16" RenderTransformOrigin="0.5,0.5" Background="Black" Foreground="White"
                  />
 
+            <StackPanel
+                MouseEnter="VideoPlayerGrid_MouseEnter"
+                MouseLeave="VideoPlayerGrid_MouseLeave" 
+                x:Name="StackPanel1" 
+                HorizontalAlignment="Right" Width="800" Orientation="Horizontal" 
+                FlowDirection="RightToLeft" Height="40" VerticalAlignment="Top" Background="Transparent"
+             >
+                <Button Name="btnCloseApp" 
+                            Click="btnCloseApp_Click"
+                            Style="{StaticResource AppControlButtonStyle}"
+                            Content="✕"/>
+
+                <Button Name="btnMaximizeApp"
+                            Click="btnMaximizeApp_Click"
+                            Style="{StaticResource AppControlButtonStyle}"
+                            Content="▭" />
+                
+                <Button Name="btnMinimizeApp"
+                            Click="btnMinimizeApp_Click"
+                            Style="{StaticResource AppControlButtonStyle}"
+                            Content="__"
+                            Margin="0 0 8 0"/>
+
+            </StackPanel>
+            
             <Button x:Name="Backward15seconds"
                     Style="{StaticResource btnMediaControlStyle}" 
                    Width="50" Height="50" Margin="250,200,0,200" 
