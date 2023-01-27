@@ -2,7 +2,6 @@
 using GalaxyMediaPlayer.Helpers;
 using GalaxyMediaPlayer.Windows;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -113,7 +112,6 @@ namespace GalaxyMediaPlayer.Pages
             {
                 MyMediaPlayer.SetPlaylistFromTempPlaylist();
                 MyMediaPlayer.PlayCurrentSong();
-                MyMediaPlayer.isSongPlaying = true;
             }
             else if (MyMediaPlayer.isSongPlaying)
             {

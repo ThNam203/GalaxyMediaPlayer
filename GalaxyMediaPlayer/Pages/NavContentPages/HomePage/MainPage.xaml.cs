@@ -50,9 +50,24 @@ namespace GalaxyMediaPlayer.Pages.HomePage
             if (mostListenedEntities.Count == 0) mostListenedTb.Visibility = System.Windows.Visibility.Collapsed;
         }
 
-        private void listboxItem_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void mostWatchedItem_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            
+            mostListenedListbox.SelectedIndex = -1;
+
+            if (e.ClickCount >= 2)
+            {
+
+            }
+        }
+
+        private void mostListenedItem_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            mostWatchListbox.SelectedIndex = 1;
+
+            if (e.ClickCount >= 2)
+            {
+                MyMediaPlayer.OpenAndPlay(mostListenedEntities[mostListenedListbox.SelectedIndex].Path);
+            }
         }
     }
 }

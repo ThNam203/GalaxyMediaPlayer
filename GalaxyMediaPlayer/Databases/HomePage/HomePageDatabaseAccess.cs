@@ -14,7 +14,7 @@ namespace GalaxyMediaPlayer.Databases.HomePage
         {
             using (IDbConnection connection = new SQLiteConnection(GetConnectionStr()))
             {
-                var output = connection.Query<Pages.HomePage.MainPage.MostWatchEntity>("select * from MostWatched");
+                var output = connection.Query<Pages.HomePage.MainPage.MostWatchEntity>("select * from MostWatched order by Count DESC");
                 return output.ToList();
             }
         }
@@ -23,7 +23,7 @@ namespace GalaxyMediaPlayer.Databases.HomePage
         {
             using (IDbConnection connection = new SQLiteConnection(GetConnectionStr()))
             {
-                var output = connection.Query<Pages.HomePage.MainPage.MostWatchEntity>("select * from MostListened");
+                var output = connection.Query<Pages.HomePage.MainPage.MostWatchEntity>("select * from MostListened order by Count DESC");
                 return output.ToList();
             }
         }

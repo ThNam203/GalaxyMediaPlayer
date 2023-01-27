@@ -68,7 +68,7 @@
                             Padding="0 8"
                             BorderBrush="Transparent"
                             BorderThickness="2"
-                            MouseDown="listboxItem_MouseDown">
+                            MouseDown="mostWatchedItem_MouseDown">
                             <StackPanel>
                                 <Image  Width="200" Height="100" Stretch="Uniform"
                                     Source="{Binding Path, Converter={StaticResource VideoPathToImageSource}}">
@@ -88,6 +88,7 @@
                         <DataTemplate.Triggers>
                             <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
                                 <Setter TargetName="border" Property="BorderBrush" Value="#219ebc"/>
+                                <Setter TargetName="border" Property="Background" Value="{DynamicResource brushLightAccent}"/>
                             </DataTrigger>
 
                             <MultiDataTrigger>
@@ -158,7 +159,7 @@
                             Padding="0 8"
                             BorderBrush="Transparent"
                             BorderThickness="2"
-                            MouseDown="listboxItem_MouseDown">
+                            MouseDown="mostListenedItem_MouseDown">
                             <StackPanel>
                                 <Image  Width="200" Height="100" Stretch="Uniform"
                                     Source="{Binding Path, Converter={StaticResource MusicPathToImageSource}}">
@@ -178,6 +179,7 @@
                         <DataTemplate.Triggers>
                             <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
                                 <Setter TargetName="border" Property="BorderBrush" Value="#219ebc"/>
+                                <Setter TargetName="border" Property="Background" Value="{DynamicResource brushLightAccent}"/>
                             </DataTrigger>
 
                             <MultiDataTrigger>
@@ -187,7 +189,6 @@
                                 </MultiDataTrigger.Conditions>
                                 <MultiDataTrigger.Setters>
                                     <Setter TargetName="border" Property="BorderBrush" Value="#8ecae6"/>
-                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource brushLightAccent}"/>
                                 </MultiDataTrigger.Setters>
                             </MultiDataTrigger>
                         </DataTemplate.Triggers>

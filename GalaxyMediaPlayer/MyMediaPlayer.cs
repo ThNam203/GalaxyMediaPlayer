@@ -42,7 +42,7 @@ namespace GalaxyMediaPlayer
         {
             mediaPlayer.MediaEnded += MediaPlayer_MediaEnded;
         }
-        private static void OpenAndPlay(string songPath)
+        public static void OpenAndPlay(string songPath)
         {
             // Nam: mediaPlayer.MediaOpen() wont invoke if it open the same songPath with the previous songPath
             // so we need to add a garbage songPath to open first
