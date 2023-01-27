@@ -334,6 +334,10 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 {
 
                 }
+                else if (entity.Type == EntityType.Video)
+                {
+                    MainWindow.Instance.MainFrame.Navigate(new VideoMediaPLayer(new List<string> { entity.Path }));
+                }
                 else if (entity.Type == EntityType.Folder)
                 {
                     DirectoryInfo di = new DirectoryInfo(entity.Path);

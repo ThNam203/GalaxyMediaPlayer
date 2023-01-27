@@ -1,29 +1,12 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using TagLib.Id3v2;
-using Wpf.Ui.Controls;
 using System.Windows.Threading;
-using System.Drawing;
 using System.IO;
-using Microsoft.VisualBasic.ApplicationServices;
-using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
-using System.Threading;
-using System.Windows.Media.Animation;
-using GalaxyMediaPlayer.Databases.VideoPage;
 
 namespace GalaxyMediaPlayer.Pages
 {
@@ -81,13 +64,20 @@ namespace GalaxyMediaPlayer.Pages
         List<string> subtitlePaths;
         int VideoPathIndex = 0;
         Thickness thickness = new Thickness(0, 40, 0, 60);
-        public VideoMediaPLayer(List<string> videoPath)
+
+        public VideoMediaPLayer(List<string> videoPath, int startIndex = 0)
         {
             InitializeComponent();
             videoPaths = new List<string>();
             this.videoPaths = videoPath;
+            VideoPathIndex = startIndex;
+
+            // Nam: if there is music playing, stop it
+            if (MyMediaPlayer.isSongPlaying) MyMediaPlayer.Pause();
+
             Load();
         }
+
         private void Load()
         {
             timer = new DispatcherTimer(); //H.Nam: DispatcherTimer for displaying video current position and subtitles
@@ -324,6 +314,10 @@ namespace GalaxyMediaPlayer.Pages
         {
             TimeSpan ts = media.NaturalDuration.TimeSpan;
             SliderSeek.Maximum = ts.TotalSeconds;
+
+            // Nam: update most watched in home page
+            GalaxyMediaPlayer.Databases.HomePage.HomePageDatabaseAccess.SaveDataOnWatchingVideo(videoPaths[VideoPathIndex]);
+
             timer.Start();
         }
 

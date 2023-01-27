@@ -1,5 +1,4 @@
-﻿using GalaxyMediaPlayer.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Dapper;
 using System.Configuration;
 using System.Data;
@@ -14,7 +13,7 @@ namespace GalaxyMediaPlayer.Databases.HomePage
         {
             using (IDbConnection connection = new SQLiteConnection(GetConnectionStr()))
             {
-                var output = connection.Query<Pages.HomePage.MainPage.MostWatchEntity>("select * from MostWatched order by Count DESC");
+                var output = connection.Query<Pages.HomePage.MainPage.MostWatchEntity>("select * from MostWatched order by Count DESC limit 10");
                 return output.ToList();
             }
         }
@@ -23,7 +22,7 @@ namespace GalaxyMediaPlayer.Databases.HomePage
         {
             using (IDbConnection connection = new SQLiteConnection(GetConnectionStr()))
             {
-                var output = connection.Query<Pages.HomePage.MainPage.MostWatchEntity>("select * from MostListened order by Count DESC");
+                var output = connection.Query<Pages.HomePage.MainPage.MostWatchEntity>("select * from MostListened order by Count DESC limit 10");
                 return output.ToList();
             }
         }

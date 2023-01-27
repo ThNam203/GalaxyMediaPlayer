@@ -52,22 +52,36 @@ namespace GalaxyMediaPlayer.Pages.HomePage
 
         private void mostWatchedItem_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            mostListenedListbox.SelectedIndex = -1;
+            mostListenedListbox.UnselectAll();
 
             if (e.ClickCount >= 2)
             {
-
+                MainWindow.Instance.MainFrame.Navigate(new VideoMediaPLayer(new System.Collections.Generic.List<string> { mostWatchedEntities[mostWatchListbox.SelectedIndex].Path }));
             }
         }
 
         private void mostListenedItem_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            mostWatchListbox.SelectedIndex = 1;
+            mostWatchListbox.UnselectAll();
 
             if (e.ClickCount >= 2)
             {
                 MyMediaPlayer.OpenAndPlay(mostListenedEntities[mostListenedListbox.SelectedIndex].Path);
             }
+        }
+
+        private void ScrollViewer_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            ScrollViewer scrollViewer = (ScrollViewer)sender;
+            if (e.Delta < 0)
+            {
+                scrollViewer.LineRight();
+            }
+            else
+            {
+                scrollViewer.LineLeft();
+            }
+            e.Handled = true;
         }
     }
 }

@@ -26,7 +26,14 @@
                     FontSize="16"
                     Margin="16 0 0 0"/>
 
-        <StackPanel Grid.Row="1" Margin="16">
+        <Grid Grid.Row="1" Margin="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            
             <TextBlock  Name="mostWatchedTb"
                         FontFamily="{StaticResource Raleway}"
                         Foreground="White"
@@ -34,6 +41,7 @@
                         Text="Most Watched"/>
             <ListBox
                 x:Name="mostWatchListbox"
+                Grid.Row="1"
                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
                 Background="{DynamicResource brushPrimary}"
@@ -117,96 +125,120 @@
                     </Style>
                 </ListBox.ItemContainerStyle>
             </ListBox>
-            
+
             <TextBlock  Name="mostListenedTb"
+                        Grid.Row="2"
                         FontFamily="{StaticResource Raleway}"
                         Foreground="White"
                         FontSize="13"
                         Text="Most Listened"/>
-            <ListBox
-                x:Name="mostListenedListbox"
-                ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                Background="{DynamicResource brushPrimary}"
-                Visibility="Visible"
-                BorderThickness="0"
-                SelectionMode="Extended"
-                Grid.ColumnSpan="2">
-                <ListBox.Resources>
+
+            <ScrollViewer
+                Grid.Row="3"
+                HorizontalScrollBarVisibility="Auto"
+                VerticalScrollBarVisibility="Disabled"
+                PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+                <ScrollViewer.Resources>
                     <Style TargetType="ScrollBar">
                         <Setter Property="SnapsToDevicePixels" Value="True"/>
                         <Setter Property="OverridesDefaultStyle" Value="true"/>
                         <Style.Triggers>
-                            <Trigger Property="Orientation" Value="Vertical">
-                                <Setter Property="Width" Value="10"/>
-                                <Setter Property="Height" Value="Auto" />
-                                <Setter Property="Margin" Value="8 24" />
-                                <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                            <Trigger Property="Orientation" Value="Horizontal">
+                                <Setter Property="Width" Value="200"/>
+                                <Setter Property="Height" Value="10" />
+                                <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
-                </ListBox.Resources>
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Border 
-                            Name="border"
-                            Margin="8 16"
-                            Padding="0 8"
-                            BorderBrush="Transparent"
-                            BorderThickness="2"
-                            MouseDown="mostListenedItem_MouseDown">
-                            <StackPanel>
-                                <Image  Width="200" Height="100" Stretch="Uniform"
-                                    Source="{Binding Path, Converter={StaticResource MusicPathToImageSource}}">
-                                </Image>
+                </ScrollViewer.Resources>
+                <ListBox
+                    x:Name="mostListenedListbox"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                    ScrollViewer.CanContentScroll="True"
+                    Background="{DynamicResource brushPrimary}"
+                    Visibility="Visible"
+                    BorderThickness="0"
+                    SelectionMode="Single"
+                    Grid.ColumnSpan="2">
+                        <ListBox.Resources>
+                            <Style TargetType="ScrollBar">
+                                <Setter Property="SnapsToDevicePixels" Value="True"/>
+                                <Setter Property="OverridesDefaultStyle" Value="true"/>
+                                <Style.Triggers>
+                                    <Trigger Property="Orientation" Value="Vertical">
+                                        <Setter Property="Width" Value="10"/>
+                                        <Setter Property="Height" Value="Auto" />
+                                        <Setter Property="Margin" Value="8 24" />
+                                        <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.Resources>
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border 
+                                Name="border"
+                                Margin="8 16"
+                                Padding="0 8"
+                                Height="150"
+                                BorderBrush="Transparent"
+                                BorderThickness="2"
+                                MouseDown="mostListenedItem_MouseDown">
+                                    <StackPanel>
+                                        <Image  Width="200" Height="100" Stretch="Uniform"
+                                        Source="{Binding Path, Converter={StaticResource MusicPathToImageSource}}">
+                                        </Image>
 
-                                <TextBlock  FontSize="11"
-                                        Width="150"
-                                        Margin="4 4 0 0"
-                                        Background="Transparent"
-                                        Foreground="{DynamicResource brushSecondary}"
-                                        HorizontalAlignment="Center"
-                                        Text="{Binding Title}"
-                                        TextAlignment="Center"
-                                        TextTrimming="CharacterEllipsis"/>
-                            </StackPanel>
-                        </Border>
-                        <DataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
-                                <Setter TargetName="border" Property="BorderBrush" Value="#219ebc"/>
-                                <Setter TargetName="border" Property="Background" Value="{DynamicResource brushLightAccent}"/>
-                            </DataTrigger>
+                                        <TextBlock  FontSize="11"
+                                            Width="150"
+                                            Margin="4 4 0 0"
+                                            Background="Transparent"
+                                            Foreground="{DynamicResource brushSecondary}"
+                                            HorizontalAlignment="Center"
+                                            Text="{Binding Title}"
+                                            TextAlignment="Center"
+                                            TextTrimming="CharacterEllipsis"/>
+                                    </StackPanel>
+                                </Border>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
+                                        <Setter TargetName="border" Property="BorderBrush" Value="#219ebc"/>
+                                        <Setter TargetName="border" Property="Background" Value="{DynamicResource brushLightAccent}"/>
+                                    </DataTrigger>
 
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="False"/>
-                                    <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsMouseOver}" Value="True"/>
-                                </MultiDataTrigger.Conditions>
-                                <MultiDataTrigger.Setters>
-                                    <Setter TargetName="border" Property="BorderBrush" Value="#8ecae6"/>
-                                </MultiDataTrigger.Setters>
-                            </MultiDataTrigger>
-                        </DataTemplate.Triggers>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="IsSelected" Value="{Binding Content.IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Self}}"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="ListBoxItem">
-                                    <ContentPresenter/>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ListBox.ItemContainerStyle>
-            </ListBox>
-        </StackPanel>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="False"/>
+                                            <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsMouseOver}" Value="True"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.Setters>
+                                            <Setter TargetName="border" Property="BorderBrush" Value="#8ecae6"/>
+                                        </MultiDataTrigger.Setters>
+                                    </MultiDataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="IsSelected" Value="{Binding Content.IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Self}}"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListBoxItem">
+                                            <ContentPresenter/>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                </ListBox>
+            </ScrollViewer>
+            
+        </Grid>
     </Grid>
 </Page>
