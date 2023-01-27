@@ -85,7 +85,7 @@ namespace GalaxyMediaPlayer.Pages
 
         private void btnCloseApp_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+           
         }
 
         private void btnZoomIn_Click(object sender, RoutedEventArgs e)

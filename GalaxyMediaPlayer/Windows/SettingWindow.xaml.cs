@@ -44,7 +44,11 @@ namespace GalaxyMediaPlayer.Windows
                 videoSettingPanel.Visibility = Visibility.Visible;
                 videoLabel.BorderBrush = Brushes.White;
             }
-            else throw new NotImplementedException();
+            else
+            {
+                videoSettingPanel.Visibility = Visibility.Visible;
+                videoLabel.BorderBrush = Brushes.White;
+            }
         }
 
         private void SetUpMusicSetting()
@@ -77,6 +81,11 @@ namespace GalaxyMediaPlayer.Windows
             }
         }
 
+        private void SetUpImageSetting()
+        {
+            // Press F, we dont have fucking what
+        }
+
         private void btnCloseApp_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;
@@ -105,6 +114,7 @@ namespace GalaxyMediaPlayer.Windows
 
             videoSettingPanel.Visibility = Visibility.Collapsed;
             musicSettingPanel.Visibility = Visibility.Visible;
+            imageSettingPanel.Visibility = Visibility.Collapsed;
         }
 
         private void videoLabel_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -115,6 +125,7 @@ namespace GalaxyMediaPlayer.Windows
 
             videoSettingPanel.Visibility = Visibility.Visible;
             musicSettingPanel.Visibility = Visibility.Collapsed;
+            imageSettingPanel.Visibility = Visibility.Collapsed;
         }
 
         private void imageLabel_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -125,6 +136,7 @@ namespace GalaxyMediaPlayer.Windows
 
             videoSettingPanel.Visibility = Visibility.Collapsed;
             musicSettingPanel.Visibility = Visibility.Collapsed;
+            imageSettingPanel.Visibility = Visibility.Visible;
         }
 
         private void musicDelBtn_Click(object sender, RoutedEventArgs e)
@@ -175,6 +187,16 @@ namespace GalaxyMediaPlayer.Windows
             }
 
             if (videoFolderPaths.Count > 0) emptyVideoTb.Visibility = Visibility.Collapsed;
+        }
+
+        private void imageDelBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void addImageFolderBtn_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

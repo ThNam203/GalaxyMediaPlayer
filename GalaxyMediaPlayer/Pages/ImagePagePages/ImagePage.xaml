@@ -376,7 +376,7 @@
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <virtualizingwrappanel:VirtualizingWrapPanel
-                        IsItemsHost="True"/>
+                        IsItemsHost="False"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 

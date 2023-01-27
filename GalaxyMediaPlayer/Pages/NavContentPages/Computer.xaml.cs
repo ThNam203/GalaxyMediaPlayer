@@ -166,6 +166,8 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
         private void BackBtn_Click(object sender, RoutedEventArgs e)
         {
+            int idx = MainPage.currentMusicBrowsingFolder.LastIndexOf(pathStack.Peek());
+            MainPage.currentMusicBrowsingFolder = MainPage.currentMusicBrowsingFolder.Remove(idx, pathStack.Peek().Length);
             pathStack.Pop();
 
             if (pathStack.Count == 0)
@@ -178,6 +180,8 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             else
             {
                 string pathToBack = pathStack.Peek();
+                idx = MainPage.currentMusicBrowsingFolder.LastIndexOf(pathToBack);
+                MainPage.currentMusicBrowsingFolder = MainPage.currentMusicBrowsingFolder.Remove(idx, pathToBack.Length);
                 DirectoryInfo di = new DirectoryInfo(pathToBack);
                 OpenFolder(di, true);
             }
@@ -188,7 +192,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         private void OpenFolder(DirectoryInfo di, bool IsOnBackButtonPress)
         {
             MainPage.currentMusicBrowsingFolder += di.FullName;
-            if (!MyMediaPlayer.isSongOpened) MyMediaPlayer.pathCurrentlyInUse = di.FullName;
+            //if (!MyMediaPlayer.isSongOpened) MyMediaPlayer.pathCurrentlyInUse = MainPage.currentMusicBrowsingFolder;
 
             if (!IsOnBackButtonPress)
             {

@@ -204,6 +204,7 @@ namespace GalaxyMediaPlayer
             {
                 positionInPlaylist++;
                 if (positionInPlaylist < playlist.Count) PlayCurrentSong();
+                else MainPage.Instance.StopMusic();
             }
         }
     }

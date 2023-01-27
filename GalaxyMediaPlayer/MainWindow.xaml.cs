@@ -1,5 +1,6 @@
 ﻿using GalaxyMediaPlayer.Pages;
 using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -40,11 +41,12 @@ namespace GalaxyMediaPlayer
         {
             Instance = this;
             InitializeComponent();
-            MainFrame.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
 
             // Nam: disable 'backspace' button can go back in frame's stack
             NavigationCommands.BrowseBack.InputGestures.Clear();
             NavigationCommands.BrowseForward.InputGestures.Clear();
+
+            MainFrame.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
         }
 
         private void btnMinimizeApp_Click(object sender, RoutedEventArgs e)

@@ -27,6 +27,7 @@ using System.Net.Mime;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
+
 namespace GalaxyMediaPlayer.Pages
 {
     /// <summary>
@@ -97,7 +98,6 @@ namespace GalaxyMediaPlayer.Pages
             if (e.ClickCount == 1)
             {
                 Image img = (Image)sender;
-                
             }
             else if (e.ClickCount >= 2)
             {
@@ -146,6 +146,7 @@ namespace GalaxyMediaPlayer.Pages
                 foreach (ImageModel model in list)
                 {
                     listViewImage.Items.Add(model);
+
                 }
             }
             else if (sortIndex == 1)

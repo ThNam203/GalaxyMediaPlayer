@@ -34,7 +34,6 @@ namespace GalaxyMediaPlayer.Databases.SongPlaylist
                     connection
                         .Execute("insert into PlaylistSongs (PlaylistId, Id, Name, Album, Artist, Performer, Length, Path) " +
                         "values (@PlaylistId, @Id, @Name, @Album, @Artist, @Performer, @Length, @Path)", songInfor);
-
                     return 1;
                 }
 

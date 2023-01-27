@@ -54,7 +54,6 @@ namespace GalaxyMediaPlayer
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-
     public enum EntityType
     {
         Folder,

@@ -267,5 +267,102 @@
                 </Button.Style>
             </Button>
         </StackPanel>
+
+        <StackPanel Grid.Row="2"
+                    Name="imageSettingPanel"
+                    Visibility="Collapsed">
+            <Grid Margin="0 50 0 0">
+                <ListView 
+                  Name="imageListView"
+                  Width="300"
+                  Height="200"
+                  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                  BorderThickness="0"
+                  Background="Transparent">
+                    <ListView.Resources>
+                        <Style TargetType="ScrollBar">
+                            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}"/>
+                            <Setter Property="Width" Value="10"/>
+                            <Setter Property="Height" Value="150"/>
+                            <Setter Property="Margin" Value="8 0 0 0"/>
+                            <Setter Property="OverridesDefaultStyle" Value="True"/>
+                        </Style>
+                    </ListView.Resources>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListViewItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                        <Grid Height="25" x:Name="Bg" Background="#6c757d" SnapsToDevicePixels="true">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="265"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Border Padding="16 0 0 0" Grid.Column="0">
+                                                <ContentPresenter TextBlock.Foreground="White" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                            </Border>
+                                            <Button Name="imageDelBtn" Click="imageDelBtn_Click" Visibility="Hidden" Grid.Column="1" Width="23" Height="23" Margin="6 0 0 0">
+                                                <Button.Style>
+                                                    <Style TargetType="Button">
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate>
+                                                                    <Border Name="border" Padding="4" CornerRadius="3">
+                                                                        <Image Source="/Resources/Icons/trash_bin.png"/>
+                                                                    </Border>
+                                                                    <ControlTemplate.Triggers>
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter TargetName="border" Property="Background" Value="#adb5bd"/>
+                                                                        </Trigger>
+                                                                    </ControlTemplate.Triggers>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" TargetName="Bg" Value="#8d99ae"/>
+                                                <Setter TargetName="imageDelBtn" Property="Visibility" Value="Visible"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+
+                <TextBlock Name="emptyImageTb" Margin="0 0 0 8" Foreground="White" Width="250" Height="30" TextWrapping="Wrap" TextAlignment="Center">
+                    Add folder to easily track your images
+                </TextBlock>
+            </Grid>
+
+            <Button Name="addImageFolderBtn" Width="135" HorizontalAlignment="Right" Margin="0 40 75 0" Click="addImageFolderBtn_Click">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Style.Setters>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Border Background="#8d99ae">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Path Margin="10" Stroke="White" Data="M0,5 H10 M5,5 V10Z"  StrokeThickness="2" Height="10" Width="10" />
+                                                <TextBlock Foreground="White"
+                                                   FontSize="12"
+                                                   Text="Add Image Folder"
+                                                   VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style.Setters>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </StackPanel>
     </Grid>
 </Window>

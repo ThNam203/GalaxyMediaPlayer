@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using GalaxyMediaPlayer.Databases.HomePage;
 
 namespace GalaxyMediaPlayer.Pages
 {
@@ -47,6 +48,8 @@ namespace GalaxyMediaPlayer.Pages
             // Nam: disable 'backspace' button can go back in frame's stack
             NavigationCommands.BrowseBack.InputGestures.Clear();
             NavigationCommands.BrowseForward.InputGestures.Clear();
+
+            navButtonsListBox.SelectedIndex = 0;
         }
 
         private void MediaPlayer_MediaOpened(object? sender, EventArgs e)
@@ -54,6 +57,9 @@ namespace GalaxyMediaPlayer.Pages
             MyMediaPlayer.isSongOpened = true;
             MyMediaPlayer.isSongPlaying = true;
             totalTimeInSecond = MyMediaPlayer.GetTotalTimeInSecond();
+
+            // Nam: keeping track of most listened song
+            HomePageDatabaseAccess.SaveDataOnListeningMusic(Uri.UnescapeDataString(MyMediaPlayer.mediaPlayer.Source.AbsolutePath));
 
             SongSliderPanel.Visibility = Visibility.Visible;
 
@@ -301,10 +307,12 @@ namespace GalaxyMediaPlayer.Pages
                 btnPlayPause.Background.Opacity = 1;
                 btnPrevious.Background.Opacity = opacityNotActiveValue;
                 btnNext.Background.Opacity = opacityNotActiveValue;
+                btnStop.Background.Opacity = opacityNotActiveValue;
 
                 btnPlayPause.IsEnabled = true;
                 btnPrevious.IsEnabled = false;
                 btnNext.IsEnabled = false;
+                btnStop.IsEnabled = false;
             }
         }
 
@@ -361,6 +369,11 @@ namespace GalaxyMediaPlayer.Pages
         }
 
         private void btnStop_Click(object sender, RoutedEventArgs e)
+        {
+            StopMusic();
+        }
+
+        public void StopMusic()
         {
             MyMediaPlayer.Stop();
             SongInfoDisplayGrid.Visibility = Visibility.Collapsed;
@@ -479,11 +492,22 @@ namespace GalaxyMediaPlayer.Pages
                 if (p.Title == "PlaylistPage") currentMusicBrowsingFolder = p.Title;
                 else if (p.Title == "MusicPage") currentMusicBrowsingFolder = p.Title;
                 else if (p.Title == "ComputerBrowse") currentMusicBrowsingFolder = p.Title;
+
+                if (p.Title == "MusicDetailPage")
+                {
+                    ActivateControlButtons();
+                } else
+                {
+                    ChangeButtonsViewOnOpenFolder(true);
+                    ChangeAdditionControlVisibilityInInforGrid(true);
+                }
             }
+        }
 
+        private void NavButton_Selected(object sender, RoutedEventArgs e)
+        {
+           ContentFrame.Navigate(new Uri("/Pages/VideoMediaPlayerPages/Page.xaml", UriKind.Relative));
 
-            ChangeButtonsViewOnOpenFolder(true);
-            ChangeAdditionControlVisibilityInInforGrid(true);
         }
     }
 }
