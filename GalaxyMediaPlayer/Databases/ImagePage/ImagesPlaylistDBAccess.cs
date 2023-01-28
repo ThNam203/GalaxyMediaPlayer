@@ -6,27 +6,29 @@ using System.Data;
 using System.Data.SQLite;
 using System.Linq;
 
+
 namespace GalaxyMediaPlayer.Databases.ImagePage
 {
-    public class ImagesDBAccess
+    public class ImagesPlaylistDBAccess
     {
-        public static List<ImageModel> LoadImageList()
-        {
-            using(IDbConnection connStr = new SQLiteConnection(GetConnectionStr()))
-            {
-                var output = connStr.Query<ImageModel>("select * from ImagesTable");
-                return output.ToList();
-            }    
-        }
-
-        public static int SaveImage(ImageModel newImage)
+        public static List<ImagePlaylistModel> LoadImagePlayList()
         {
             using (IDbConnection connStr = new SQLiteConnection(GetConnectionStr()))
             {
-                bool isExisted = connStr.ExecuteScalar<bool>("select count(1) from ImagesTable where Id=@Id", newImage);
+                var output = connStr.Query<ImagePlaylistModel>("select * from ImagePlaylistTable");
+                return output.ToList();
+            }
+        }
+
+        public static int SaveImagePlaylist(ImagePlaylistModel newImagePlaylist)
+        {
+            using (IDbConnection connStr = new SQLiteConnection(GetConnectionStr()))
+            {
+                bool isExisted = connStr.ExecuteScalar<bool>("select count(1) from ImagePlaylistTable where Id=@Id", newImagePlaylist);
+
                 if (!isExisted)
                 {
-                    int rowAffected = connStr.Execute("insert into ImagesTable (Id,Path, DateCreated) values (@Id, @path, @dateCreated)", newImage);
+                    int rowAffected = connStr.Execute("insert into ImagePlaylistTable (Id, PlaylistName) values (@Id, @PlaylistName)", newImagePlaylist);
                     return rowAffected;
                 }
                 else
@@ -34,11 +36,11 @@ namespace GalaxyMediaPlayer.Databases.ImagePage
             }
         }
 
-        public static int DeleteImage(ImageModel newImage)
+        public static int DeleteImagePlaylist(ImagePlaylistModel newImagePlaylist)
         {
             using (IDbConnection connStr = new SQLiteConnection(GetConnectionStr()))
             {
-                int rowAffected = connStr.Execute("Delete from ImagesTable where Id=@Id", newImage);
+                int rowAffected = connStr.Execute("Delete from ImagePlaylistTable where Id=@Id", newImagePlaylist);
                 return rowAffected;
             }
         }

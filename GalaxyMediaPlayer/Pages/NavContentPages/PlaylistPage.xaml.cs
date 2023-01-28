@@ -76,7 +76,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             showVideosPlaylistsBtn.BorderBrush = System.Windows.Media.Brushes.Transparent;
 
             currentPlaylistType = PlaylistPageType.Image;
-            PageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/Page1.xaml", UriKind.Relative));
+            PageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/ImagePlaylistPage.xaml", UriKind.Relative));
         }
 
         // Show rename, delete table
