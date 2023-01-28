@@ -55,6 +55,13 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             else
             {
                 string folderPath = pathStack.Peek();
+
+                Stack<string> temp = new Stack<string>(pathStack);
+                temp.Pop();
+                Stack<string> reverseTemp = new Stack<string>(temp);
+                while (temp.Count > 0) reverseTemp.Push(temp.Pop());
+                while (reverseTemp.Count > 0) MainPage.currentMusicBrowsingFolder += reverseTemp.Pop();
+
                 OpenFolder(new DirectoryInfo(folderPath), false);
             }
 
@@ -180,8 +187,17 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             else
             {
                 string pathToBack = pathStack.Peek();
-                idx = MainPage.currentMusicBrowsingFolder.LastIndexOf(pathToBack);
-                MainPage.currentMusicBrowsingFolder = MainPage.currentMusicBrowsingFolder.Remove(idx, pathToBack.Length);
+
+                try
+                {
+                    idx = MainPage.currentMusicBrowsingFolder.LastIndexOf(pathToBack);
+                    MainPage.currentMusicBrowsingFolder = MainPage.currentMusicBrowsingFolder.Remove(idx, pathToBack.Length);
+                }
+                catch (Exception)
+                {
+                    MainWindow.ShowCustomMessageBoxInMiddle(new UserControls.ShowMessageControl("Error", "Something is wrong, you can restart the software"));
+                }
+
                 DirectoryInfo di = new DirectoryInfo(pathToBack);
                 OpenFolder(di, true);
             }
@@ -200,6 +216,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 // if the new folderPath is the same at the peek pathStack, we won't add it
                 if (pathStack.Count == 0 || pathStack.Peek() != di.FullName) pathStack.Push(di.FullName);
                 if (pathStack.Count > 0) BackBtn.Visibility = Visibility.Visible;
+
                 // done
             }
 
