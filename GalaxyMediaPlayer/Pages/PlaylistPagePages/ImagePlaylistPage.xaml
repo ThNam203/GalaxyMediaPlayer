@@ -48,12 +48,12 @@
                 CornerRadius="10"
                 Margin="10">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock Margin="0 0 0 12" Foreground="White" Width="300" Height="auto" TextWrapping="Wrap" TextAlignment="Center">
-                    Add images to have a nice look on them!
+                <TextBlock Margin="0 0 0 30" Foreground="White" Width="300" Height="auto" TextWrapping="Wrap" TextAlignment="Center">
+                    Create new playlist to store your favourite images!
                 </TextBlock>
-                <Button Content="Add now"
+                <Button Content="New Playlist"
                     Style="{StaticResource FirstButtonAddNowStyle}"
-                    Click="Btn_AddNow_Click"/>
+                    Click="Btn_NewPlaylist_Click"/>
             </StackPanel>
         </Border>
         <ListBox

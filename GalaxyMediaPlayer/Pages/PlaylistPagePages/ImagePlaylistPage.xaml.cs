@@ -53,7 +53,7 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             ListBoxImagePlaylist.Visibility = Visibility.Visible;
         }
 
-        private void Btn_AddNow_Click(object sender, RoutedEventArgs e)
+        private void Btn_NewPlaylist_Click(object sender, RoutedEventArgs e)
         {
             NewPlaylistControl newPlaylistControl = new NewPlaylistControl(AddNewImagePlaylist);
             MainWindow.ShowCustomMessageBoxInMiddle(newPlaylistControl);

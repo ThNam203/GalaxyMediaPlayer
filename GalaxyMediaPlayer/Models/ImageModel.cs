@@ -8,6 +8,18 @@ namespace GalaxyMediaPlayer.Models
 {
     public class ImageModel
     {
+        private string _id;
+        public string Id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                _id = value;
+            }
+        }
         private string _path = "";
         public string path { get { return _path; } set { _path = value; } }
 
@@ -27,13 +39,22 @@ namespace GalaxyMediaPlayer.Models
 
         public ImageModel()
         {
-            path = "";
-            dateCreated = "";
+            _id = Guid.NewGuid().ToString();
+            _path = "";
+            _dateCreated = "";
         }
 
         public ImageModel(string fileName, string date)
         {
-            path = fileName;
+            _id = Guid.NewGuid().ToString();
+            _path = fileName;
+            dateCreated = date;
+        }
+
+        public ImageModel(string id ,string fileName, string date)
+        {
+            _id = id;
+            _path = fileName;
             dateCreated = date;
         }
 
