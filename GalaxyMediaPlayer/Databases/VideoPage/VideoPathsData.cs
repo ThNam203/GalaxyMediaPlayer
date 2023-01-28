@@ -19,7 +19,7 @@ namespace GalaxyMediaPlayer.Databases.VideoPage
 
     public class VideoPaths
     {
-        static string fileLocation = AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\VideoPath.xml";
+         string fileLocation = AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\VideoPath.xml";
         public XmlElement root;
 
         XmlDocument xmlDocument = new XmlDocument();
@@ -30,6 +30,13 @@ namespace GalaxyMediaPlayer.Databases.VideoPage
             root = xmlDocument.DocumentElement;
             CreateThumbnailFolderIfNotExist();
         }
+        public VideoPaths(string playlistName)
+        {
+            this.fileLocation = AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\"+playlistName.Trim()+".xml";
+            root = xmlDocument.DocumentElement;
+            CreateThumbnailFolderIfNotExist();
+        }
+
         public void AddPath(string path)
         {
             XmlElement xml = xmlDocument.CreateElement("link");

@@ -66,7 +66,8 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             showImagesPlaylistsBtn.BorderBrush = System.Windows.Media.Brushes.Transparent;
 
             currentPlaylistType = PlaylistPageType.Video;
-            PageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/Page1.xaml", UriKind.Relative));
+            
+            PageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/VideoPlaylistPage.xaml", UriKind.Relative));
         }
 
         private void showImagesPlaylistsBtn_MouseDown(object sender, MouseButtonEventArgs e)
