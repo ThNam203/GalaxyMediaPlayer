@@ -154,12 +154,12 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         private void AddNewImagePlaylist(string PlaylistName)
         {
             ImagePlaylistModel imagePlaylistModel = new ImagePlaylistModel(PlaylistName);
-            PlaylistPagePages.ImagePlaylistPage.ImagesPlaylist.Add(imagePlaylistModel);
+            PlaylistPagePages.ImagePlaylistPage.ImagePlaylists.Add(imagePlaylistModel);
             PlaylistPagePages.ImagePlaylistPage.listBoxImagePlaylist.Items.Add(imagePlaylistModel);
 
             ImagesPlaylistDBAccess.SaveImagePlaylist(imagePlaylistModel);
             MainWindow.ClearAllMessageBox();
-            if (PlaylistPagePages.ImagePlaylistPage.ImagesPlaylist.Count > 0)
+            if (PlaylistPagePages.ImagePlaylistPage.ImagePlaylists.Count > 0)
             {
                 PlaylistPagePages.ImagePlaylistPage.BorderListView.Visibility = Visibility.Collapsed;
                 PlaylistPagePages.ImagePlaylistPage.listBoxImagePlaylist.Visibility = Visibility.Visible;

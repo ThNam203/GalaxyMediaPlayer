@@ -1,7 +1,9 @@
 ﻿using GalaxyMediaPlayer.Databases.ImagePage;
+using GalaxyMediaPlayer.Databases.SongPlaylist;
 using GalaxyMediaPlayer.Models;
 using GalaxyMediaPlayer.Pages.NavContentPages;
 using GalaxyMediaPlayer.UserControls;
+using GalaxyMediaPlayer.UserControls.PlaylistControls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -26,7 +28,7 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
     /// </summary>
     public partial class ImagePlaylistPage : Page
     {
-        public static ObservableCollection<ImagePlaylistModel> ImagesPlaylist;
+        public static ObservableCollection<ImagePlaylistModel> ImagePlaylists;
         public static ListView ListViewImage;
         public static ListBox listBoxImagePlaylist;
         public static Border BorderListView;
@@ -37,14 +39,14 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             listBoxImagePlaylist = ListBoxImagePlaylist;
             ListViewImage = listViewImage;
             BorderListView = BorderlistView;
-            ImagesPlaylist = new ObservableCollection<ImagePlaylistModel>(ImagesPlaylistDBAccess.LoadImagePlayList());
+            ImagePlaylists = new ObservableCollection<ImagePlaylistModel>(ImagesPlaylistDBAccess.LoadImagePlayList());
 
-            foreach(ImagePlaylistModel imagePlaylistModel in ImagesPlaylist)
+            foreach(ImagePlaylistModel imagePlaylistModel in ImagePlaylists)
             {
                 ListBoxImagePlaylist.Items.Add(imagePlaylistModel);
             }
 
-            if(ImagesPlaylist.Count > 0)
+            if(ImagePlaylists.Count > 0)
             {
                 ShowButtonWhenHaveImagePlaylist();
             }
@@ -83,12 +85,12 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
         private void AddNewImagePlaylist(string PlaylistName)
         {
             ImagePlaylistModel imagePlaylistModel = new ImagePlaylistModel(PlaylistName);
-            ImagesPlaylist.Add(imagePlaylistModel);
+            ImagePlaylists.Add(imagePlaylistModel);
             ListBoxImagePlaylist.Items.Add(imagePlaylistModel);
 
             ImagesPlaylistDBAccess.SaveImagePlaylist(imagePlaylistModel);
             MainWindow.ClearAllMessageBox();
-            if (ImagesPlaylist.Count > 0)
+            if (ImagePlaylists.Count > 0)
             {
                 ShowButtonWhenHaveImagePlaylist();
             }
@@ -120,7 +122,66 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
 
         private void listBoxItem_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
+            ImagePlaylistModel? playlist;
+            playlist = ListBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
 
+            if (playlist != null)
+            {
+                PlaylistRightClickDialog dialog = new PlaylistRightClickDialog(
+                    onRenameButtonClick: RenameImagePlaylist,
+                    onDeleteButtonClick: RemoveImagePlaylist,
+                    currentName: playlist.PlaylistName);
+
+                int left = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).X);
+                int top = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).Y);
+                MainWindow.ShowCustomMessageBox(dialog, left: left, top: top);
+                e.Handled = true;
+            }
+        }
+
+        private void RemoveImagePlaylist()
+        {
+            ImagePlaylistModel? playlist;
+            playlist = ListBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
+
+            if (playlist != null)
+            {
+                ImagePlaylists.Remove(playlist);
+                ListBoxImagePlaylist.Items.Remove(playlist);
+                ImagesPlaylistDBAccess.DeleteImagePlaylist(playlist);
+            }
+
+            if (ImagePlaylists.Count <= 0)
+            {
+                ShowButtonWhenDoNotHaveImagePlaylist();
+            }
+        }
+
+        private void RenameImagePlaylist(string newName)
+        {
+            ImagePlaylistModel? playlist;
+            playlist = ListBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
+
+            if (playlist != null)
+            {
+                ImagePlaylistModel renamedPlaylist = new ImagePlaylistModel(playlist);
+                renamedPlaylist.PlaylistName = newName;
+
+
+                ImagesPlaylistDBAccess.RenameImagePlaylist(renamedPlaylist);
+
+                for (int i = 0; i < ImagePlaylists.Count; i++)
+                {
+                    if (playlist.Id == ImagePlaylists[i].Id)
+                    {
+                        ImagePlaylists.RemoveAt(i);
+                        ListBoxImagePlaylist.Items.RemoveAt(i);
+                        ImagePlaylists.Insert(i, renamedPlaylist);
+                        ListBoxImagePlaylist.Items.Insert(i, ImagePlaylists[i]);
+                        break;
+                    }
+                }
+            }
         }
 
         private void img_MouseDown(object sender, MouseButtonEventArgs e)

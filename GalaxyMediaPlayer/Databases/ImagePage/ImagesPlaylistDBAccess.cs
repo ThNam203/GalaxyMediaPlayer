@@ -37,11 +37,21 @@ namespace GalaxyMediaPlayer.Databases.ImagePage
             }
         }
 
-        public static int DeleteImagePlaylist(ImagePlaylistModel newImagePlaylist)
+        public static int DeleteImagePlaylist(ImagePlaylistModel ImagePlaylist)
         {
             using (IDbConnection connStr = new SQLiteConnection(GetConnectionStr()))
             {
-                int rowAffected = connStr.Execute("Delete from ImagePlaylistTable where Id=@Id", newImagePlaylist);
+                connStr.Execute("Delete from ImageInPlaylistTable where PlaylistId=@Id", ImagePlaylist);
+                int rowAffected = connStr.Execute("Delete from ImagePlaylistTable where Id=@Id", ImagePlaylist);
+                return rowAffected;
+            }
+        }
+
+        public static int RenameImagePlaylist(ImagePlaylistModel newPlaylist)
+        {
+            using (IDbConnection connection = new SQLiteConnection(GetConnectionStr()))
+            {
+                int rowAffected = connection.Execute("update ImagePlaylistTable set PlaylistName=@PlaylistName where Id=@Id", newPlaylist);
                 return rowAffected;
             }
         }
