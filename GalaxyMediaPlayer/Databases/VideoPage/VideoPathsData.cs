@@ -13,28 +13,24 @@ using MediaToolkit.Options;
 using MediaToolkit;
 using System.IO;
 using System.DirectoryServices.ActiveDirectory;
+using static ScrapySharp.Core.Token;
 
 namespace GalaxyMediaPlayer.Databases.VideoPage
 {
 
     public class VideoPaths
     {
-         string fileLocation = AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\VideoPath.xml";
+        string fileLocation = AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\VideoPath.xml";
         public XmlElement root;
-
         XmlDocument xmlDocument = new XmlDocument();
-
-        public VideoPaths()
+        public string playlistName { get; set; }
+        public VideoPaths(string fileLocation)
         {
-            xmlDocument.Load(fileLocation);
+            this.fileLocation = fileLocation.Trim();
+            xmlDocument.Load(this.fileLocation);
             root = xmlDocument.DocumentElement;
             CreateThumbnailFolderIfNotExist();
-        }
-        public VideoPaths(string playlistName)
-        {
-            this.fileLocation = AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\"+playlistName.Trim()+".xml";
-            root = xmlDocument.DocumentElement;
-            CreateThumbnailFolderIfNotExist();
+            playlistName = System.IO.Path.GetFileNameWithoutExtension(fileLocation);
         }
 
         public void AddPath(string path)
@@ -59,7 +55,6 @@ namespace GalaxyMediaPlayer.Databases.VideoPage
         public bool IsEmpty()
         {
             return root.ChildNodes.Count == 0;
-
         }
         public int Count()
         {
@@ -74,6 +69,17 @@ namespace GalaxyMediaPlayer.Databases.VideoPage
                 list.Add(item.InnerText);
             }
             return list.Distinct().ToList();
+        }
+        public ObservableCollection<VideoPaths> GetAllPlaylistPaths()
+        {     
+            ObservableCollection<VideoPaths> list = new ObservableCollection<VideoPaths>();
+            string[] oDirectories = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage","*.xml",SearchOption.AllDirectories);
+            foreach (string file in oDirectories)
+            {
+                VideoPaths video = new VideoPaths(file);
+                list.Add(video);
+            }
+            return list;
         }
         public ObservableCollection<VideoDisplay> GetAllPathsObs()
         {
@@ -110,11 +116,11 @@ namespace GalaxyMediaPlayer.Databases.VideoPage
             using (var engine = new Engine())
             {
                 title = System.IO.Path.GetFileNameWithoutExtension(path);
-                pathToImg = AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoThumbNail\\" + title +".jpeg";
+                pathToImg = AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoThumbNail\\" + title + ".jpeg";
                 var mp4 = new MediaFile { Filename = path };
                 engine.GetMetadata(mp4);
                 var options = new ConversionOptions { Seek = TimeSpan.FromSeconds(1) };
-                var outputFile = new MediaFile { Filename = pathToImg};
+                var outputFile = new MediaFile { Filename = pathToImg };
                 engine.GetThumbnail(mp4, outputFile, options);
             }
 

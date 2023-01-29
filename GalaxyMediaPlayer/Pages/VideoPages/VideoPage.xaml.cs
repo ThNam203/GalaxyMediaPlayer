@@ -12,6 +12,7 @@ using MediaToolkit.Model;
 using MediaToolkit.Options;
 using MediaToolkit;
 using System.Collections.ObjectModel;
+using System.DirectoryServices.ActiveDirectory;
 
 //using System.Windows.Forms;
 namespace GalaxyMediaPlayer.Pages
@@ -43,7 +44,7 @@ namespace GalaxyMediaPlayer.Pages
                 }   
                 xmlDocument.Save(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\VideoPath.xml");
             }
-            videoPaths = new VideoPaths();
+            videoPaths = new VideoPaths(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\VideoPath.xml");
             if (!videoPaths.IsEmpty())
             {
                 ChangeBtnVisibility();
@@ -51,7 +52,7 @@ namespace GalaxyMediaPlayer.Pages
             source = new ObservableCollection<VideoDisplay>();
              source = videoPaths.GetAllPathsObs();
             VideoListView.ItemsSource =source ;
-           // videoPaths.DeletePath(@"C:\Users\GIGA\Videos\How To Create an SRT File - Detailed Subtitling Tutorial.mp4");
+            
         }
 
         private void Add(object sender, RoutedEventArgs e)
@@ -98,18 +99,6 @@ namespace GalaxyMediaPlayer.Pages
         { 
             return (System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\VideoPath.xml"));
         }
-        private void test_Click(object sender, RoutedEventArgs e)
-        {
-            string pathToVideoFile = @"C:\Users\GIGA\Videos\Ben Tren Tang Lau - Uyen Linh.mp4";
-            using (var engine = new Engine())
-            {
-                var mp4 = new MediaFile { Filename = pathToVideoFile };
-                engine.GetMetadata(mp4);
-                var options = new ConversionOptions { Seek = TimeSpan.FromSeconds(1) };
-                var outputFile = new MediaFile { Filename =  @"C:\Users\GIGA\Videos\123.jpeg" };
-                engine.GetThumbnail(mp4, outputFile, options);
-            }
-        }
         private void ChangeBtnVisibility()
         { 
             var x = addPanel.Visibility;
@@ -120,6 +109,7 @@ namespace GalaxyMediaPlayer.Pages
 
         private void btn_Delete_Click(object sender, RoutedEventArgs e)
         {
+            videoPaths.GetAllPlaylistPaths();
             bool flag = false;
             foreach (VideoDisplay video in VideoListView.SelectedItems)
             {

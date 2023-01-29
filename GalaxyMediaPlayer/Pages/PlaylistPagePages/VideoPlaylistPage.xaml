@@ -291,7 +291,7 @@
                                     Background="Transparent"
                                     Foreground="{DynamicResource brushSecondary}"
                                     HorizontalAlignment="Left"
-                                    Text="{Binding pathToVideo}"
+                                    Text="{Binding playlistName}"
                                     TextTrimming="CharacterEllipsis"/>
                     </StackPanel>
                     <DataTemplate.Triggers>
@@ -326,7 +326,7 @@
         </ListBox>
 
         <DataGrid Name="playlistVideosDataGrid"
-                  Visibility="Visible"
+                  Visibility="Hidden"
                   Style="{DynamicResource DataGridBrowseStyle}" 
                   CellStyle="{DynamicResource DataGridCellStyle1}" 
                   ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderBrowseStyle}" 
@@ -373,7 +373,18 @@
                                     MinWidth="100"
                                     Binding="{Binding length}"/>
 
-
+                <DataGridCheckBoxColumn CanUserResize="False" Width="30">
+                    <DataGridCheckBoxColumn.Header>
+                        <Border>
+                            <Image Name="deleteIconHeader" Height="16" Width="16" Source="/Resources/Icons/PlaylistPageIcons/trash_bin.png" MouseDown="deleteIconHeader_MouseDown"/>
+                        </Border>
+                    </DataGridCheckBoxColumn.Header>
+                    <DataGridCheckBoxColumn.ElementStyle>
+                        <Style>
+                            <EventSetter Event="CheckBox.Click" Handler="DeleteCheckBoxClick"/>
+                        </Style>
+                    </DataGridCheckBoxColumn.ElementStyle>
+                </DataGridCheckBoxColumn>
             </DataGrid.Columns>
         </DataGrid>
 

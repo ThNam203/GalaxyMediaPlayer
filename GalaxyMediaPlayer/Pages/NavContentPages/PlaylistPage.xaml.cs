@@ -1,16 +1,22 @@
 ﻿using GalaxyMediaPlayer.Databases.SongPlaylist;
+using GalaxyMediaPlayer.Databases.VideoPage;
 using GalaxyMediaPlayer.Helpers;
 using GalaxyMediaPlayer.Models;
+using GalaxyMediaPlayer.Pages.PlaylistPagePages;
 using GalaxyMediaPlayer.UserControls;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace GalaxyMediaPlayer.Pages.NavContentPages
 {
@@ -22,8 +28,8 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         public static TextBlock PlaylistNameHeader;
         public static ComboBox CbSortPlaylistBy;
         public static StackPanel ChooseCategoryPanel;
-
         public static Action<object, RoutedEventArgs> NewPlaylistBtn_Click;
+
 
         public enum PlaylistPageType
         {
@@ -90,7 +96,8 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             }
             else if (currentPlaylistType == PlaylistPageType.Video)
             {
-
+                NewPlaylistControl newPlaylistControl = new NewPlaylistControl(AddNewVideoPlaylist);
+                MainWindow.ShowCustomMessageBoxInMiddle(newPlaylistControl);
             } 
             else if (currentPlaylistType == PlaylistPageType.Image)
             {
@@ -117,7 +124,15 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             }
             else if (currentPlaylistType == PlaylistPageType.Video)
             {
-
+                try
+                { //VideoPlaylistPage.play
+                  //  PlaylistPagePages.VideoPlaylistPage.PlaylistListBox.Visibility = Visibility.Visible;
+                  //  PlaylistPagePages.VideoPlaylistPage.PlaylistVideosDataGrid.Visibility = Visibility.Hidden;
+                    PlaylistPage.BackBtn.Visibility = Visibility.Hidden;
+                }catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
             else if (currentPlaylistType == PlaylistPageType.Image)
             {
@@ -144,7 +159,26 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Visible;
             }
         }
+        private void AddNewVideoPlaylist(string playlistName)
+        {
+            XmlDocument xmlDocument = new XmlDocument();
+            XmlElement root = xmlDocument.CreateElement("root");
+            xmlDocument.AppendChild(root);
+            string path = AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage";
+            if (!File.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            xmlDocument.Save(path+"\\"+playlistName+".xml");
+            VideoPaths videoPaths = new VideoPaths(path + "\\" + playlistName + ".xml");
+            VideoPlaylistPage.playlistSource.Add(videoPaths);
+            MainWindow.ClearAllMessageBox();
 
+        }
+        private bool IsDataBaseExists(StringProperty playlistName)
+        {
+            return (System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\"+playlistName+".xml"));
+        }
         private void cbSortPlaylistBy_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cbSortPlaylistBy.SelectedItem != null)
