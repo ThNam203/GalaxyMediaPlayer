@@ -23,9 +23,9 @@ namespace GalaxyMediaPlayer.Pages
     {
         VideoPaths videoPaths;
         ObservableCollection<VideoDisplay> source;
+
         public VideoPage()
         {
-
             InitializeComponent();
             DataBaseInit();
         }

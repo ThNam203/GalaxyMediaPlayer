@@ -36,7 +36,7 @@ namespace GalaxyMediaPlayer.Windows
             SetUpView();
             SetUpSlider();
             SetBtnRepeatViewOnRepeatingOption();
-            MyMediaPlayer.mediaPlayer.MediaOpened += MediaPlayer_MediaOpened;
+            MyMusicMediaPlayer.mediaPlayer.MediaOpened += MediaPlayer_MediaOpened;
             showInfoTimer = new DispatcherTimer();
             showInfoTimer.Interval = TimeSpan.FromSeconds(0.1);
             showInfoTimer.Tick += ShowInfoTimer_Tick;
@@ -72,8 +72,8 @@ namespace GalaxyMediaPlayer.Windows
 
         private void MediaPlayer_MediaOpened(object? sender, EventArgs e)
         {
-            MyMediaPlayer.isSongOpened = true;
-            MyMediaPlayer.isSongPlaying = true;
+            MyMusicMediaPlayer.isSongOpened = true;
+            MyMusicMediaPlayer.isSongPlaying = true;
 
             SetUpView();
             SetUpSlider();
@@ -89,23 +89,23 @@ namespace GalaxyMediaPlayer.Windows
             timerVideoTime.Start();
 
 
-            totalTimeInSecond = MyMediaPlayer.GetTotalTimeInSecond();
+            totalTimeInSecond = MyMusicMediaPlayer.GetTotalTimeInSecond();
             durationFormat = DurationFormatHelper.GetDurationFormatFromTotalSeconds(totalTimeInSecond);
 
-            tbSongDuration.Text = MyMediaPlayer.mediaPlayer.NaturalDuration.TimeSpan.ToString(durationFormat);
+            tbSongDuration.Text = MyMusicMediaPlayer.mediaPlayer.NaturalDuration.TimeSpan.ToString(durationFormat);
             tbCurrentSongPosition.Text = TimeSpan.FromSeconds(0).ToString(durationFormat);
         }
 
         private void SetUpView()
         {
             ImageBrush brush = new ImageBrush();
-            if (MyMediaPlayer.isSongPlaying)
+            if (MyMusicMediaPlayer.isSongPlaying)
                 brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/pause_32.png"));
             else
                 brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/play_32.png"));
             btnPlayPause.Background = brush;
 
-            string songPath = Uri.UnescapeDataString(MyMediaPlayer.GetSource.AbsolutePath);
+            string songPath = Uri.UnescapeDataString(MyMusicMediaPlayer.GetSource.AbsolutePath);
             tbSongTitle.Text = Path.GetFileNameWithoutExtension(songPath);
 
             TagLib.File song = TagLib.File.Create(songPath);
@@ -130,7 +130,7 @@ namespace GalaxyMediaPlayer.Windows
         private void TimerVideoTime_Tick(object? sender, EventArgs e)
         {
             // Nam: If user is dragging slider, we are not updating the slider value
-            if (!isDragging) SongDurationSlider.Value = (MyMediaPlayer.mediaPlayer.Position.TotalSeconds / totalTimeInSecond) * 100;
+            if (!isDragging) SongDurationSlider.Value = (MyMusicMediaPlayer.mediaPlayer.Position.TotalSeconds / totalTimeInSecond) * 100;
         }
 
         private void SongDurationSlider_Thumb_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
@@ -138,7 +138,7 @@ namespace GalaxyMediaPlayer.Windows
             isDragging = false;
             try
             {
-                MyMediaPlayer.mediaPlayer.Position = TimeSpan.FromSeconds(totalTimeInSecond * (sender as Slider).Value / 100);
+                MyMusicMediaPlayer.mediaPlayer.Position = TimeSpan.FromSeconds(totalTimeInSecond * (sender as Slider).Value / 100);
             }
             catch (Exception)
             {
@@ -158,32 +158,32 @@ namespace GalaxyMediaPlayer.Windows
 
         private void btnNext_Click(object sender, RoutedEventArgs e)
         {
-            MyMediaPlayer.PlayNextSong();
+            MyMusicMediaPlayer.PlayNextSong();
         }
 
         private void btnPrevious_Click(object sender, RoutedEventArgs e)
         {
-            MyMediaPlayer.PlayPreviousSong();
+            MyMusicMediaPlayer.PlayPreviousSong();
         }
 
         private void btnRepeat_Click(object sender, RoutedEventArgs e)
         {
-            MyMediaPlayer.ChangeRepeatingOptionOnClick();
+            MyMusicMediaPlayer.ChangeRepeatingOptionOnClick();
             SetBtnRepeatViewOnRepeatingOption();
         }
 
         private void btnPlayPause_Click(object sender, RoutedEventArgs e)
         {
             ImageBrush brush = new ImageBrush();
-            MyMediaPlayer.isSongPlaying = !MyMediaPlayer.isSongPlaying;
-            if (MyMediaPlayer.isSongPlaying)
+            MyMusicMediaPlayer.isSongPlaying = !MyMusicMediaPlayer.isSongPlaying;
+            if (MyMusicMediaPlayer.isSongPlaying)
             {
-                MyMediaPlayer.Continue();
+                MyMusicMediaPlayer.Continue();
                 brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/pause_32.png"));
             }
             else
             {
-                MyMediaPlayer.Pause();
+                MyMusicMediaPlayer.Pause();
                 brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/play_32.png"));
             }
 
@@ -192,29 +192,29 @@ namespace GalaxyMediaPlayer.Windows
 
         private void btnRandom_Click(object sender, RoutedEventArgs e)
         {
-            MyMediaPlayer.isRandoming = !MyMediaPlayer.isRandoming;
+            MyMusicMediaPlayer.isRandoming = !MyMusicMediaPlayer.isRandoming;
 
-            if (MyMediaPlayer.isRandoming) btnRandom.Background.Opacity = 1;
+            if (MyMusicMediaPlayer.isRandoming) btnRandom.Background.Opacity = 1;
             else btnRandom.Background.Opacity = 0.5;
         }
 
         private void SetBtnRepeatViewOnRepeatingOption()
         {
-            if (MyMediaPlayer.repeatingOptions == MyMediaPlayer.RepeatingOption.NoRepeat)
+            if (MyMusicMediaPlayer.repeatingOptions == MyMusicMediaPlayer.RepeatingOption.NoRepeat)
             {
                 ImageBrush brush = new ImageBrush();
                 brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/repeat_32.png"));
                 btnRepeat.Background = brush;
                 btnRepeat.Background.Opacity = 0.5;
             }
-            else if (MyMediaPlayer.repeatingOptions == MyMediaPlayer.RepeatingOption.RepeatOne)
+            else if (MyMusicMediaPlayer.repeatingOptions == MyMusicMediaPlayer.RepeatingOption.RepeatOne)
             {
                 ImageBrush brush = new ImageBrush();
                 brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/repeat_one_32.png"));
                 btnRepeat.Background = brush;
                 btnRepeat.Background.Opacity = 1;
             }
-            else if (MyMediaPlayer.repeatingOptions == MyMediaPlayer.RepeatingOption.RepeatPlaylist)
+            else if (MyMusicMediaPlayer.repeatingOptions == MyMusicMediaPlayer.RepeatingOption.RepeatPlaylist)
             {
                 ImageBrush brush = new ImageBrush();
                 brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/repeat_32.png"));
@@ -256,7 +256,7 @@ namespace GalaxyMediaPlayer.Windows
             {
                 Application.Current.MainWindow = MainWindow.Instance;
             }
-            MyMediaPlayer.mediaPlayer.MediaOpened -= MediaPlayer_MediaOpened;
+            MyMusicMediaPlayer.mediaPlayer.MediaOpened -= MediaPlayer_MediaOpened;
         }
 
         private void Window_MouseEnter(object sender, MouseEventArgs e)

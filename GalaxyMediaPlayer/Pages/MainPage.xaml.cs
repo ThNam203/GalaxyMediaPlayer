@@ -40,8 +40,8 @@ namespace GalaxyMediaPlayer.Pages
             InitializeComponent();
             this.DataContext = this;
             InitializeMediaControlButtonsView(); // Nam: if buttons are not active, we grey them out and change volumn slider position
-            MyMediaPlayer.Initialize();
-            MyMediaPlayer.mediaPlayer.MediaOpened += MediaPlayer_MediaOpened;
+            MyMusicMediaPlayer.Initialize();
+            MyMusicMediaPlayer.mediaPlayer.MediaOpened += MediaPlayer_MediaOpened;
             this.ContentFrame.JournalOwnership = System.Windows.Navigation.JournalOwnership.OwnsJournal;
 
             // Nam: disable 'backspace' button can go back in frame's stack
@@ -53,12 +53,12 @@ namespace GalaxyMediaPlayer.Pages
 
         private void MediaPlayer_MediaOpened(object? sender, EventArgs e)
         {
-            MyMediaPlayer.isSongOpened = true;
-            MyMediaPlayer.isSongPlaying = true;
-            totalTimeInSecond = MyMediaPlayer.GetTotalTimeInSecond();
+            MyMusicMediaPlayer.isSongOpened = true;
+            MyMusicMediaPlayer.isSongPlaying = true;
+            totalTimeInSecond = MyMusicMediaPlayer.GetTotalTimeInSecond();
 
             // Nam: keeping track of most listened song
-            HomePageDatabaseAccess.SaveDataOnListeningMusic(Uri.UnescapeDataString(MyMediaPlayer.mediaPlayer.Source.AbsolutePath));
+            HomePageDatabaseAccess.SaveDataOnListeningMusic(Uri.UnescapeDataString(MyMusicMediaPlayer.mediaPlayer.Source.AbsolutePath));
 
             SongSliderPanel.Visibility = Visibility.Visible;
 
@@ -68,7 +68,7 @@ namespace GalaxyMediaPlayer.Pages
             ChangeAdditionControlVisibilityInInforGrid(false);
 
             durationFormat = DurationFormatHelper.GetDurationFormatFromTotalSeconds(totalTimeInSecond);
-            tbSongDuration.Text = MyMediaPlayer.mediaPlayer.NaturalDuration.TimeSpan.ToString(durationFormat);
+            tbSongDuration.Text = MyMusicMediaPlayer.mediaPlayer.NaturalDuration.TimeSpan.ToString(durationFormat);
             tbCurrentSongPosition.Text = TimeSpan.FromSeconds(0).ToString(durationFormat);
 
             // Slider update timer
@@ -81,14 +81,14 @@ namespace GalaxyMediaPlayer.Pages
         private void TimerVideoTime_Tick(object? sender, EventArgs e)
         {
             // Nam: If user is dragging slider, we are not updating the slider value
-            if (!isDragging && MyMediaPlayer.isSongPlaying)
+            if (!isDragging && MyMusicMediaPlayer.isSongPlaying)
             {
-                SongDurationSlider.Value = (MyMediaPlayer.mediaPlayer.Position.TotalSeconds / totalTimeInSecond) * 100;
+                SongDurationSlider.Value = (MyMusicMediaPlayer.mediaPlayer.Position.TotalSeconds / totalTimeInSecond) * 100;
             }
         }
 
         // Nam: Computer.isUserBrowsing mainly use for playing music outside the computer page
-        // which prevent SetPlaylistFromTempPlaylist method to provoke in MyMediaPlayer
+        // which prevent SetPlaylistFromTempPlaylist method to provoke in MyMusicMediaPlayer
         private void navButtonsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             NavButton? selectedItem = navButtonsListBox.SelectedItem as NavButton;
@@ -105,68 +105,68 @@ namespace GalaxyMediaPlayer.Pages
         
         private void btnPlayPause_Click(object sender, RoutedEventArgs e)
         {
-            MyMediaPlayer.isSongPlaying = !MyMediaPlayer.isSongPlaying;
+            MyMusicMediaPlayer.isSongPlaying = !MyMusicMediaPlayer.isSongPlaying;
             changeAllBtnPlayPauseBackgroundImage();
 
-            if (MyMediaPlayer.pathCurrentlyInUse != currentMusicBrowsingFolder)
+            if (MyMusicMediaPlayer.pathCurrentlyInUse != currentMusicBrowsingFolder)
             {
-                MyMediaPlayer.SetPlaylistFromTempPlaylist();
-                MyMediaPlayer.PlayCurrentSong();
+                MyMusicMediaPlayer.SetPlaylistFromTempPlaylist();
+                MyMusicMediaPlayer.PlayCurrentSong();
             }
-            else if (MyMediaPlayer.isSongPlaying)
+            else if (MyMusicMediaPlayer.isSongPlaying)
             {
-                if (MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder)
+                if (MyMusicMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder)
                 {
-                    if (MyMediaPlayer.isSongOpened)
+                    if (MyMusicMediaPlayer.isSongOpened)
                     {
-                        MyMediaPlayer.Continue();
+                        MyMusicMediaPlayer.Continue();
                     }
                     else
                     {
-                        MyMediaPlayer.SetPlaylistFromTempPlaylist();
-                        MyMediaPlayer.PlayCurrentSong();
+                        MyMusicMediaPlayer.SetPlaylistFromTempPlaylist();
+                        MyMusicMediaPlayer.PlayCurrentSong();
                     }
                 }
             }
             else
             {
-                MyMediaPlayer.Pause();
+                MyMusicMediaPlayer.Pause();
             }
         }
 
         private void btnPlayPauseInGridInfo_Click(object sender, RoutedEventArgs e)
         {
-            MyMediaPlayer.isSongPlaying = !MyMediaPlayer.isSongPlaying;
-            if (MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder) changeAllBtnPlayPauseBackgroundImage();
+            MyMusicMediaPlayer.isSongPlaying = !MyMusicMediaPlayer.isSongPlaying;
+            if (MyMusicMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder) changeAllBtnPlayPauseBackgroundImage();
             else changeBtnPlayPauseBackgroundInGridInfo();
 
-            if (MyMediaPlayer.isSongPlaying) MyMediaPlayer.Continue();
-            else MyMediaPlayer.Pause();
+            if (MyMusicMediaPlayer.isSongPlaying) MyMusicMediaPlayer.Continue();
+            else MyMusicMediaPlayer.Pause();
         }
 
         private void btnRepeat_Click(object sender, RoutedEventArgs e)
         {
-            MyMediaPlayer.ChangeRepeatingOptionOnClick();
+            MyMusicMediaPlayer.ChangeRepeatingOptionOnClick();
             SetBtnRepeatViewOnRepeatingOption();
         }
 
         private void SetBtnRepeatViewOnRepeatingOption()
         {
-            if (MyMediaPlayer.repeatingOptions == MyMediaPlayer.RepeatingOption.NoRepeat)
+            if (MyMusicMediaPlayer.repeatingOptions == MyMusicMediaPlayer.RepeatingOption.NoRepeat)
             {
                 ImageBrush brush = new ImageBrush();
                 brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/repeat_32.png"));
                 btnRepeat.Background = brush;
                 btnRepeat.Background.Opacity = opacityNotActiveValue;
             }
-            else if (MyMediaPlayer.repeatingOptions == MyMediaPlayer.RepeatingOption.RepeatOne)
+            else if (MyMusicMediaPlayer.repeatingOptions == MyMusicMediaPlayer.RepeatingOption.RepeatOne)
             {
                 ImageBrush brush = new ImageBrush();
                 brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/repeat_one_32.png"));
                 btnRepeat.Background = brush;
                 btnRepeat.Background.Opacity = 1;
             }
-            else if (MyMediaPlayer.repeatingOptions == MyMediaPlayer.RepeatingOption.RepeatPlaylist)
+            else if (MyMusicMediaPlayer.repeatingOptions == MyMusicMediaPlayer.RepeatingOption.RepeatPlaylist)
             {
                 ImageBrush brush = new ImageBrush();
                 brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/repeat_32.png"));
@@ -182,7 +182,7 @@ namespace GalaxyMediaPlayer.Pages
             ImageBrush brush = new ImageBrush();
             double previousOpacity = btnPlayPause.Background.Opacity;
 
-            if (MyMediaPlayer.isSongPlaying)
+            if (MyMusicMediaPlayer.isSongPlaying)
                 brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/pause_32.png"));
             else
                 brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/play_32.png"));
@@ -195,7 +195,7 @@ namespace GalaxyMediaPlayer.Pages
         {
             ImageBrush brush = new ImageBrush();
 
-            if (MyMediaPlayer.isSongPlaying)
+            if (MyMusicMediaPlayer.isSongPlaying)
                 brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/pause_32.png"));
             else
                 brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/play_32.png"));
@@ -206,7 +206,7 @@ namespace GalaxyMediaPlayer.Pages
         // Nam: add song image, title, artist to displayGrid
         private void AddSongInformationToInfoGrid()
         {
-            string songPath = Uri.UnescapeDataString(MyMediaPlayer.mediaPlayer.Source.AbsolutePath);
+            string songPath = Uri.UnescapeDataString(MyMusicMediaPlayer.mediaPlayer.Source.AbsolutePath);
 
             SongInfoDisplayGrid.Visibility = Visibility.Visible;
             TagLib.File songFile = TagLib.File.Create(songPath);
@@ -237,18 +237,18 @@ namespace GalaxyMediaPlayer.Pages
         private void InitializeMediaControlButtonsView()
         {
             SetBtnRepeatViewOnRepeatingOption();
-            VolumeSlider.Value = MyMediaPlayer.GetVolumn;
+            VolumeSlider.Value = MyMusicMediaPlayer.GetVolumn;
         }
 
         // Nam: when we browse to another folder,
         // we need to separate the infor grid to the previous played folder
         public void ChangeAdditionControlVisibilityInInforGrid(bool forceShow)
         {
-            if (MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder && forceShow == false)
+            if (MyMusicMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder && forceShow == false)
             {
                 ExtraControlGridInfo.Visibility = Visibility.Collapsed;
             }
-            else if (MyMediaPlayer.pathCurrentlyInUse != currentMusicBrowsingFolder || forceShow)
+            else if (MyMusicMediaPlayer.pathCurrentlyInUse != currentMusicBrowsingFolder || forceShow)
             {
                 ExtraControlGridInfo.Visibility = Visibility.Visible;
             }
@@ -256,7 +256,7 @@ namespace GalaxyMediaPlayer.Pages
 
         private void SetVolumnIcon()
         {
-            if (MyMediaPlayer.GetVolumn == 0) isMuted = true;
+            if (MyMusicMediaPlayer.GetVolumn == 0) isMuted = true;
             else isMuted = false;
             if (isMuted)
             {
@@ -279,7 +279,7 @@ namespace GalaxyMediaPlayer.Pages
         // which is always not active
         public void ChangeButtonsViewOnOpenFolder(bool forceDisable)
         {
-            int number = MyMediaPlayer.GetTempPlaylistSize();
+            int number = MyMusicMediaPlayer.GetTempPlaylistSize();
 
             ImageBrush brush = new ImageBrush();
             brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/play_32.png"));
@@ -289,7 +289,7 @@ namespace GalaxyMediaPlayer.Pages
             {
                 DisableControlButtons();
             }
-            else if (MyMediaPlayer.isSongOpened && MyMediaPlayer.isSongPlaying && MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder)
+            else if (MyMusicMediaPlayer.isSongOpened && MyMusicMediaPlayer.isSongPlaying && MyMusicMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder)
             {
                 brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/pause_32.png"));
                 btnPlayPause.Background = brush;
@@ -342,27 +342,27 @@ namespace GalaxyMediaPlayer.Pages
 
         private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            MyMediaPlayer.SetVolumn(e.NewValue);
+            MyMusicMediaPlayer.SetVolumn(e.NewValue);
             SetVolumnIcon();
         }
 
         private void btnNext_Click(object sender, RoutedEventArgs e)
         {
-            MyMediaPlayer.PlayNextSong();
+            MyMusicMediaPlayer.PlayNextSong();
         }
 
         private void btnPrevious_Click(object sender, RoutedEventArgs e)
         {
-            MyMediaPlayer.PlayPreviousSong();
+            MyMusicMediaPlayer.PlayPreviousSong();
         }
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            MyMediaPlayer.Stop();
+            MyMusicMediaPlayer.Stop();
             SongInfoDisplayGrid.Visibility = Visibility.Collapsed;
             SongSliderPanel.Visibility = Visibility.Collapsed;
 
-            if (MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder) changeAllBtnPlayPauseBackgroundImage();
+            if (MyMusicMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder) changeAllBtnPlayPauseBackgroundImage();
             else changeBtnPlayPauseBackgroundInGridInfo();
         }
 
@@ -373,11 +373,11 @@ namespace GalaxyMediaPlayer.Pages
 
         public void StopMusic()
         {
-            MyMediaPlayer.Stop();
+            MyMusicMediaPlayer.Stop();
             SongInfoDisplayGrid.Visibility = Visibility.Collapsed;
             SongSliderPanel.Visibility = Visibility.Collapsed;
 
-            if (MyMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder) changeAllBtnPlayPauseBackgroundImage();
+            if (MyMusicMediaPlayer.pathCurrentlyInUse == currentMusicBrowsingFolder) changeAllBtnPlayPauseBackgroundImage();
             else changeBtnPlayPauseBackgroundInGridInfo();
 
             btnStop.Background.Opacity = opacityNotActiveValue;
@@ -391,9 +391,9 @@ namespace GalaxyMediaPlayer.Pages
 
         private void btnRandom_Click(object sender, RoutedEventArgs e)
         {
-            MyMediaPlayer.isRandoming = !MyMediaPlayer.isRandoming;
+            MyMusicMediaPlayer.isRandoming = !MyMusicMediaPlayer.isRandoming;
 
-            if (MyMediaPlayer.isRandoming) btnRandom.Background.Opacity = 1;
+            if (MyMusicMediaPlayer.isRandoming) btnRandom.Background.Opacity = 1;
             else btnRandom.Background.Opacity = opacityNotActiveValue;
         }
 
@@ -427,7 +427,7 @@ namespace GalaxyMediaPlayer.Pages
             isDragging = false;
             try
             {
-                MyMediaPlayer.mediaPlayer.Position = TimeSpan.FromSeconds(totalTimeInSecond * (sender as Slider).Value / 100);
+                MyMusicMediaPlayer.mediaPlayer.Position = TimeSpan.FromSeconds(totalTimeInSecond * (sender as Slider).Value / 100);
             }
             catch (Exception)
             {
@@ -467,13 +467,13 @@ namespace GalaxyMediaPlayer.Pages
             isMuted = !isMuted;
             if (isMuted)
             {
-                volumnBeforeMute = MyMediaPlayer.GetVolumn;
-                MyMediaPlayer.SetVolumn(0);
+                volumnBeforeMute = MyMusicMediaPlayer.GetVolumn;
+                MyMusicMediaPlayer.SetVolumn(0);
                 VolumeSlider.Value = 0;
             }
             else
             {
-                MyMediaPlayer.SetVolumn(volumnBeforeMute);
+                MyMusicMediaPlayer.SetVolumn(volumnBeforeMute);
                 VolumeSlider.Value = volumnBeforeMute;
             }
             SetVolumnIcon();

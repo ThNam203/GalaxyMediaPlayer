@@ -73,7 +73,7 @@ namespace GalaxyMediaPlayer.Pages
             VideoPathIndex = startIndex;
 
             // Nam: if there is music playing, stop it
-            if (MyMediaPlayer.isSongPlaying) MyMediaPlayer.Pause();
+            if (MyMusicMediaPlayer.isSongPlaying) MyMusicMediaPlayer.Pause();
 
             Load();
         }

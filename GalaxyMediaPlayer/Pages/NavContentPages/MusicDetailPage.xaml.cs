@@ -20,7 +20,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         public MusicModel musicModel;
         public MusicDetailPage()
         {
-            musicModel = new MusicModel(Uri.UnescapeDataString(MyMediaPlayer.GetSource.AbsolutePath));
+            musicModel = new MusicModel(Uri.UnescapeDataString(MyMusicMediaPlayer.GetSource.AbsolutePath));
             InitializeComponent();
             this.DataContext = musicModel;
             SetFontSize();

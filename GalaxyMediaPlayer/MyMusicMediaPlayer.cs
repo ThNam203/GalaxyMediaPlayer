@@ -6,9 +6,10 @@ using System.Windows.Media;
 
 namespace GalaxyMediaPlayer
 {
-    internal class MyMediaPlayer
+    internal class MyMusicMediaPlayer
     {
-        public enum RepeatingOption {
+        public enum RepeatingOption 
+        {
             NoRepeat,
             RepeatOne,
             RepeatPlaylist
@@ -42,7 +43,7 @@ namespace GalaxyMediaPlayer
         {
             mediaPlayer.MediaEnded += MediaPlayer_MediaEnded;
         }
-        public static void OpenAndPlay(string songPath)
+        private static void OpenAndPlay(string songPath)
         {
             // Nam: mediaPlayer.MediaOpen() wont invoke if it open the same songPath with the previous songPath
             // so we need to add a garbage songPath to open first
@@ -102,6 +103,12 @@ namespace GalaxyMediaPlayer
         {
             tempPlaylist.Clear();
             tempPlaylist.AddRange(songPaths);
+        }
+
+        public static void SetNewPlaylist(List<string> songPaths)
+        {
+            playlist.Clear();
+            playlist.AddRange(songPaths);
         }
 
         public static void PlayNextSong()

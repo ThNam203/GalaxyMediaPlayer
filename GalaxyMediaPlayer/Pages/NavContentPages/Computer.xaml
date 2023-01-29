@@ -456,8 +456,7 @@
                  Background="{DynamicResource brushPrimary}"
                  Visibility="Visible"
                  BorderThickness="0"
-                 SelectionMode="Extended"
-                 ItemsSource="{Binding systemEntities}">
+                 SelectionMode="Extended">
             <ListBox.Resources>
                 <Style TargetType="ScrollBar">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -607,8 +606,8 @@
                   SelectionUnit="FullRow"
                   VirtualizingPanel.VirtualizationMode="Standard"
                   Margin="16 4"
-                  Grid.Row="3"
-                  ItemsSource="{Binding systemEntities}">
+                  Sorting="browseDataGrid_Sorting"
+                  Grid.Row="3">
             <DataGrid.Resources>
                 <Style TargetType="ScrollBar">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>

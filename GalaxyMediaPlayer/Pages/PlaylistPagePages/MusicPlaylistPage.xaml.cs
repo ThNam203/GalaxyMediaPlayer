@@ -62,7 +62,7 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                     else PlaylistSongsDatabaseAccess.DeleteSong(songInfor);
                 }
 
-                MyMediaPlayer.SetTempPlaylist(currentChosenPlaylistSongs.Select(s => s.Path).ToList());
+                MyMusicMediaPlayer.SetTempPlaylist(currentChosenPlaylistSongs.Select(s => s.Path).ToList());
                 MainPage.Instance.ChangeButtonsViewOnOpenFolder(forceDisable: false);
                 MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid(false);
 
@@ -151,9 +151,9 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             if (chosenSong != null)
             {
                 List<string> songs = playlistSongsDataGrid.Items.Cast<SongInfor>().Select(s => s.Path).ToList();
-                MyMediaPlayer.SetPlaylistFromTempPlaylist();
-                MyMediaPlayer.SetPositionInPlaylist(playlistSongsDataGrid.SelectedIndex);
-                MyMediaPlayer.PlayCurrentSong();
+                MyMusicMediaPlayer.SetPlaylistFromTempPlaylist();
+                MyMusicMediaPlayer.SetPositionInPlaylist(playlistSongsDataGrid.SelectedIndex);
+                MyMusicMediaPlayer.PlayCurrentSong();
                 e.Handled = true;
             }
         }

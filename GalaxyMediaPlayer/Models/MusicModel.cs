@@ -87,7 +87,7 @@ namespace GalaxyMediaPlayer.Models
 
                 // Nam: Not using method below cause it's meeting a bug where duration return only about 70%
                 // SongDurationInString = songFile.Length.Duration.ToString(DurationFormatHelper.GetDurationFormatFromTotalSeconds(songFile.Properties.Duration.TotalSeconds));
-                SongDurationInString = MyMediaPlayer.mediaPlayer.NaturalDuration.TimeSpan.ToString(DurationFormatHelper.GetDurationFormatFromTotalSeconds(MyMediaPlayer.GetTotalTimeInSecond()));
+                SongDurationInString = MyMusicMediaPlayer.mediaPlayer.NaturalDuration.TimeSpan.ToString(DurationFormatHelper.GetDurationFormatFromTotalSeconds(MyMusicMediaPlayer.GetTotalTimeInSecond()));
 
                 try
                 {
