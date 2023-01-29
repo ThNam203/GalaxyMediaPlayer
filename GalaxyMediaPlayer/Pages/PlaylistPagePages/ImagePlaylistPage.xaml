@@ -10,6 +10,12 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ImagePlaylistPage">
 
+    <Page.Resources>
+        <cvt:SystemEntityToImageSource x:Key="SystemEntityToImageSource"></cvt:SystemEntityToImageSource>
+        <cvt:ImagePathToImageSource x:Key="ImagePathToImageSource"></cvt:ImagePathToImageSource>
+        <cvt:EntityTypeToVisibility x:Key="EntityTypeToVisibility"></cvt:EntityTypeToVisibility>
+        <cvt:ImagePathToThumbnailImage x:Key="ImagePathToThumbnailImage"></cvt:ImagePathToThumbnailImage>
+    </Page.Resources>
     <Grid>
         <Grid.Resources>
             <Style x:Key="FirstButtonAddNowStyle" TargetType="Button">
@@ -144,5 +150,76 @@
                 </Style>
             </ListBox.ItemContainerStyle>
         </ListBox>
+        <ListView Name="listViewImage"
+                  Background="Transparent"
+                  Visibility="Collapsed"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  Margin="{Binding ElementName=BorderlistView, Path=Margin}"
+                  BorderThickness="0"
+                  IsSynchronizedWithCurrentItem="True">
+            <ListView.Resources>
+                <Style TargetType="ScrollBar">
+                    <Setter Property="SnapsToDevicePixels" Value="True"/>
+                    <Setter Property="OverridesDefaultStyle" Value="true"/>
+                    <Style.Triggers>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter Property="Width" Value="10"/>
+                            <Setter Property="Height" Value="Auto" />
+                            <Setter Property="Margin" Value="8 24" />
+                            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.Resources>
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="Padding" Value="5" ></Setter>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                <Border Name="imgBorder"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="2"
+                                        Background="{TemplateBinding Background}">
+
+                                    <ContentPresenter Width="auto" Height="auto"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#40ffffff"></Setter>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#80ffffff"></Setter>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <virtualizingwrappanel:VirtualizingWrapPanel
+                        IsItemsHost="False"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ListView.ItemTemplate>
+                <DataTemplate x:Name="DatatemplateImage">
+                    <Grid Width="200" Height="120">
+                        <Image x:Name="img" 
+                               Source="{Binding path, Converter={StaticResource ImagePathToThumbnailImage}}" 
+                               Panel.ZIndex="1" 
+                               MouseDown="img_MouseDown"
+                               MouseRightButtonDown="img_MouseRightButtonDown"
+                               Margin="8"
+                               Width="200" Height="120"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Page>

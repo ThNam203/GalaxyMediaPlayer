@@ -1,4 +1,5 @@
-﻿using GalaxyMediaPlayer.Databases.SongPlaylist;
+﻿using GalaxyMediaPlayer.Databases.ImagePage;
+using GalaxyMediaPlayer.Databases.SongPlaylist;
 using GalaxyMediaPlayer.Helpers;
 using GalaxyMediaPlayer.Models;
 using GalaxyMediaPlayer.UserControls;
@@ -19,6 +20,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         public static Button NewPlaylistBtn;
         public static Button BackBtn;
         public static Button AddNewSongToPlaylistBtn;
+        public static Button AddNewImageToPlaylistBtn;
         public static TextBlock PlaylistNameHeader;
         public static ComboBox CbSortPlaylistBy;
         public static StackPanel ChooseCategoryPanel;
@@ -41,6 +43,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             NewPlaylistBtn = newPlaylistBtn;
             PlaylistNameHeader = playlistNameHeader;
             AddNewSongToPlaylistBtn = addNewSongToPlaylistBtn;
+            AddNewImageToPlaylistBtn = addNewImageToPlaylistBtn;
             CbSortPlaylistBy = cbSortPlaylistBy;
             BackBtn = backBtn;
             ChooseCategoryPanel = chooseCategoryPanel;
@@ -93,7 +96,8 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             } 
             else if (currentPlaylistType == PlaylistPageType.Image)
             {
-
+                NewPlaylistControl newPlaylistControl = new NewPlaylistControl(AddNewImagePlaylist);
+                MainWindow.ShowCustomMessageBoxInMiddle(newPlaylistControl);
             }
 
             e.Handled = true;
@@ -120,6 +124,9 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             }
             else if (currentPlaylistType == PlaylistPageType.Image)
             {
+                addNewImageToPlaylistBtn.Visibility = Visibility.Collapsed;
+                PlaylistPagePages.ImagePlaylistPage.ListViewImage.Visibility = Visibility.Collapsed;
+                PlaylistPagePages.ImagePlaylistPage.listBoxImagePlaylist.Visibility = Visibility.Visible;
 
             }
 
@@ -141,6 +148,21 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             {
                 PlaylistPagePages.MusicPlaylistPage.EmptyPlaylistBorder.Visibility = Visibility.Collapsed;
                 PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void AddNewImagePlaylist(string PlaylistName)
+        {
+            ImagePlaylistModel imagePlaylistModel = new ImagePlaylistModel(PlaylistName);
+            PlaylistPagePages.ImagePlaylistPage.ImagesPlaylist.Add(imagePlaylistModel);
+            PlaylistPagePages.ImagePlaylistPage.listBoxImagePlaylist.Items.Add(imagePlaylistModel);
+
+            ImagesPlaylistDBAccess.SaveImagePlaylist(imagePlaylistModel);
+            MainWindow.ClearAllMessageBox();
+            if (PlaylistPagePages.ImagePlaylistPage.ImagesPlaylist.Count > 0)
+            {
+                PlaylistPagePages.ImagePlaylistPage.BorderListView.Visibility = Visibility.Collapsed;
+                PlaylistPagePages.ImagePlaylistPage.listBoxImagePlaylist.Visibility = Visibility.Visible;
             }
         }
 
@@ -238,9 +260,46 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             }
         }
 
+        private void addNewImageToPlaylistBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ImagePlaylistModel? playlist;
+            playlist = PlaylistPagePages.ImagePlaylistPage.listBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
+
+            if(playlist != null)
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                string filter = "SupportedFormat|";
+                foreach (string extenstion in SupportedExtensions.IMAGE_EXTENSION)
+                {
+                    filter += "*." + extenstion + ";";
+                }
+                openFileDialog.Filter = filter;
+                openFileDialog.Multiselect = true;
+
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    foreach (string file in openFileDialog.FileNames)
+                    {
+                        //add filePath to listview
+                        FileInfo fi = new FileInfo(file);
+                        string date = fi.CreationTime.ToString();
+                        ImageModel imgModel = new ImageModel(playlist.Id,file, date);
+                        
+                        if(ImagesInPlaylistDBAccess.SaveImageIntoPlaylist(imgModel) != -1)
+                        {
+                            playlist.Images.Add(imgModel);
+                            PlaylistPagePages.ImagePlaylistPage.ListViewImage.Items.Add(imgModel);
+                        }
+                    }
+                }
+            }
+        }
+
         private void PageFrame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
 
         }
+
+        
     }
 }

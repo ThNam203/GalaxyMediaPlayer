@@ -1,35 +1,34 @@
 ﻿using Dapper;
 using GalaxyMediaPlayer.Models;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Data;
 using System.Data.SQLite;
 using System.Linq;
 
-
 namespace GalaxyMediaPlayer.Databases.ImagePage
 {
-    public class ImagesPlaylistDBAccess
+    public class ImagesInPlaylistDBAccess
     {
-        public static List<ImagePlaylistModel> LoadImagePlayList()
+        public static List<ImageModel> LoadImageInPlayList(string PlaylistId)
         {
             using (IDbConnection connStr = new SQLiteConnection(GetConnectionStr()))
             {
-                var output = connStr.Query<ImagePlaylistModel>("select * from ImagePlaylistTable");
+                var imagePlaylistModel = new {PlaylistId = PlaylistId };
+                var output = connStr.Query<ImageModel>("select * from ImageInPlaylistTable where PlaylistId=@PlaylistId",imagePlaylistModel);
                 return output.ToList();
             }
         }
 
-        public static int SaveImagePlaylist(ImagePlaylistModel newImagePlaylist)
+        public static int SaveImageIntoPlaylist(ImageModel newImageModel)
         {
             using (IDbConnection connStr = new SQLiteConnection(GetConnectionStr()))
             {
-                bool isExisted = connStr.ExecuteScalar<bool>("select count(1) from ImagePlaylistTable where Id=@Id", newImagePlaylist);
+                bool isExisted = connStr.ExecuteScalar<bool>("select count(1) from ImageInPlaylistTable where PlaylistId=@PlaylistId and Path=@path", newImageModel);
 
                 if (!isExisted)
                 {
-                    int rowAffected = connStr.Execute("insert into ImagePlaylistTable (Id, PlaylistName,TimeCreated) values (@Id, @PlaylistName,@TimeCreated)", newImagePlaylist);
+                    int rowAffected = connStr.Execute("insert into ImageInPlaylistTable (PlaylistId, Id, Path, DateCreated) values (@PlaylistId, @Id, @path, @dateCreated)", newImageModel);
                     return rowAffected;
                 }
                 else
@@ -37,11 +36,11 @@ namespace GalaxyMediaPlayer.Databases.ImagePage
             }
         }
 
-        public static int DeleteImagePlaylist(ImagePlaylistModel newImagePlaylist)
+        public static int DeleteImagePlaylist(ImageModel imageModel)
         {
             using (IDbConnection connStr = new SQLiteConnection(GetConnectionStr()))
             {
-                int rowAffected = connStr.Execute("Delete from ImagePlaylistTable where Id=@Id", newImagePlaylist);
+                int rowAffected = connStr.Execute("Delete from ImageInPlaylistTable where PlaylistId=@PlaylistId and Id=@Id", imageModel);
                 return rowAffected;
             }
         }

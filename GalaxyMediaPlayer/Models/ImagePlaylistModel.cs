@@ -9,13 +9,6 @@ namespace GalaxyMediaPlayer.Models
 {
     public class ImagePlaylistModel
     {
-        public ImagePlaylistModel()
-        {
-            this._id = Guid.NewGuid().ToString();
-            this._playlistName = "";
-            this._images = new List<ImageModel>();
-            this._timeCreated = DateTime.Now.ToString();
-        }
 
         public ImagePlaylistModel(string playlistName)
         {
@@ -25,10 +18,10 @@ namespace GalaxyMediaPlayer.Models
             this._timeCreated = DateTime.Now.ToString();
         }
 
-        private ImagePlaylistModel(string id, string name, string timeCreated)
+        private ImagePlaylistModel(string id, string PlaylistName, string timeCreated)
         {
             this._id = id;
-            this._playlistName = name;
+            this._playlistName = PlaylistName;
             this._timeCreated = timeCreated;
             this._images = new List<ImageModel>();
         }

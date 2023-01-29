@@ -1,5 +1,6 @@
 ﻿using GalaxyMediaPlayer.Databases.ImagePage;
 using GalaxyMediaPlayer.Models;
+using GalaxyMediaPlayer.Pages.NavContentPages;
 using GalaxyMediaPlayer.UserControls;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
 {
@@ -24,10 +26,17 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
     /// </summary>
     public partial class ImagePlaylistPage : Page
     {
-        private static ObservableCollection<ImagePlaylistModel> ImagesPlaylist;
+        public static ObservableCollection<ImagePlaylistModel> ImagesPlaylist;
+        public static ListView ListViewImage;
+        public static ListBox listBoxImagePlaylist;
+        public static Border BorderListView;
+
         public ImagePlaylistPage()
         {
             InitializeComponent();
+            listBoxImagePlaylist = ListBoxImagePlaylist;
+            ListViewImage = listViewImage;
+            BorderListView = BorderlistView;
             ImagesPlaylist = new ObservableCollection<ImagePlaylistModel>(ImagesPlaylistDBAccess.LoadImagePlayList());
 
             foreach(ImagePlaylistModel imagePlaylistModel in ImagesPlaylist)
@@ -53,6 +62,18 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             ListBoxImagePlaylist.Visibility = Visibility.Visible;
         }
 
+        void ShowButtonWhenInImagePlaylist()
+        {
+            listViewImage.Visibility = Visibility.Visible;
+            ListBoxImagePlaylist.Visibility = Visibility.Collapsed;
+        }
+
+        void ShowButtonWhenNotInImagePlaylist()
+        {
+            listViewImage.Visibility= Visibility.Collapsed;
+            ListBoxImagePlaylist.Visibility = Visibility.Visible;
+        }
+
         private void Btn_NewPlaylist_Click(object sender, RoutedEventArgs e)
         {
             NewPlaylistControl newPlaylistControl = new NewPlaylistControl(AddNewImagePlaylist);
@@ -75,10 +96,39 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
 
         private void listBoxItem_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            if(e.ClickCount >=2)
+            {
+                ImagePlaylistModel imagePlaylistModel = ListBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
+                if (imagePlaylistModel != null)
+                {
+                    if(listViewImage.Items.Count > 0)
+                        ListViewImage.Items.Clear();
+                    foreach(ImageModel imageModel in ImagesInPlaylistDBAccess.LoadImageInPlayList(imagePlaylistModel.Id))
+                    {
+                        listViewImage.Items.Add(imageModel);
+                    }
 
+                    ShowButtonWhenInImagePlaylist();
+                    PlaylistPage.PlaylistNameHeader.Text = imagePlaylistModel.PlaylistName;
+                    PlaylistPage.ChooseCategoryPanel.Visibility = Visibility.Collapsed;
+                    PlaylistPage.BackBtn.Visibility = Visibility.Visible;
+                    PlaylistPage.AddNewImageToPlaylistBtn.Visibility = Visibility.Visible;
+                    PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Collapsed;
+                }
+            }
         }
 
         private void listBoxItem_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void img_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void img_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
 
         }

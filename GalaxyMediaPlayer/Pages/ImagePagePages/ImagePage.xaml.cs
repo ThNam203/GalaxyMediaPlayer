@@ -37,7 +37,7 @@ namespace GalaxyMediaPlayer.Pages
     {
 
         private static List<ImageModel> Images;
-       
+
         public ImagePage()
         {
             InitializeComponent();
@@ -95,17 +95,17 @@ namespace GalaxyMediaPlayer.Pages
 
         private void Image_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ClickCount == 1)
-            {
-                Image img = (Image)sender;
-            }
-            else if (e.ClickCount >= 2)
+            if (e.ClickCount >= 2)
             {
                 ImageModel imageModelSelected = (ImageModel)listViewImage.SelectedItem;
                 string ImagePath = imageModelSelected.path;
                 OpenImagePage openImagePage = new OpenImagePage(ImagePath);
                 openImagePage.IsDoubleClick = true;
                 MainWindow.Instance.MainFrame.Navigate(openImagePage);
+            }
+            if (e.RightButton == MouseButtonState.Pressed)
+            {
+
             }
         }
 
@@ -164,11 +164,24 @@ namespace GalaxyMediaPlayer.Pages
         private void img_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             ImageRightClickDialog dialog = new ImageRightClickDialog(
-                onDeleteButtonClick: DeleteImage);
+            onDeleteButtonClick: DeleteImage);
             int left = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).X);
             int top = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).Y);
             MainWindow.ShowCustomMessageBox(dialog, left: left, top: top);
+
             e.Handled = true;
+        }
+
+        private void DeleteImage(ImageModel item)
+        {
+            Images.Remove(item);
+            listViewImage.Items.Remove(item);
+            ImagesDBAccess.DeleteImage(item);
+
+            if (Images.Count == 0)
+            {
+                ShowButtonWhenDoNotHaveImage();
+            }
         }
 
         private void DeleteImage()
