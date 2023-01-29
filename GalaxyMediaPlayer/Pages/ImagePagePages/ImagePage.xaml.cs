@@ -27,7 +27,6 @@ using System.Net.Mime;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-
 namespace GalaxyMediaPlayer.Pages
 {
     /// <summary>
@@ -36,12 +35,19 @@ namespace GalaxyMediaPlayer.Pages
     public partial class ImagePage : Page
     {
 
-        private static List<ImageModel> Images;
+        private static List<ImageModel> _Images;
+        public static List<ImageModel> Images
+        {
+            get { return _Images;}
+            set { _Images = value; }
+        }
 
+        public static ListView ListViewImage;
         public ImagePage()
         {
             InitializeComponent();
             Images = new List<ImageModel>();
+            ListViewImage = listViewImage;
             LoadFromDB();
         }
 
@@ -98,9 +104,9 @@ namespace GalaxyMediaPlayer.Pages
             if (e.ClickCount >= 2)
             {
                 ImageModel imageModelSelected = (ImageModel)listViewImage.SelectedItem;
-                string ImagePath = imageModelSelected.path;
-                OpenImagePage openImagePage = new OpenImagePage(ImagePath);
+                OpenImagePage openImagePage = new OpenImagePage(imageModelSelected, Images);
                 openImagePage.IsDoubleClick = true;
+                
                 MainWindow.Instance.MainFrame.Navigate(openImagePage);
             }
         }
@@ -173,17 +179,6 @@ namespace GalaxyMediaPlayer.Pages
             }
         }
 
-        private void DeleteImage(ImageModel item)
-        {
-            Images.Remove(item);
-            listViewImage.Items.Remove(item);
-            ImagesDBAccess.DeleteImage(item);
-
-            if (Images.Count == 0)
-            {
-                ShowButtonWhenDoNotHaveImage();
-            }
-        }
 
         private void DeleteImage()
         {

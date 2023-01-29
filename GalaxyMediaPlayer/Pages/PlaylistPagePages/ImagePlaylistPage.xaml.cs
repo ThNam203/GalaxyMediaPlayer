@@ -3,6 +3,7 @@ using GalaxyMediaPlayer.Databases.SongPlaylist;
 using GalaxyMediaPlayer.Models;
 using GalaxyMediaPlayer.Pages.NavContentPages;
 using GalaxyMediaPlayer.UserControls;
+using GalaxyMediaPlayer.UserControls.ImageControls;
 using GalaxyMediaPlayer.UserControls.PlaylistControls;
 using System;
 using System.Collections.Generic;
@@ -191,7 +192,36 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
 
         private void img_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
+            ImageModel? image;
+            image = listViewImage.SelectedItem as ImageModel;
+            if (image != null)
+            {
+                ImageRightClickDialog dialog = new ImageRightClickDialog(
+                    onDeleteButtonClick: DeleteImage);
+                int left = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).X);
+                int top = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).Y);
+                MainWindow.ShowCustomMessageBox(dialog, left: left, top: top);
 
+                e.Handled = true;
+            }
+        }
+
+        private void DeleteImage()
+        {
+            ImagePlaylistModel? playlist;
+            playlist = ListBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
+            if (playlist != null)
+            {
+                foreach (ImageModel item in listViewImage.SelectedItems)
+                {
+                    ImagesInPlaylistDBAccess.DeleteImagePlaylist(item);
+                }
+                listViewImage.Items.Clear();
+                foreach (ImageModel imageModel in ImagesInPlaylistDBAccess.LoadImageInPlayList(playlist.Id))
+                {
+                    listViewImage.Items.Add(imageModel);
+                }
+            }
         }
     }
 }

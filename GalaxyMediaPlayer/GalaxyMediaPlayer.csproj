@@ -53,6 +53,8 @@
     <None Remove="Resources\Icons\ImagePageIcons\Filter.png" />
     <None Remove="Resources\Icons\ImagePageIcons\Image_gallery.png" />
     <None Remove="Resources\Icons\ImagePageIcons\Left_Arrow.png" />
+    <None Remove="Resources\Icons\ImagePageIcons\next.png" />
+    <None Remove="Resources\Icons\ImagePageIcons\previous.png" />
     <None Remove="Resources\Icons\ImagePageIcons\rotate_left.png" />
     <None Remove="Resources\Icons\ImagePageIcons\Rotate_right.png" />
     <None Remove="Resources\Icons\ImagePageIcons\zoom_in.png" />
@@ -115,10 +117,13 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Resource Include="Resources\Icons\ImagePageIcons\Image_gallery.png" />
+    <Resource Include="Resources\Icons\ImagePageIcons\next.png" />
+    <Resource Include="Resources\Icons\ImagePageIcons\previous.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\full_screen_64.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\minimize.png" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Accord.Video.FFMPEG" Version="3.8.0" />
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="ExifLib" Version="1.7.0" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
