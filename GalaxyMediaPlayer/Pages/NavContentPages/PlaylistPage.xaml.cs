@@ -11,12 +11,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
 using System.Xml;
 using System.Xml.Serialization;
+using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
 
 namespace GalaxyMediaPlayer.Pages.NavContentPages
 {
@@ -25,6 +27,8 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         public static Button NewPlaylistBtn;
         public static Button BackBtn;
         public static Button AddNewSongToPlaylistBtn;
+        public static Button AddNewVideoToPlaylistBtn;
+
         public static TextBlock PlaylistNameHeader;
         public static ComboBox CbSortPlaylistBy;
         public static StackPanel ChooseCategoryPanel;
@@ -47,6 +51,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             NewPlaylistBtn = newPlaylistBtn;
             PlaylistNameHeader = playlistNameHeader;
             AddNewSongToPlaylistBtn = addNewSongToPlaylistBtn;
+            AddNewVideoToPlaylistBtn = addNewVideoToPlaylistBtn;
             CbSortPlaylistBy = cbSortPlaylistBy;
             BackBtn = backBtn;
             ChooseCategoryPanel = chooseCategoryPanel;
@@ -125,10 +130,11 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             else if (currentPlaylistType == PlaylistPageType.Video)
             {
                 try
-                { //VideoPlaylistPage.play
-                  //  PlaylistPagePages.VideoPlaylistPage.PlaylistListBox.Visibility = Visibility.Visible;
-                  //  PlaylistPagePages.VideoPlaylistPage.PlaylistVideosDataGrid.Visibility = Visibility.Hidden;
-                    PlaylistPage.BackBtn.Visibility = Visibility.Hidden;
+                { 
+                    PlaylistPagePages.VideoPlaylistPage.PlaylistListBox.Visibility = Visibility.Visible;
+                    PlaylistPagePages.VideoPlaylistPage.PlaylistVideosDataGrid.Visibility = Visibility.Collapsed;
+                    PlaylistPage.BackBtn.Visibility = Visibility.Collapsed;
+
                 }catch(Exception ex)
                 {
                     MessageBox.Show(ex.Message);
@@ -272,10 +278,30 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 }
             }
         }
+        private void addNewVideoToPlaylistBtn_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
+            ofd.Multiselect = true;
+            ofd.Filter = "Video files |*.wmv; *.3g2; *.3gp; *.3gp2; *.3gpp; *.amv; *.asf;  *.avi; *.bin; *.cue; *.divx; *.dv; *.flv; *.gxf; *.iso; *.m1v; *.m2v; *.m2t; *.m2ts; *.m4v; " +
+             " *.mkv; *.mov; *.mp2; *.mp2v; *.mp4; *.mp4v; *.mpa; *.mpe; *.mpeg; *.mpeg1; *.mpeg2; *.mpeg4; *.mpg; *.mpv2; *.mts; *.nsv; *.nuv; *.ogg; *.ogm;" +
+             " *.ogv; *.ogx; *.ps; *.rec; *.rm; *.rmvb; *.tod; *.ts; *.tts; *.vob; *.vro; *.webm; *.dat; ";
 
+            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                foreach(string file in ofd.FileNames)
+                {
+                    VideoDisplay videoDisplay = new VideoDisplay(file);
+                    VideoPlaylistPage.source.Add(videoDisplay);
+                    var x = VideoPlaylistPage.PlaylistListBox.SelectedItem as VideoPaths;
+                    x.AddPath(file);
+                }
+            }
+        }
         private void PageFrame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
 
         }
+
+
     }
 }

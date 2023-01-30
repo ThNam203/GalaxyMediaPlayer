@@ -76,7 +76,9 @@ namespace GalaxyMediaPlayer.Databases.VideoPage
             string[] oDirectories = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage","*.xml",SearchOption.AllDirectories);
             foreach (string file in oDirectories)
             {
+                
                 VideoPaths video = new VideoPaths(file);
+                if(file!= AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\VideoPath.xml")
                 list.Add(video);
             }
             return list;
@@ -88,7 +90,6 @@ namespace GalaxyMediaPlayer.Databases.VideoPage
             foreach (XmlNode item in xmlNodeList)
             {
                 VideoDisplay videoDisplay = new VideoDisplay(item.InnerText);
-
                 list.Add(videoDisplay);
             }
             return list;

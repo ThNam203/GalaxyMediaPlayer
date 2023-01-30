@@ -34,21 +34,23 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
         public static ListBox PlaylistListBox;
         public static DataGrid PlaylistVideosDataGrid;
         public static Border EmptyPlaylistBorder;
+        private List<int> deleteIndices = new List<int>();
+
 
         VideoPaths videoPaths;
         
         public VideoPlaylistPage()
-        {
+        {   
+            InitializeComponent();
             PlaylistListBox = playlistListBox;
             PlaylistVideosDataGrid = playlistVideosDataGrid;
             EmptyPlaylistBorder = emptyPlaylistBorder;
-            InitializeComponent();
+
             DataBaseInit();
             playlistListBox.ItemsSource = playlistSource;//playlist
         }
         private void DataBaseInit()
         {
-            
             if (!IsDataBaseExists())//H.Nam if the database is not exists, create new one
             {
                 XmlDocument xmlDocument = new XmlDocument();
@@ -92,10 +94,15 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                     var x = playlistListBox.SelectedItem as VideoPaths;
                     source = x.GetAllPathsObs();
                     playlistVideosDataGrid.ItemsSource = source;//Video
+                    NavContentPages.PlaylistPage.CbSortPlaylistBy.Visibility = Visibility.Collapsed;
+                    NavContentPages.PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Collapsed;
+                    NavContentPages.PlaylistPage.ChooseCategoryPanel.Visibility = Visibility.Collapsed;
+                    NavContentPages.PlaylistPage.BackBtn.Visibility = Visibility.Visible;
+                    NavContentPages.PlaylistPage.AddNewVideoToPlaylistBtn.Visibility = Visibility.Visible;
+
                     playlistVideosDataGrid.Visibility = Visibility.Visible;
                     playlistListBox.Visibility= Visibility.Hidden;
                     PlaylistPage.BackBtn.Visibility = Visibility.Visible;
-                    
                 }
             }
             catch(Exception ex)
@@ -163,11 +170,35 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
 
         private void deleteIconHeader_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
+            var x = playlistVideosDataGrid.SelectedItems as VideoDisplay;
+            if (deleteIndices.Count > 0)
+            {
+                ConfirmDialog dialog = new ConfirmDialog("Delete Songs", "Are you sure to delete " + deleteIndices.Count + " songs", deleteVideosInPlaylist);
+                dialog.Show();
+            }
         }
         private void DeleteCheckBoxClick(object sender, RoutedEventArgs e)
         {
+            if (sender == null) return;
 
+            CheckBox cb = (CheckBox)sender;
+            if ((bool)cb.IsChecked) deleteIndices.Add(playlistVideosDataGrid.SelectedIndex);
+            else deleteIndices.Remove(playlistVideosDataGrid.SelectedIndex);
+            e.Handled = true;
+        }
+        private void deleteVideosInPlaylist()
+        {
+            List<SongInfor> deleteSongs = new List<SongInfor>();
+            foreach (int idx in deleteIndices.OrderByDescending(v => v))
+            {
+                var videoPaths = playlistListBox.SelectedItem as VideoPaths;
+                videoPaths.DeletePath(source[idx].pathToVideo);
+                source.RemoveAt(idx);
+
+            }
+
+            deleteIndices.Clear();
+            PlaylistSongsDatabaseAccess.DeleteSongs(deleteSongs);
         }
     }
 }
