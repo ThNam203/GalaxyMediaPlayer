@@ -77,7 +77,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             showImagesPlaylistsBtn.BorderBrush = System.Windows.Media.Brushes.Transparent;
 
             currentPlaylistType = PlaylistPageType.Video;
-            
+
             PageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/VideoPlaylistPage.xaml", UriKind.Relative));
         }
 
@@ -103,7 +103,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             {
                 NewPlaylistControl newPlaylistControl = new NewPlaylistControl(AddNewVideoPlaylist);
                 MainWindow.ShowCustomMessageBoxInMiddle(newPlaylistControl);
-            } 
+            }
             else if (currentPlaylistType == PlaylistPageType.Image)
             {
 
@@ -123,23 +123,16 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             if (currentPlaylistType == PlaylistPageType.Music)
             {
                 addNewSongToPlaylistBtn.Visibility = Visibility.Collapsed;
-
                 PlaylistPagePages.MusicPlaylistPage.PlaylistListBox.Visibility = Visibility.Visible;
                 PlaylistPagePages.MusicPlaylistPage.PlaylistSongsDataGrid.Visibility = Visibility.Collapsed;
             }
             else if (currentPlaylistType == PlaylistPageType.Video)
             {
-                try
-                { 
-                    PlaylistPagePages.VideoPlaylistPage.PlaylistListBox.Visibility = Visibility.Visible;
-                    PlaylistPagePages.VideoPlaylistPage.PlaylistVideosDataGrid.Visibility = Visibility.Collapsed;
-                    addNewVideoToPlaylistBtn.Visibility = Visibility.Collapsed;
-                    PlaylistPage.BackBtn.Visibility = Visibility.Collapsed;
-                    
-                }catch(Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
+
+                PlaylistPagePages.VideoPlaylistPage.PlaylistListBox.Visibility = Visibility.Visible;
+                PlaylistPagePages.VideoPlaylistPage.PlaylistVideosDataGrid.Visibility = Visibility.Collapsed;
+                addNewVideoToPlaylistBtn.Visibility = Visibility.Collapsed;
+                PlaylistPage.BackBtn.Visibility = Visibility.Collapsed;
             }
             else if (currentPlaylistType == PlaylistPageType.Image)
             {
@@ -176,7 +169,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             {
                 Directory.CreateDirectory(path);
             }
-            xmlDocument.Save(path+"\\"+playlistName+".xml");
+            xmlDocument.Save(path + "\\" + playlistName + ".xml");
             VideoPaths videoPaths = new VideoPaths(path + "\\" + playlistName + ".xml");
             VideoPlaylistPage.playlistSource.Add(videoPaths);
             MainWindow.ClearAllMessageBox();
@@ -184,7 +177,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         }
         private bool IsDataBaseExists(StringProperty playlistName)
         {
-            return (System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\"+playlistName+".xml"));
+            return (System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\" + playlistName + ".xml"));
         }
         private void cbSortPlaylistBy_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -198,11 +191,11 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
                     PlaylistPagePages.MusicPlaylistPage.playlists.Clear();
                     foreach (SongPlaylistModel song in tempPlaylists) PlaylistPagePages.MusicPlaylistPage.playlists.Add(song);
-                } 
+                }
                 else if (sortIndex == 1)
                 {
                     List<SongPlaylistModel> tempPlaylists = new List<SongPlaylistModel>(PlaylistPagePages.MusicPlaylistPage.playlists);
-                    tempPlaylists.Sort((x, y) => 
+                    tempPlaylists.Sort((x, y) =>
                         DateTime.Parse(y.TimeCreated, CultureInfo.InvariantCulture)
                         .CompareTo(DateTime.Parse(x.TimeCreated, CultureInfo.InvariantCulture)));
 
@@ -288,7 +281,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                foreach(string file in ofd.FileNames)
+                foreach (string file in ofd.FileNames)
                 {
                     VideoDisplay videoDisplay = new VideoDisplay(file);
                     VideoPlaylistPage.source.Add(videoDisplay);

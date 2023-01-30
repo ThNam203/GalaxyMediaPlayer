@@ -10,17 +10,19 @@
       Title="VideoMediaPLayer" ShowsNavigationUI="True" >
 
 
-    <Grid AllowDrop="True" Margin="0,0,0,0" KeyDown="Video_Page_KeyDown" >
+    <Grid AllowDrop="True" Margin="0,0,0,0" KeyDown="Video_Page_KeyDown" Background="Black" >
 
         <Grid 
               x:Name="videoGrid" 
               >
+
             <MediaElement 
                 x:Name="media"
                 MediaEnded="media_MediaEnded" 
-                MediaOpened="media_MediaOpened" 
+                MediaOpened="media_MediaOpened" MouseLeftButtonDown="media_MouseLeftButtonDown" 
+                
                  />
-
+            
             <ui:TextBox x:Name="Sub" TextWrapping="Wrap" 
                         FontFamily="Times New Roman" 
                         FontSize="24" 
@@ -35,7 +37,6 @@
                     <SolidColorBrush Color="#FFE5D9D9" Opacity="0"/>
                 </ui:TextBox.Background>
             </ui:TextBox>
-            
 
         </Grid>
         <Grid x:Name="controlVideoGrid" 
@@ -44,34 +45,38 @@
                 <RowDefinition Height="40" ></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Label x:Name="labelVideoTitle" Height="40" 
+            <Grid Grid.Row="0"   MouseEnter="VideoPlayerGrid_MouseEnter" Background="Transparent"
+                MouseLeave="VideoPlayerGrid_MouseLeave" >
+                <Label x:Name="labelVideoTitle" Height="40" Grid.Row="0"                 
+
                    VerticalAlignment="Top" FontFamily="Times New Roman" FontSize="16" RenderTransformOrigin="0.5,0.5" Background="Black" Foreground="White"
                  />
-
-            <StackPanel
-                MouseEnter="VideoPlayerGrid_MouseEnter"
-                MouseLeave="VideoPlayerGrid_MouseLeave" 
+                <StackPanel
                 x:Name="StackPanel1" 
                 HorizontalAlignment="Right" Width="800" Orientation="Horizontal" 
                 FlowDirection="RightToLeft" Height="40" VerticalAlignment="Top" Background="Transparent"
              >
-                <Button Name="btnCloseApp" 
+                    <Button Name="btnCloseApp" 
                             Click="btnCloseApp_Click"
                             Style="{StaticResource AppControlButtonStyle}"
                             Content="✕"/>
 
-                <Button Name="btnMaximizeApp"
+                    <Button Name="btnMaximizeApp"
                             Click="btnMaximizeApp_Click"
                             Style="{StaticResource AppControlButtonStyle}"
                             Content="▭" />
-                
-                <Button Name="btnMinimizeApp"
+
+                    <Button Name="btnMinimizeApp"
                             Click="btnMinimizeApp_Click"
                             Style="{StaticResource AppControlButtonStyle}"
                             Content="__"
                             Margin="0 0 8 0"/>
 
-            </StackPanel>
+                </StackPanel>
+            </Grid>
+
+
+
             
             <Button x:Name="Backward15seconds"
                     Style="{StaticResource btnMediaControlStyle}" 
@@ -89,25 +94,26 @@
                     </TransformGroup>
                 </Button.RenderTransform>
                 <Button.Background>
-                    <ImageBrush x:Name="Play_PauseIcon2"
+                    <ImageBrush x:Name="BackwardIcon"
                             Opacity="1" 
                             ImageSource="/Resources/Icons/MediaControlIcons/Skip15seconds.png"/>
                 </Button.Background>
             </Button>
-            <Button x:Name="btnPlayPause_Copy"
-                    Grid.Row="0" Grid.RowSpan="2"
+            
+            <Button x:Name="btnPlayPause_Copy"  Margin="0,200,0,200" 
+                    Grid.Row="0" Grid.RowSpan="2"  IsHitTestVisible="False"
                 Style="{StaticResource btnMediaControlStyle}" 
-                        RenderTransformOrigin="0.5,0.5" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        RenderTransformOrigin="0.5,0.5" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0">
                 <Button.Background>
-                    <ImageBrush x:Name="Play_PauseIcon1"
+                    <ImageBrush x:Name="Play_PauseIcon2"
                         Opacity="1" 
                         ImageSource="/Resources/Icons/MediaControlIcons/play_32.png"/>
                 </Button.Background>
             </Button>
 
             <Button                    
-                Grid.Row="0" Grid.RowSpan="2"
-                x:Name="Forward15seconds"
+                Grid.Row="0" Grid.RowSpan="2" 
+                x:Name="Forward15seconds"  IsHitTestVisible="False"
                     Style="{StaticResource btnMediaControlStyle}" 
                     RenderTransformOrigin="0.5,0.5" Width="50" Height="50" HorizontalAlignment="Right" Margin="0,200,250,200" Opacity="0">
                 <Button.RenderTransform>
@@ -119,7 +125,7 @@
                     </TransformGroup>
                 </Button.RenderTransform>
                 <Button.Background>
-                    <ImageBrush x:Name="Play_PauseIcon3" 
+                    <ImageBrush x:Name="ForwardIcon" 
                             ImageSource="/Resources/Icons/MediaControlIcons/Skip15seconds.png" Opacity="1"/>
                 </Button.Background>
             </Button>
@@ -135,7 +141,6 @@
 
             <Grid x:Name="VideoPlayerGrid" Margin="0,0,0,0" 
               VerticalAlignment="Bottom" 
-
                Height="70" Background="Black" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="250"/>
@@ -150,12 +155,10 @@
 
                 <Slider 
              x:Name="SliderSeek" 
-                Style="{StaticResource Horizontal_Slider2}"           
-                
+                Style="{StaticResource Horizontal_Slider2}"                 
                 GotMouseCapture="SliderSeek_GotMouseCapture" 
                 LostMouseCapture="SliderSeek_LostMouseCapture" MinHeight="3" 
                 Margin="50,0,50,0" VerticalAlignment="Center" Grid.Column="0" Grid.ColumnSpan="3">
-
                 </Slider>
                 <StackPanel x:Name="SongSliderPanel"
                 Visibility="Collapsed"
@@ -216,7 +219,7 @@
                             </TransformGroup>
                         </Button.RenderTransform>
                         <Button.Background>
-                            <ImageBrush x:Name="Play_PauseIcon5"
+                            <ImageBrush
                             Opacity="1" 
                             ImageSource="/Resources/Icons/MediaControlIcons/Skip15seconds.png"/>
                         </Button.Background>
@@ -225,9 +228,9 @@
                     <Button x:Name="btnPlayPause"
                     Style="{StaticResource btnMediaControlStyle}" Click="btnPlayPause_Click">
                         <Button.Background>
-                            <ImageBrush x:Name="Play_PauseIcon"
+                            <ImageBrush x:Name="Play_PauseIcon" 
                             Opacity="1" 
-                            ImageSource="/Resources/Icons/MediaControlIcons/play_32.png"/>
+                            ImageSource="/Resources/Icons/MediaControlIcons/pause_32.png"/>
                         </Button.Background>
                     </Button>
                     <Button x:Name="btnSkip15Seconds"
@@ -241,7 +244,7 @@
                             </TransformGroup>
                         </Button.RenderTransform>
                         <Button.Background>
-                            <ImageBrush x:Name="Play_PauseIcon4"
+                            <ImageBrush 
                             Opacity="1" 
                             ImageSource="/Resources/Icons/MediaControlIcons/Skip15seconds.png"/>
                         </Button.Background>

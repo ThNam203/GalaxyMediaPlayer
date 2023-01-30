@@ -88,7 +88,6 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
         }
         private void listBoxItem_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-
                 if (playlistListBox.SelectedItems.Count > 0 && e.ClickCount >= 2)
                 {
 
@@ -196,7 +195,6 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                 var videoPaths = playlistListBox.SelectedItem as VideoPaths;
                 videoPaths.DeletePath(source[idx].pathToVideo);
                 source.RemoveAt(idx);
-
             }
 
             deleteIndices.Clear();

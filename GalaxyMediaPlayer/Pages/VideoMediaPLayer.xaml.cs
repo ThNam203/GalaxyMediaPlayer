@@ -7,6 +7,8 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using System.IO;
+using GalaxyMediaPlayer.Pages.NavContentPages.MusicPage;
+using System.Windows.Shapes;
 
 namespace GalaxyMediaPlayer.Pages
 {
@@ -39,7 +41,7 @@ namespace GalaxyMediaPlayer.Pages
                         EndTime = fileContent[item + 1].Substring(fileContent[item + 1].LastIndexOf("-->") + 3).Trim(),
                         Text = fileContent[item + 2] + fileContent[item + 3]
 
-                    }); ;
+                    }); 
                     //H.nam The block numbers of SRT like 1, 2, 3, ... and so on
                     segment++;
                     //H.Nam Iterate one block at a time
@@ -50,12 +52,13 @@ namespace GalaxyMediaPlayer.Pages
 
         }
         List<SrtContent> test = new List<SrtContent>();
-        
+
         bool repeatIsOn = false;
         bool subtitlesIsOn = false;
         bool randomIsOn = false;
         bool fullSizeIsOn = true;
         bool sliderSeekIsDown = false;
+        bool mouseCaptured = false;
         DispatcherTimer timer;
         DispatcherTimer timer1;
         System.Windows.Forms.Timer timer2;
@@ -71,7 +74,6 @@ namespace GalaxyMediaPlayer.Pages
             videoPaths = new List<string>();
             this.videoPaths = videoPath;
             VideoPathIndex = startIndex;
-
             // Nam: if there is music playing, stop it
             if (MyMediaPlayer.isSongPlaying) MyMediaPlayer.Pause();
 
@@ -86,11 +88,9 @@ namespace GalaxyMediaPlayer.Pages
             timer1.Tick += new EventHandler(Timer1_Tick);
             timer2 = new System.Windows.Forms.Timer();
             timer2.Interval = 30;
-            timer2.Tick += Timer2_Tick;    
-            timer.Interval = TimeSpan.FromMilliseconds(200);
+            timer2.Tick += Timer2_Tick;
+            timer.Interval = TimeSpan.FromMilliseconds(50);
             timer.Tick += new EventHandler(Timer_Tick);
-            Play_PauseIcon1.Opacity = 0;
-            
             btnSubtitles.Opacity = 0.5;
             btnRandom.Opacity = 0.5;
             btnRepeat.Opacity = 0.5;
@@ -105,9 +105,9 @@ namespace GalaxyMediaPlayer.Pages
         private void Timer2_Tick(object? sender, EventArgs e) //For animation transform
         {
             bool flag = false;
-            if (Play_PauseIcon1.Opacity > 0)
+            if (btnPlayPause_Copy.Opacity > 0)
             {
-                Play_PauseIcon1.Opacity -= 0.1; flag = true;
+                btnPlayPause_Copy.Opacity -= 0.1; flag = true;
             }
             if (Forward15seconds.Opacity > 0)
             {
@@ -117,8 +117,7 @@ namespace GalaxyMediaPlayer.Pages
             {
                 Backward15seconds.Opacity -= 0.1; flag = true;
             }
-
-            if (fullSizeIsOn)
+            if (!fullSizeIsOn)
             {
                 if (media.Margin.Top < 40)
                 {
@@ -135,14 +134,6 @@ namespace GalaxyMediaPlayer.Pages
                     flag = true;
                 }
             }
-            if (sliderSeekIsDown)
-            {
-                string a = TimeSpan.FromMinutes(SliderSeek.Value).ToString();
-                string b = TimeSpan.FromMinutes(SliderSeek.Maximum).ToString();
-                Video_Duration.Content = a.Substring(0, a.LastIndexOf(':')) + " / " + b.Substring(0, b.LastIndexOf(':'));
-                media.Position = TimeSpan.FromSeconds(SliderSeek.Value);
-                flag = true;
-            }
             if (flag == false)
             {
                 timer2.Stop();
@@ -153,13 +144,19 @@ namespace GalaxyMediaPlayer.Pages
             bool flag = false;
             if (VideoPlayerGrid.Height > 0)
             {
-                VideoPlayerGrid.Height -=5;
-                   flag = true;
-            }
-            if(labelVideoTitle.Height > 0)
-            {
-                labelVideoTitle.Height-=5;
+                VideoPlayerGrid.Height -= 5;
                 flag = true;
+            }
+            if (labelVideoTitle.Height > 0)
+            {
+                labelVideoTitle.Height -= 5;
+                flag = true;
+            }
+            if (mouseCaptured || !fullSizeIsOn)
+            {
+                labelVideoTitle.Height = 40;
+                VideoPlayerGrid.Height = 70;
+                flag = false;
             }
             if (!flag)
             {
@@ -171,6 +168,7 @@ namespace GalaxyMediaPlayer.Pages
             bool flag = true;
             try
             {
+                if(!sliderSeekIsDown)
                 SliderSeek.Value = media.Position.TotalSeconds;//update the current video position to progress bar
                 string a = TimeSpan.FromMinutes(SliderSeek.Value).ToString();//H.Nam: remove miliseconds from Timespan
                 string b = TimeSpan.FromMinutes(SliderSeek.Maximum).ToString();
@@ -199,7 +197,6 @@ namespace GalaxyMediaPlayer.Pages
                 {
                     Sub.Background.Opacity = 0;
                     Sub.Text = "";
-
                 }
 
             }
@@ -252,22 +249,23 @@ namespace GalaxyMediaPlayer.Pages
         }
         private void btnPlayPause_Click(object sender, RoutedEventArgs e)
         {
-
+            btnPlayPause_Copy.Opacity = 1;
+            timer2.Start();
             if (media.LoadedBehavior != MediaState.Play)
             {
-                media.LoadedBehavior = MediaState.Play;
-                Play_PauseIcon.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/pause_32.png"));
-                Play_PauseIcon1.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/pause_32.png"));
 
+                Play_PauseIcon.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/pause_32.png"));
+                Play_PauseIcon2.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/pause_32.png"));
+                media.LoadedBehavior = MediaState.Play;
             }
             else
             {
-                media.LoadedBehavior = MediaState.Pause;
+
                 Play_PauseIcon.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/play_32.png"));
-                Play_PauseIcon1.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/play_32.png"));
+                Play_PauseIcon2.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/play_32.png"));
+                media.LoadedBehavior = MediaState.Pause;
             }
-            Play_PauseIcon1.Opacity = 1;
-            timer2.Start();
+
         }
 
 
@@ -322,45 +320,34 @@ namespace GalaxyMediaPlayer.Pages
         }
 
 
-        private void SliderSeek_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            while (false)
-            {
-                media.LoadedBehavior = MediaState.Pause;
-            }
-            media.LoadedBehavior = MediaState.Play;
-        }
-
         private void SliderSeek_GotMouseCapture(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            timer.Stop();
-            timer2.Start();
             sliderSeekIsDown = true;
+            media.Volume = 0;
         }
 
         private void SliderSeek_LostMouseCapture(object sender, System.Windows.Input.MouseEventArgs e)
         {
             media.Position = TimeSpan.FromSeconds(SliderSeek.Value);//H.Nam: Allow user to change the video position according to progress bar
             sliderSeekIsDown = false;
-            timer.Start();
+            media.Volume =VolumeSlider.Value;
         }
 
         private void VideoPlayerGrid_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            mouseCaptured = false;
             if (fullSizeIsOn)
             {
-                 wait(3000);
-                //control_panel.Visibility = Visibility.Hidden;
-                //VolumeControlPanel.Visibility = Visibility.Hidden;
-                //SliderSeek.Visibility = Visibility.Hidden;
+                wait(3000);
                 timer1.Start();
             }
         }
 
         private void VideoPlayerGrid_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            mouseCaptured =true;
             labelVideoTitle.Height = 40;
-            VideoPlayerGrid.Height=70;
+            VideoPlayerGrid.Height = 70;
         }
         private void btnSkip15Seconds_Click(object sender, RoutedEventArgs e)
         {
@@ -409,7 +396,6 @@ namespace GalaxyMediaPlayer.Pages
             }
             labelVideoTitle.Content = System.IO.Path.GetFileNameWithoutExtension(videoPaths[VideoPathIndex]);
         }
-
         private void btnPrevious_Click(object sender, RoutedEventArgs e)
         {
             if (VideoPathIndex > 0)
@@ -447,7 +433,7 @@ namespace GalaxyMediaPlayer.Pages
             }
             else
             {
-                
+
                 repeatIsOn = true;
                 if (randomIsOn)
                 {
@@ -461,16 +447,14 @@ namespace GalaxyMediaPlayer.Pages
         private void btnFullScreen_Click(object sender, RoutedEventArgs e)
         {
             if (fullSizeIsOn)
-                ToggleScreenSizeIcon.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/full_screen_64.png"));
+                ToggleScreenSizeIcon.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/minimize_32.png"));
+
             else
             {
-                ToggleScreenSizeIcon.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/minimize_32.png"));
+                ToggleScreenSizeIcon.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/full_screen_64.png"));
             }
-
             fullSizeIsOn = !fullSizeIsOn;
             timer2.Start();
-
-
         }
 
         private void btnSubtitles_Click_1(object sender, RoutedEventArgs e)
@@ -491,7 +475,7 @@ namespace GalaxyMediaPlayer.Pages
                         btnSubtitles.Opacity = 1;
                     }
                 }
-         
+
             }
 
         }
@@ -537,7 +521,17 @@ namespace GalaxyMediaPlayer.Pages
 
         private void btnCloseApp_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            MainWindow.Instance.MainFrame.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
+        }
+
+        private void media_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            btnPlayPause_Click(sender, e);
         }
     }
 }
+//private void btnCloseApp_Click(object sender, RoutedEventArgs e)
+//{
+//    MainWindow.Instance.MainFrame.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
+
+//}
