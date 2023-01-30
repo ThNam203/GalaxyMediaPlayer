@@ -21,9 +21,13 @@ namespace GalaxyMediaPlayer.Databases.VideoPage
     public class VideoPaths
     {
         string fileLocation = AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\VideoPath.xml";
-        public XmlElement root;
-        XmlDocument xmlDocument = new XmlDocument();
+        public string playlistThumbnail { get; set; }
         public string playlistName { get; set; }
+        public XmlElement root;
+        
+        XmlDocument xmlDocument = new XmlDocument();
+
+
         public VideoPaths(string fileLocation)
         {
             this.fileLocation = fileLocation.Trim();
@@ -76,10 +80,16 @@ namespace GalaxyMediaPlayer.Databases.VideoPage
             string[] oDirectories = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage","*.xml",SearchOption.AllDirectories);
             foreach (string file in oDirectories)
             {
-                
-                VideoPaths video = new VideoPaths(file);
-                if(file!= AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\VideoPath.xml")
-                list.Add(video);
+                if (file != AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\VideoPath.xml")
+                {
+                    VideoPaths video = new VideoPaths(file);
+                    if (video.root.ChildNodes.Count > 0)
+                    {
+                        VideoDisplay display = new VideoDisplay(video.root.FirstChild.InnerText);
+                        video.playlistThumbnail = display.pathToImg;
+                    }
+                    list.Add(video);
+                }
             }
             return list;
         }

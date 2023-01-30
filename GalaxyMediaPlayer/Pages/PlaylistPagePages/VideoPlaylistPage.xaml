@@ -281,7 +281,7 @@
                                 BorderThickness="3">
 
                             <Image 
-                                   Source="{Binding pathToImg}"/>
+                                   Source="{Binding playlistThumbnail}"/>
                         </Border>
 
                         <TextBlock  Grid.Row="1" 
@@ -400,7 +400,9 @@
 
                 <Button
                     Name="secondaryNewPlaylistBtn"
-                    Click="secondaryNewPlaylistBtn_Click">
+                    Click="secondaryNewPlaylistBtn_Click"
+                    
+                    >
                     <Button.Template>
                         <ControlTemplate>
                             <Border Width="100"

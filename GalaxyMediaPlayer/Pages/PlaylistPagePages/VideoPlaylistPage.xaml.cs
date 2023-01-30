@@ -38,16 +38,14 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
 
 
         VideoPaths videoPaths;
-        
+
         public VideoPlaylistPage()
-        {   
+        {
             InitializeComponent();
             PlaylistListBox = playlistListBox;
             PlaylistVideosDataGrid = playlistVideosDataGrid;
             EmptyPlaylistBorder = emptyPlaylistBorder;
-
             DataBaseInit();
-            playlistListBox.ItemsSource = playlistSource;//playlist
         }
         private void DataBaseInit()
         {
@@ -62,13 +60,16 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                     Directory.CreateDirectory(path);
                 }
                 xmlDocument.Save(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPlayListPage\\VideoPlayListPath.xml");
-                
+
             }
             videoPaths = new VideoPaths(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\VideoPath.xml");
             playlistSource = new ObservableCollection<VideoPaths>();
             playlistSource = videoPaths.GetAllPlaylistPaths();
-            source = new ObservableCollection<VideoDisplay>();
-            
+            source = new ObservableCollection<VideoDisplay>(); 
+            playlistListBox.ItemsSource = playlistSource;
+            if (playlistListBox.Items.Count == 0) {
+               emptyPlaylistBorder.Visibility= Visibility.Visible;
+            }
         }
         public bool IsDataBaseExists()
         {
@@ -78,7 +79,8 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
 
         private void secondaryNewPlaylistBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            PlaylistPage.NewPlaylistBtn_Click(sender,e);
+            emptyPlaylistBorder.Visibility = Visibility.Collapsed;
         }
         public void change_Btn_Visibility()
         {
@@ -86,8 +88,7 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
         }
         private void listBoxItem_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            try
-            {
+
                 if (playlistListBox.SelectedItems.Count > 0 && e.ClickCount >= 2)
                 {
 
@@ -99,16 +100,12 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                     NavContentPages.PlaylistPage.ChooseCategoryPanel.Visibility = Visibility.Collapsed;
                     NavContentPages.PlaylistPage.BackBtn.Visibility = Visibility.Visible;
                     NavContentPages.PlaylistPage.AddNewVideoToPlaylistBtn.Visibility = Visibility.Visible;
-
                     playlistVideosDataGrid.Visibility = Visibility.Visible;
-                    playlistListBox.Visibility= Visibility.Hidden;
+                    playlistListBox.Visibility = Visibility.Hidden;
                     PlaylistPage.BackBtn.Visibility = Visibility.Visible;
                 }
-            }
-            catch(Exception ex)
-            {
-                //   MessageBox.Show(ex.Message);
-            }
+            
+
         }
         private void listBoxItem_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -129,22 +126,27 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
 
 
         }
-            private void RemovePlaylist()
-        { 
+        private void RemovePlaylist()
+        {
             string[] oDirectories = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage", "*.xml", SearchOption.AllDirectories);
             var x = playlistListBox.SelectedItem as VideoPaths;
             foreach (string oDirectory in oDirectories)
             {
-                if(System.IO.Path.GetFileNameWithoutExtension(oDirectory) == x.playlistName)
+                if (System.IO.Path.GetFileNameWithoutExtension(oDirectory) == x.playlistName)
                 {
                     File.Delete(oDirectory);
                 }
             }
             playlistSource.Remove(x);
+            if (playlistListBox.Items.Count == 0)
+            {
+                emptyPlaylistBorder.Visibility = Visibility.Visible;
+                PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void RenamePlaylist(string newName)
-            {
+        {
             string[] oDirectories = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage", "*.xml", SearchOption.AllDirectories);
             var x = playlistListBox.SelectedItem as VideoPaths;
             string renamePlaylist = string.Empty;
@@ -153,7 +155,7 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                 if (System.IO.Path.GetFileNameWithoutExtension(oDirectory) == x.playlistName)
                 {
                     renamePlaylist = System.IO.Path.GetDirectoryName(oDirectory) + "\\" + newName + ".xml";
-                    File.Move(oDirectory,renamePlaylist);
+                    File.Move(oDirectory, renamePlaylist);
                 }
             }
             playlistSource.Remove(x);
@@ -165,7 +167,7 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             List<String> path = new List<string>();
             var x = playlistVideosDataGrid.SelectedItem as VideoDisplay;
             path.Add(x.pathToVideo);
-                MainWindow.Instance.MainFrame.Navigate(new VideoMediaPLayer(path));
+            MainWindow.Instance.MainFrame.Navigate(new VideoMediaPLayer(path));
         }
 
         private void deleteIconHeader_MouseDown(object sender, MouseButtonEventArgs e)

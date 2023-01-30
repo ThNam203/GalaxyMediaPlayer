@@ -251,7 +251,8 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
-
+                    
+                    
                     <Button
                     Name="addNewSongToPlaylistBtn"
                     Click="addNewSongToPlaylistBtn_Click"
