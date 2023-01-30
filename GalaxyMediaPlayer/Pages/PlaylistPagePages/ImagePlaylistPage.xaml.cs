@@ -1,6 +1,7 @@
 ﻿using GalaxyMediaPlayer.Databases.ImagePage;
 using GalaxyMediaPlayer.Databases.SongPlaylist;
 using GalaxyMediaPlayer.Models;
+using GalaxyMediaPlayer.Pages.ImagePagePages;
 using GalaxyMediaPlayer.Pages.NavContentPages;
 using GalaxyMediaPlayer.UserControls;
 using GalaxyMediaPlayer.UserControls.ImageControls;
@@ -50,6 +51,10 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             if(ImagePlaylists.Count > 0)
             {
                 ShowButtonWhenHaveImagePlaylist();
+            }
+            else
+            {
+                ShowButtonWhenDoNotHaveImagePlaylist();
             }
         }
 
@@ -105,9 +110,13 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                 if (imagePlaylistModel != null)
                 {
                     if(listViewImage.Items.Count > 0)
+                    {
+                        imagePlaylistModel.Images.Clear();
                         ListViewImage.Items.Clear();
+                    }
                     foreach(ImageModel imageModel in ImagesInPlaylistDBAccess.LoadImageInPlayList(imagePlaylistModel.Id))
                     {
+                        imagePlaylistModel.Images.Add(imageModel);
                         listViewImage.Items.Add(imageModel);
                     }
 
@@ -187,7 +196,14 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
 
         private void img_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
+            ImagePlaylistModel imagePlaylistModel = ListBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
+            if (e.ClickCount >= 2)
+            {
+                ImageModel imageModelSelected = (ImageModel)listViewImage.SelectedItem;
+                Pages.ImagePagePages.ShowImagePlaylistPage showImagePlaylistPage = new ShowImagePlaylistPage(imageModelSelected, imagePlaylistModel.Images);
+                
+                MainWindow.Instance.MainFrame.Navigate(showImagePlaylistPage);
+            }
         }
 
         private void img_MouseRightButtonDown(object sender, MouseButtonEventArgs e)

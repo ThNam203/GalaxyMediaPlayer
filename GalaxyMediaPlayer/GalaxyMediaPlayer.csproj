@@ -123,7 +123,6 @@
     <Resource Include="Resources\Icons\MediaControlIcons\minimize.png" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Accord.Video.FFMPEG" Version="3.8.0" />
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="ExifLib" Version="1.7.0" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />

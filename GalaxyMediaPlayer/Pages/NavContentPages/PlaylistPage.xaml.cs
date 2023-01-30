@@ -24,6 +24,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         public static TextBlock PlaylistNameHeader;
         public static ComboBox CbSortPlaylistBy;
         public static StackPanel ChooseCategoryPanel;
+        public static Frame pageFrame;
 
         public static Action<object, RoutedEventArgs> NewPlaylistBtn_Click;
 
@@ -47,6 +48,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             CbSortPlaylistBy = cbSortPlaylistBy;
             BackBtn = backBtn;
             ChooseCategoryPanel = chooseCategoryPanel;
+            pageFrame = PageFrame;
             NewPlaylistBtn_Click = this.newPlaylistBtn_Click;
 
             PageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/MusicPlaylistPage.xaml", UriKind.Relative));
@@ -299,7 +301,5 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         {
 
         }
-
-        
     }
 }
