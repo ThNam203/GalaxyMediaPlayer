@@ -1,4 +1,5 @@
 ﻿using GalaxyMediaPlayer.Models;
+using GalaxyMediaPlayer.Pages.NavContentPages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,17 +22,25 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
     /// <summary>
     /// Interaction logic for ShowImagePlaylistPage.xaml
     /// </summary>
-    public partial class ShowImagePlaylistPage : Page
+    public partial class ShowImagePlaylistPage : Window
     {
 
-        public ShowImagePlaylistPage(ImageModel img, List<ImageModel> list)
+        public ShowImagePlaylistPage(ImageModel img, List<ImageModel> list,double width, double height,double left, double top)
         {
             InitializeComponent();
             _Images = list;
             currentImage = img;
             imgPath = img.path;
             RunPlaylistImage();
+
+            this.Width = width;
+            this.Height = height;
+            this.Left = left;
+            this.Top = top;
+
+            this.WindowStartupLocation= WindowStartupLocation.Manual;
         }
+
         private static ImageModel _currentImage;
         public static ImageModel currentImage
         {
@@ -60,6 +69,30 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
             }
         }
 
+        private void btnMinimizeApp_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        private void btnMaximizeApp_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.WindowState == WindowState.Maximized)
+            {
+                MainWindow.Instance.WindowState= WindowState.Normal;
+                this.WindowState = WindowState.Normal;
+            }
+            else
+            {
+                MainWindow.Instance.WindowState = WindowState.Maximized;
+                this.WindowState = WindowState.Maximized;
+            }
+        }
+
+        private void btnCloseApp_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
         System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
         private void RunPlaylistImage()
         {
@@ -85,36 +118,52 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
             currentImage = Images[TargetIndex];
         }
 
-
-
-        private void btnMinimizeApp_Click(object sender, RoutedEventArgs e)
+        void getSizeOfNormalWindow(
+            ref double normalWidth,
+            ref double normalHeight,
+            ref double normalLeft,
+            ref double normalTop)
         {
-            Application.Current.MainWindow.WindowState = WindowState.Minimized;
-        }
-
-        private void btnMaximizeApp_Click(object sender, RoutedEventArgs e)
-        {
-            if (Application.Current.MainWindow.WindowState == WindowState.Maximized)
+            if (this.WindowState == WindowState.Maximized)
             {
-                Application.Current.MainWindow.WindowState = WindowState.Normal;
+                this.Visibility = Visibility.Hidden;
+                this.WindowState = WindowState.Normal;
+
+                normalWidth = this.ActualWidth;
+                normalHeight = this.ActualHeight;
+                normalLeft = this.Left;
+                normalTop = this.Top;
+
+                this.WindowState = WindowState.Maximized;
+                this.Visibility = Visibility.Visible;
             }
             else
             {
-                Application.Current.MainWindow.WindowState = WindowState.Maximized;
+                normalWidth = this.ActualWidth;
+                normalHeight = this.ActualHeight;
+                normalLeft = this.Left;
+                normalTop = this.Top;
             }
-        }
-
-        private void btnCloseApp_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
         }
 
         private void btnLeftArrow_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            MainWindow.Instance.MainFrame.NavigationService.GoBack();
+            double width = 0, height = 0, left = 400, top = 400;
+            getSizeOfNormalWindow(ref width,ref height,ref left, ref top);
+            MainWindow.Instance.Width = width;
+            MainWindow.Instance.Height = height;
+            Application.Current.MainWindow.Visibility = Visibility.Visible;
+            MainWindow.Instance.Left= left;
+            MainWindow.Instance.Top= top;
+            this.Close();
+        }
 
-            Pages.NavContentPages.PlaylistPage.pageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/ImagePlaylistPage.xaml", UriKind.Relative));
-            //Pages.NavContentPages.PlaylistPage.showImagesPlaylistsBtn_MouseDown(sender, e);
+        private void PageShowImagePlaylist_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
+
+            if (dispatcherTimer.IsEnabled==false)
+                dispatcherTimer.Start();
         }
     }
 }

@@ -6,6 +6,7 @@ using GalaxyMediaPlayer.Pages.NavContentPages;
 using GalaxyMediaPlayer.UserControls;
 using GalaxyMediaPlayer.UserControls.ImageControls;
 using GalaxyMediaPlayer.UserControls.PlaylistControls;
+using GalaxyMediaPlayer.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -194,15 +195,52 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             }
         }
 
+        void getSizeOfNormalWindow(
+            ref double normalWidth,
+            ref double normalHeight,
+            ref double normalLeft,
+            ref double normalTop)
+        {
+            if(MainWindow.Instance.WindowState == WindowState.Maximized)
+            {
+                MainWindow.Instance.WindowState = WindowState.Normal;
+
+                normalWidth = MainWindow.Instance.ActualWidth;
+                normalHeight = MainWindow.Instance.ActualHeight;
+                normalLeft = MainWindow.Instance.Left;
+                normalTop = MainWindow.Instance.Top;
+
+                MainWindow.Instance.WindowState = WindowState.Maximized;
+            }
+            else
+            {
+                normalWidth = MainWindow.Instance.ActualWidth;
+                normalHeight = MainWindow.Instance.ActualHeight;
+                normalLeft = MainWindow.Instance.Left;
+                normalTop = MainWindow.Instance.Top;
+            }
+        }
+
         private void img_MouseDown(object sender, MouseButtonEventArgs e)
         {
             ImagePlaylistModel imagePlaylistModel = ListBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
             if (e.ClickCount >= 2)
             {
-                ImageModel imageModelSelected = (ImageModel)listViewImage.SelectedItem;
-                Pages.ImagePagePages.ShowImagePlaylistPage showImagePlaylistPage = new ShowImagePlaylistPage(imageModelSelected, imagePlaylistModel.Images);
-                
-                MainWindow.Instance.MainFrame.Navigate(showImagePlaylistPage);
+                if (imagePlaylistModel != null)
+                {
+                    ImageModel imageModelSelected = (ImageModel)listViewImage.SelectedItem;
+                    if (imageModelSelected != null)
+                    {
+                        Application.Current.MainWindow.Visibility = Visibility.Hidden;
+
+                        double normalWidth = 0, normalHeight = 0, normalLeft = 0,normalTop = 0 ;
+                        getSizeOfNormalWindow(ref normalWidth,ref normalHeight, ref normalLeft, ref normalTop);
+                        ShowImagePlaylistPage showImagePlaylistPage = new ShowImagePlaylistPage(imageModelSelected, imagePlaylistModel.Images, normalWidth, normalHeight, normalLeft, normalTop);
+
+                        showImagePlaylistPage.WindowState = MainWindow.Instance.WindowState;
+                        showImagePlaylistPage.Show();
+                    }
+                }
             }
         }
 

@@ -24,7 +24,6 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         public static TextBlock PlaylistNameHeader;
         public static ComboBox CbSortPlaylistBy;
         public static StackPanel ChooseCategoryPanel;
-        public static Frame pageFrame;
 
         public static Action<object, RoutedEventArgs> NewPlaylistBtn_Click;
 
@@ -35,7 +34,9 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             Video,
         }
 
+
         PlaylistPageType currentPlaylistType = PlaylistPageType.Music;
+        
 
         public PlaylistPage()
         {
@@ -48,7 +49,6 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             CbSortPlaylistBy = cbSortPlaylistBy;
             BackBtn = backBtn;
             ChooseCategoryPanel = chooseCategoryPanel;
-            pageFrame = PageFrame;
             NewPlaylistBtn_Click = this.newPlaylistBtn_Click;
 
             PageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/MusicPlaylistPage.xaml", UriKind.Relative));
@@ -60,7 +60,6 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             showVideosPlaylistsBtn.BorderBrush = System.Windows.Media.Brushes.Transparent;
             showImagesPlaylistsBtn.BorderBrush = System.Windows.Media.Brushes.Transparent;
 
-            currentPlaylistType = PlaylistPageType.Music;
             PageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/MusicPlaylistPage.xaml", UriKind.Relative));
         }
 
@@ -74,7 +73,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             PageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/Page1.xaml", UriKind.Relative));
         }
 
-        private void showImagesPlaylistsBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        public void showImagesPlaylistsBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             showImagesPlaylistsBtn.BorderBrush = System.Windows.Media.Brushes.White;
             showMusicPlaylistsBtn.BorderBrush = System.Windows.Media.Brushes.Transparent;

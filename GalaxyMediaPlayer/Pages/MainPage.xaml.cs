@@ -34,6 +34,7 @@ namespace GalaxyMediaPlayer.Pages
         // Nam: use this value when a button is not active
         private float opacityNotActiveValue = 0.5f;
 
+
         public MainPage()
         {
             Instance = this;
@@ -454,6 +455,7 @@ namespace GalaxyMediaPlayer.Pages
             else
             {
                 Application.Current.MainWindow.WindowState = WindowState.Maximized;
+
             }
         }
 
