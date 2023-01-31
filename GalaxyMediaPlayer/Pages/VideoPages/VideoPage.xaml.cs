@@ -52,33 +52,9 @@ namespace GalaxyMediaPlayer.Pages
             source = new ObservableCollection<VideoDisplay>();
              source = videoPaths.GetAllPathsObs();
             VideoListView.ItemsSource =source ;               
-           // AddVideoInFolder();         
             if (source.Count>0)
             {
                 ChangeBtnVisibility();
-            }
-        }
-        private void AddVideoInFolder()
-        {
-            foreach (var folder in VideoPageDatabaseAccess.GetAllData())
-            {
-                string[] files = Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories);
-                foreach (string file in files)
-                {
-                    string extension = Path.GetExtension(file);
-                    if(!videoExtension.Contains(extension))
-                        continue;
-
-                    List<string> check = videoPaths.GetAllPaths();
-                    bool flag= true;
-                    foreach (string path in check)
-                    {
-                        if(path==file)
-                            flag= false;
-                    }
-                    if(flag)
-                       source.Add(new VideoDisplay(file));
-                }
             }
         }
         private void Add(object sender, RoutedEventArgs e)

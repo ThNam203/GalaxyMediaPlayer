@@ -9,6 +9,7 @@ using System.Windows.Threading;
 using System.IO;
 using GalaxyMediaPlayer.Pages.NavContentPages.MusicPage;
 using System.Windows.Shapes;
+using Xabe.FFmpeg;
 
 namespace GalaxyMediaPlayer.Pages
 {
@@ -41,7 +42,7 @@ namespace GalaxyMediaPlayer.Pages
                         EndTime = fileContent[item + 1].Substring(fileContent[item + 1].LastIndexOf("-->") + 3).Trim(),
                         Text = fileContent[item + 2] + fileContent[item + 3]
 
-                    }); 
+                    });
                     //H.nam The block numbers of SRT like 1, 2, 3, ... and so on
                     segment++;
                     //H.Nam Iterate one block at a time
@@ -149,12 +150,14 @@ namespace GalaxyMediaPlayer.Pages
             }
             if (labelVideoTitle.Height > 0)
             {
+                StackPanel1.Height -= 5;
                 labelVideoTitle.Height -= 5;
                 flag = true;
             }
             if (mouseCaptured || !fullSizeIsOn)
             {
                 labelVideoTitle.Height = 40;
+                StackPanel1.Height = 40;
                 VideoPlayerGrid.Height = 70;
                 flag = false;
             }
@@ -168,8 +171,8 @@ namespace GalaxyMediaPlayer.Pages
             bool flag = true;
             try
             {
-                if(!sliderSeekIsDown)
-                SliderSeek.Value = media.Position.TotalSeconds;//update the current video position to progress bar
+                if (!sliderSeekIsDown)
+                    SliderSeek.Value = media.Position.TotalSeconds;//update the current video position to progress bar
                 string a = TimeSpan.FromMinutes(SliderSeek.Value).ToString();//H.Nam: remove miliseconds from Timespan
                 string b = TimeSpan.FromMinutes(SliderSeek.Maximum).ToString();
                 Video_Duration.Content = a.Substring(0, a.LastIndexOf(':')) + " / " + b.Substring(0, b.LastIndexOf(':'));
@@ -231,6 +234,14 @@ namespace GalaxyMediaPlayer.Pages
                 System.Windows.Forms.MessageBox.Show(ex.Message);
             }
         }
+        private string getSRTLanguage(string videopath, string srtpath)
+        {
+            videopath = System.IO.Path.GetFileNameWithoutExtension(videopath);
+            srtpath = System.IO.Path.GetFileNameWithoutExtension(srtpath);
+            int start = srtpath.IndexOf(videopath);
+            int end = start + videopath.Length;
+            return srtpath.Substring(0, start) + srtpath.Substring(end).Trim(); ;
+        }
         private void getSrtPath()
         {
             subtitlePaths.Clear();
@@ -242,7 +253,9 @@ namespace GalaxyMediaPlayer.Pages
                     if (System.IO.Path.GetFileName(item).Contains(System.IO.Path.GetFileNameWithoutExtension(videoPath)))
                     {
                         subtitlePaths.Add(item);
-                        break;
+
+                        // subtitlesCbb.Items.Add(System.IO.Path.GetFileName(item));
+                        // subtitlesCbb.Visibility= Visibility.Visible;
                     }
                 }
             }
@@ -330,7 +343,7 @@ namespace GalaxyMediaPlayer.Pages
         {
             media.Position = TimeSpan.FromSeconds(SliderSeek.Value);//H.Nam: Allow user to change the video position according to progress bar
             sliderSeekIsDown = false;
-            media.Volume =VolumeSlider.Value;
+            media.Volume = VolumeSlider.Value;
         }
 
         private void VideoPlayerGrid_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
@@ -345,9 +358,10 @@ namespace GalaxyMediaPlayer.Pages
 
         private void VideoPlayerGrid_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            mouseCaptured =true;
+            mouseCaptured = true;
             labelVideoTitle.Height = 40;
             VideoPlayerGrid.Height = 70;
+            StackPanel1.Height = 40;
         }
         private void btnSkip15Seconds_Click(object sender, RoutedEventArgs e)
         {
@@ -379,10 +393,6 @@ namespace GalaxyMediaPlayer.Pages
             }
         }
 
-        private void Close_Button_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-
-        }
 
         private void btnNext_Click(object sender, RoutedEventArgs e)
         {
@@ -463,19 +473,30 @@ namespace GalaxyMediaPlayer.Pages
             {
                 btnSubtitles.Opacity = 0.5;
                 subtitlesIsOn = false;
+                subtitlesCbb.Visibility = Visibility.Collapsed;
             }
             else
             {
+                bool flag = false;
+                subtitlesCbb.Items.Clear();
                 foreach (string subPath in subtitlePaths)
                 {
                     if (System.IO.Path.GetFileName(subPath).Contains(System.IO.Path.GetFileNameWithoutExtension(videoPaths[VideoPathIndex])))
                     {
+                        if(!flag)
                         test = ParseSRT(subPath);
                         subtitlesIsOn = true;
                         btnSubtitles.Opacity = 1;
+                        subtitlesCbb.Items.Add(getSRTLanguage(videoPaths[VideoPathIndex], subPath));
+                        flag = true;
+
                     }
                 }
-
+                if (flag)
+                {
+                    subtitlesCbb.Text = subtitlesCbb.Items[0].ToString();
+                    subtitlesCbb.Visibility = Visibility.Visible;
+                }
             }
 
         }
@@ -528,10 +549,23 @@ namespace GalaxyMediaPlayer.Pages
         {
             btnPlayPause_Click(sender, e);
         }
+
+        private void _SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+            foreach (string subPath in subtitlePaths)
+            {
+
+                if (System.IO.Path.GetFileName(subPath).Contains(System.IO.Path.GetFileNameWithoutExtension(videoPaths[VideoPathIndex])))
+                {
+
+                    if (subtitlesCbb.Items[subtitlesCbb.SelectedIndex].ToString() == getSRTLanguage(videoPaths[VideoPathIndex], subPath))
+                    {
+                        test = ParseSRT(subPath); break;
+                    }
+                }
+            }
+        }
+
     }
 }
-//private void btnCloseApp_Click(object sender, RoutedEventArgs e)
-//{
-//    MainWindow.Instance.MainFrame.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
-
-//}
