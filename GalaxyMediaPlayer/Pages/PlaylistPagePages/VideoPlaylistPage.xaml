@@ -273,12 +273,12 @@
                         MouseLeftButtonDown="listBoxItem_MouseLeftButtonDown"
                         MouseRightButtonDown="listBoxItem_MouseRightButtonDown">
                         <Border x:Name="border"
-                                Width="100" Height="100"
+                                Width="210" Height="auto"
                                 Background="{DynamicResource brushLightAccent}"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 BorderBrush="Transparent"
-                                BorderThickness="3">
+                                BorderThickness="2">
 
                             <Image 
                                    Source="{Binding playlistThumbnail}"/>
