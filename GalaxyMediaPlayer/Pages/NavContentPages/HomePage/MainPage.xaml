@@ -52,7 +52,7 @@
                         <Style.Triggers>
                             <Trigger Property="Orientation" Value="Horizontal">
                                 <Setter Property="Width" Value="300"/>
-                                <Setter Property="Height" Value="10" />
+                                <Setter Property="Height" Value="5" />
                                 <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
                             </Trigger>
                         </Style.Triggers>
@@ -110,7 +110,6 @@
                                     </MultiDataTrigger.Conditions>
                                     <MultiDataTrigger.Setters>
                                         <Setter TargetName="border" Property="BorderBrush" Value="#8ecae6"/>
-                                        <Setter TargetName="border" Property="Background" Value="{DynamicResource brushLightAccent}"/>
                                     </MultiDataTrigger.Setters>
                                 </MultiDataTrigger>
                             </DataTemplate.Triggers>
@@ -150,7 +149,7 @@
                         <Style.Triggers>
                             <Trigger Property="Orientation" Value="Horizontal">
                                 <Setter Property="Width" Value="300"/>
-                                <Setter Property="Height" Value="10" />
+                                <Setter Property="Height" Value="5" />
                                 <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
                             </Trigger>
                         </Style.Triggers>

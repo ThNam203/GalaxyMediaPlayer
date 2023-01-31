@@ -10,6 +10,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using GalaxyMediaPlayer.Databases.HomePage;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace GalaxyMediaPlayer.Pages
 {
@@ -105,6 +107,26 @@ namespace GalaxyMediaPlayer.Pages
         
         private void btnPlayPause_Click(object sender, RoutedEventArgs e)
         {
+            if (MainPage.currentMusicBrowsingFolder.StartsWith("ComputerBrowse") && !MyMusicMediaPlayer.isSongOpened)
+            {
+                if (Computer.selectedPlayableEntities.Count > 0)
+                {
+                    List<string> entityPaths = Computer.selectedPlayableEntities.Select(x => x.Path).ToList();
+                    if (Computer.selectedPlayableEntities[0].Type == EntityType.Video)
+                    {
+                        MainWindow.Instance.MainFrame.Navigate(new VideoMediaPLayer(entityPaths));
+                    }
+                    else
+                    {
+                        MyMusicMediaPlayer.SetNewPlaylist(entityPaths);
+                        MyMusicMediaPlayer.PlayCurrentSong();
+                    }
+
+                    changeAllBtnPlayPauseBackgroundImage();
+                    return;
+                }
+            }
+
             MyMusicMediaPlayer.isSongPlaying = !MyMusicMediaPlayer.isSongPlaying;
             changeAllBtnPlayPauseBackgroundImage();
 

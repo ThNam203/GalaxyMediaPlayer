@@ -1,12 +1,11 @@
 ﻿using GalaxyMediaPlayer.Helpers;
-using LrcParser.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace GalaxyMediaPlayer.Pages.NavContentPages
@@ -33,6 +32,9 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         {
             get { return GetAllMusicPathsInFolderEvenSorted(); }
         }
+
+        // Nam: use for playPauseBtn click
+        public static List<SystemEntityModel> selectedPlayableEntities = new List<SystemEntityModel>();
 
         // this binds to listbox in computer browse page
         public ObservableCollection<SystemEntityModel> systemEntities { get; set; }
@@ -150,10 +152,10 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             {
                 if (sender != null)
                 {
+                    FrameworkElement frameworkElement = e.OriginalSource as FrameworkElement;
+                    SystemEntityModel model = (SystemEntityModel)frameworkElement.DataContext;
                     if (e.OriginalSource is not CheckBox)
                     {
-                        FrameworkElement frameworkElement = e.OriginalSource as FrameworkElement;
-                        SystemEntityModel model = (SystemEntityModel)frameworkElement.DataContext;
                         if (model != null && model.Type != EntityType.Folder)
                         {
                             foreach (SystemEntityModel item in systemEntities)
@@ -363,11 +365,6 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             }
             else
             {
-                List<SystemEntityModel> tempEntities = new List<SystemEntityModel>();
-                foreach (SystemEntityModel model in browseDataGrid.Items) tempEntities.Add(model);
-                systemEntities.Clear();
-                foreach (SystemEntityModel model in tempEntities) { systemEntities.Add(model); break; };
-
                 cbSortByOptions.SelectedIndex = -1;
                 cbSortByOptions.Visibility = Visibility.Visible;
                 browseListBox.Visibility = Visibility.Visible;
@@ -388,9 +385,41 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         {
             this.Dispatcher.BeginInvoke((Action)delegate ()
             {
+                List<SystemEntityModel> tempEntities = new List<SystemEntityModel>(browseDataGrid.Items.Cast<SystemEntityModel>());
+                systemEntities.Clear();
+                foreach (SystemEntityModel model in tempEntities) { systemEntities.Add(model); };
+
                 //runs after sorting is done
                 MyMusicMediaPlayer.SetTempPlaylist(allMusicPathsInFolder);
             }, null);
+        }
+
+        private void entityCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBox cb = (CheckBox)sender;
+            ContentPresenter cp = (ContentPresenter)cb.TemplatedParent;
+            SystemEntityModel model = cp.Content as SystemEntityModel;
+
+            if (model == null) return;
+
+            selectedPlayableEntities.Clear();
+            // Nam: remove selected video if user choose music and vice-versa
+            if (model.Type == EntityType.Music)
+            {
+                foreach (SystemEntityModel item in systemEntities)
+                {
+                    if (item.IsSelected == true && item.Type == EntityType.Video) item.IsSelected = false;
+                    if (item.IsSelected) selectedPlayableEntities.Add(item);
+                }
+            }
+            else
+            {
+                foreach (SystemEntityModel item in systemEntities)
+                {
+                    if (item.IsSelected == true && item.Type == EntityType.Music) item.IsSelected = false;
+                    if (item.IsSelected) selectedPlayableEntities.Add(item);
+                }
+            }
         }
     }
 }

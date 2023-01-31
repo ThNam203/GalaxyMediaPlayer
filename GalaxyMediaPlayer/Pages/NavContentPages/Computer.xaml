@@ -492,7 +492,7 @@
                                    Path=DataContext,
                                    Converter={StaticResource SystemEntityToImageSource}}" />
 
-                            <CheckBox Name="checkBox">
+                            <CheckBox Name="checkBox" Click="entityCheckBox_Click">
                                 <CheckBox.Style>
                                     <Style TargetType="CheckBox">
                                         <Setter Property="Margin" Value="16 12 0 0"/>
@@ -500,7 +500,8 @@
                                         <Setter Property="Background" Value="Red"/>
                                         <Setter Property="VerticalAlignment" Value="Top"/>
                                         <Setter Property="Visibility" Value="{Binding Type, Converter={StaticResource EntityTypeToVisibility}}"/>
-                                        <Setter Property="IsChecked" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                                        <Setter Property="IsChecked" Value="{Binding
+                                            IsSelected, Mode=TwoWay}"/>
                                         <Setter Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="CheckBox">

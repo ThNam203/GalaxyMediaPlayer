@@ -109,6 +109,7 @@ namespace GalaxyMediaPlayer
         {
             playlist.Clear();
             playlist.AddRange(songPaths);
+            SetPositionInPlaylist(0);
         }
 
         public static void PlayNextSong()
