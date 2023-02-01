@@ -34,6 +34,25 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <Style x:Key="btnNextPreviousStyle" TargetType="Button">
+                <Setter Property="Width" Value="40"/>
+                <Setter Property="Height" Value="50"/>
+                <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="outerBorder" Padding="12">
+                                <Border x:Name="innerBorder" Background="{TemplateBinding Background}"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="outerBorder" Property="Background" Value="{DynamicResource brushLightAccent}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
             <Style x:Key="btnLeftArrowStyle" TargetType="Button">
                 <Setter Property="Width" Value="40"/>
                 <Setter Property="Height" Value="40"/>
@@ -165,9 +184,26 @@
                        Height="{Binding ElementName=PageOpenImage,Path=ActualHeight}"
                    RenderOptions.BitmapScalingMode="Fant"
                    Stretch="Uniform"
-                   MouseWheel="OpenImg_MouseWheel"
-                   />
+                   MouseWheel="OpenImg_MouseWheel"/>
             </Canvas>
+            <Button x:Name="btnMoveToPreImage"
+                        Style="{StaticResource btnNextPreviousStyle}"
+                        HorizontalAlignment="Left"
+                        Margin="10 50 0 0"
+                        Click="btnMoveToPreImage_Click">
+                <Button.Background>
+                    <ImageBrush ImageSource="/Resources/Icons/ImagePageIcons/previous.png"></ImageBrush>
+                </Button.Background>
+            </Button>
+            <Button x:Name="btnMoveToNextImage"
+                        Style="{StaticResource btnNextPreviousStyle}"
+                        HorizontalAlignment="Right"
+                        Margin="0 50 10 0"
+                        Click="btnMoveToNextImage_Click">
+                <Button.Background>
+                    <ImageBrush ImageSource="/Resources/Icons/ImagePageIcons/next.png"></ImageBrush>
+                </Button.Background>
+            </Button>
         </Grid>
     </Grid>
 </Page>

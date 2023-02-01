@@ -7,6 +7,9 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Pages\ImagePagePages\ShowImagePlaylistPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Pages\NavContentPages\HomePage\MainPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -88,6 +91,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\ImagePagePages\ShowImagePlaylistPage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\NavContentPages\HomePage\MainPage.xaml">

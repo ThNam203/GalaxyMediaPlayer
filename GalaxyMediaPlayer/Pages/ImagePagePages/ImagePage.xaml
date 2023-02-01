@@ -30,8 +30,6 @@
                 <Setter Property="Height" Value="37"></Setter>
                 <Setter Property="VerticalAlignment" Value="Center"></Setter>
                 <Setter Property="Background" Value="Transparent"></Setter>
-                <Setter Property="BorderBrush" Value="Transparent"></Setter>
-                <Setter Property="BorderThickness" Value="0 0 0 3"></Setter>
                 <Setter Property="Foreground" Value="White"></Setter>
             </Style>
             <Style x:Key="FirstButtonAddNowStyle" TargetType="Button">
@@ -262,8 +260,6 @@
 
         <Border Grid.Row="1"
                 x:Name="BorderLeftBar"
-                BorderBrush="#95ffffff"
-                BorderThickness="0 0 0 1"
                 Margin="10 0 10 0">
             <StackPanel x:Name="LeftBar" Orientation="Horizontal"
                         HorizontalAlignment="Left"

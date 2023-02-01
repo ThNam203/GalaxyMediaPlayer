@@ -27,7 +27,6 @@ using System.Net.Mime;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-
 namespace GalaxyMediaPlayer.Pages
 {
     /// <summary>
@@ -36,12 +35,19 @@ namespace GalaxyMediaPlayer.Pages
     public partial class ImagePage : Page
     {
 
-        private static List<ImageModel> Images;
-       
+        private static List<ImageModel> _Images;
+        public static List<ImageModel> Images
+        {
+            get { return _Images;}
+            set { _Images = value; }
+        }
+
+        public static ListView ListViewImage;
         public ImagePage()
         {
             InitializeComponent();
             Images = new List<ImageModel>();
+            ListViewImage = listViewImage;
             LoadFromDB();
         }
 
@@ -95,16 +101,12 @@ namespace GalaxyMediaPlayer.Pages
 
         private void Image_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ClickCount == 1)
-            {
-                Image img = (Image)sender;
-            }
-            else if (e.ClickCount >= 2)
+            if (e.ClickCount >= 2)
             {
                 ImageModel imageModelSelected = (ImageModel)listViewImage.SelectedItem;
-                string ImagePath = imageModelSelected.path;
-                OpenImagePage openImagePage = new OpenImagePage(ImagePath);
+                OpenImagePage openImagePage = new OpenImagePage(imageModelSelected, Images);
                 openImagePage.IsDoubleClick = true;
+                
                 MainWindow.Instance.MainFrame.Navigate(openImagePage);
             }
         }
@@ -163,13 +165,20 @@ namespace GalaxyMediaPlayer.Pages
 
         private void img_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            ImageRightClickDialog dialog = new ImageRightClickDialog(
-                onDeleteButtonClick: DeleteImage);
-            int left = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).X);
-            int top = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).Y);
-            MainWindow.ShowCustomMessageBox(dialog, left: left, top: top);
-            e.Handled = true;
+            ImageModel? image;
+            image = listViewImage.SelectedItem as ImageModel;
+            if(image != null)
+            {
+                ImageRightClickDialog dialog = new ImageRightClickDialog(
+                    onDeleteButtonClick: DeleteImage);
+                int left = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).X);
+                int top = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).Y);
+                MainWindow.ShowCustomMessageBox(dialog, left: left, top: top);
+
+                e.Handled = true;
+            }
         }
+
 
         private void DeleteImage()
         {

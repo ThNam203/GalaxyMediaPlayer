@@ -273,6 +273,27 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
+                    <Button
+                    Name="addNewImageToPlaylistBtn"
+                    Click="addNewImageToPlaylistBtn_Click"
+                    Margin="0 0 0 5"
+                    Visibility="Collapsed">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Border Width="100"
+                                Margin="16 0 0 0"
+                                CornerRadius="10"
+                                Background="#2a9d8f"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                    <TextBlock Text="Add new image" 
+                                       TextAlignment="Center"
+                                       Foreground="{DynamicResource brushSecondary}"
+                                       Margin="4"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
                 </StackPanel>
 
                 <!--SelectionChanged="cbSortByOptions_SelectionChanged"-->
