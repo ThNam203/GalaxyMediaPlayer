@@ -38,7 +38,7 @@ namespace GalaxyMediaPlayer.Pages
         private static List<ImageModel> _Images;
         public static List<ImageModel> Images
         {
-            get { return _Images;}
+            get { return _Images; }
             set { _Images = value; }
         }
 
@@ -106,10 +106,12 @@ namespace GalaxyMediaPlayer.Pages
                 ImageModel imageModelSelected = (ImageModel)listViewImage.SelectedItem;
                 OpenImagePage openImagePage = new OpenImagePage(imageModelSelected, Images);
                 openImagePage.IsDoubleClick = true;
-                
+
                 MainWindow.Instance.MainFrame.Navigate(openImagePage);
             }
         }
+
+        
 
         private void LoadFromDB()
         {
@@ -167,7 +169,7 @@ namespace GalaxyMediaPlayer.Pages
         {
             ImageModel? image;
             image = listViewImage.SelectedItem as ImageModel;
-            if(image != null)
+            if (image != null)
             {
                 ImageRightClickDialog dialog = new ImageRightClickDialog(
                     onDeleteButtonClick: DeleteImage);
@@ -205,5 +207,13 @@ namespace GalaxyMediaPlayer.Pages
                 ShowButtonWhenDoNotHaveImage();
             }
         }
+
+        private void Page_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            listViewImage.UnselectAll();
+            e.Handled = true;
+        }
+
+
     }
 }

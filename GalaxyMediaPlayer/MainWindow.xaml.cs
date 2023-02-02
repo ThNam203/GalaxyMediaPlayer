@@ -14,6 +14,8 @@ namespace GalaxyMediaPlayer
     {
         public static MainWindow Instance;
         public bool CanDrag = true;
+        public static double WidthNormalSize = 1120;
+        public static double HeightNormalSize = 630;
         public static void ShowCustomMessageBoxInMiddle(UIElement messageBox)
         {
             Instance.MessageBoxGrid.Children.Add(messageBox);
@@ -90,6 +92,15 @@ namespace GalaxyMediaPlayer
         {
             MessageBoxCanvas.Children.Clear();
             MessageBoxCanvas.Visibility = Visibility.Collapsed;
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if(this.WindowState != WindowState.Maximized)
+            {
+                WidthNormalSize = this.ActualWidth;
+                HeightNormalSize = this.ActualHeight;
+            }
         }
     }
 }

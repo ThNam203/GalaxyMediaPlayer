@@ -13,7 +13,8 @@
         Height="630" 
         Width="1120"
         MinHeight="540"
-        MinWidth="960">
+        MinWidth="960"
+        SizeChanged="Window_SizeChanged">
 
     <Grid Name="MainWindowGrid">
         <Grid Height="30" Background="Transparent" VerticalAlignment="Top">

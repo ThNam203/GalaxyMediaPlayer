@@ -8,7 +8,8 @@
       xmlns:local="clr-namespace:GalaxyMediaPlayer.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="ImagePage">
+      Title="ImagePage"
+      MouseDown="Page_MouseDown">
     <Page.Resources>
         <cvt:SystemEntityToImageSource x:Key="SystemEntityToImageSource"></cvt:SystemEntityToImageSource>
         <cvt:ImagePathToImageSource x:Key="ImagePathToImageSource"></cvt:ImagePathToImageSource>
@@ -361,6 +362,9 @@
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter Property="Background" Value="#80ffffff"></Setter>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="False">
+                                        <Setter Property="Background" Value="Transparent"></Setter>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>

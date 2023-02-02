@@ -195,32 +195,6 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             }
         }
 
-        void getSizeOfNormalWindow(
-            ref double normalWidth,
-            ref double normalHeight,
-            ref double normalLeft,
-            ref double normalTop)
-        {
-            if(MainWindow.Instance.WindowState == WindowState.Maximized)
-            {
-                MainWindow.Instance.WindowState = WindowState.Normal;
-
-                normalWidth = MainWindow.Instance.ActualWidth;
-                normalHeight = MainWindow.Instance.ActualHeight;
-                normalLeft = MainWindow.Instance.Left;
-                normalTop = MainWindow.Instance.Top;
-
-                MainWindow.Instance.WindowState = WindowState.Maximized;
-            }
-            else
-            {
-                normalWidth = MainWindow.Instance.ActualWidth;
-                normalHeight = MainWindow.Instance.ActualHeight;
-                normalLeft = MainWindow.Instance.Left;
-                normalTop = MainWindow.Instance.Top;
-            }
-        }
-
         private void img_MouseDown(object sender, MouseButtonEventArgs e)
         {
             ImagePlaylistModel imagePlaylistModel = ListBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
@@ -231,14 +205,20 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                     ImageModel imageModelSelected = (ImageModel)listViewImage.SelectedItem;
                     if (imageModelSelected != null)
                     {
+                        double normalWidth = MainWindow.WidthNormalSize;
+                        double normalHeight = MainWindow.HeightNormalSize;
+                        double normalLeft = MainWindow.Instance.Left;
+                        double normalTop = MainWindow.Instance.Top;
+                        ShowImageInPlaylistWindow showImagePlaylistWindow = new ShowImageInPlaylistWindow(imageModelSelected, imagePlaylistModel.Images, normalWidth, normalHeight, normalLeft, normalTop);
+
+                        showImagePlaylistWindow.WindowState = MainWindow.Instance.WindowState;
+                        if(showImagePlaylistWindow.WindowState == WindowState.Maximized)
+                            showImagePlaylistWindow.cursor = Cursors.Arrow;
+                        else
+                            showImagePlaylistWindow.cursor = Cursors.Hand;
+
+                        showImagePlaylistWindow.Show();
                         Application.Current.MainWindow.Visibility = Visibility.Hidden;
-
-                        double normalWidth = 0, normalHeight = 0, normalLeft = 0,normalTop = 0 ;
-                        getSizeOfNormalWindow(ref normalWidth,ref normalHeight, ref normalLeft, ref normalTop);
-                        ShowImagePlaylistPage showImagePlaylistPage = new ShowImagePlaylistPage(imageModelSelected, imagePlaylistModel.Images, normalWidth, normalHeight, normalLeft, normalTop);
-
-                        showImagePlaylistPage.WindowState = MainWindow.Instance.WindowState;
-                        showImagePlaylistPage.Show();
                     }
                 }
             }
