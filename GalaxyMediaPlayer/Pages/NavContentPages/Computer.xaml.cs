@@ -398,7 +398,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         {
             CheckBox cb = (CheckBox)sender;
             ContentPresenter cp = (ContentPresenter)cb.TemplatedParent;
-            SystemEntityModel model = cp.Content as SystemEntityModel;
+            SystemEntityModel? model = cp.Content as SystemEntityModel;
 
             if (model == null) return;
 
@@ -418,6 +418,37 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 {
                     if (item.IsSelected == true && item.Type == EntityType.Music) item.IsSelected = false;
                     if (item.IsSelected) selectedPlayableEntities.Add(item);
+                }
+            }
+        }
+
+        public void browseDataGrid_OnCheckBoxChecked(object sender, RoutedEventArgs e)
+        {
+            CheckBox cb = (CheckBox)sender;
+
+            if (cb.IsChecked == true)
+            {
+                SystemEntityModel? model = cb.DataContext as SystemEntityModel;
+
+                if (model == null) return;
+
+                selectedPlayableEntities.Clear();
+                // Nam: remove selected video if user choose music and vice-versa
+                if (model.Type == EntityType.Music)
+                {
+                    foreach (SystemEntityModel item in systemEntities)
+                    {
+                        if (item.IsSelected == true && item.Type == EntityType.Video) item.IsSelected = false;
+                        if (item.IsSelected) selectedPlayableEntities.Add(item);
+                    }
+                }
+                else
+                {
+                    foreach (SystemEntityModel item in systemEntities)
+                    {
+                        if (item.IsSelected == true && item.Type == EntityType.Music) item.IsSelected = false;
+                        if (item.IsSelected) selectedPlayableEntities.Add(item);
+                    }
                 }
             }
         }

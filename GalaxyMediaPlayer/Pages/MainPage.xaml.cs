@@ -514,11 +514,18 @@ namespace GalaxyMediaPlayer.Pages
                 if (p.Title == "PlaylistPage") currentMusicBrowsingFolder = p.Title;
                 else if (p.Title == "MusicPage") currentMusicBrowsingFolder = p.Title;
                 else if (p.Title == "ComputerBrowse") currentMusicBrowsingFolder = p.Title;
+                else if (p.Title == "HomePage") currentMusicBrowsingFolder= p.Title;
 
                 if (p.Title == "MusicDetailPage")
                 {
                     ActivateControlButtons();
-                } else
+                } 
+                else if (p.Title == "HomePage")
+                {
+                    ChangeButtonsViewOnOpenFolder(false);
+                    ChangeAdditionControlVisibilityInInforGrid(false);
+                }
+                else
                 {
                     ChangeButtonsViewOnOpenFolder(true);
                     ChangeAdditionControlVisibilityInInforGrid(true);
