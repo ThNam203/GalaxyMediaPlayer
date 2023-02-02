@@ -63,12 +63,14 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
         {
             BorderlistView.Visibility = Visibility.Visible;
             ListBoxImagePlaylist.Visibility = Visibility.Collapsed;
+            PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Collapsed;
         }
 
         void ShowButtonWhenHaveImagePlaylist()
         {
             BorderlistView.Visibility = Visibility.Collapsed;
             ListBoxImagePlaylist.Visibility = Visibility.Visible;
+            PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Visible;
         }
 
         void ShowButtonWhenInImagePlaylist()
@@ -152,14 +154,15 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
 
         private void RemoveImagePlaylist()
         {
-            ImagePlaylistModel? playlist;
-            playlist = ListBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
-
-            if (playlist != null)
+            foreach(ImagePlaylistModel playlist in ListBoxImagePlaylist.SelectedItems)
             {
                 ImagePlaylists.Remove(playlist);
-                ListBoxImagePlaylist.Items.Remove(playlist);
                 ImagesPlaylistDBAccess.DeleteImagePlaylist(playlist);
+            }
+            ListBoxImagePlaylist.Items.Clear();
+            foreach (ImagePlaylistModel imagePlaylistModel in ImagePlaylists)
+            {
+                ListBoxImagePlaylist.Items.Add(imagePlaylistModel);
             }
 
             if (ImagePlaylists.Count <= 0)

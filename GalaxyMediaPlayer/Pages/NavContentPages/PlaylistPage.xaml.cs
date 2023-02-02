@@ -60,6 +60,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             showVideosPlaylistsBtn.BorderBrush = System.Windows.Media.Brushes.Transparent;
             showImagesPlaylistsBtn.BorderBrush = System.Windows.Media.Brushes.Transparent;
 
+            currentPlaylistType = PlaylistPageType.Music;
             PageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/MusicPlaylistPage.xaml", UriKind.Relative));
         }
 

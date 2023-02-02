@@ -130,10 +130,6 @@ namespace GalaxyMediaPlayer.Pages
 
         }
 
-        private void ItemBarImages_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            //ItemBarImages.BorderBrush = Brushes.White;
-        }
         private void ComboboxFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int sortIndex = ComboboxFilter.SelectedIndex;
@@ -184,24 +180,17 @@ namespace GalaxyMediaPlayer.Pages
 
         private void DeleteImage()
         {
-            foreach (ImageModel item in Images)
-            {
-                item.IsSelected = false;
-            }
             foreach (ImageModel item in listViewImage.SelectedItems)
             {
-                int index = listViewImage.Items.IndexOf(item);
-                Images[index].IsSelected = true;
+                Images.Remove(item);
+                ImagesDBAccess.DeleteImage(item);
             }
-            foreach (ImageModel item in Images.ToList())
+            listViewImage.Items.Clear();
+            foreach (ImageModel item in Images)
             {
-                if (item.IsSelected)
-                {
-                    Images.Remove(item);
-                    listViewImage.Items.Remove(item);
-                    ImagesDBAccess.DeleteImage(item);
-                }
+                listViewImage.Items.Add(item);
             }
+
             if (Images.Count == 0)
             {
                 ShowButtonWhenDoNotHaveImage();
@@ -213,7 +202,5 @@ namespace GalaxyMediaPlayer.Pages
             listViewImage.UnselectAll();
             e.Handled = true;
         }
-
-
     }
 }

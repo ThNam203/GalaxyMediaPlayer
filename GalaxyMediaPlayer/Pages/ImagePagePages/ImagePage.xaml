@@ -265,23 +265,11 @@
             <StackPanel x:Name="LeftBar" Orientation="Horizontal"
                         HorizontalAlignment="Left"
                         Width="auto">
-                <!--<Label x:Name="ItemBarImages"
-                       Content="Images"
-                       Style="{StaticResource ItemBar}"
-                       MouseDown="ItemBarImages_MouseDown">
-                </Label>-->
-
                 <Button Content="Add more" 
                         x:Name="btn_Addmore"
                         Visibility="Collapsed"
                         Style="{StaticResource SecondButtonAddNowStyle}"
                         Click="btn_Addmore_Click"/>
-
-                <!--<Button Content="Delete"
-                x:Name="btn_DeleteImage"
-                Visibility="Collapsed"
-                Style="{StaticResource SecondButtonAddNowStyle}"
-                Click="btn_DeleteImage_Click"/>-->
             </StackPanel>
         </Border>
 

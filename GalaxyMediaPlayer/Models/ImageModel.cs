@@ -29,13 +29,6 @@ namespace GalaxyMediaPlayer.Models
         private string _path = "";
         public string path { get { return _path; } set { _path = value; } }
 
-        private bool _IsSelected = false;
-        public bool IsSelected 
-        { 
-            get { return _IsSelected; } 
-            set { _IsSelected = value; }
-        }
-
         private string _dateCreated = "";
         public string dateCreated
         {
