@@ -15,6 +15,8 @@
         <cvt:ImagePathToImageSource x:Key="ImagePathToImageSource"></cvt:ImagePathToImageSource>
         <cvt:EntityTypeToVisibility x:Key="EntityTypeToVisibility"></cvt:EntityTypeToVisibility>
         <cvt:ImagePathToThumbnailImage x:Key="ImagePathToThumbnailImage"></cvt:ImagePathToThumbnailImage>
+        <cvt:EntityTypeToImage x:Key="EntityTypeToImageSource"></cvt:EntityTypeToImage>
+        <cvt:FileSizeToString x:Key="FileSizeToString"></cvt:FileSizeToString>
     </Page.Resources>
 
     <Grid>
@@ -276,7 +278,7 @@
         <Border x:Name="BorderRightBar"
                 Grid.Row="1"
                 HorizontalAlignment="Right"
-                Margin="0 0 25 0">
+                Margin="0 0 40 0">
             <StackPanel x:Name="RightBar" Orientation="Horizontal"
                             Width="auto">
                 <Label Name="DefaultContentCombobox" Content="Filter" Visibility="Collapsed"></Label>
@@ -284,9 +286,18 @@
                           Width="100"
                           Height="30"
                           SelectionChanged="ComboboxFilter_SelectionChanged">
-                    <ComboBoxItem>By Name &#8595;</ComboBoxItem>
-                    <ComboBoxItem>By Date &#8595;</ComboBoxItem>
+                    <ComboBoxItem>By Name &#8593;</ComboBoxItem>
+                    <ComboBoxItem>By Date &#8593;</ComboBoxItem>
+                    <ComboBoxItem>By Size &#8593;</ComboBoxItem>
                 </ComboBox>
+                <Image
+                    Margin="16 0"
+                    Grid.Column="2"
+                    Name="BrowseStyleImage"
+                    MouseLeftButtonDown="BrowseStyleImage_MouseLeftButtonDown" 
+                    Width="16"
+                    Height="16"
+                    Source="/Resources/Icons/ComputerPageIcons/four_squares_32.png"/>
             </StackPanel>
         </Border>
 
@@ -351,9 +362,6 @@
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter Property="Background" Value="#80ffffff"></Setter>
                                     </Trigger>
-                                    <Trigger Property="IsSelected" Value="False">
-                                        <Setter Property="Background" Value="Transparent"></Setter>
-                                    </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
                         </Setter.Value>
@@ -382,5 +390,60 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+        <DataGrid Name="browseDataGrid"
+                  Visibility="Collapsed"
+                  Style="{DynamicResource DataGridBrowseStyle}" 
+                  CellStyle="{DynamicResource DataGridCellStyle1}" 
+                  ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderBrowseStyle}" 
+                  RowStyle="{DynamicResource DataGridRowBrowseStyle}"
+                  SelectionMode="Extended"
+                  SelectionUnit="FullRow"
+                  VirtualizingPanel.VirtualizationMode="Standard"
+                  Margin="16 4"
+                  Grid.Row="3"
+                  ItemsSource="{Binding systemEntities}">
+            <DataGrid.Resources>
+                <Style TargetType="ScrollBar">
+                    <Setter Property="SnapsToDevicePixels" Value="True"/>
+                    <Setter Property="OverridesDefaultStyle" Value="true"/>
+                    <Style.Triggers>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter Property="Width" Value="10"/>
+                            <Setter Property="Margin" Value="8 2" />
+                            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Name" SortMemberPath="Name" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="16" Height="16" Margin="0 0 8 0" Source="{Binding Type, Converter={StaticResource EntityTypeToImageSource}}"/>
+                                <TextBlock Text="{Binding Name}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Date" 
+                                    IsReadOnly="True" 
+                                    Width="*" 
+                                    CanUserResize="True"
+                                    MinWidth="150"
+                                    Binding="{Binding dateCreated}"/>
+
+                <DataGridTextColumn Header="Size" 
+                                    IsReadOnly="True" 
+                                    Width="*" 
+                                    CanUserResize="True"
+                                    MinWidth="100"
+                                    Binding="{Binding length, Converter={StaticResource FileSizeToString}}"/>
+                
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Page>

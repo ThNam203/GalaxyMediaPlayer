@@ -170,26 +170,67 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
         private void cbSortPlaylistBy_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (cbSortPlaylistBy.SelectedItem != null)
+            if(currentPlaylistType == PlaylistPageType.Music)
             {
-                int sortIndex = cbSortPlaylistBy.SelectedIndex;
-                if (sortIndex == 0)
+                if (cbSortPlaylistBy.SelectedItem != null)
                 {
-                    List<SongPlaylistModel> tempPlaylists = new List<SongPlaylistModel>(PlaylistPagePages.MusicPlaylistPage.playlists);
-                    tempPlaylists.Sort((x, y) => x.Name.CompareTo(y.Name));
+                    int sortIndex = cbSortPlaylistBy.SelectedIndex;
+                    if (sortIndex == 0)
+                    {
+                        List<SongPlaylistModel> tempPlaylists = new List<SongPlaylistModel>(PlaylistPagePages.MusicPlaylistPage.playlists);
+                        tempPlaylists.Sort((x, y) => x.Name.CompareTo(y.Name));
 
-                    PlaylistPagePages.MusicPlaylistPage.playlists.Clear();
-                    foreach (SongPlaylistModel song in tempPlaylists) PlaylistPagePages.MusicPlaylistPage.playlists.Add(song);
-                } 
-                else if (sortIndex == 1)
+                        PlaylistPagePages.MusicPlaylistPage.playlists.Clear();
+                        foreach (SongPlaylistModel song in tempPlaylists) PlaylistPagePages.MusicPlaylistPage.playlists.Add(song);
+                    }
+                    else if (sortIndex == 1)
+                    {
+                        List<SongPlaylistModel> tempPlaylists = new List<SongPlaylistModel>(PlaylistPagePages.MusicPlaylistPage.playlists);
+                        tempPlaylists.Sort((x, y) =>
+                            DateTime.Parse(y.TimeCreated, CultureInfo.InvariantCulture)
+                            .CompareTo(DateTime.Parse(x.TimeCreated, CultureInfo.InvariantCulture)));
+
+                        PlaylistPagePages.MusicPlaylistPage.playlists.Clear();
+                        foreach (SongPlaylistModel song in tempPlaylists) PlaylistPagePages.MusicPlaylistPage.playlists.Add(song);
+                    }
+                }
+            }
+            else if (currentPlaylistType == PlaylistPageType.Video)
+            {
+
+            }
+            else if (currentPlaylistType == PlaylistPageType.Image)
+            {
+                if (cbSortPlaylistBy.SelectedItem != null)
                 {
-                    List<SongPlaylistModel> tempPlaylists = new List<SongPlaylistModel>(PlaylistPagePages.MusicPlaylistPage.playlists);
-                    tempPlaylists.Sort((x, y) => 
-                        DateTime.Parse(y.TimeCreated, CultureInfo.InvariantCulture)
-                        .CompareTo(DateTime.Parse(x.TimeCreated, CultureInfo.InvariantCulture)));
+                    int sortIndex = cbSortPlaylistBy.SelectedIndex;
+                    //if (sortIndex == -1)
+                    //    DefaultContentCombobox.Content = "Filter";
+                    //else
+                    //    DefaultContentCombobox.Content = "";
 
-                    PlaylistPagePages.MusicPlaylistPage.playlists.Clear();
-                    foreach (SongPlaylistModel song in tempPlaylists) PlaylistPagePages.MusicPlaylistPage.playlists.Add(song);
+                    if (sortIndex == 0)
+                    {
+                        List<ImagePlaylistModel> list = new List<ImagePlaylistModel>(PlaylistPagePages.ImagePlaylistPage.ImagePlaylists);
+                        list.Sort((x, y) => x.PlaylistName.CompareTo(y.PlaylistName));
+
+                        PlaylistPagePages.ImagePlaylistPage.listBoxImagePlaylist.Items.Clear();
+                        foreach (ImagePlaylistModel model in list)
+                        {
+                            PlaylistPagePages.ImagePlaylistPage.listBoxImagePlaylist.Items.Add(model);
+                        }
+                    }
+                    else if (sortIndex == 1)
+                    {
+                        List<ImagePlaylistModel> list = new List<ImagePlaylistModel>(PlaylistPagePages.ImagePlaylistPage.ImagePlaylists);
+                        list.Sort((x, y) => x.TimeCreated.CompareTo(y.TimeCreated));
+
+                        PlaylistPagePages.ImagePlaylistPage.listBoxImagePlaylist.Items.Clear();
+                        foreach (ImagePlaylistModel model in list)
+                        {
+                            PlaylistPagePages.ImagePlaylistPage.listBoxImagePlaylist.Items.Add(model);
+                        }
+                    }
                 }
             }
         }
@@ -284,8 +325,9 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                     {
                         //add filePath to listview
                         FileInfo fi = new FileInfo(file);
+                        string id = Guid.NewGuid().ToString();
                         string date = fi.CreationTime.ToString();
-                        ImageModel imgModel = new ImageModel(playlist.Id,file, date);
+                        ImageModel imgModel = new ImageModel(playlist.Id, id, file, date);
                         
                         if(ImagesInPlaylistDBAccess.SaveImageIntoPlaylist(imgModel) != -1)
                         {

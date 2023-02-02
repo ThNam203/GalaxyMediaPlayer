@@ -43,6 +43,8 @@ namespace GalaxyMediaPlayer.Pages
         }
 
         public static ListView ListViewImage;
+        private bool isUsingGridStyle = false;
+
         public ImagePage()
         {
             InitializeComponent();
@@ -51,20 +53,44 @@ namespace GalaxyMediaPlayer.Pages
             LoadFromDB();
         }
 
-        void ShowButtonWhenDoNotHaveImage()
+        void ShowBtnOfPage(int num)
         {
-            BorderlistView.Visibility = Visibility.Visible;
-            listViewImage.Visibility = Visibility.Collapsed;
-            btn_Addmore.Visibility = Visibility.Collapsed;
-            ComboboxFilter.Visibility = Visibility.Collapsed;
-        }
+            if(num == 0)
+            {
+                //Visible button
+                BorderlistView.Visibility = Visibility.Visible;
 
-        void ShowButtonWhenHaveImage()
-        {
-            BorderlistView.Visibility = Visibility.Collapsed;
-            listViewImage.Visibility = Visibility.Visible;
-            btn_Addmore.Visibility = Visibility.Visible;
-            ComboboxFilter.Visibility = Visibility.Visible;
+                //Collasped button
+                listViewImage.Visibility = Visibility.Collapsed;
+                btn_Addmore.Visibility = Visibility.Collapsed;
+                ComboboxFilter.Visibility = Visibility.Collapsed;
+                BrowseStyleImage.Visibility = Visibility.Collapsed;
+                browseDataGrid.Visibility = Visibility.Collapsed;
+            }
+            else if(num == 1)
+            {
+                //Visible button
+                listViewImage.Visibility = Visibility.Visible;
+                ComboboxFilter.Visibility = Visibility.Visible;
+                btn_Addmore.Visibility = Visibility.Visible;
+                BrowseStyleImage.Visibility = Visibility.Visible;
+
+                //Collasped button
+                BorderlistView.Visibility = Visibility.Collapsed;
+                browseDataGrid.Visibility = Visibility.Collapsed;
+            }
+            else if(num == 2)
+            {
+                //Visible button
+                ComboboxFilter.Visibility = Visibility.Visible;
+                btn_Addmore.Visibility = Visibility.Visible;
+                browseDataGrid.Visibility = Visibility.Visible;
+                BrowseStyleImage.Visibility = Visibility.Visible;
+
+                //Collasped button
+                listViewImage.Visibility = Visibility.Collapsed;
+                BorderlistView.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void btn_Addmore_Click(object sender, RoutedEventArgs e)
@@ -85,16 +111,28 @@ namespace GalaxyMediaPlayer.Pages
                     //add filePath to listview
                     FileInfo fi = new FileInfo(file);
                     string date = fi.CreationTime.ToString();
-                    ImageModel imgModel = new ImageModel(file, date);
+                    string name = System.IO.Path.GetFileName(fi.FullName);
+                    string size = fi.Length.ToString();
+                    string id = Guid.NewGuid().ToString();
+                    ImageModel imgModel = new ImageModel(id, name,fi.FullName,date,size);
                     var FindingResult = Images.Find(img => img.path == imgModel.path);
                     if (FindingResult == null)
                     {
-                        Images.Add(imgModel);
                         //insert to database
                         int SavingResult = ImagesDBAccess.SaveImage(imgModel);
-                        if (SavingResult == 1) listViewImage.Items.Add(imgModel);
+                        if (SavingResult != -1)
+                        {
+                            listViewImage.Items.Add(imgModel);
+                            browseDataGrid.Items.Add(imgModel);
+                            Images.Add(imgModel);
+                        }
                     }
-                    ShowButtonWhenHaveImage();
+                    if (Images.Count > 0)
+                    {
+                        if(isUsingGridStyle) ShowBtnOfPage(2);
+                        else ShowBtnOfPage(1);
+                    }
+                    else ShowBtnOfPage(0);
                 }
             }
         }
@@ -118,15 +156,17 @@ namespace GalaxyMediaPlayer.Pages
             Images = ImagesDBAccess.LoadImageList();
             if (Images.Count > 0)
             {
-                ShowButtonWhenHaveImage();
-
+                ShowBtnOfPage(1);
                 foreach (ImageModel imageModel in Images)
                 {
                     if (imageModel.path != "" && imageModel.path != null)
+                    {
                         listViewImage.Items.Add(imageModel);
+                        browseDataGrid.Items.Add(imageModel);
+                    }
                 }
             }
-            else ShowButtonWhenDoNotHaveImage();
+            else ShowBtnOfPage(0);
 
         }
 
@@ -143,10 +183,11 @@ namespace GalaxyMediaPlayer.Pages
                 List<ImageModel> list = new List<ImageModel>(Images);
                 list.Sort((x, y) => Path.GetFileName(x.path).CompareTo(Path.GetFileName(y.path)));
                 listViewImage.Items.Clear();
+                browseDataGrid.Items.Clear();
                 foreach (ImageModel model in list)
                 {
                     listViewImage.Items.Add(model);
-
+                    browseDataGrid.Items.Add(model);
                 }
             }
             else if (sortIndex == 1)
@@ -154,9 +195,23 @@ namespace GalaxyMediaPlayer.Pages
                 List<ImageModel> list = new List<ImageModel>(Images);
                 list.Sort((x, y) => x.CompareDate(y));
                 listViewImage.Items.Clear();
+                browseDataGrid.Items.Clear();
                 foreach (ImageModel model in list)
                 {
                     listViewImage.Items.Add(model);
+                    browseDataGrid.Items.Add(model);
+                }
+            }
+            else if (sortIndex == 2)
+            {
+                List<ImageModel> list = new List<ImageModel>(Images);
+                list.Sort((x, y) => x.length.CompareTo(y.length));
+                listViewImage.Items.Clear();
+                browseDataGrid.Items.Clear();
+                foreach (ImageModel model in list)
+                {
+                    listViewImage.Items.Add(model);
+                    browseDataGrid.Items.Add(model);
                 }
             }
         }
@@ -186,14 +241,16 @@ namespace GalaxyMediaPlayer.Pages
                 ImagesDBAccess.DeleteImage(item);
             }
             listViewImage.Items.Clear();
+            browseDataGrid.Items.Clear();
             foreach (ImageModel item in Images)
             {
                 listViewImage.Items.Add(item);
+                browseDataGrid.Items.Add(item);
             }
 
             if (Images.Count == 0)
             {
-                ShowButtonWhenDoNotHaveImage();
+                ShowBtnOfPage(0);
             }
         }
 
@@ -201,6 +258,30 @@ namespace GalaxyMediaPlayer.Pages
         {
             listViewImage.UnselectAll();
             e.Handled = true;
+        }
+
+        
+
+        private void BrowseStyleImage_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            try
+            {
+                isUsingGridStyle = !isUsingGridStyle;
+                if (isUsingGridStyle)
+                {
+                    ShowBtnOfPage(2);
+                    BrowseStyleImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/ComputerPageIcons/list_32.png"));
+                }
+                else
+                {
+                    ShowBtnOfPage(1);
+                    BrowseStyleImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/ComputerPageIcons/four_squares_32.png"));
+                }
+            }
+            catch
+            {
+
+            }
         }
     }
 }
