@@ -81,14 +81,15 @@ namespace GalaxyMediaPlayer.Models
             _id = id;
         }
 
-        public ImageModel(string Playlistid, string id ,string path, string dateCreated)
+        public ImageModel(string Playlistid, string id, string name ,string path, string dateCreated, string size)
         {
             _PlaylistId = Playlistid;
             _id = id;
+            _Name = name;
             _path = path;
             _dateCreated = dateCreated;
-
-            _id = Guid.NewGuid().ToString();
+            _size= size;
+            _length = _length = long.Parse(_size);
         }
 
         public int CompareDate(ImageModel model)
