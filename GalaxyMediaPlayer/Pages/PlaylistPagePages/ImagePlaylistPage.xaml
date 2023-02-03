@@ -236,7 +236,8 @@
                   MouseRightButtonDown="browseDataGrid_MouseRightButtonDown"
                   Margin="16 4"
                   Grid.Row="3"
-                  ItemsSource="{Binding systemEntities}">
+                  ItemsSource="{Binding systemEntities}"
+                  IsReadOnly="True">
             <DataGrid.Resources>
                 <Style TargetType="ScrollBar">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>

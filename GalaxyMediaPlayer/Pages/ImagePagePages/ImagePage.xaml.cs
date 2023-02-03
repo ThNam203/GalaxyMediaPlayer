@@ -161,10 +161,13 @@ namespace GalaxyMediaPlayer.Pages
             if (e.ClickCount >= 2)
             {
                 ImageModel imageModelSelected = (ImageModel)listViewImage.SelectedItem;
-                OpenImagePage openImagePage = new OpenImagePage(imageModelSelected, Images);
-                openImagePage.IsDoubleClick = true;
+                if(imageModelSelected != null)
+                {
+                    OpenImagePage openImagePage = new OpenImagePage(imageModelSelected, Images);
+                    openImagePage.IsDoubleClick = true;
 
-                MainWindow.Instance.MainFrame.Navigate(openImagePage);
+                    MainWindow.Instance.MainFrame.Navigate(openImagePage);
+                }
             }
         }
 
@@ -312,18 +315,6 @@ namespace GalaxyMediaPlayer.Pages
             isUsingGridStyle = MainWindow.IsImagePageUsingGridStyle;
         }
 
-        private void browseDataGrid_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ClickCount >= 2)
-            {
-                ImageModel imageModelSelected = (ImageModel)browseDataGrid.SelectedItem;
-                OpenImagePage openImagePage = new OpenImagePage(imageModelSelected, Images);
-                openImagePage.IsDoubleClick = true;
-
-                MainWindow.Instance.MainFrame.Navigate(openImagePage);
-            }
-        }
-
         private void browseDataGrid_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             ImageModel? image;
@@ -337,6 +328,28 @@ namespace GalaxyMediaPlayer.Pages
                 MainWindow.ShowCustomMessageBox(dialog, left: left, top: top);
 
                 e.Handled = true;
+            }
+        }
+
+        private void browseDataGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount >= 2)
+            {
+                try
+                {
+                    ImageModel imageModelSelected = (ImageModel)browseDataGrid.SelectedItem;
+                    if (imageModelSelected != null)
+                    {
+                        OpenImagePage openImagePage = new OpenImagePage(imageModelSelected, Images);
+                        openImagePage.IsDoubleClick = true;
+
+                        MainWindow.Instance.MainFrame.Navigate(openImagePage);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
     }

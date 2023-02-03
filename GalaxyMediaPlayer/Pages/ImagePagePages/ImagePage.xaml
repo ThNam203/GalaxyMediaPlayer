@@ -323,7 +323,6 @@
                   Visibility="Collapsed"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
-                  ItemsSource="{Binding Images}"
                   Margin="{Binding ElementName=BorderlistView, Path=Margin}"
                   BorderThickness="0"
                   IsSynchronizedWithCurrentItem="True">
@@ -402,9 +401,10 @@
                   VirtualizingPanel.VirtualizationMode="Standard"
                   Margin="16 4"
                   Grid.Row="3"
-                  MouseDown="browseDataGrid_MouseDown"
+                  MouseLeftButtonDown="browseDataGrid_MouseLeftButtonDown"
                   MouseRightButtonDown="browseDataGrid_MouseRightButtonDown"
-                  ItemsSource="{Binding systemEntities}">
+                  ItemsSource="{Binding systemEntities}"
+                  IsReadOnly="True">
             <DataGrid.Resources>
                 <Style TargetType="ScrollBar">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
