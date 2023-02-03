@@ -32,6 +32,7 @@ namespace GalaxyMediaPlayer.Pages
             imgPath = img.path;
             ZoomScale = 1;
         }
+
         private static ImageModel _currentImage;
         public static ImageModel currentImage
         {
@@ -170,6 +171,7 @@ namespace GalaxyMediaPlayer.Pages
         private void btnLeftArrow_Click(object sender, RoutedEventArgs e)
         {
             MainWindow.Instance.MainFrame.NavigationService.GoBack();
+            
         }
 
         private void btnRotateRight_Click(object sender, RoutedEventArgs e)

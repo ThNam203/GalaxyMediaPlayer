@@ -302,7 +302,7 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             if (image != null)
             {
                 ImageRightClickDialog dialog = new ImageRightClickDialog(
-                    onDeleteButtonClick: DeleteImage);
+                    onDeleteButtonClick: DeleteImageInListView);
                 int left = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).X);
                 int top = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).Y);
                 MainWindow.ShowCustomMessageBox(dialog, left: left, top: top);
@@ -311,7 +311,7 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             }
         }
 
-        private void DeleteImage()
+        private void DeleteImageInListView()
         {
             ImagePlaylistModel? playlist;
             playlist = ListBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
@@ -331,6 +331,40 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             }
         }
 
-        
+        private void DeleteImageInDataGridView()
+        {
+            ImagePlaylistModel? playlist;
+            playlist = ListBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
+            if (playlist != null)
+            {
+                foreach (ImageModel item in browseDataGrid.SelectedItems)
+                {
+                    ImagesInPlaylistDBAccess.DeleteImagePlaylist(item);
+                }
+                listViewImage.Items.Clear();
+                browseDataGrid.Items.Clear();
+                foreach (ImageModel imageModel in ImagesInPlaylistDBAccess.LoadImageInPlayList(playlist.Id))
+                {
+                    listViewImage.Items.Add(imageModel);
+                    browseDataGrid.Items.Add(imageModel);
+                }
+            }
+        }
+
+        private void browseDataGrid_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ImageModel? image;
+            image = browseDataGrid.SelectedItem as ImageModel;
+            if (image != null)
+            {
+                ImageRightClickDialog dialog = new ImageRightClickDialog(
+                    onDeleteButtonClick: DeleteImageInDataGridView);
+                int left = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).X);
+                int top = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).Y);
+                MainWindow.ShowCustomMessageBox(dialog, left: left, top: top);
+
+                e.Handled = true;
+            }
+        }
     }
 }

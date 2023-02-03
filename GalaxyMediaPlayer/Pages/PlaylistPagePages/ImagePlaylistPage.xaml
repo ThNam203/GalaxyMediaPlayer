@@ -233,6 +233,7 @@
                   SelectionMode="Extended"
                   SelectionUnit="FullRow"
                   VirtualizingPanel.VirtualizationMode="Standard"
+                  MouseRightButtonDown="browseDataGrid_MouseRightButtonDown"
                   Margin="16 4"
                   Grid.Row="3"
                   ItemsSource="{Binding systemEntities}">

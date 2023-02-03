@@ -43,19 +43,38 @@ namespace GalaxyMediaPlayer.Pages
         }
 
         public static ListView ListViewImage;
-        private bool isUsingGridStyle = false;
+        private bool _isUsingGridStyle;
+        public bool isUsingGridStyle
+        {
+            get { return _isUsingGridStyle; }
+            set
+            {
+                _isUsingGridStyle = value;
+                if (isUsingGridStyle)
+                {
+                    ShowBtnOfPage(2);
+                    BrowseStyleImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/ComputerPageIcons/list_32.png"));
+                }
+                else
+                {
+                    ShowBtnOfPage(1);
+                    BrowseStyleImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/ComputerPageIcons/four_squares_32.png"));
+                }
+            }
+        }
 
         public ImagePage()
         {
             InitializeComponent();
             Images = new List<ImageModel>();
             ListViewImage = listViewImage;
-            LoadFromDB();
+            isUsingGridStyle = MainWindow.IsImagePageUsingGridStyle;
+            LoadFromDB(isUsingGridStyle);
         }
 
         void ShowBtnOfPage(int num)
         {
-            if(num == 0)
+            if (num == 0)
             {
                 //Visible button
                 BorderlistView.Visibility = Visibility.Visible;
@@ -67,7 +86,7 @@ namespace GalaxyMediaPlayer.Pages
                 BrowseStyleImage.Visibility = Visibility.Collapsed;
                 browseDataGrid.Visibility = Visibility.Collapsed;
             }
-            else if(num == 1)
+            else if (num == 1)
             {
                 //Visible button
                 listViewImage.Visibility = Visibility.Visible;
@@ -79,7 +98,7 @@ namespace GalaxyMediaPlayer.Pages
                 BorderlistView.Visibility = Visibility.Collapsed;
                 browseDataGrid.Visibility = Visibility.Collapsed;
             }
-            else if(num == 2)
+            else if (num == 2)
             {
                 //Visible button
                 ComboboxFilter.Visibility = Visibility.Visible;
@@ -114,7 +133,7 @@ namespace GalaxyMediaPlayer.Pages
                     string name = System.IO.Path.GetFileName(fi.FullName);
                     string size = fi.Length.ToString();
                     string id = Guid.NewGuid().ToString();
-                    ImageModel imgModel = new ImageModel(id, name,fi.FullName,date,size);
+                    ImageModel imgModel = new ImageModel(id, name, fi.FullName, date, size);
                     var FindingResult = Images.Find(img => img.path == imgModel.path);
                     if (FindingResult == null)
                     {
@@ -129,7 +148,7 @@ namespace GalaxyMediaPlayer.Pages
                     }
                     if (Images.Count > 0)
                     {
-                        if(isUsingGridStyle) ShowBtnOfPage(2);
+                        if (isUsingGridStyle) ShowBtnOfPage(2);
                         else ShowBtnOfPage(1);
                     }
                     else ShowBtnOfPage(0);
@@ -149,14 +168,17 @@ namespace GalaxyMediaPlayer.Pages
             }
         }
 
-        
 
-        private void LoadFromDB()
+
+        private void LoadFromDB(bool isUsingGridStyle)
         {
             Images = ImagesDBAccess.LoadImageList();
             if (Images.Count > 0)
             {
-                ShowBtnOfPage(1);
+                if (isUsingGridStyle)
+                    ShowBtnOfPage(2);
+                else
+                    ShowBtnOfPage(1);
                 foreach (ImageModel imageModel in Images)
                 {
                     if (imageModel.path != "" && imageModel.path != null)
@@ -223,7 +245,7 @@ namespace GalaxyMediaPlayer.Pages
             if (image != null)
             {
                 ImageRightClickDialog dialog = new ImageRightClickDialog(
-                    onDeleteButtonClick: DeleteImage);
+                    onDeleteButtonClick: DeleteImageInListView);
                 int left = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).X);
                 int top = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).Y);
                 MainWindow.ShowCustomMessageBox(dialog, left: left, top: top);
@@ -233,9 +255,30 @@ namespace GalaxyMediaPlayer.Pages
         }
 
 
-        private void DeleteImage()
+        private void DeleteImageInListView()
         {
             foreach (ImageModel item in listViewImage.SelectedItems)
+            {
+                Images.Remove(item);
+                ImagesDBAccess.DeleteImage(item);
+            }
+            listViewImage.Items.Clear();
+            browseDataGrid.Items.Clear();
+            foreach (ImageModel item in Images)
+            {
+                listViewImage.Items.Add(item);
+                browseDataGrid.Items.Add(item);
+            }
+
+            if (Images.Count == 0)
+            {
+                ShowBtnOfPage(0);
+            }
+        }
+
+        private void DeleteImageInDataGridView()
+        {
+            foreach (ImageModel item in browseDataGrid.SelectedItems)
             {
                 Images.Remove(item);
                 ImagesDBAccess.DeleteImage(item);
@@ -257,30 +300,43 @@ namespace GalaxyMediaPlayer.Pages
         private void Page_MouseDown(object sender, MouseButtonEventArgs e)
         {
             listViewImage.UnselectAll();
+            browseDataGrid.UnselectAll();
             e.Handled = true;
         }
 
-        
+
 
         private void BrowseStyleImage_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            try
-            {
-                isUsingGridStyle = !isUsingGridStyle;
-                if (isUsingGridStyle)
-                {
-                    ShowBtnOfPage(2);
-                    BrowseStyleImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/ComputerPageIcons/list_32.png"));
-                }
-                else
-                {
-                    ShowBtnOfPage(1);
-                    BrowseStyleImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/ComputerPageIcons/four_squares_32.png"));
-                }
-            }
-            catch
-            {
+            MainWindow.IsImagePageUsingGridStyle = !MainWindow.IsImagePageUsingGridStyle;
+            isUsingGridStyle = MainWindow.IsImagePageUsingGridStyle;
+        }
 
+        private void browseDataGrid_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount >= 2)
+            {
+                ImageModel imageModelSelected = (ImageModel)browseDataGrid.SelectedItem;
+                OpenImagePage openImagePage = new OpenImagePage(imageModelSelected, Images);
+                openImagePage.IsDoubleClick = true;
+
+                MainWindow.Instance.MainFrame.Navigate(openImagePage);
+            }
+        }
+
+        private void browseDataGrid_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ImageModel? image;
+            image = browseDataGrid.SelectedItem as ImageModel;
+            if (image != null)
+            {
+                ImageRightClickDialog dialog = new ImageRightClickDialog(
+                    onDeleteButtonClick: DeleteImageInDataGridView);
+                int left = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).X);
+                int top = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).Y);
+                MainWindow.ShowCustomMessageBox(dialog, left: left, top: top);
+
+                e.Handled = true;
             }
         }
     }

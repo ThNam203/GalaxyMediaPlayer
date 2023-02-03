@@ -2,6 +2,7 @@
 using GalaxyMediaPlayer.Databases.SongPlaylist;
 using GalaxyMediaPlayer.Helpers;
 using GalaxyMediaPlayer.Models;
+using GalaxyMediaPlayer.Pages.PlaylistPagePages;
 using GalaxyMediaPlayer.UserControls;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
@@ -29,7 +30,23 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
         public static Action<object, RoutedEventArgs> NewPlaylistBtn_Click;
 
-        private bool isUsingGridStyle = false;
+        private bool _isUsingGridStyle;
+        public bool isUsingGridStyle
+        {
+            get { return _isUsingGridStyle; }
+            set
+            {
+                _isUsingGridStyle = value;
+                if (isUsingGridStyle)
+                {
+                    BrowseStyleImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/ComputerPageIcons/list_32.png"));
+                }
+                else
+                {
+                    BrowseStyleImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/ComputerPageIcons/four_squares_32.png"));
+                }
+            }
+        }
 
         public enum PlaylistPageType
         {
@@ -55,6 +72,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             ChooseCategoryPanel = chooseCategoryPanel;
             NewPlaylistBtn_Click = this.newPlaylistBtn_Click;
             browseStyleImage = BrowseStyleImage;
+            isUsingGridStyle = false;
 
             PageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/MusicPlaylistPage.xaml", UriKind.Relative));
         }
@@ -86,6 +104,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             showVideosPlaylistsBtn.BorderBrush = System.Windows.Media.Brushes.Transparent;
 
             currentPlaylistType = PlaylistPageType.Image;
+            _isUsingGridStyle = MainWindow.IsImagePageUsingGridStyle;
             PageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/ImagePlaylistPage.xaml", UriKind.Relative));
         }
 
@@ -348,7 +367,8 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         {
             try
             {
-                isUsingGridStyle = !isUsingGridStyle;
+                MainWindow.IsImagePageUsingGridStyle = !MainWindow.IsImagePageUsingGridStyle;
+                isUsingGridStyle = MainWindow.IsImagePageUsingGridStyle;
                 if (isUsingGridStyle)
                 {
                     PlaylistPagePages.ImagePlaylistPage.ShowBtnOfPage3();

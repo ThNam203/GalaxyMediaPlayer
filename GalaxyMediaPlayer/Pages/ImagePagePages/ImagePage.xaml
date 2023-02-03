@@ -402,6 +402,8 @@
                   VirtualizingPanel.VirtualizationMode="Standard"
                   Margin="16 4"
                   Grid.Row="3"
+                  MouseDown="browseDataGrid_MouseDown"
+                  MouseRightButtonDown="browseDataGrid_MouseRightButtonDown"
                   ItemsSource="{Binding systemEntities}">
             <DataGrid.Resources>
                 <Style TargetType="ScrollBar">
