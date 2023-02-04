@@ -42,6 +42,10 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             {
                 emptyPlaylistBorder.Visibility = Visibility.Visible;
                 PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Collapsed;
+            } 
+            else
+            {
+                PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Visible;
             }
         }
 

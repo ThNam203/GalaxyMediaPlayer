@@ -18,8 +18,6 @@ using System.Windows.Controls;
 using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
 using System.Xml;
-using System.Xml.Serialization;
-using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
 
 namespace GalaxyMediaPlayer.Pages.NavContentPages
 {
