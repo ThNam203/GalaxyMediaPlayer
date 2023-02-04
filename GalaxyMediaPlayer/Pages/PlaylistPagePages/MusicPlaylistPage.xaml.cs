@@ -49,7 +49,6 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
         {
             SongPlaylistModel? playlist;
             playlist = playlistListBox.SelectedItem as SongPlaylistModel;
-
             if (playlist != null && e.ClickCount >= 2)
             {
                 MainPage.currentMusicBrowsingFolder += playlist.Name;
@@ -65,7 +64,6 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                 MyMusicMediaPlayer.SetTempPlaylist(currentChosenPlaylistSongs.Select(s => s.Path).ToList());
                 MainPage.Instance.ChangeButtonsViewOnOpenFolder(forceDisable: false);
                 MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid(false);
-
                 playlistSongsDataGrid.Visibility = Visibility.Visible;
                 playlistListBox.Visibility = Visibility.Collapsed;
 

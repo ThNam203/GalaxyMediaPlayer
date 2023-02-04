@@ -9,18 +9,164 @@
       d:DesignHeight="450"  d:DesignWidth="800" 
       Title="VideoMediaPLayer" ShowsNavigationUI="True" >
 
+    <Page.Resources>
+        <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="20" />
+                </Grid.ColumnDefinitions>
+                <Border
+                  x:Name="Border" 
+                  Grid.ColumnSpan="2"
+                  CornerRadius="5"
+                  Background="#FF3F3F3F"
+                  BorderThickness="0" />
+                <Border 
+                  Grid.Column="0"
+                  CornerRadius="0" 
+                  Margin="1" 
+                  Background="#FF3F3F3F" 
+                  BorderThickness="0" />
+                <Path 
+                  x:Name="Arrow"
+                  Grid.Column="1"     
+                  Fill="White"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Data="M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z"
+                />
+            </Grid>
+        </ControlTemplate>
 
-    <Grid AllowDrop="True" Margin="0,0,0,0" KeyDown="Video_Page_KeyDown" >
+        <ControlTemplate x:Key="ComboBoxTextBox" TargetType="{x:Type TextBox}">
+            <Border x:Name="PART_ContentHost" Focusable="False" Background="Transparent" />
+        </ControlTemplate>
+        <Style x:Key="{x:Type ComboBox}" TargetType="{x:Type ComboBox}">
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+            <Setter Property="MinWidth" Value="80"/>
+            <Setter Property="MinHeight" Value="20"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ComboBox}">
+                        <Grid>
+                            <ToggleButton 
+                                Name="ToggleButton" 
+                                Template="{StaticResource ComboBoxToggleButton}" 
+                                Grid.Column="2" 
+                                Focusable="false"
+                                IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
+                                ClickMode="Press">
+                            </ToggleButton>
+                            <ContentPresenter Name="ContentSite" IsHitTestVisible="False"  Content="{TemplateBinding SelectionBoxItem}"
+                                ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                Margin="8,3,23,3"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left" />
+                            <TextBox x:Name="PART_EditableTextBox"
+                                Style="{x:Null}" 
+                                Template="{StaticResource ComboBoxTextBox}" 
+                                HorizontalAlignment="Left" 
+                                VerticalAlignment="Center" 
+                                Margin="3,3,23,3"
+                                Focusable="True" 
+                                Background="#FF3F3F3F"
+                                Foreground="Green"
+                                Visibility="Hidden"
+                                IsReadOnly="{TemplateBinding IsReadOnly}"/>
+                            <Popup 
+                                Name="Popup"
+                                Placement="Bottom"
+                                IsOpen="{TemplateBinding IsDropDownOpen}"
+                                AllowsTransparency="True" 
+                                Focusable="False"
+                                PopupAnimation="Slide">
+
+                                <Grid Name="DropDown"
+                                      SnapsToDevicePixels="True"
+                                      MinWidth="{TemplateBinding ActualWidth}"
+                                      MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <Border 
+                                        x:Name="DropDownBorder"
+                                        Background="#FF3F3F3F"
+                                        BorderThickness="0"/>
+                                    <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                    </ScrollViewer>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasItems" Value="false">
+                                <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#888888"/>
+                            </Trigger>
+                            <Trigger Property="IsGrouping" Value="true">
+                                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                            </Trigger>
+                            <Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="true">
+                                <Setter TargetName="DropDownBorder" Property="CornerRadius" Value="0"/>
+                                <Setter TargetName="DropDownBorder" Property="Margin" Value="0,2,0,0"/>
+                            </Trigger>
+                            <Trigger Property="IsEditable"  Value="true">
+                                <Setter Property="IsTabStop" Value="false"/>
+                                <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="ContentSite" Property="Visibility" Value="Hidden"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="{x:Type ComboBoxItem}" TargetType="{x:Type ComboBoxItem}">
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                        <Border Name="Border"
+                              Padding="8 2 2 2"
+                              SnapsToDevicePixels="true">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="true">
+                                <Setter TargetName="Border" Property="Background" Value="#FF4F4F4F"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#888888"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+    <Grid AllowDrop="True" Margin="0,0,0,0" KeyDown="Video_Page_KeyDown" Background="Black" >
 
         <Grid 
               x:Name="videoGrid" 
               >
+
             <MediaElement 
                 x:Name="media"
                 MediaEnded="media_MediaEnded" 
-                MediaOpened="media_MediaOpened" 
+                MediaOpened="media_MediaOpened" MouseLeftButtonDown="media_MouseLeftButtonDown" 
+                
                  />
-
+            
             <ui:TextBox x:Name="Sub" TextWrapping="Wrap" 
                         FontFamily="Times New Roman" 
                         FontSize="24" 
@@ -35,7 +181,6 @@
                     <SolidColorBrush Color="#FFE5D9D9" Opacity="0"/>
                 </ui:TextBox.Background>
             </ui:TextBox>
-            
 
         </Grid>
         <Grid x:Name="controlVideoGrid" 
@@ -44,34 +189,38 @@
                 <RowDefinition Height="40" ></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Label x:Name="labelVideoTitle" Height="40" 
+            <Grid Grid.Row="0"   MouseEnter="VideoPlayerGrid_MouseEnter" Background="Transparent"
+                MouseLeave="VideoPlayerGrid_MouseLeave" >
+                <Label x:Name="labelVideoTitle" Height="40" Grid.Row="0"                 
+
                    VerticalAlignment="Top" FontFamily="Times New Roman" FontSize="16" RenderTransformOrigin="0.5,0.5" Background="Black" Foreground="White"
                  />
-
-            <StackPanel
-                MouseEnter="VideoPlayerGrid_MouseEnter"
-                MouseLeave="VideoPlayerGrid_MouseLeave" 
+                <StackPanel 
                 x:Name="StackPanel1" 
                 HorizontalAlignment="Right" Width="800" Orientation="Horizontal" 
                 FlowDirection="RightToLeft" Height="40" VerticalAlignment="Top" Background="Transparent"
              >
-                <Button Name="btnCloseApp" 
+                    <Button Name="btnCloseApp" 
                             Click="btnCloseApp_Click"
                             Style="{StaticResource AppControlButtonStyle}"
                             Content="✕"/>
 
-                <Button Name="btnMaximizeApp"
+                    <Button Name="btnMaximizeApp"
                             Click="btnMaximizeApp_Click"
                             Style="{StaticResource AppControlButtonStyle}"
                             Content="▭" />
-                
-                <Button Name="btnMinimizeApp"
+
+                    <Button Name="btnMinimizeApp"
                             Click="btnMinimizeApp_Click"
                             Style="{StaticResource AppControlButtonStyle}"
                             Content="__"
                             Margin="0 0 8 0"/>
 
-            </StackPanel>
+                </StackPanel>
+            </Grid>
+
+
+
             
             <Button x:Name="Backward15seconds"
                     Style="{StaticResource btnMediaControlStyle}" 
@@ -89,25 +238,26 @@
                     </TransformGroup>
                 </Button.RenderTransform>
                 <Button.Background>
-                    <ImageBrush x:Name="Play_PauseIcon2"
+                    <ImageBrush x:Name="BackwardIcon"
                             Opacity="1" 
                             ImageSource="/Resources/Icons/MediaControlIcons/Skip15seconds.png"/>
                 </Button.Background>
             </Button>
-            <Button x:Name="btnPlayPause_Copy"
-                    Grid.Row="0" Grid.RowSpan="2"
+            
+            <Button x:Name="btnPlayPause_Copy"  Margin="0,200,0,200" 
+                    Grid.Row="0" Grid.RowSpan="2"  IsHitTestVisible="False"
                 Style="{StaticResource btnMediaControlStyle}" 
-                        RenderTransformOrigin="0.5,0.5" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        RenderTransformOrigin="0.5,0.5" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0">
                 <Button.Background>
-                    <ImageBrush x:Name="Play_PauseIcon1"
+                    <ImageBrush x:Name="Play_PauseIcon2"
                         Opacity="1" 
                         ImageSource="/Resources/Icons/MediaControlIcons/play_32.png"/>
                 </Button.Background>
             </Button>
 
             <Button                    
-                Grid.Row="0" Grid.RowSpan="2"
-                x:Name="Forward15seconds"
+                Grid.Row="0" Grid.RowSpan="2" 
+                x:Name="Forward15seconds"  IsHitTestVisible="False"
                     Style="{StaticResource btnMediaControlStyle}" 
                     RenderTransformOrigin="0.5,0.5" Width="50" Height="50" HorizontalAlignment="Right" Margin="0,200,250,200" Opacity="0">
                 <Button.RenderTransform>
@@ -119,7 +269,7 @@
                     </TransformGroup>
                 </Button.RenderTransform>
                 <Button.Background>
-                    <ImageBrush x:Name="Play_PauseIcon3" 
+                    <ImageBrush x:Name="ForwardIcon" 
                             ImageSource="/Resources/Icons/MediaControlIcons/Skip15seconds.png" Opacity="1"/>
                 </Button.Background>
             </Button>
@@ -135,7 +285,6 @@
 
             <Grid x:Name="VideoPlayerGrid" Margin="0,0,0,0" 
               VerticalAlignment="Bottom" 
-
                Height="70" Background="Black" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="250"/>
@@ -150,12 +299,10 @@
 
                 <Slider 
              x:Name="SliderSeek" 
-                Style="{StaticResource Horizontal_Slider2}"           
-                
+                Style="{StaticResource Horizontal_Slider2}"                 
                 GotMouseCapture="SliderSeek_GotMouseCapture" 
                 LostMouseCapture="SliderSeek_LostMouseCapture" MinHeight="3" 
                 Margin="50,0,50,0" VerticalAlignment="Center" Grid.Column="0" Grid.ColumnSpan="3">
-
                 </Slider>
                 <StackPanel x:Name="SongSliderPanel"
                 Visibility="Collapsed"
@@ -216,7 +363,7 @@
                             </TransformGroup>
                         </Button.RenderTransform>
                         <Button.Background>
-                            <ImageBrush x:Name="Play_PauseIcon5"
+                            <ImageBrush
                             Opacity="1" 
                             ImageSource="/Resources/Icons/MediaControlIcons/Skip15seconds.png"/>
                         </Button.Background>
@@ -225,9 +372,9 @@
                     <Button x:Name="btnPlayPause"
                     Style="{StaticResource btnMediaControlStyle}" Click="btnPlayPause_Click">
                         <Button.Background>
-                            <ImageBrush x:Name="Play_PauseIcon"
+                            <ImageBrush x:Name="Play_PauseIcon" 
                             Opacity="1" 
-                            ImageSource="/Resources/Icons/MediaControlIcons/play_32.png"/>
+                            ImageSource="/Resources/Icons/MediaControlIcons/pause_32.png"/>
                         </Button.Background>
                     </Button>
                     <Button x:Name="btnSkip15Seconds"
@@ -241,7 +388,7 @@
                             </TransformGroup>
                         </Button.RenderTransform>
                         <Button.Background>
-                            <ImageBrush x:Name="Play_PauseIcon4"
+                            <ImageBrush 
                             Opacity="1" 
                             ImageSource="/Resources/Icons/MediaControlIcons/Skip15seconds.png"/>
                         </Button.Background>
@@ -281,6 +428,9 @@
                             <ImageBrush x:Name="ToggleScreenSizeIcon" ImageSource="/Resources/Icons/MediaControlIcons/full_screen_64.png"/>
                         </Button.Background>
                     </Button>
+                    <ComboBox Visibility="Collapsed"
+                        Name="subtitlesCbb" VerticalAlignment="Center" HorizontalAlignment="Center" AutomationProperties.Name=" gbgfbg" SelectionChanged="_SelectionChanged"
+                        />
                 </StackPanel>
                 <StackPanel x:Name="VolumeControlPanel"
                 Orientation="Horizontal"
