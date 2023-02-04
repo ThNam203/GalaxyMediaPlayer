@@ -36,7 +36,7 @@ namespace GalaxyMediaPlayer.Databases.ImagePage
             }
         }
 
-        public static int DeleteImagePlaylist(ImageModel imageModel)
+        public static int DeleteImageInPlaylist(ImageModel imageModel)
         {
             using (IDbConnection connStr = new SQLiteConnection(GetConnectionStr()))
             {

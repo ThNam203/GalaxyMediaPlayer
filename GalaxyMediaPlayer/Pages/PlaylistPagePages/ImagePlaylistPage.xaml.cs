@@ -268,9 +268,9 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
 
         private void img_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            ImagePlaylistModel imagePlaylistModel = ListBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
             if (e.ClickCount >= 2)
             {
+                ImagePlaylistModel? imagePlaylistModel = ListBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
                 if (imagePlaylistModel != null)
                 {
                     ImageModel imageModelSelected = (ImageModel)listViewImage.SelectedItem;
@@ -280,7 +280,7 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                         double normalHeight = MainWindow.HeightNormalSize;
                         double normalLeft = MainWindow.Instance.Left;
                         double normalTop = MainWindow.Instance.Top;
-                        ShowImageInPlaylistWindow showImagePlaylistWindow = new ShowImageInPlaylistWindow(imageModelSelected, imagePlaylistModel.Images, normalWidth, normalHeight, normalLeft, normalTop);
+                        ShowImageInPlaylistWindow showImagePlaylistWindow = new ShowImageInPlaylistWindow(imagePlaylistModel.Images, normalWidth, normalHeight, normalLeft, normalTop);
 
                         showImagePlaylistWindow.WindowState = MainWindow.Instance.WindowState;
                         if(showImagePlaylistWindow.WindowState == WindowState.Maximized)
@@ -319,14 +319,16 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             {
                 foreach (ImageModel item in listViewImage.SelectedItems)
                 {
-                    ImagesInPlaylistDBAccess.DeleteImagePlaylist(item);
+                    ImagesInPlaylistDBAccess.DeleteImageInPlaylist(item);
                 }
                 listViewImage.Items.Clear();
                 browseDataGrid.Items.Clear();
+                playlist.Images.Clear();
                 foreach (ImageModel imageModel in ImagesInPlaylistDBAccess.LoadImageInPlayList(playlist.Id))
                 {
                     listViewImage.Items.Add(imageModel);
                     browseDataGrid.Items.Add(imageModel);
+                    playlist.Images.Add(imageModel);
                 }
             }
         }
@@ -339,14 +341,16 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             {
                 foreach (ImageModel item in browseDataGrid.SelectedItems)
                 {
-                    ImagesInPlaylistDBAccess.DeleteImagePlaylist(item);
+                    ImagesInPlaylistDBAccess.DeleteImageInPlaylist(item);
                 }
                 listViewImage.Items.Clear();
                 browseDataGrid.Items.Clear();
+                playlist.Images.Clear();
                 foreach (ImageModel imageModel in ImagesInPlaylistDBAccess.LoadImageInPlayList(playlist.Id))
                 {
                     listViewImage.Items.Add(imageModel);
                     browseDataGrid.Items.Add(imageModel);
+                    playlist.Images.Add(imageModel);
                 }
             }
         }

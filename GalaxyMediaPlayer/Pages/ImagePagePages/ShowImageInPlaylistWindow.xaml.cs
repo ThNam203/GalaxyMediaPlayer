@@ -1,4 +1,5 @@
 ﻿using GalaxyMediaPlayer.Models;
+using GalaxyMediaPlayer.Pages.PlaylistPagePages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,12 +21,13 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
     /// </summary>
     public partial class ShowImageInPlaylistWindow : Window
     {
-        public ShowImageInPlaylistWindow(ImageModel img, List<ImageModel> list, double width, double height, double left, double top)
+        public ShowImageInPlaylistWindow(List<ImageModel> list, double width, double height, double left, double top)
         {
             InitializeComponent();
             _Images = list;
-            currentImage = img;
-            imgPath = img.path;
+            imgPath = _Images[0].path;
+            currentImage = _Images[0];
+            dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             RunPlaylistImage();
 
             this.Width = width;
@@ -66,6 +68,8 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
         private Cursor _cursor = Cursors.Hand;
         public Cursor cursor { get { return _cursor; } set { _cursor = value; CanvasImg.Cursor = _cursor; } }
 
+        System.Windows.Threading.DispatcherTimer dispatcherTimer;
+
         private void btnMinimizeApp_Click(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Minimized;
@@ -92,7 +96,7 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
             Application.Current.Shutdown();
         }
 
-        System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+        
         private void RunPlaylistImage()
         {
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
@@ -112,7 +116,6 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
                 TargetIndex = currentIndex + 1;
             }
             imgPath = Images[TargetIndex].path;
-            OpenImg.Source = new BitmapImage(new Uri(_imgPath));
 
             currentImage = Images[TargetIndex];
         }
@@ -141,7 +144,7 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
             MainWindow.Instance.Top = this.Top;
 
             Application.Current.MainWindow.Visibility = Visibility.Visible;
-
+            dispatcherTimer.Stop();
             this.Close();
         }
     }
