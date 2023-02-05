@@ -55,8 +55,6 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             playlist = playlistListBox.SelectedItem as SongPlaylistModel;
             if (playlist != null && e.ClickCount >= 2)
             {
-                MainPage.currentMusicBrowsingFolder += playlist.Name;
-
                 currentChosenPlaylistSongs.Clear();
                 foreach (SongInfor songInfor in PlaylistSongsDatabaseAccess.LoadSongsFromPlaylistId(playlist.Id))
                 {
@@ -187,6 +185,9 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             {
                 deleteSongs.Add(currentChosenPlaylistSongs[idx]);
                 currentChosenPlaylistSongs.RemoveAt(idx);
+
+                MyMusicMediaPlayer.SetTempPlaylist(MusicPlaylistPage.currentChosenPlaylistSongs.Select(s => s.Path).ToList());
+                MainPage.Instance.ChangeButtonsViewOnOpenFolder(forceDisable: false);
             }
 
             deleteIndices.Clear();
