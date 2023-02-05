@@ -286,9 +286,9 @@
                           Width="100"
                           Height="30"
                           SelectionChanged="ComboboxFilter_SelectionChanged">
-                    <ComboBoxItem>By Name &#8593;</ComboBoxItem>
-                    <ComboBoxItem>By Date &#8593;</ComboBoxItem>
-                    <ComboBoxItem>By Size &#8593;</ComboBoxItem>
+                    <ComboBoxItem>By Name &#8595;</ComboBoxItem>
+                    <ComboBoxItem>By Date &#8595;</ComboBoxItem>
+                    <ComboBoxItem>By Size &#8595;</ComboBoxItem>
                 </ComboBox>
                 <Image
                     Margin="16 0"
@@ -325,7 +325,8 @@
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                   Margin="{Binding ElementName=BorderlistView, Path=Margin}"
                   BorderThickness="0"
-                  IsSynchronizedWithCurrentItem="True">
+                  IsSynchronizedWithCurrentItem="True"
+                  SelectionMode="Extended">
             <ListView.Resources>
                 <Style TargetType="ScrollBar">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>

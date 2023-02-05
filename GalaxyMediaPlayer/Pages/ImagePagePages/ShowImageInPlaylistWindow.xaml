@@ -42,9 +42,10 @@
         <Grid.RowDefinitions>
             <RowDefinition Name="ImageFeatureRow" Height="40" />
             <RowDefinition Name="PictureRow" Height="*"/>
+            <RowDefinition Name="SecondImageFeatureRow" Height="40"/>
         </Grid.RowDefinitions>
 
-        <Grid Name="ToolGrid"
+        <Grid Name="TopToolGrid"
               Background="Transparent"
               Grid.Row="0"
               VerticalAlignment="Center">
@@ -89,6 +90,39 @@
                    RenderOptions.BitmapScalingMode="Fant"
                    Stretch="Uniform"/>
             </Canvas>
+        </Grid>
+        <Grid Name="BottomToolGrid"
+              Background="Transparent"
+              Grid.Row="2"
+              VerticalAlignment="Center"
+              HorizontalAlignment="Center">
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <Image
+                    Margin="16 0"
+                    Grid.Column="2"
+                    Name="btnPreviousImage"
+                    MouseLeftButtonDown="btnPreviousImage_MouseLeftButtonDown" 
+                    Width="16"
+                    Height="16"
+                    Source="/Resources/Icons/MediaControlIcons/previous_32.png"/>
+                <Image
+                    Margin="16 0"
+                    Grid.Column="2"
+                    Name="btnPlayImagePlaylist"
+                    MouseLeftButtonDown="btnPlayImagePlaylist_MouseLeftButtonDown" 
+                    Width="16"
+                    Height="16"
+                    Source="/Resources/Icons/MediaControlIcons/pause_32.png"/>
+                <Image
+                    Margin="16 0"
+                    Grid.Column="2"
+                    Name="btnNextImage"
+                    MouseLeftButtonDown="btnNextImage_MouseLeftButtonDown" 
+                    Width="16"
+                    Height="16"
+                    Source="/Resources/Icons/MediaControlIcons/next_32.png"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>

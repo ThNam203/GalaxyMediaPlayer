@@ -125,8 +125,6 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
             this.DragMove();
             MainWindow.Instance.Left = this.Left;
             MainWindow.Instance.Top = this.Top;
-            if (dispatcherTimer.IsEnabled == false)
-                dispatcherTimer.Start();
         }
 
         private void PageShowImagePlaylist_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -146,6 +144,48 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
             Application.Current.MainWindow.Visibility = Visibility.Visible;
             dispatcherTimer.Stop();
             this.Close();
+        }
+
+        private void btnPreviousImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            int currentIndex = Images.IndexOf(currentImage);
+            int TargetIndex;
+
+            if (currentIndex == 0)  
+                TargetIndex = Images.Count - 1;
+            else 
+                TargetIndex = currentIndex - 1;
+
+            imgPath = Images[TargetIndex].path;
+            currentImage = Images[TargetIndex];
+        }
+
+        private void btnPlayImagePlaylist_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (dispatcherTimer.IsEnabled)
+            {
+                btnPlayImagePlaylist.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/play_32.png"));
+                dispatcherTimer.Stop();
+            }
+            else
+            {
+                btnPlayImagePlaylist.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/pause_32.png"));
+                dispatcherTimer.Start();
+            }
+        }
+
+        private void btnNextImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            int currentIndex = Images.IndexOf(currentImage);
+            int TargetIndex;
+
+            if (currentIndex == Images.Count - 1)
+                TargetIndex = 0;
+            else
+                TargetIndex = currentIndex + 1;
+
+            imgPath = Images[TargetIndex].path;
+            currentImage = Images[TargetIndex];
         }
     }
 }

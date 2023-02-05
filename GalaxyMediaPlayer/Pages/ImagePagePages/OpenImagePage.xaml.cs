@@ -319,7 +319,6 @@ namespace GalaxyMediaPlayer.Pages
                 TargetIndex = currentIndex + 1;
             }
             imgPath = Images[TargetIndex].path;
-            OpenImg.Source = new BitmapImage(new Uri(_imgPath));
 
             currentImage = Images[TargetIndex];
         }
