@@ -28,7 +28,7 @@ namespace GalaxyMediaPlayer.Databases.ImagePage
 
                 if (!isExisted)
                 {
-                    int rowAffected = connStr.Execute("insert into ImageInPlaylistTable (PlaylistId, Id, Path, DateCreated) values (@PlaylistId, @Id, @path, @dateCreated)", newImageModel);
+                    int rowAffected = connStr.Execute("insert into ImageInPlaylistTable (PlaylistId, Id, Name, Path, DateCreated, Size) values (@PlaylistId, @Id,@Name, @path, @dateCreated, @Size)", newImageModel);
                     return rowAffected;
                 }
                 else
@@ -36,7 +36,7 @@ namespace GalaxyMediaPlayer.Databases.ImagePage
             }
         }
 
-        public static int DeleteImagePlaylist(ImageModel imageModel)
+        public static int DeleteImageInPlaylist(ImageModel imageModel)
         {
             using (IDbConnection connStr = new SQLiteConnection(GetConnectionStr()))
             {

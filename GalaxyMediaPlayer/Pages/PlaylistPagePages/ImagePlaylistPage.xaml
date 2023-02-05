@@ -8,6 +8,7 @@
       xmlns:local="clr-namespace:GalaxyMediaPlayer.Pages.PlaylistPagePages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
+      MouseDown="Page_MouseDown"
       Title="ImagePlaylistPage">
 
     <Page.Resources>
@@ -15,6 +16,8 @@
         <cvt:ImagePathToImageSource x:Key="ImagePathToImageSource"></cvt:ImagePathToImageSource>
         <cvt:EntityTypeToVisibility x:Key="EntityTypeToVisibility"></cvt:EntityTypeToVisibility>
         <cvt:ImagePathToThumbnailImage x:Key="ImagePathToThumbnailImage"></cvt:ImagePathToThumbnailImage>
+        <cvt:EntityTypeToImage x:Key="EntityTypeToImageSource"></cvt:EntityTypeToImage>
+        <cvt:FileSizeToString x:Key="FileSizeToString"></cvt:FileSizeToString>
     </Page.Resources>
     <Grid>
         <Grid.Resources>
@@ -221,5 +224,62 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+        <DataGrid Name="browseDataGrid"
+                  Visibility="Collapsed"
+                  Style="{DynamicResource DataGridBrowseStyle}" 
+                  CellStyle="{DynamicResource DataGridCellStyle1}" 
+                  ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderBrowseStyle}" 
+                  RowStyle="{DynamicResource DataGridRowBrowseStyle}"
+                  SelectionMode="Extended"
+                  SelectionUnit="FullRow"
+                  VirtualizingPanel.VirtualizationMode="Standard"
+                  MouseRightButtonDown="browseDataGrid_MouseRightButtonDown"
+                  Margin="16 4"
+                  Grid.Row="3"
+                  ItemsSource="{Binding systemEntities}"
+                  IsReadOnly="True">
+            <DataGrid.Resources>
+                <Style TargetType="ScrollBar">
+                    <Setter Property="SnapsToDevicePixels" Value="True"/>
+                    <Setter Property="OverridesDefaultStyle" Value="true"/>
+                    <Style.Triggers>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter Property="Width" Value="10"/>
+                            <Setter Property="Margin" Value="8 2" />
+                            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Name" SortMemberPath="Name" Width="*" MinWidth="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="16" Height="16" Margin="0 0 8 0" Source="{Binding Type, Converter={StaticResource EntityTypeToImageSource}}"/>
+                                <TextBlock Text="{Binding Name}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Date" 
+                                    IsReadOnly="True" 
+                                    Width="*" 
+                                    CanUserResize="True"
+                                    MinWidth="150"
+                                    Binding="{Binding dateCreated}"/>
+
+                <DataGridTextColumn Header="Size" 
+                                    IsReadOnly="True" 
+                                    Width="*" 
+                                    CanUserResize="True"
+                                    MinWidth="100"
+                                    Binding="{Binding length, Converter={StaticResource FileSizeToString}}"/>
+
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Page>

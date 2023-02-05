@@ -24,7 +24,8 @@ namespace GalaxyMediaPlayer.Pages
 
         // Nam: use to hold information about where user are navigating (which is for showing MUSIC AdditionalGridInfor)
         public static string currentMusicBrowsingFolder;
-        
+
+
         private double totalTimeInSecond;
         private bool isDragging = false; // Nam: if user is dragging, we are not updating the slider value, see more below
         private bool isMuted = false;

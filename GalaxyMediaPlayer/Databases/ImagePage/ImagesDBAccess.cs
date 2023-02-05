@@ -23,10 +23,10 @@ namespace GalaxyMediaPlayer.Databases.ImagePage
         {
             using (IDbConnection connStr = new SQLiteConnection(GetConnectionStr()))
             {
-                bool isExisted = connStr.ExecuteScalar<bool>("select count(1) from ImagesTable where Id=@Id", newImage);
+                bool isExisted = connStr.ExecuteScalar<bool>("select count(1) from ImagesTable where path=@path", newImage);
                 if (!isExisted)
                 {
-                    int rowAffected = connStr.Execute("insert into ImagesTable (Id,Path, DateCreated) values (@Id, @path, @dateCreated)", newImage);
+                    int rowAffected = connStr.Execute("insert into ImagesTable (Id,Name,Path, DateCreated,Size) values (@Id,@Name,@path, @dateCreated,@size)", newImage);
                     return rowAffected;
                 }
                 else

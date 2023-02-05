@@ -318,16 +318,29 @@
                     
                 </StackPanel>
 
-                <!--SelectionChanged="cbSortByOptions_SelectionChanged"-->
-                <ComboBox   Name="cbSortPlaylistBy"
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            Margin="0 0 40 0">
+                    <!--SelectionChanged="cbSortByOptions_SelectionChanged"-->
+                    <ComboBox   Name="cbSortPlaylistBy"
                         Width="80"
-                        Margin="0 0 50 5"
+                        Margin="0 0 5 0"
                         Grid.Column="1"
                         VerticalAlignment="Center"
                             SelectionChanged="cbSortPlaylistBy_SelectionChanged">
-                    <ComboBoxItem>Name</ComboBoxItem>
-                    <ComboBoxItem>Date  &#8595;</ComboBoxItem>
-                </ComboBox>
+                        <ComboBoxItem>Name &#8593;</ComboBoxItem>
+                        <ComboBoxItem>Date &#8593;</ComboBoxItem>
+                    </ComboBox>
+                    <Image
+                    Margin="5"
+                    Grid.Column="2"
+                    Name="BrowseStyleImage"
+                    MouseLeftButtonDown="BrowseStyleImage_MouseLeftButtonDown" 
+                    Visibility="Hidden"
+                    Width="16"
+                    Height="16"
+                    Source="/Resources/Icons/ComputerPageIcons/four_squares_32.png"/>
+                </StackPanel>
             </Grid>
 
             <Separator

@@ -14,6 +14,13 @@ namespace GalaxyMediaPlayer
     {
         public static MainWindow Instance;
         public bool CanDrag = true;
+        public static double WidthNormalSize = 1120;
+        public static double HeightNormalSize = 630;
+
+        //Dat: To know using listview or datagrid in ImagePage and ImagePlaylistPage
+        public static bool IsImagePageUsingGridStyle;
+        public static bool IsImagePlaylistPageUsingGridStyle;
+
         public static void ShowCustomMessageBoxInMiddle(UIElement messageBox)
         {
             Instance.MessageBoxGrid.Children.Add(messageBox);
@@ -45,6 +52,9 @@ namespace GalaxyMediaPlayer
             // Nam: disable 'backspace' button can go back in frame's stack
             NavigationCommands.BrowseBack.InputGestures.Clear();
             NavigationCommands.BrowseForward.InputGestures.Clear();
+
+            IsImagePageUsingGridStyle = false;
+            IsImagePlaylistPageUsingGridStyle = false;
 
             MainFrame.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
         }
@@ -90,6 +100,15 @@ namespace GalaxyMediaPlayer
         {
             MessageBoxCanvas.Children.Clear();
             MessageBoxCanvas.Visibility = Visibility.Collapsed;
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if(this.WindowState != WindowState.Maximized)
+            {
+                WidthNormalSize = this.ActualWidth;
+                HeightNormalSize = this.ActualHeight;
+            }
         }
     }
 }
