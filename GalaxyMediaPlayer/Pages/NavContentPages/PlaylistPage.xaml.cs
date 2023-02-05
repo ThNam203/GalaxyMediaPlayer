@@ -54,7 +54,6 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 }
             }
         }
-        public static Action<object, RoutedEventArgs> NewPlaylistBtn_Click;
 
         public enum PlaylistPageType
         {
