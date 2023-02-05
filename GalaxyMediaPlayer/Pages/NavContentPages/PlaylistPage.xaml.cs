@@ -1,5 +1,6 @@
 ﻿using GalaxyMediaPlayer.Databases.ImagePage;
 using GalaxyMediaPlayer.Databases.SongPlaylist;
+using GalaxyMediaPlayer.Databases.VideoPage;
 using GalaxyMediaPlayer.Helpers;
 using GalaxyMediaPlayer.Models;
 using GalaxyMediaPlayer.Pages.PlaylistPagePages;
@@ -8,12 +9,16 @@ using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using System.Xml;
 
 namespace GalaxyMediaPlayer.Pages.NavContentPages
 {
@@ -23,6 +28,8 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         public static Button BackBtn;
         public static Button AddNewSongToPlaylistBtn;
         public static Button AddNewImageToPlaylistBtn;
+        public static Button AddNewVideoToPlaylistBtn;
+
         public static TextBlock PlaylistNameHeader;
         public static ComboBox CbSortPlaylistBy;
         public static StackPanel ChooseCategoryPanel;
@@ -47,6 +54,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 }
             }
         }
+        public static Action<object, RoutedEventArgs> NewPlaylistBtn_Click;
 
         public enum PlaylistPageType
         {
@@ -66,6 +74,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             NewPlaylistBtn = newPlaylistBtn;
             PlaylistNameHeader = playlistNameHeader;
             AddNewSongToPlaylistBtn = addNewSongToPlaylistBtn;
+            AddNewVideoToPlaylistBtn = addNewVideoToPlaylistBtn;
             AddNewImageToPlaylistBtn = addNewImageToPlaylistBtn;
             CbSortPlaylistBy = cbSortPlaylistBy;
             BackBtn = backBtn;
@@ -94,7 +103,8 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             showImagesPlaylistsBtn.BorderBrush = System.Windows.Media.Brushes.Transparent;
 
             currentPlaylistType = PlaylistPageType.Video;
-            PageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/Page1.xaml", UriKind.Relative));
+
+            PageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/VideoPlaylistPage.xaml", UriKind.Relative));
         }
 
         public void showImagesPlaylistsBtn_MouseDown(object sender, MouseButtonEventArgs e)
@@ -118,8 +128,9 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             }
             else if (currentPlaylistType == PlaylistPageType.Video)
             {
-
-            } 
+                NewPlaylistControl newPlaylistControl = new NewPlaylistControl(AddNewVideoPlaylist);
+                MainWindow.ShowCustomMessageBoxInMiddle(newPlaylistControl);
+            }
             else if (currentPlaylistType == PlaylistPageType.Image)
             {
                 NewPlaylistControl newPlaylistControl = new NewPlaylistControl(AddNewImagePlaylist);
@@ -140,13 +151,16 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             if (currentPlaylistType == PlaylistPageType.Music)
             {
                 addNewSongToPlaylistBtn.Visibility = Visibility.Collapsed;
-
                 PlaylistPagePages.MusicPlaylistPage.PlaylistListBox.Visibility = Visibility.Visible;
                 PlaylistPagePages.MusicPlaylistPage.PlaylistSongsDataGrid.Visibility = Visibility.Collapsed;
             }
             else if (currentPlaylistType == PlaylistPageType.Video)
             {
 
+                PlaylistPagePages.VideoPlaylistPage.PlaylistListBox.Visibility = Visibility.Visible;
+                PlaylistPagePages.VideoPlaylistPage.PlaylistVideosDataGrid.Visibility = Visibility.Collapsed;
+                addNewVideoToPlaylistBtn.Visibility = Visibility.Collapsed;
+                PlaylistPage.BackBtn.Visibility = Visibility.Collapsed;
             }
             else if (currentPlaylistType == PlaylistPageType.Image)
             {
@@ -172,6 +186,26 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 PlaylistPagePages.MusicPlaylistPage.EmptyPlaylistBorder.Visibility = Visibility.Collapsed;
                 PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Visible;
             }
+        }
+        private void AddNewVideoPlaylist(string playlistName)
+        {
+            XmlDocument xmlDocument = new XmlDocument();
+            XmlElement root = xmlDocument.CreateElement("root");
+            xmlDocument.AppendChild(root);
+            string path = AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage";
+            if (!File.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            xmlDocument.Save(path + "\\" + playlistName + ".xml");
+            VideoPaths videoPaths = new VideoPaths(path + "\\" + playlistName + ".xml");
+            VideoPlaylistPage.playlistSource.Add(videoPaths);
+            MainWindow.ClearAllMessageBox();
+            PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Visible;
+        }
+        private bool IsDataBaseExists(StringProperty playlistName)
+        {
+            return (System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\" + playlistName + ".xml"));
         }
 
         private void AddNewImagePlaylist(string PlaylistName)
@@ -256,7 +290,6 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             }
         }
 
-
         private void addNewSongToPlaylistBtn_Click(object sender, RoutedEventArgs e)
         {
             SongPlaylistModel? playlist;
@@ -323,13 +356,31 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 }
             }
         }
+        private void addNewVideoToPlaylistBtn_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
+            ofd.Multiselect = true;
+            ofd.Filter = "Video files |*.wmv; *.3g2; *.3gp; *.3gp2; *.3gpp; *.amv; *.asf;  *.avi; *.bin; *.cue; *.divx; *.dv; *.flv; *.gxf; *.iso; *.m1v; *.m2v; *.m2t; *.m2ts; *.m4v; " +
+             " *.mkv; *.mov; *.mp2; *.mp2v; *.mp4; *.mp4v; *.mpa; *.mpe; *.mpeg; *.mpeg1; *.mpeg2; *.mpeg4; *.mpg; *.mpv2; *.mts; *.nsv; *.nuv; *.ogg; *.ogm;" +
+             " *.ogv; *.ogx; *.ps; *.rec; *.rm; *.rmvb; *.tod; *.ts; *.tts; *.vob; *.vro; *.webm; *.dat; ";
 
+            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                foreach (string file in ofd.FileNames)
+                {
+                    VideoDisplay videoDisplay = new VideoDisplay(file);
+                    VideoPlaylistPage.source.Add(videoDisplay);
+                    var x = VideoPlaylistPage.PlaylistListBox.SelectedItem as VideoPaths;
+                    x.AddPath(file);
+                }
+            }
+        }
         private void addNewImageToPlaylistBtn_Click(object sender, RoutedEventArgs e)
         {
             ImagePlaylistModel? playlist;
             playlist = PlaylistPagePages.ImagePlaylistPage.listBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
 
-            if(playlist != null)
+            if (playlist != null)
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
                 string filter = "SupportedFormat|";
@@ -390,5 +441,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         {
 
         }
+
+
     }
 }

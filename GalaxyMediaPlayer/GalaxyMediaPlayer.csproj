@@ -16,6 +16,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Databases\HomePage\Stat.db" />
+    <None Remove="Databases\ImagePage\SettingDatabase\Database.txt" />
     <None Remove="Databases\MusicPage\Database.txt" />
     <None Remove="Databases\Playlist.db" />
     <None Remove="Databases\VideoPage\Database.txt" />
@@ -109,6 +110,7 @@
     <Content Include="Databases\HomePage\Stat.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Databases\ImagePage\SettingDatabase\Database.txt" />
     <Content Include="Databases\MusicPage\Database.txt" />
     <Content Include="Databases\SongPlaylist\Playlist.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

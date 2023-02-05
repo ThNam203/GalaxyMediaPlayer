@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace GalaxyMediaPlayer.Pages.NavContentPages
@@ -33,16 +33,19 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             get { return GetAllMusicPathsInFolderEvenSorted(); }
         }
 
+        // Nam: use for playPauseBtn click
+        public static List<SystemEntityModel> selectedPlayableEntities = new List<SystemEntityModel>();
+
         // this binds to listbox in computer browse page
         public ObservableCollection<SystemEntityModel> systemEntities { get; set; }
-        // Nam: this is to sort the list by SortType, then systemEntities point to it to show the sorted
-        private List<SystemEntityModel> systemEntitiesSort { get; set; }
         public Computer()
         {
             InitializeComponent();
             systemEntities = new();
-            systemEntitiesSort = new();
             DataContext = this;
+
+            browseListBox.ItemsSource = systemEntities;
+            browseDataGrid.ItemsSource = systemEntities;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -55,6 +58,13 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             else
             {
                 string folderPath = pathStack.Peek();
+
+                Stack<string> temp = new Stack<string>(pathStack);
+                temp.Pop();
+                Stack<string> reverseTemp = new Stack<string>(temp);
+                while (temp.Count > 0) reverseTemp.Push(temp.Pop());
+                while (reverseTemp.Count > 0) MainPage.currentMusicBrowsingFolder += reverseTemp.Pop();
+
                 OpenFolder(new DirectoryInfo(folderPath), false);
             }
 
@@ -108,7 +118,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         // Nam: Music list (allMusicPathsInFolder) must be sorted to the coresponding position in systemEntities
         private void sortSystemEntities(SortType type, bool isSortAscending)
         {
-            systemEntitiesSort = new List<SystemEntityModel>(systemEntities);
+            List<SystemEntityModel> systemEntitiesSort = new List<SystemEntityModel>(systemEntities);
             if (type == SortType.Name)
             {
                 systemEntitiesSort.Sort((x, y) => x.Name.CompareTo(y.Name));
@@ -126,7 +136,6 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 systemEntitiesSort.Sort((x, y) => x.Type.CompareTo(y.Type));
             }
 
-            MyMediaPlayer.SetTempPlaylist(GetAllMusicPathsInFolderEvenSorted());
             systemEntities.Clear();
             foreach (SystemEntityModel entity in systemEntitiesSort) systemEntities.Add(entity);
         }
@@ -143,10 +152,10 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             {
                 if (sender != null)
                 {
+                    FrameworkElement frameworkElement = e.OriginalSource as FrameworkElement;
+                    SystemEntityModel model = (SystemEntityModel)frameworkElement.DataContext;
                     if (e.OriginalSource is not CheckBox)
                     {
-                        FrameworkElement frameworkElement = e.OriginalSource as FrameworkElement;
-                        SystemEntityModel model = (SystemEntityModel)frameworkElement.DataContext;
                         if (model != null && model.Type != EntityType.Folder)
                         {
                             foreach (SystemEntityModel item in systemEntities)
@@ -180,8 +189,17 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             else
             {
                 string pathToBack = pathStack.Peek();
-                idx = MainPage.currentMusicBrowsingFolder.LastIndexOf(pathToBack);
-                MainPage.currentMusicBrowsingFolder = MainPage.currentMusicBrowsingFolder.Remove(idx, pathToBack.Length);
+
+                try
+                {
+                    idx = MainPage.currentMusicBrowsingFolder.LastIndexOf(pathToBack);
+                    MainPage.currentMusicBrowsingFolder = MainPage.currentMusicBrowsingFolder.Remove(idx, pathToBack.Length);
+                }
+                catch (Exception)
+                {
+                    MainWindow.ShowCustomMessageBoxInMiddle(new UserControls.ShowMessageControl("Error", "Something is wrong, you can restart the software"));
+                }
+
                 DirectoryInfo di = new DirectoryInfo(pathToBack);
                 OpenFolder(di, true);
             }
@@ -200,6 +218,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 // if the new folderPath is the same at the peek pathStack, we won't add it
                 if (pathStack.Count == 0 || pathStack.Peek() != di.FullName) pathStack.Push(di.FullName);
                 if (pathStack.Count > 0) BackBtn.Visibility = Visibility.Visible;
+
                 // done
             }
 
@@ -273,14 +292,14 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                     sortSystemEntities(type, true);
                 }
 
-                MyMediaPlayer.SetTempPlaylist(allMusicPathsInFolder);
+                MyMusicMediaPlayer.SetTempPlaylist(allMusicPathsInFolder);
                 // Nam: mediaPlayer need to update first so ui can change accordingly
                 MainPage.Instance.ChangeButtonsViewOnOpenFolder(forceDisable: false);
                 MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid(false);
             }
             catch(UnauthorizedAccessException) 
             {
-                MessageBox.Show("You don't have the permission to access this folder");
+                MainWindow.ShowCustomMessageBoxInMiddle(new UserControls.ShowMessageControl("Error", "You don't have the permission to do this action"));
             }
         }
 
@@ -288,47 +307,34 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         private List<string> GetAllMusicPathsInFolderEvenSorted()
         {
             List<string> result = new List<string>();
-            foreach (SystemEntityModel model in systemEntities)
+
+            if (isUsingGridStyle)
             {
-                if (model.Type == EntityType.Music)
-                {
-                    result.Add(model.Path);
-                }
+                foreach (SystemEntityModel model in browseDataGrid.Items) 
+                    if (model.Type == EntityType.Music) result.Add(model.Path);
             }
+            else
+            {
+                foreach (SystemEntityModel model in systemEntities)
+                    if (model.Type == EntityType.Music) result.Add(model.Path);
+            }
+
             return result;
         }
 
         private void OnBrowseItemDoubleClick(bool isUsingListBox)
         {
             SystemEntityModel? entity;
-            if (isUsingListBox)
-                entity = browseListBox.SelectedItem as SystemEntityModel;
+            if (isUsingListBox) entity = browseListBox.SelectedItem as SystemEntityModel;
             else entity = browseDataGrid.SelectedItem as SystemEntityModel; 
 
             if (entity != null)
             {
                 if (entity.Type == EntityType.Music)
                 {
-                    if (isUsingListBox)
-                    {
-                        MyMediaPlayer.SetTempPlaylist(allMusicPathsInFolder);
-                        MyMediaPlayer.SetPlaylistFromTempPlaylist();
-                        MyMediaPlayer.SetPositionInPlaylist(allMusicPathsInFolder.IndexOf(entity.Path));
-                        MyMediaPlayer.PlayCurrentSong();
-                    } 
-                    else
-                    {
-                        List<string> songs = new List<string>();
-                        foreach (SystemEntityModel model in browseDataGrid.Items)
-                        {
-                            if (model.Type == EntityType.Music) songs.Add(model.Path);
-                        }
-
-                        MyMediaPlayer.SetTempPlaylist(songs);
-                        MyMediaPlayer.SetPlaylistFromTempPlaylist();
-                        MyMediaPlayer.SetPositionInPlaylist(songs.IndexOf(entity.Path));
-                        MyMediaPlayer.PlayCurrentSong();
-                    }
+                    MyMusicMediaPlayer.SetNewPlaylist(new List<string> { entity.Path });
+                    MyMusicMediaPlayer.SetPositionInPlaylist(0);
+                    MyMusicMediaPlayer.PlayCurrentSong();
                 }
                 else if (entity.Type == EntityType.Image)
                 {
@@ -349,6 +355,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         private void BrowseStyleImage_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             isUsingGridStyle = !isUsingGridStyle;
+
             if (isUsingGridStyle)
             {
                 cbSortByOptions.Visibility = Visibility.Collapsed;
@@ -358,6 +365,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             }
             else
             {
+                cbSortByOptions.SelectedIndex = -1;
                 cbSortByOptions.Visibility = Visibility.Visible;
                 browseListBox.Visibility = Visibility.Visible;
                 browseDataGrid.Visibility = Visibility.Collapsed;
@@ -367,9 +375,82 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
         private void cbSortByOptions_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (cbSortByOptions.SelectedIndex == -1) return;
             SortType type = (SortType)((ComboBox)sender).SelectedItem;
             sortSystemEntities(type, true);
-            MyMediaPlayer.SetTempPlaylist(allMusicPathsInFolder);
+            MyMusicMediaPlayer.SetTempPlaylist(allMusicPathsInFolder);
+        }
+
+        private void browseDataGrid_Sorting(object sender, DataGridSortingEventArgs e)
+        {
+            this.Dispatcher.BeginInvoke((Action)delegate ()
+            {
+                List<SystemEntityModel> tempEntities = new List<SystemEntityModel>(browseDataGrid.Items.Cast<SystemEntityModel>());
+                systemEntities.Clear();
+                foreach (SystemEntityModel model in tempEntities) { systemEntities.Add(model); };
+
+                //runs after sorting is done
+                MyMusicMediaPlayer.SetTempPlaylist(allMusicPathsInFolder);
+            }, null);
+        }
+
+        private void entityCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBox cb = (CheckBox)sender;
+            ContentPresenter cp = (ContentPresenter)cb.TemplatedParent;
+            SystemEntityModel? model = cp.Content as SystemEntityModel;
+
+            if (model == null) return;
+
+            selectedPlayableEntities.Clear();
+            // Nam: remove selected video if user choose music and vice-versa
+            if (model.Type == EntityType.Music)
+            {
+                foreach (SystemEntityModel item in systemEntities)
+                {
+                    if (item.IsSelected == true && item.Type == EntityType.Video) item.IsSelected = false;
+                    if (item.IsSelected) selectedPlayableEntities.Add(item);
+                }
+            }
+            else
+            {
+                foreach (SystemEntityModel item in systemEntities)
+                {
+                    if (item.IsSelected == true && item.Type == EntityType.Music) item.IsSelected = false;
+                    if (item.IsSelected) selectedPlayableEntities.Add(item);
+                }
+            }
+        }
+
+        public void browseDataGrid_OnCheckBoxChecked(object sender, RoutedEventArgs e)
+        {
+            CheckBox cb = (CheckBox)sender;
+
+            if (cb.IsChecked == true)
+            {
+                SystemEntityModel? model = cb.DataContext as SystemEntityModel;
+
+                if (model == null) return;
+
+                selectedPlayableEntities.Clear();
+                // Nam: remove selected video if user choose music and vice-versa
+                if (model.Type == EntityType.Music)
+                {
+                    foreach (SystemEntityModel item in systemEntities)
+                    {
+                        if (item.IsSelected == true && item.Type == EntityType.Video) item.IsSelected = false;
+                        if (item.IsSelected) selectedPlayableEntities.Add(item);
+                    }
+                }
+                else
+                {
+                    foreach (SystemEntityModel item in systemEntities)
+                    {
+                        if (item.IsSelected == true && item.Type == EntityType.Music) item.IsSelected = false;
+                        if (item.IsSelected) selectedPlayableEntities.Add(item);
+                    }
+                }
+            }
         }
     }
 }

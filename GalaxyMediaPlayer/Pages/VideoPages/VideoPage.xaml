@@ -36,7 +36,7 @@
                        Margin="4 0 16 4"
                        Foreground="{DynamicResource brushSecondary}"/>
         </StackPanel>
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" 
+        <StackPanel HorizontalAlignment="Center" 
                     x:Name="addPanel"
                     VerticalAlignment="Center"
                     Grid.Row="2"
@@ -44,9 +44,15 @@
             <TextBlock Margin="0 0 0 12" Foreground="White" Width="300" Height="auto" TextWrapping="Wrap" TextAlignment="Center">
                     Import your videos here!
             </TextBlock>
-            <Button Content="Add Now" x:Name="addBtn"
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" >
+             <Button Content="Add videos" x:Name="addBtn"
                     Style="{StaticResource FirstButtonAddNowStyle}" Click="Add"
                     />
+            <Button Content="Add folder" x:Name="addFolderBtn"
+                    Style="{StaticResource FirstButtonAddNowStyle}" Click="addFolderBtn_Click"
+                    />
+            </StackPanel>
+
         </StackPanel>
         <Border Grid.Row="1"
                 x:Name="Bar"
@@ -57,12 +63,16 @@
                         HorizontalAlignment="Left"
                         Width="auto">
 
-                <Button Content="Add more" 
+                <Button Content="Add videos" 
                         x:Name="btn_Addmore"
                         Visibility="Visible"
                         Style="{StaticResource FirstButtonAddNowStyle}"
                         Click="Add"/>
-
+                <Button Content="Add folder"
+                        x:Name="btn_AddmoreFolder"
+                        Visibility="Visible"
+                        Style="{StaticResource FirstButtonAddNowStyle}"
+                        Click="addFolderBtn_Click"/>
                 <Button Content="Delete"
                 x:Name="btn_Delete"
                 Visibility="Visible"
@@ -120,7 +130,7 @@
                         <Image x:Name="img"  Grid.Row="0"
                                Source="{Binding pathToImg}" 
                                Panel.ZIndex="1"
-                               Width="200" Height="200" />
+                               Width="200" Height="auto" />
                         <TextBlock x:Name="title" Text="{Binding title}"  Grid.Row="1"  
                                    Foreground="White"  >
                         </TextBlock>

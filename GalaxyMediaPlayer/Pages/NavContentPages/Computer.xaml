@@ -169,6 +169,7 @@
         <!--#endregion-->
 
         <!--#region Grid Style -->
+        <SolidColorBrush x:Key="{x:Static DataGrid.FocusBorderBrushKey}" Color="#FF000000"/>
         <Style x:Key="DataGridRowBrowseStyle" TargetType="{x:Type DataGridRow}">
             <Setter Property="Background" Value="{DynamicResource brushPrimary}"/>
             <Setter Property="Margin" Value="0 4 0 0"/>
@@ -285,7 +286,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <SolidColorBrush x:Key="{x:Static DataGrid.FocusBorderBrushKey}" Color="#FF000000"/>
         <Style x:Key="DataGridCellStyle1" TargetType="{x:Type DataGridCell}">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -398,44 +398,44 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal"
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <StackPanel Orientation="Horizontal"
+                        Grid.Column="0"
                     Margin="8 0 0 0">
-            <Button x:Name="BackBtn" 
+                <Button x:Name="BackBtn" 
                     Margin="8 0 0 0"
                     Visibility="Collapsed"
                     Content="&lt;"
                     Style="{StaticResource BackButtonArrowStyle}"
                     Click="BackBtn_Click">
-            </Button>
+                </Button>
 
-            <TextBlock x:Name="currentFolderName" 
+                <TextBlock x:Name="currentFolderName" 
                        Text="My Computer"
                        FontSize="26"
                        Margin="4 0 16 4"
                        Foreground="{DynamicResource brushSecondary}"/>
-        </StackPanel>
+            </StackPanel>
 
-        <Grid Grid.Row="1"
-              Margin="8">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="auto"/> 
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock/>
-
-            <ComboBox   Name="cbSortByOptions"
+            <StackPanel Grid.Column="2"
+                        Orientation="Horizontal">
+                <ComboBox   Name="cbSortByOptions"
                         SelectionChanged="cbSortByOptions_SelectionChanged"
                         Width="80"
                         Grid.Column="1"
                         VerticalAlignment="Center">
-            </ComboBox>
+                </ComboBox>
 
-            <Image
+                <Image
                 Margin="16 0"
                 Grid.Column="2"
                 Name="BrowseStyleImage"
@@ -443,21 +443,21 @@
                 Width="16"
                 Height="16"
                 Source="/Resources/Icons/ComputerPageIcons/four_squares_32.png"/>
+            </StackPanel>
         </Grid>
 
-        <Separator Grid.Row="2"
+        <Separator Grid.Row="1"
                    Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"
                    Margin="16 0"/>
 
-        <ListBox Grid.Row="3"
+        <ListBox Grid.Row="2"
                  x:Name="browseListBox"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ScrollViewer.VerticalScrollBarVisibility="Auto"
                  Background="{DynamicResource brushPrimary}"
                  Visibility="Visible"
                  BorderThickness="0"
-                 SelectionMode="Extended"
-                 ItemsSource="{Binding systemEntities}">
+                 SelectionMode="Extended">
             <ListBox.Resources>
                 <Style TargetType="ScrollBar">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -493,7 +493,7 @@
                                    Path=DataContext,
                                    Converter={StaticResource SystemEntityToImageSource}}" />
 
-                            <CheckBox Name="checkBox">
+                            <CheckBox Name="checkBox" Click="entityCheckBox_Click">
                                 <CheckBox.Style>
                                     <Style TargetType="CheckBox">
                                         <Setter Property="Margin" Value="16 12 0 0"/>
@@ -501,7 +501,8 @@
                                         <Setter Property="Background" Value="Red"/>
                                         <Setter Property="VerticalAlignment" Value="Top"/>
                                         <Setter Property="Visibility" Value="{Binding Type, Converter={StaticResource EntityTypeToVisibility}}"/>
-                                        <Setter Property="IsChecked" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                                        <Setter Property="IsChecked" Value="{Binding
+                                            IsSelected, Mode=TwoWay}"/>
                                         <Setter Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="CheckBox">
@@ -607,8 +608,8 @@
                   SelectionUnit="FullRow"
                   VirtualizingPanel.VirtualizationMode="Standard"
                   Margin="16 4"
-                  Grid.Row="3"
-                  ItemsSource="{Binding systemEntities}">
+                  Sorting="browseDataGrid_Sorting"
+                  Grid.Row="2">
             <DataGrid.Resources>
                 <Style TargetType="ScrollBar">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -629,6 +630,7 @@
                         <Style TargetType="CheckBox">
                             <Setter Property="Visibility" Value="{Binding Type, Converter={StaticResource ResourceKey=EntityTypeToVisibility}}"/>
                             <Setter Property="IsChecked" Value="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}"/>
+                            <EventSetter Event="Checked" Handler="browseDataGrid_OnCheckBoxChecked"/>
                         </Style>
                     </DataGridCheckBoxColumn.ElementStyle>
                 </DataGridCheckBoxColumn>

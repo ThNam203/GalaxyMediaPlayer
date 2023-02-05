@@ -19,7 +19,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPages
             songsDataGrid.ItemsSource = songsToShow;
             Pages.MainPage.currentMusicBrowsingFolder += currentBrowsingName;
 
-            MyMediaPlayer.SetTempPlaylist(songsToShow.Select(x => x.Path).ToList());
+            MyMusicMediaPlayer.SetTempPlaylist(songsToShow.Select(x => x.Path).ToList());
             Pages.MainPage.Instance.ChangeButtonsViewOnOpenFolder(forceDisable: false);
             Pages.MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid(forceShow: false);
         }
@@ -34,9 +34,9 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPages
             // Nam: indicates that a song is chosen (not outside)
             if (chosenSong != null)
             {
-                MyMediaPlayer.SetPlaylistFromTempPlaylist();
-                MyMediaPlayer.SetPositionInPlaylist(songsDataGrid.SelectedIndex);
-                MyMediaPlayer.PlayCurrentSong();
+                MyMusicMediaPlayer.SetPlaylistFromTempPlaylist();
+                MyMusicMediaPlayer.SetPositionInPlaylist(songsDataGrid.SelectedIndex);
+                MyMusicMediaPlayer.PlayCurrentSong();
                 e.Handled = true;
             }
         }

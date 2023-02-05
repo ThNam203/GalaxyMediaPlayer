@@ -42,6 +42,10 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             {
                 emptyPlaylistBorder.Visibility = Visibility.Visible;
                 PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Collapsed;
+            } 
+            else
+            {
+                PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Visible;
             }
         }
 
@@ -49,7 +53,6 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
         {
             SongPlaylistModel? playlist;
             playlist = playlistListBox.SelectedItem as SongPlaylistModel;
-
             if (playlist != null && e.ClickCount >= 2)
             {
                 MainPage.currentMusicBrowsingFolder += playlist.Name;
@@ -62,10 +65,9 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                     else PlaylistSongsDatabaseAccess.DeleteSong(songInfor);
                 }
 
-                MyMediaPlayer.SetTempPlaylist(currentChosenPlaylistSongs.Select(s => s.Path).ToList());
+                MyMusicMediaPlayer.SetTempPlaylist(currentChosenPlaylistSongs.Select(s => s.Path).ToList());
                 MainPage.Instance.ChangeButtonsViewOnOpenFolder(forceDisable: false);
                 MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid(false);
-
                 playlistSongsDataGrid.Visibility = Visibility.Visible;
                 playlistListBox.Visibility = Visibility.Collapsed;
 
@@ -151,9 +153,9 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             if (chosenSong != null)
             {
                 List<string> songs = playlistSongsDataGrid.Items.Cast<SongInfor>().Select(s => s.Path).ToList();
-                MyMediaPlayer.SetPlaylistFromTempPlaylist();
-                MyMediaPlayer.SetPositionInPlaylist(playlistSongsDataGrid.SelectedIndex);
-                MyMediaPlayer.PlayCurrentSong();
+                MyMusicMediaPlayer.SetPlaylistFromTempPlaylist();
+                MyMusicMediaPlayer.SetPositionInPlaylist(playlistSongsDataGrid.SelectedIndex);
+                MyMusicMediaPlayer.PlayCurrentSong();
                 e.Handled = true;
             }
         }

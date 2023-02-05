@@ -152,7 +152,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPage
                 }
             }
 
-            MyMediaPlayer.SetTempPlaylist(musicList.Select(x => x.Path).ToList());
+            MyMusicMediaPlayer.SetTempPlaylist(musicList.Select(x => x.Path).ToList());
             MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid(false);
             MainPage.Instance.ChangeButtonsViewOnOpenFolder(false);
         }
@@ -271,9 +271,9 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages.MusicPage
             // Nam: indicates that a song is chosen (not outside)
             if (chosenSong != null)
             {
-                MyMediaPlayer.SetPlaylistFromTempPlaylist();
-                MyMediaPlayer.SetPositionInPlaylist(songsDataGrid.SelectedIndex);
-                MyMediaPlayer.PlayCurrentSong();
+                MyMusicMediaPlayer.SetPlaylistFromTempPlaylist();
+                MyMusicMediaPlayer.SetPositionInPlaylist(songsDataGrid.SelectedIndex);
+                MyMusicMediaPlayer.PlayCurrentSong();
                 e.Handled = true;
             }
         }

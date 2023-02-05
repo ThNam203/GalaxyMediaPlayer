@@ -66,7 +66,9 @@ namespace GalaxyMediaPlayer.Pages.HomePage
 
             if (e.ClickCount >= 2)
             {
-                MyMediaPlayer.OpenAndPlay(mostListenedEntities[mostListenedListbox.SelectedIndex].Path);
+                MyMusicMediaPlayer.SetNewPlaylist(new System.Collections.Generic.List<string> { mostListenedEntities[mostListenedListbox.SelectedIndex].Path });
+                MyMusicMediaPlayer.SetPositionInPlaylist(0);
+                MyMusicMediaPlayer.PlayCurrentSong();
             }
         }
 

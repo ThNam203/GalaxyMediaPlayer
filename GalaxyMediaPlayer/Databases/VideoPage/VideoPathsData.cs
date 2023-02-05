@@ -1,35 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
 using System.Xml;
-using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Collections.ObjectModel;
 using MediaToolkit.Model;
 using MediaToolkit.Options;
 using MediaToolkit;
 using System.IO;
 using System.DirectoryServices.ActiveDirectory;
+using static ScrapySharp.Core.Token;
 
 namespace GalaxyMediaPlayer.Databases.VideoPage
 {
 
     public class VideoPaths
     {
-        static string fileLocation = AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\VideoPath.xml";
+        string fileLocation = AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\VideoPath.xml";
+        public string playlistThumbnail { get; set; }
+        public string playlistName { get; set; }
         public XmlElement root;
-
+        
         XmlDocument xmlDocument = new XmlDocument();
 
-        public VideoPaths()
+
+        public VideoPaths(string fileLocation)
         {
-            xmlDocument.Load(fileLocation);
+            this.fileLocation = fileLocation.Trim();
+            xmlDocument.Load(this.fileLocation);
             root = xmlDocument.DocumentElement;
             CreateThumbnailFolderIfNotExist();
+            playlistName = System.IO.Path.GetFileNameWithoutExtension(fileLocation);
         }
+
         public void AddPath(string path)
         {
             XmlElement xml = xmlDocument.CreateElement("link");
@@ -52,7 +54,6 @@ namespace GalaxyMediaPlayer.Databases.VideoPage
         public bool IsEmpty()
         {
             return root.ChildNodes.Count == 0;
-
         }
         public int Count()
         {
@@ -68,6 +69,25 @@ namespace GalaxyMediaPlayer.Databases.VideoPage
             }
             return list.Distinct().ToList();
         }
+        public ObservableCollection<VideoPaths> GetAllPlaylistPaths()
+        {     
+            ObservableCollection<VideoPaths> list = new ObservableCollection<VideoPaths>();
+            string[] oDirectories = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage","*.xml",SearchOption.AllDirectories);
+            foreach (string file in oDirectories)
+            {
+                if (file != AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\VideoPath.xml")
+                {
+                    VideoPaths video = new VideoPaths(file);
+                    if (video.root.ChildNodes.Count > 0)
+                    {
+                        VideoDisplay display = new VideoDisplay(video.root.FirstChild.InnerText);
+                        video.playlistThumbnail = display.pathToImg;
+                    }
+                    list.Add(video);
+                }
+            }
+            return list;
+        }
         public ObservableCollection<VideoDisplay> GetAllPathsObs()
         {
             ObservableCollection<VideoDisplay> list = new ObservableCollection<VideoDisplay>();
@@ -75,7 +95,6 @@ namespace GalaxyMediaPlayer.Databases.VideoPage
             foreach (XmlNode item in xmlNodeList)
             {
                 VideoDisplay videoDisplay = new VideoDisplay(item.InnerText);
-
                 list.Add(videoDisplay);
             }
             return list;
@@ -103,11 +122,11 @@ namespace GalaxyMediaPlayer.Databases.VideoPage
             using (var engine = new Engine())
             {
                 title = System.IO.Path.GetFileNameWithoutExtension(path);
-                pathToImg = AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoThumbNail\\" + title +".jpeg";
+                pathToImg = AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoThumbNail\\" + title + ".jpeg";
                 var mp4 = new MediaFile { Filename = path };
                 engine.GetMetadata(mp4);
                 var options = new ConversionOptions { Seek = TimeSpan.FromSeconds(1) };
-                var outputFile = new MediaFile { Filename = pathToImg};
+                var outputFile = new MediaFile { Filename = pathToImg };
                 engine.GetThumbnail(mp4, outputFile, options);
             }
 

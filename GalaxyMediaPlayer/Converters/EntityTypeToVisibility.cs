@@ -10,7 +10,7 @@ namespace GalaxyMediaPlayer.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             EntityType entityType = (EntityType)value;
-            if (entityType == EntityType.Folder) return Visibility.Hidden;
+            if (entityType == EntityType.Folder || entityType == EntityType.Image) return Visibility.Hidden;
             return Visibility.Visible;
         }
 
