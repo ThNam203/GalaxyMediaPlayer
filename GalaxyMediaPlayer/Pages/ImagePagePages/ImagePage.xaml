@@ -420,7 +420,7 @@
             </DataGrid.Resources>
 
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Name" SortMemberPath="Name" Width="*">
+                <DataGridTemplateColumn Header="Name" SortMemberPath="Name" Width="*" MinWidth="150">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">

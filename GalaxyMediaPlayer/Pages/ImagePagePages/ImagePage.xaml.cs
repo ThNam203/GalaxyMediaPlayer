@@ -18,7 +18,6 @@ using GalaxyMediaPlayer.Models;
 using System.Data;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.SqlClient;
-using GalaxyMediaPlayer.ConnectDB;
 using GalaxyMediaPlayer.Databases.ImagePage;
 using GalaxyMediaPlayer.Helpers;
 using GalaxyMediaPlayer.UserControls.ImageControls;
@@ -134,18 +133,16 @@ namespace GalaxyMediaPlayer.Pages
                     string size = fi.Length.ToString();
                     string id = Guid.NewGuid().ToString();
                     ImageModel imgModel = new ImageModel(id, name, fi.FullName, date, size);
-                    var FindingResult = Images.Find(img => img.path == imgModel.path);
-                    if (FindingResult == null)
+
+                    //insert to database
+                    int SavingResult = ImagesDBAccess.SaveImage(imgModel);
+                    if (SavingResult != -1)
                     {
-                        //insert to database
-                        int SavingResult = ImagesDBAccess.SaveImage(imgModel);
-                        if (SavingResult != -1)
-                        {
-                            listViewImage.Items.Add(imgModel);
-                            browseDataGrid.Items.Add(imgModel);
-                            Images.Add(imgModel);
-                        }
+                        listViewImage.Items.Add(imgModel);
+                        browseDataGrid.Items.Add(imgModel);
+                        Images.Add(imgModel);
                     }
+
                     if (Images.Count > 0)
                     {
                         if (isUsingGridStyle) ShowBtnOfPage(2);
@@ -161,11 +158,9 @@ namespace GalaxyMediaPlayer.Pages
             if (e.ClickCount >= 2)
             {
                 ImageModel imageModelSelected = (ImageModel)listViewImage.SelectedItem;
-                if(imageModelSelected != null)
+                if (imageModelSelected != null)
                 {
                     OpenImagePage openImagePage = new OpenImagePage(imageModelSelected, Images);
-                    openImagePage.IsDoubleClick = true;
-
                     MainWindow.Instance.MainFrame.Navigate(openImagePage);
                 }
             }
@@ -341,8 +336,6 @@ namespace GalaxyMediaPlayer.Pages
                     if (imageModelSelected != null)
                     {
                         OpenImagePage openImagePage = new OpenImagePage(imageModelSelected, Images);
-                        openImagePage.IsDoubleClick = true;
-
                         MainWindow.Instance.MainFrame.Navigate(openImagePage);
                     }
                 }

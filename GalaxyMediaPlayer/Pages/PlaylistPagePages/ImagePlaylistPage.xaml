@@ -8,6 +8,7 @@
       xmlns:local="clr-namespace:GalaxyMediaPlayer.Pages.PlaylistPagePages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
+      MouseDown="Page_MouseDown"
       Title="ImagePlaylistPage">
 
     <Page.Resources>
@@ -253,7 +254,7 @@
             </DataGrid.Resources>
 
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Name" SortMemberPath="Name" Width="*">
+                <DataGridTemplateColumn Header="Name" SortMemberPath="Name" Width="*" MinWidth="150">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">

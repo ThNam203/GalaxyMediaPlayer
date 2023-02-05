@@ -62,7 +62,7 @@ namespace GalaxyMediaPlayer.Models
 
         }
 
-        public void AddNewSongToPlaylist(ImageModel imageModel)
+        public void AddNewImageToPlaylist(ImageModel imageModel)
         {
             Images.Add(imageModel);
         }

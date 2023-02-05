@@ -370,5 +370,12 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                 e.Handled = true;
             }
         }
+
+        private void Page_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            listViewImage.UnselectAll();
+            browseDataGrid.UnselectAll();
+            e.Handled = true;
+        }
     }
 }
