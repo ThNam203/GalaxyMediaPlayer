@@ -84,6 +84,7 @@
     <None Remove="Resources\Icons\next_32.png" />
     <None Remove="Resources\Icons\pause_32.png" />
     <None Remove="Resources\Icons\PlaylistPageIcons\album.png" />
+    <None Remove="Resources\Icons\PlaylistPageIcons\film.png" />
     <None Remove="Resources\Icons\PlaylistPageIcons\ic_audio_file.png" />
     <None Remove="Resources\Icons\PlaylistPageIcons\playlist.png" />
     <None Remove="Resources\Icons\PlaylistPageIcons\trash_bin.png" />
@@ -203,6 +204,7 @@
     <Resource Include="Resources\Icons\MediaControlIcons\random_32.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\volume_32.png" />
     <Resource Include="Resources\Icons\PlaylistPageIcons\album.png" />
+    <Resource Include="Resources\Icons\PlaylistPageIcons\film.png" />
     <Resource Include="Resources\Icons\PlaylistPageIcons\ic_audio_file.png" />
     <Resource Include="Resources\Icons\PlaylistPageIcons\playlist.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>

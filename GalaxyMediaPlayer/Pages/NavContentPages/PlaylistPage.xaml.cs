@@ -133,6 +133,9 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 PlaylistPagePages.VideoPlaylistPage.PlaylistVideosDataGrid.Visibility = Visibility.Collapsed;
                 addNewVideoToPlaylistBtn.Visibility = Visibility.Collapsed;
                 PlaylistPage.BackBtn.Visibility = Visibility.Collapsed;
+
+
+
             }
             else if (currentPlaylistType == PlaylistPageType.Image)
             {
@@ -173,7 +176,12 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             VideoPaths videoPaths = new VideoPaths(path + "\\" + playlistName + ".xml");
             VideoPlaylistPage.playlistSource.Add(videoPaths);
             MainWindow.ClearAllMessageBox();
-            PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Visible;
+            if (PlaylistPagePages.VideoPlaylistPage.PlaylistListBox.Items.Count > 0)
+            {
+                PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Visible;
+                VideoPlaylistPage.EmptyPlaylistBorder.Visibility= Visibility.Collapsed;
+            }
+            
         }
         private bool IsDataBaseExists(StringProperty playlistName)
         {
