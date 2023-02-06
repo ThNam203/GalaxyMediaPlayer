@@ -38,6 +38,27 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <Style x:Key="BtnControlMediaStyle" TargetType="Button">
+                <Setter Property="Width" Value="40"/>
+                <Setter Property="Height" Value="40"/>
+                <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                <Setter Property="Margin" Value="0 0 4 0"></Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="outerBorder" Padding="12">
+                                <Border x:Name="innerBorder" Background="{TemplateBinding Background}"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="outerBorder" Property="Background" Value="{DynamicResource brushLightAccent}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Name="ImageFeatureRow" Height="40" />
@@ -98,30 +119,27 @@
               HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center">
-                <Image
-                    Margin="16 0"
-                    Grid.Column="2"
-                    Name="btnPreviousImage"
-                    MouseLeftButtonDown="btnPreviousImage_MouseLeftButtonDown" 
-                    Width="16"
-                    Height="16"
-                    Source="/Resources/Icons/MediaControlIcons/previous_32.png"/>
-                <Image
-                    Margin="16 0"
-                    Grid.Column="2"
-                    Name="btnPlayImagePlaylist"
-                    MouseLeftButtonDown="btnPlayImagePlaylist_MouseLeftButtonDown" 
-                    Width="16"
-                    Height="16"
-                    Source="/Resources/Icons/MediaControlIcons/pause_32.png"/>
-                <Image
-                    Margin="16 0"
-                    Grid.Column="2"
-                    Name="btnNextImage"
-                    MouseLeftButtonDown="btnNextImage_MouseLeftButtonDown" 
-                    Width="16"
-                    Height="16"
-                    Source="/Resources/Icons/MediaControlIcons/next_32.png"/>
+                <Button x:Name="btnPreviousImage"
+                        Style="{StaticResource BtnControlMediaStyle}"
+                        Click="btnPreviousImage_Click">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/previous_32.png"></ImageBrush>
+                    </Button.Background>
+                </Button>
+                <Button x:Name="btnPlayImagePlaylist"
+                        Style="{StaticResource BtnControlMediaStyle}"
+                        Click="btnPlayImagePlaylist_Click">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/pause_32.png" x:Name="ImagePlayBtn"></ImageBrush>
+                    </Button.Background>
+                </Button>
+                <Button x:Name="btnNextImage"
+                        Style="{StaticResource BtnControlMediaStyle}"
+                        Click="btnNextImage_Click">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/next_32.png"></ImageBrush>
+                    </Button.Background>
+                </Button>
             </StackPanel>
         </Grid>
     </Grid>

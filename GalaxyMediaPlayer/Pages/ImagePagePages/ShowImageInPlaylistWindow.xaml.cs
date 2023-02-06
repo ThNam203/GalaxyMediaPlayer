@@ -146,35 +146,35 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
             this.Close();
         }
 
-        private void btnPreviousImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void btnPreviousImage_Click(object sender, RoutedEventArgs e)
         {
             int currentIndex = Images.IndexOf(currentImage);
             int TargetIndex;
 
-            if (currentIndex == 0)  
+            if (currentIndex == 0)
                 TargetIndex = Images.Count - 1;
-            else 
+            else
                 TargetIndex = currentIndex - 1;
 
             imgPath = Images[TargetIndex].path;
             currentImage = Images[TargetIndex];
         }
 
-        private void btnPlayImagePlaylist_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void btnPlayImagePlaylist_Click(object sender, RoutedEventArgs e)
         {
             if (dispatcherTimer.IsEnabled)
             {
-                btnPlayImagePlaylist.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/play_32.png"));
+                ImagePlayBtn.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/play_32.png"));
                 dispatcherTimer.Stop();
             }
             else
             {
-                btnPlayImagePlaylist.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/pause_32.png"));
+                ImagePlayBtn.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/MediaControlIcons/pause_32.png"));
                 dispatcherTimer.Start();
             }
         }
 
-        private void btnNextImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void btnNextImage_Click(object sender, RoutedEventArgs e)
         {
             int currentIndex = Images.IndexOf(currentImage);
             int TargetIndex;
