@@ -56,6 +56,24 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             }
         }
 
+        private bool _IsRuningImagePlaylist;
+        public bool IsRuningImagePlaylist
+        {
+            get { return _IsRuningImagePlaylist; }
+            set
+            {
+                _IsRuningImagePlaylist = value;
+                if (_IsRuningImagePlaylist)
+                {
+                    currentPlaylistType = PlaylistPageType.Image;
+                    ChangeToPageImage();
+                    _IsRuningImagePlaylist = false;
+                }
+            }
+        }
+
+
+
         public enum PlaylistPageType
         {
             Music,
@@ -82,6 +100,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             ChooseCategoryPanel = chooseCategoryPanel;
             NewPlaylistBtn_Click = this.newPlaylistBtn_Click;
             browseStyleImage = BrowseStyleImage;
+            IsRuningImagePlaylist = MainWindow.IsRuningImagePlaylist;
 
             PageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/MusicPlaylistPage.xaml", UriKind.Relative));
         }
@@ -108,6 +127,20 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         }
 
         public void showImagesPlaylistsBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            showImagesPlaylistsBtn.BorderBrush = System.Windows.Media.Brushes.White;
+            showMusicPlaylistsBtn.BorderBrush = System.Windows.Media.Brushes.Transparent;
+            showVideosPlaylistsBtn.BorderBrush = System.Windows.Media.Brushes.Transparent;
+
+            currentPlaylistType = PlaylistPageType.Image;
+            cbSortPlaylistBy.SelectedIndex = -1;
+            IsImagePlaylistPageUsingGridStyle = MainWindow.IsImagePlaylistPageUsingGridStyle = false;
+            MainWindow.IsImagePlaylistPageUsingGridStyle = false;
+
+            PageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/ImagePlaylistPage.xaml", UriKind.Relative));
+        }
+
+        void ChangeToPageImage()
         {
             showImagesPlaylistsBtn.BorderBrush = System.Windows.Media.Brushes.White;
             showMusicPlaylistsBtn.BorderBrush = System.Windows.Media.Brushes.Transparent;

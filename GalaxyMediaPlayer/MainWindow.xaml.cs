@@ -1,4 +1,5 @@
-﻿using GalaxyMediaPlayer.Pages;
+﻿using GalaxyMediaPlayer.Models;
+using GalaxyMediaPlayer.Pages;
 using System;
 using System.IO;
 using System.Windows;
@@ -20,6 +21,10 @@ namespace GalaxyMediaPlayer
         //Dat: To know using listview or datagrid in ImagePage and ImagePlaylistPage
         public static bool IsImagePageUsingGridStyle;
         public static bool IsImagePlaylistPageUsingGridStyle;
+
+        //Dat: To control ImagePlaylistPage
+        public static bool IsRuningImagePlaylist;
+        public static ImagePlaylistModel? PlaylistRunning;
 
         public static void ShowCustomMessageBoxInMiddle(UIElement messageBox)
         {
@@ -55,6 +60,9 @@ namespace GalaxyMediaPlayer
 
             IsImagePageUsingGridStyle = false;
             IsImagePlaylistPageUsingGridStyle = false;
+
+            IsRuningImagePlaylist = false;
+
 
             MainFrame.Navigate(new Uri("/Pages/MainPage.xaml", UriKind.Relative));
         }
