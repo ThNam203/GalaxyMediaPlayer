@@ -273,7 +273,7 @@
                         MouseLeftButtonDown="listBoxItem_MouseLeftButtonDown"
                         MouseRightButtonDown="listBoxItem_MouseRightButtonDown">
                         <Border x:Name="border"
-                                Width="210" Height="auto"
+                                Width="210" Height="120"
                                 Background="{DynamicResource brushLightAccent}"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
@@ -351,7 +351,7 @@
             </DataGrid.Resources>
 
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Thumbnail" Width="100"
+                <DataGridTemplateColumn Header="Thumbnail" Width="100" 
                     IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -395,7 +395,7 @@
                 VerticalAlignment="Center">
             <StackPanel>
                 <TextBlock Margin="0 0 0 8" Foreground="White" Width="300" Height="40" TextWrapping="Wrap" TextAlignment="Center">
-                    Create playlist to easily access to your managed songs!
+                    Create playlist to easily access to your managed videos!
                 </TextBlock>
 
                 <Button

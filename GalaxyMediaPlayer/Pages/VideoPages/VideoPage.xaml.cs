@@ -70,7 +70,6 @@ namespace GalaxyMediaPlayer.Pages
                 List<string> paths = videoPaths.GetAllPaths();
                 foreach( string filename in openFileDialog.FileNames)
                 {
-                    
                     bool flag = true;
                     foreach( string path in paths)
                     {
@@ -81,9 +80,10 @@ namespace GalaxyMediaPlayer.Pages
                         }
                     }
                     if (flag) {
-                
-                     videoPaths.AddPath(filename);
+
+                        videoPaths.AddPath(filename);
                      VideoDisplay videoDisplay = new VideoDisplay(filename);
+
                         source.Add(videoDisplay);
                     }
 

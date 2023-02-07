@@ -59,6 +59,7 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             source = new ObservableCollection<VideoDisplay>(); 
             playlistListBox.ItemsSource = playlistSource;
             if (playlistListBox.Items.Count == 0) {
+                PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Collapsed;
                emptyPlaylistBorder.Visibility= Visibility.Visible;
             }
         }
@@ -70,8 +71,8 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
 
         private void secondaryNewPlaylistBtn_Click(object sender, RoutedEventArgs e)
         {
-            PlaylistPage.NewPlaylistBtn_Click(sender,e);
-            emptyPlaylistBorder.Visibility = Visibility.Collapsed;
+            PlaylistPage.NewPlaylistBtn_Click(sender,e);            
+            e.Handled = true;
         }
         public void change_Btn_Visibility()
         {

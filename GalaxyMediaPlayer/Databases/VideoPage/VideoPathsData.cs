@@ -9,6 +9,9 @@ using MediaToolkit;
 using System.IO;
 using System.DirectoryServices.ActiveDirectory;
 using static ScrapySharp.Core.Token;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace GalaxyMediaPlayer.Databases.VideoPage
 {
@@ -22,7 +25,6 @@ namespace GalaxyMediaPlayer.Databases.VideoPage
         
         XmlDocument xmlDocument = new XmlDocument();
 
-
         public VideoPaths(string fileLocation)
         {
             this.fileLocation = fileLocation.Trim();
@@ -30,6 +32,12 @@ namespace GalaxyMediaPlayer.Databases.VideoPage
             root = xmlDocument.DocumentElement;
             CreateThumbnailFolderIfNotExist();
             playlistName = System.IO.Path.GetFileNameWithoutExtension(fileLocation);
+            playlistThumbnail = "pack://application:,,,/Resources/Icons/PlaylistPageIcons/film.png";
+            if (root.ChildNodes.Count >= 1)
+            {
+                VideoDisplay display = new VideoDisplay(root.FirstChild.InnerText);
+                playlistThumbnail = display.pathToImg;
+            }
         }
 
         public void AddPath(string path)
@@ -49,6 +57,11 @@ namespace GalaxyMediaPlayer.Databases.VideoPage
                     root.RemoveChild(item);
                     xmlDocument.Save(fileLocation);
                 }
+            }
+            if (root.ChildNodes.Count == 0)
+            {
+                playlistThumbnail = "pack://application:,,,/Resources/Icons/PlaylistPageIcons/film.png";
+
             }
         }
         public bool IsEmpty()
@@ -78,11 +91,6 @@ namespace GalaxyMediaPlayer.Databases.VideoPage
                 if (file != AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\VideoPath.xml")
                 {
                     VideoPaths video = new VideoPaths(file);
-                    if (video.root.ChildNodes.Count > 0)
-                    {
-                        VideoDisplay display = new VideoDisplay(video.root.FirstChild.InnerText);
-                        video.playlistThumbnail = display.pathToImg;
-                    }
                     list.Add(video);
                 }
             }
