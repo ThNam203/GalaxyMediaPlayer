@@ -84,6 +84,9 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             PlaylistPage.BackBtn.Visibility = Visibility.Collapsed;
             PlaylistPage.browseStyleImage.Visibility = Visibility.Hidden;
             PlaylistPage.CbSortPlaylistInImagePlaylist.Visibility = Visibility.Collapsed;
+
+            MainPage.Instance.btnPlayPause.Background.Opacity = 0.5f;
+            MainPage.Instance.btnPlayPause.IsEnabled = false;
         }
 
         public static void ShowBtnOfPage2()
@@ -94,6 +97,9 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             PlaylistPage.AddNewImageToPlaylistBtn.Visibility = Visibility.Visible;
             PlaylistPage.browseStyleImage.Visibility = Visibility.Visible;
             PlaylistPage.CbSortPlaylistInImagePlaylist.Visibility = Visibility.Visible;
+
+            MainPage.Instance.btnPlayPause.Background.Opacity = 1;
+            MainPage.Instance.btnPlayPause.IsEnabled = true;
 
             //Collasped button
             BrowseDataGrid.Visibility = Visibility.Collapsed;
@@ -111,6 +117,9 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             BrowseDataGrid.Visibility = Visibility.Visible;
             PlaylistPage.browseStyleImage.Visibility = Visibility.Visible;
             PlaylistPage.CbSortPlaylistInImagePlaylist.Visibility = Visibility.Visible;
+
+            MainPage.Instance.btnPlayPause.Background.Opacity = 1;
+            MainPage.Instance.btnPlayPause.IsEnabled = true;
 
             //Collasped button
             ListViewImage.Visibility = Visibility.Collapsed;
@@ -137,6 +146,9 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                 PlaylistPage.browseStyleImage.Visibility = Visibility.Hidden;
                 PlaylistPage.CbSortPlaylistBy.Visibility = Visibility.Collapsed;
                 PlaylistPage.CbSortPlaylistInImagePlaylist.Visibility = Visibility.Collapsed;
+
+                MainPage.Instance.btnPlayPause.Background.Opacity = 0.5f;
+                MainPage.Instance.btnPlayPause.IsEnabled = false;
             }
             else if (num == 1)
             {
@@ -153,6 +165,9 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                 PlaylistPage.BackBtn.Visibility = Visibility.Collapsed;
                 PlaylistPage.browseStyleImage.Visibility = Visibility.Hidden;
                 PlaylistPage.CbSortPlaylistInImagePlaylist.Visibility = Visibility.Collapsed;
+
+                MainPage.Instance.btnPlayPause.Background.Opacity = 0.5f;
+                MainPage.Instance.btnPlayPause.IsEnabled = false;
             }
             else if (num == 2)
             {
@@ -162,6 +177,9 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                 PlaylistPage.AddNewImageToPlaylistBtn.Visibility = Visibility.Visible;
                 PlaylistPage.browseStyleImage.Visibility = Visibility.Visible;
                 PlaylistPage.CbSortPlaylistInImagePlaylist.Visibility = Visibility.Visible;
+
+                MainPage.Instance.btnPlayPause.Background.Opacity = 1;
+                MainPage.Instance.btnPlayPause.IsEnabled = true;
 
                 //Collasped button
                 browseDataGrid.Visibility = Visibility.Collapsed;
