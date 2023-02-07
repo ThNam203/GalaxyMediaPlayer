@@ -50,14 +50,14 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             BorderListView = BorderlistView;
             BrowseDataGrid = browseDataGrid;
             ImagePlaylists = new ObservableCollection<ImagePlaylistModel>(ImagesPlaylistDBAccess.LoadImagePlayList());
-            
 
-            foreach(ImagePlaylistModel imagePlaylistModel in ImagePlaylists)
+
+            foreach (ImagePlaylistModel imagePlaylistModel in ImagePlaylists)
             {
                 ListBoxImagePlaylist.Items.Add(imagePlaylistModel);
             }
 
-            if(ImagePlaylists.Count > 0)
+            if (ImagePlaylists.Count > 0)
             {
                 ShowBtnOfPage(1);
             }
@@ -193,18 +193,16 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
 
         private void listBoxItem_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if(e.ClickCount >=2)
+            if (e.ClickCount >= 2)
             {
                 ImagePlaylistModel imagePlaylistModel = ListBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
                 if (imagePlaylistModel != null)
                 {
-                    if(listViewImage.Items.Count > 0)
-                    {
-                        imagePlaylistModel.Images.Clear();
-                        ListViewImage.Items.Clear();
-                        browseDataGrid.Items.Clear();
-                    }
-                    foreach(ImageModel imageModel in ImagesInPlaylistDBAccess.LoadImageInPlayList(imagePlaylistModel.Id))
+                    imagePlaylistModel.Images.Clear();
+                    ListViewImage.Items.Clear();
+                    browseDataGrid.Items.Clear();
+
+                    foreach (ImageModel imageModel in ImagesInPlaylistDBAccess.LoadImageInPlayList(imagePlaylistModel.Id))
                     {
                         imagePlaylistModel.Images.Add(imageModel);
                         listViewImage.Items.Add(imageModel);
@@ -226,15 +224,13 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
 
         void PreviewlistBoxItem_MouseLeftButtonDown()
         {
-            ImagePlaylistModel imagePlaylistModel = MainWindow.PlaylistRunning;
+            ImagePlaylistModel? imagePlaylistModel = new ImagePlaylistModel(MainWindow.PlaylistRunning);
             if (imagePlaylistModel != null)
             {
-                if (listViewImage.Items.Count > 0)
-                {
-                    imagePlaylistModel.Images.Clear();
-                    ListViewImage.Items.Clear();
-                    browseDataGrid.Items.Clear();
-                }
+                imagePlaylistModel.Images.Clear();
+                ListViewImage.Items.Clear();
+                browseDataGrid.Items.Clear();
+
                 foreach (ImageModel imageModel in ImagesInPlaylistDBAccess.LoadImageInPlayList(imagePlaylistModel.Id))
                 {
                     imagePlaylistModel.Images.Add(imageModel);
@@ -273,7 +269,7 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
 
         private void RemoveImagePlaylist()
         {
-            foreach(ImagePlaylistModel playlist in ListBoxImagePlaylist.SelectedItems)
+            foreach (ImagePlaylistModel playlist in ListBoxImagePlaylist.SelectedItems)
             {
                 ImagePlaylists.Remove(playlist);
                 ImagesPlaylistDBAccess.DeleteImagePlaylist(playlist);
@@ -321,7 +317,7 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
         {
             if (e.ClickCount >= 2)
             {
-                ImagePlaylistModel? imagePlaylistModel = ListBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
+                ImagePlaylistModel? imagePlaylistModel = MainWindow.PlaylistRunning;
                 if (imagePlaylistModel != null)
                 {
                     ImageModel imageModelSelected = (ImageModel)listViewImage.SelectedItem;
@@ -329,7 +325,6 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                     {
                         OpenImagePage openImagePage = new OpenImagePage(imageModelSelected, imagePlaylistModel.Images);
                         MainWindow.Instance.MainFrame.NavigationService.Navigate(openImagePage);
-                        MainWindow.IsRuningImagePlaylist = true;
                     }
                 }
             }

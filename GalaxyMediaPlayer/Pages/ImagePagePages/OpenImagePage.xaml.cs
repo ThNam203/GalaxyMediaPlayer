@@ -72,6 +72,8 @@ namespace GalaxyMediaPlayer.Pages
                 btnPreviousImage.IsEnabled = true;
                 btnPreviousImage.Opacity = 1;
             }
+
+            MainWindow.IsRuningImagePlaylist = true;
         }
         
 

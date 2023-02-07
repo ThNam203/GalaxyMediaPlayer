@@ -31,7 +31,7 @@ namespace GalaxyMediaPlayer.Models
             this._id = model.Id;
             this._playlistName = model.PlaylistName;
             this._images = model.Images;
-            this._timeCreated = DateTime.Now.ToString();
+            this._timeCreated = model._timeCreated;
         }
 
         private string _id;

@@ -25,9 +25,10 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
         {
             InitializeComponent();
             _Images = list;
-            imgPath = _Images[0].path;
             currentImage = _Images[0];
+            LoadElement(currentImage.path);
             dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+            MainWindow.IsRuningImagePlaylist = true;
             RunPlaylistImage();
         }
 
@@ -45,24 +46,15 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
             set { _Images = value; }
         }
 
-        public string _imgPath { get; set; }
-        public string imgPath
+        void LoadElement(string path)
         {
-            get { return _imgPath; }
-            set
-            {
-                _imgPath = value;
-                if (_imgPath != null)
-                {
-                    OpenImg.Source = new BitmapImage(new Uri(_imgPath));
-                }
-            }
+            OpenImg.Source = new BitmapImage(new Uri(path));
         }
 
         private Cursor _cursor = Cursors.Hand;
         public Cursor cursor { get { return _cursor; } set { _cursor = value; CanvasImg.Cursor = _cursor; } }
 
-        System.Windows.Threading.DispatcherTimer dispatcherTimer;
+        System.Windows.Threading.DispatcherTimer dispatcherTimer ;
 
         private void RunPlaylistImage()
         {
@@ -82,9 +74,9 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
             {
                 TargetIndex = currentIndex + 1;
             }
-            imgPath = Images[TargetIndex].path;
 
             currentImage = Images[TargetIndex];
+            LoadElement(currentImage.path);
         }
 
         private void btnLeftArrow_Click(object sender, RoutedEventArgs e)
@@ -103,8 +95,8 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
             else
                 TargetIndex = currentIndex - 1;
 
-            imgPath = Images[TargetIndex].path;
             currentImage = Images[TargetIndex];
+            LoadElement(currentImage.path);
         }
 
         private void btnPlayImagePlaylist_Click(object sender, RoutedEventArgs e)
@@ -131,8 +123,8 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
             else
                 TargetIndex = currentIndex + 1;
 
-            imgPath = Images[TargetIndex].path;
             currentImage = Images[TargetIndex];
+            LoadElement(currentImage.path);
         }
 
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
