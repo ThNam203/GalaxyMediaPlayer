@@ -304,7 +304,7 @@ namespace GalaxyMediaPlayer.Pages
             int TargetIndex;
             if (currentIndex == 0)
             {
-                TargetIndex = Pages.ImagePage.ListViewImage.Items.Count - 1;
+                TargetIndex = Images.Count - 1;
             }
             else
             {
@@ -322,7 +322,7 @@ namespace GalaxyMediaPlayer.Pages
 
             int currentIndex = Images.IndexOf(currentImage);
             int TargetIndex;
-            if (currentIndex == Pages.ImagePage.ListViewImage.Items.Count - 1)
+            if (currentIndex == Images.Count - 1)
             {
                 TargetIndex = 0;
             }
