@@ -14,7 +14,7 @@ namespace GalaxyMediaPlayer.Databases.ImagePage
         {
             using(IDbConnection connStr = new SQLiteConnection(GetConnectionStr()))
             {
-                var output = connStr.Query<ImageModel>("select distinct * from ImagesTable");
+                var output = connStr.Query<ImageModel>("select * from ImagesTable");
                 return output.ToList();
             }    
         }
@@ -23,8 +23,14 @@ namespace GalaxyMediaPlayer.Databases.ImagePage
         {
             using (IDbConnection connStr = new SQLiteConnection(GetConnectionStr()))
             {
-                int rowAffected = connStr.Execute("insert into ImagesTable (Path, DateCreated) values (@path, @dateCreated)",newImage);
-                return rowAffected;
+                bool isExisted = connStr.ExecuteScalar<bool>("select count(1) from ImagesTable where path=@path", newImage);
+                if (!isExisted)
+                {
+                    int rowAffected = connStr.Execute("insert into ImagesTable (Id,Name,Path, DateCreated,Size) values (@Id,@Name,@path, @dateCreated,@size)", newImage);
+                    return rowAffected;
+                }
+                else
+                    return -1;
             }
         }
 
@@ -32,7 +38,7 @@ namespace GalaxyMediaPlayer.Databases.ImagePage
         {
             using (IDbConnection connStr = new SQLiteConnection(GetConnectionStr()))
             {
-                int rowAffected = connStr.Execute("Delete from ImagesTable where Path=@path", newImage);
+                int rowAffected = connStr.Execute("Delete from ImagesTable where Id=@Id", newImage);
                 return rowAffected;
             }
         }

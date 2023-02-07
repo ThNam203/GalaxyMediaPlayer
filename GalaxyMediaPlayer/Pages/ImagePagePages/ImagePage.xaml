@@ -8,12 +8,15 @@
       xmlns:local="clr-namespace:GalaxyMediaPlayer.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="ImagePage">
+      Title="ImagePage"
+      MouseDown="Page_MouseDown">
     <Page.Resources>
         <cvt:SystemEntityToImageSource x:Key="SystemEntityToImageSource"></cvt:SystemEntityToImageSource>
         <cvt:ImagePathToImageSource x:Key="ImagePathToImageSource"></cvt:ImagePathToImageSource>
         <cvt:EntityTypeToVisibility x:Key="EntityTypeToVisibility"></cvt:EntityTypeToVisibility>
         <cvt:ImagePathToThumbnailImage x:Key="ImagePathToThumbnailImage"></cvt:ImagePathToThumbnailImage>
+        <cvt:EntityTypeToImage x:Key="EntityTypeToImageSource"></cvt:EntityTypeToImage>
+        <cvt:FileSizeToString x:Key="FileSizeToString"></cvt:FileSizeToString>
     </Page.Resources>
 
     <Grid>
@@ -30,8 +33,6 @@
                 <Setter Property="Height" Value="37"></Setter>
                 <Setter Property="VerticalAlignment" Value="Center"></Setter>
                 <Setter Property="Background" Value="Transparent"></Setter>
-                <Setter Property="BorderBrush" Value="Transparent"></Setter>
-                <Setter Property="BorderThickness" Value="0 0 0 3"></Setter>
                 <Setter Property="Foreground" Value="White"></Setter>
             </Style>
             <Style x:Key="FirstButtonAddNowStyle" TargetType="Button">
@@ -262,36 +263,22 @@
 
         <Border Grid.Row="1"
                 x:Name="BorderLeftBar"
-                BorderBrush="#95ffffff"
-                BorderThickness="0 0 0 1"
                 Margin="10 0 10 0">
             <StackPanel x:Name="LeftBar" Orientation="Horizontal"
                         HorizontalAlignment="Left"
                         Width="auto">
-                <!--<Label x:Name="ItemBarImages"
-                       Content="Images"
-                       Style="{StaticResource ItemBar}"
-                       MouseDown="ItemBarImages_MouseDown">
-                </Label>-->
-
                 <Button Content="Add more" 
                         x:Name="btn_Addmore"
                         Visibility="Collapsed"
                         Style="{StaticResource SecondButtonAddNowStyle}"
                         Click="btn_Addmore_Click"/>
-
-                <!--<Button Content="Delete"
-                x:Name="btn_DeleteImage"
-                Visibility="Collapsed"
-                Style="{StaticResource SecondButtonAddNowStyle}"
-                Click="btn_DeleteImage_Click"/>-->
             </StackPanel>
         </Border>
 
         <Border x:Name="BorderRightBar"
                 Grid.Row="1"
                 HorizontalAlignment="Right"
-                Margin="0 0 25 0">
+                Margin="0 0 40 0">
             <StackPanel x:Name="RightBar" Orientation="Horizontal"
                             Width="auto">
                 <Label Name="DefaultContentCombobox" Content="Filter" Visibility="Collapsed"></Label>
@@ -301,7 +288,16 @@
                           SelectionChanged="ComboboxFilter_SelectionChanged">
                     <ComboBoxItem>By Name &#8595;</ComboBoxItem>
                     <ComboBoxItem>By Date &#8595;</ComboBoxItem>
+                    <ComboBoxItem>By Size &#8595;</ComboBoxItem>
                 </ComboBox>
+                <Image
+                    Margin="16 0"
+                    Grid.Column="2"
+                    Name="BrowseStyleImage"
+                    MouseLeftButtonDown="BrowseStyleImage_MouseLeftButtonDown" 
+                    Width="16"
+                    Height="16"
+                    Source="/Resources/Icons/ComputerPageIcons/four_squares_32.png"/>
             </StackPanel>
         </Border>
 
@@ -327,10 +323,10 @@
                   Visibility="Collapsed"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
-                  ItemsSource="{Binding Images}"
                   Margin="{Binding ElementName=BorderlistView, Path=Margin}"
                   BorderThickness="0"
-                  IsSynchronizedWithCurrentItem="True">
+                  IsSynchronizedWithCurrentItem="True"
+                  SelectionMode="Extended">
             <ListView.Resources>
                 <Style TargetType="ScrollBar">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -394,5 +390,63 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+        <DataGrid Name="browseDataGrid"
+                  Visibility="Collapsed"
+                  Style="{DynamicResource DataGridBrowseStyle}" 
+                  CellStyle="{DynamicResource DataGridCellStyle1}" 
+                  ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderBrowseStyle}" 
+                  RowStyle="{DynamicResource DataGridRowBrowseStyle}"
+                  SelectionMode="Extended"
+                  SelectionUnit="FullRow"
+                  VirtualizingPanel.VirtualizationMode="Standard"
+                  Margin="16 4"
+                  Grid.Row="3"
+                  MouseLeftButtonDown="browseDataGrid_MouseLeftButtonDown"
+                  MouseRightButtonDown="browseDataGrid_MouseRightButtonDown"
+                  ItemsSource="{Binding systemEntities}"
+                  IsReadOnly="True">
+            <DataGrid.Resources>
+                <Style TargetType="ScrollBar">
+                    <Setter Property="SnapsToDevicePixels" Value="True"/>
+                    <Setter Property="OverridesDefaultStyle" Value="true"/>
+                    <Style.Triggers>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter Property="Width" Value="10"/>
+                            <Setter Property="Margin" Value="8 2" />
+                            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Name" SortMemberPath="Name" Width="*" MinWidth="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="16" Height="16" Margin="0 0 8 0" Source="{Binding Type, Converter={StaticResource EntityTypeToImageSource}}"/>
+                                <TextBlock Text="{Binding Name}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Date" 
+                                    IsReadOnly="True" 
+                                    Width="*" 
+                                    CanUserResize="True"
+                                    MinWidth="150"
+                                    Binding="{Binding dateCreated}"/>
+
+                <DataGridTextColumn Header="Size" 
+                                    IsReadOnly="True" 
+                                    Width="*" 
+                                    CanUserResize="True"
+                                    MinWidth="100"
+                                    Binding="{Binding length, Converter={StaticResource FileSizeToString}}"/>
+                
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Page>

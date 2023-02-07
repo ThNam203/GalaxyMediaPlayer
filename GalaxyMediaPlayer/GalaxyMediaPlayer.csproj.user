@@ -7,6 +7,12 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Pages\ImagePagePages\ShowImageInPlaylistPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\ImagePagePages\ShowImageInPlaylistWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Pages\NavContentPages\HomePage\MainPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -37,10 +43,10 @@
     <Compile Update="Pages\NavContentPages\PlaylistPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\PlaylistPagePages\MusicPlaylistPage.xaml.cs">
+    <Compile Update="Pages\PlaylistPagePages\ImagePlaylistPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\PlaylistPagePages\Page1.xaml.cs">
+    <Compile Update="Pages\PlaylistPagePages\MusicPlaylistPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Pages\PlaylistPagePages\VideoPlaylistPage.xaml.cs">
@@ -90,6 +96,12 @@
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Pages\ImagePagePages\ShowImageInPlaylistPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\ImagePagePages\ShowImageInPlaylistWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Pages\NavContentPages\HomePage\MainPage.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -120,10 +132,10 @@
     <Page Update="Pages\NavContentPages\PlaylistPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\PlaylistPagePages\MusicPlaylistPage.xaml">
+    <Page Update="Pages\PlaylistPagePages\ImagePlaylistPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\PlaylistPagePages\Page1.xaml">
+    <Page Update="Pages\PlaylistPagePages\MusicPlaylistPage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\PlaylistPagePages\VideoPlaylistPage.xaml">

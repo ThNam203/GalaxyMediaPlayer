@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,33 +9,87 @@ namespace GalaxyMediaPlayer.Models
 {
     public class ImageModel
     {
+        private string _PlaylistId = "";
+        private string _id = "";
+        private string _Name = "";
         private string _path = "";
-        public string path { get { return _path; } set { _path = value; } }
+        private string _dateCreated = "";
+        private long _length;
+        private string _size = "";
 
-        private bool _IsSelected = false;
-        public bool IsSelected 
-        { 
-            get { return _IsSelected; } 
-            set { _IsSelected = value; }
+        public string PlaylistId
+        {
+            get { return _PlaylistId; }
+            set { _PlaylistId = value; }
+        }
+        public string Id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                _id = value;
+            }
+        }
+        
+        public string Name
+        {
+            get { return _Name; }
+            set 
+            {
+                _Name = value;
+                if (_Name == null) _Name = "";
+            }
         }
 
-        private string _dateCreated = "";
+        
+        public string path { 
+            get { return _path; } 
+            set { 
+                _path = value;
+            } 
+        }
+
+        
         public string dateCreated
         {
             get { return _dateCreated; }
             set { _dateCreated = value; }
         }
-
-        public ImageModel()
+        
+        public long length
         {
-            path = "";
-            dateCreated = "";
+            get { return _length; }
+            set { _length = value; }
+        }
+        
+        public string size
+        {
+            get { return _size; }
+            set { _size = value; }
         }
 
-        public ImageModel(string fileName, string date)
+        public ImageModel(string id, string name, string path, string dateCreated, string size)
         {
-            path = fileName;
-            dateCreated = date;
+            _Name = name;
+            _path = path;
+            _dateCreated = dateCreated;
+            _size = size;
+            _length = _length = long.Parse(_size);
+            _id = id;
+        }
+
+        public ImageModel(string Playlistid, string id, string name ,string path, string dateCreated, string size)
+        {
+            _PlaylistId = Playlistid;
+            _id = id;
+            _Name = name;
+            _path = path;
+            _dateCreated = dateCreated;
+            _size= size;
+            _length = _length = long.Parse(_size);
         }
 
         public int CompareDate(ImageModel model)

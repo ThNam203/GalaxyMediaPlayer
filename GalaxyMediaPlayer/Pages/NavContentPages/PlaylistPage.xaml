@@ -252,8 +252,6 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
-                    
-                    
                     <Button
                     Name="addNewSongToPlaylistBtn"
                     Click="addNewSongToPlaylistBtn_Click"
@@ -268,6 +266,27 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center">
                                     <TextBlock Text="Add new song" 
+                                       TextAlignment="Center"
+                                       Foreground="{DynamicResource brushSecondary}"
+                                       Margin="4"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <Button
+                    Name="addNewImageToPlaylistBtn"
+                    Click="addNewImageToPlaylistBtn_Click"
+                    Margin="0 0 0 5"
+                    Visibility="Collapsed">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Border Width="100"
+                                Margin="16 0 0 0"
+                                CornerRadius="10"
+                                Background="#2a9d8f"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                    <TextBlock Text="Add new image" 
                                        TextAlignment="Center"
                                        Foreground="{DynamicResource brushSecondary}"
                                        Margin="4"/>
@@ -296,18 +315,44 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
+                    
                 </StackPanel>
 
-                <!--SelectionChanged="cbSortByOptions_SelectionChanged"-->
-                <ComboBox   Name="cbSortPlaylistBy"
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            Margin="0 0 40 0">
+                    <!--SelectionChanged="cbSortByOptions_SelectionChanged"-->
+                    <ComboBox   Name="cbSortPlaylistBy"
                         Width="80"
-                        Margin="0 0 50 5"
+                        Margin="0 0 5 0"
                         Grid.Column="1"
                         VerticalAlignment="Center"
                             SelectionChanged="cbSortPlaylistBy_SelectionChanged">
-                    <ComboBoxItem>Name</ComboBoxItem>
-                    <ComboBoxItem>Date  &#8595;</ComboBoxItem>
-                </ComboBox>
+                        <ComboBoxItem>Name &#8595;</ComboBoxItem>
+                        <ComboBoxItem>Date &#8595;</ComboBoxItem>
+                    </ComboBox>
+                    <ComboBox   Name="cbSortPlaylistInImagePlaylist"
+                                Visibility="Collapsed"
+                        Width="80"
+                        Margin="0 0 5 0"
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                            SelectionChanged="cbSortPlaylistInImagePlaylist_SelectionChanged">
+                        <ComboBoxItem>Name &#8595;</ComboBoxItem>
+                        <ComboBoxItem>Date &#8595;</ComboBoxItem>
+                        <ComboBoxItem>Size &#8595;</ComboBoxItem>
+                    </ComboBox>
+                    <Image
+                    Margin="5"
+                    Grid.Column="2"
+                    Name="BrowseStyleImage"
+                    MouseLeftButtonDown="BrowseStyleImage_MouseLeftButtonDown" 
+                    Visibility="Hidden"
+                    Width="16"
+                    Height="16"
+                    Source="/Resources/Icons/ComputerPageIcons/four_squares_32.png"/>
+                </StackPanel>
+                
             </Grid>
 
             <Separator

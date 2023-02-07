@@ -14,11 +14,9 @@ namespace GalaxyMediaPlayer.Windows
     /// </summary>
     public partial class SettingWindow : Window
     {
-        private readonly string MUSIC_DATABASE_PATH = AppDomain.CurrentDomain.BaseDirectory + "Databases\\MusicPage\\Database.txt";
-        private readonly string VIDEO_DATABASE_PATH = AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\Database.txt";
-
         private ObservableCollection<string> musicFolderPaths = new ObservableCollection<string>();
         private ObservableCollection<string> videoFolderPaths = new ObservableCollection<string>();
+        private ObservableCollection<string> imageFolderPaths = new ObservableCollection<string>();
 
         public enum SettingPage
         {
@@ -33,6 +31,7 @@ namespace GalaxyMediaPlayer.Windows
 
             SetUpMusicSetting();
             SetUpVideoSetting();
+            SetUpImageSetting();
 
             if (whatPage == SettingPage.Music)
             {
@@ -53,14 +52,11 @@ namespace GalaxyMediaPlayer.Windows
 
         private void SetUpMusicSetting()
         {
-            if (File.Exists(MUSIC_DATABASE_PATH))
+            foreach (string path in MusicPageDatabaseAccess.GetAllData())
             {
-                foreach (string path in File.ReadAllLines(MUSIC_DATABASE_PATH))
-                {
-                    if (path == null || path.Length == 0) continue;
-                    musicFolderPaths.Add(path);
-                }
-}
+                if (path == null || path.Length == 0) continue;
+                musicFolderPaths.Add(path);
+            }
 
             musicListView.ItemsSource = musicFolderPaths;
             if (musicFolderPaths.Count > 0) emptyMusicTb.Visibility = Visibility.Collapsed;
@@ -68,22 +64,26 @@ namespace GalaxyMediaPlayer.Windows
 
         private void SetUpVideoSetting()
         {
-            if (File.Exists(VIDEO_DATABASE_PATH))
+            foreach (string path in VideoPageDatabaseAccess.GetAllData())
             {
-                foreach (string path in File.ReadAllLines(VIDEO_DATABASE_PATH))
-                {
-                    if (path == null || path.Length == 0) continue;
-                    videoFolderPaths.Add(path);
-                }
-
-                videoListView.ItemsSource = videoFolderPaths;
-                if (videoFolderPaths.Count > 0) emptyVideoTb.Visibility = Visibility.Collapsed;
+                if (path == null || path.Length == 0) continue;
+                videoFolderPaths.Add(path);
             }
+
+            videoListView.ItemsSource = videoFolderPaths;
+            if (videoFolderPaths.Count > 0) emptyVideoTb.Visibility = Visibility.Collapsed;
         }
 
         private void SetUpImageSetting()
         {
-            // Press F, we dont have fucking what
+            foreach (string path in VideoPageDatabaseAccess.GetAllData())
+            {
+                if (path == null || path.Length == 0) continue;
+                imageFolderPaths.Add(path);
+            }
+
+            imageListView.ItemsSource = imageFolderPaths;
+            if (imageFolderPaths.Count > 0) emptyMusicTb.Visibility = Visibility.Collapsed;
         }
 
         private void btnCloseApp_Click(object sender, RoutedEventArgs e)
@@ -103,7 +103,10 @@ namespace GalaxyMediaPlayer.Windows
                     musicFolderPaths.Add(path);
             }
 
-            if (musicFolderPaths.Count > 0) emptyMusicTb.Visibility = Visibility.Collapsed;
+            if (musicFolderPaths.Count > 0)
+            {
+                emptyMusicTb.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void musicLabel_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -154,6 +157,8 @@ namespace GalaxyMediaPlayer.Windows
                 MusicPageDatabaseAccess.RemoveFolder(deletePath);
                 musicFolderPaths.Clear();
                 foreach (string path in MusicPageDatabaseAccess.GetAllData()) musicFolderPaths.Add(path);
+
+                if (musicFolderPaths.Count == 0) emptyMusicTb.Visibility = Visibility.Visible;
             }
         }
 
@@ -172,6 +177,8 @@ namespace GalaxyMediaPlayer.Windows
                 VideoPageDatabaseAccess.RemoveFolder(deletePath);
                 videoFolderPaths.Clear();
                 foreach (string path in VideoPageDatabaseAccess.GetAllData()) videoFolderPaths.Add(path);
+
+                if (videoFolderPaths.Count == 0) emptyVideoTb.Visibility = Visibility.Visible;
             }
         }
 
@@ -191,12 +198,35 @@ namespace GalaxyMediaPlayer.Windows
 
         private void imageDelBtn_Click(object sender, RoutedEventArgs e)
         {
+            string? deletePath = null;
+            try
+            {
+                var parent = (sender as Button).TemplatedParent;
+                deletePath = ((ContentControl)parent).Content.ToString();
+            }
+            catch (Exception) { }
 
+            if (deletePath != null)
+            {
+                Databases.ImagePage.SettingDatabase.ImageSettingDatabaseAccess.RemoveFolder(deletePath);
+                imageFolderPaths.Clear();
+                foreach (string path in Databases.ImagePage.SettingDatabase.ImageSettingDatabaseAccess.GetAllData()) imageFolderPaths.Add(path);
+
+                if (imageFolderPaths.Count == 0) emptyVideoTb.Visibility = Visibility.Visible;
+            }
         }
 
         private void addImageFolderBtn_Click(object sender, RoutedEventArgs e)
         {
+            System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                Databases.ImagePage.SettingDatabase.ImageSettingDatabaseAccess.SaveFolderToDatabase(dialog.SelectedPath);
+                imageFolderPaths.Clear();
+                foreach (string path in Databases.ImagePage.SettingDatabase.ImageSettingDatabaseAccess.GetAllData()) imageFolderPaths.Add(path);
+            }
 
+            if (imageFolderPaths.Count > 0) emptyImageTb.Visibility = Visibility.Collapsed;
         }
     }
 }

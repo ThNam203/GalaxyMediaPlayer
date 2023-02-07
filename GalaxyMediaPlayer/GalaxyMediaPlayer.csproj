@@ -16,6 +16,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Databases\HomePage\Stat.db" />
+    <None Remove="Databases\ImagePage\SettingDatabase\Database.txt" />
     <None Remove="Databases\MusicPage\Database.txt" />
     <None Remove="Databases\Playlist.db" />
     <None Remove="Databases\VideoPage\Database.txt" />
@@ -51,7 +52,10 @@
     <None Remove="Resources\Icons\ic_folder_128.png" />
     <None Remove="Resources\Icons\ic_setting_64.png" />
     <None Remove="Resources\Icons\ImagePageIcons\Filter.png" />
+    <None Remove="Resources\Icons\ImagePageIcons\Image_gallery.png" />
     <None Remove="Resources\Icons\ImagePageIcons\Left_Arrow.png" />
+    <None Remove="Resources\Icons\ImagePageIcons\next.png" />
+    <None Remove="Resources\Icons\ImagePageIcons\previous.png" />
     <None Remove="Resources\Icons\ImagePageIcons\rotate_left.png" />
     <None Remove="Resources\Icons\ImagePageIcons\Rotate_right.png" />
     <None Remove="Resources\Icons\ImagePageIcons\zoom_in.png" />
@@ -107,6 +111,7 @@
     <Content Include="Databases\HomePage\Stat.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Databases\ImagePage\SettingDatabase\Database.txt" />
     <Content Include="Databases\MusicPage\Database.txt" />
     <Content Include="Databases\SongPlaylist\Playlist.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -114,6 +119,9 @@
     <Content Include="Databases\ImagePage\ImagesDB.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\Icons\ImagePageIcons\Image_gallery.png" />
+    <Resource Include="Resources\Icons\ImagePageIcons\next.png" />
+    <Resource Include="Resources\Icons\ImagePageIcons\previous.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\full_screen_64.png" />
     <Resource Include="Resources\Icons\MediaControlIcons\minimize.png" />
   </ItemGroup>

@@ -1,4 +1,5 @@
-﻿using GalaxyMediaPlayer.Databases.SongPlaylist;
+﻿using GalaxyMediaPlayer.Databases.ImagePage;
+using GalaxyMediaPlayer.Databases.SongPlaylist;
 using GalaxyMediaPlayer.Databases.VideoPage;
 using GalaxyMediaPlayer.Helpers;
 using GalaxyMediaPlayer.Models;
@@ -8,7 +9,6 @@ using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -16,9 +16,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using System.Xml;
-using System.Xml.Serialization;
-using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
 
 namespace GalaxyMediaPlayer.Pages.NavContentPages
 {
@@ -27,12 +26,51 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         public static Button NewPlaylistBtn;
         public static Button BackBtn;
         public static Button AddNewSongToPlaylistBtn;
+        public static Button AddNewImageToPlaylistBtn;
         public static Button AddNewVideoToPlaylistBtn;
 
         public static TextBlock PlaylistNameHeader;
         public static ComboBox CbSortPlaylistBy;
+        public static ComboBox CbSortPlaylistInImagePlaylist;
         public static StackPanel ChooseCategoryPanel;
+        public static Image browseStyleImage;
+
         public static Action<object, RoutedEventArgs> NewPlaylistBtn_Click;
+
+        private bool _IsImagePlaylistPageUsingGridStyle;
+        public bool IsImagePlaylistPageUsingGridStyle
+        {
+            get { return _IsImagePlaylistPageUsingGridStyle; }
+            set
+            {
+                _IsImagePlaylistPageUsingGridStyle = value;
+                if (_IsImagePlaylistPageUsingGridStyle)
+                {
+                    BrowseStyleImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/ComputerPageIcons/list_32.png"));
+                }
+                else
+                {
+                    BrowseStyleImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/ComputerPageIcons/four_squares_32.png"));
+                }
+            }
+        }
+
+        private bool _IsRuningImagePlaylist;
+        public bool IsRuningImagePlaylist
+        {
+            get { return _IsRuningImagePlaylist; }
+            set
+            {
+                _IsRuningImagePlaylist = value;
+                if (_IsRuningImagePlaylist)
+                {
+                    currentPlaylistType = PlaylistPageType.Image;
+                    ChangeToPageImage();
+                    _IsRuningImagePlaylist = false;
+                }
+            }
+        }
+
 
 
         public enum PlaylistPageType
@@ -42,7 +80,9 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             Video,
         }
 
+
         PlaylistPageType currentPlaylistType = PlaylistPageType.Music;
+
 
         public PlaylistPage()
         {
@@ -52,10 +92,14 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             PlaylistNameHeader = playlistNameHeader;
             AddNewSongToPlaylistBtn = addNewSongToPlaylistBtn;
             AddNewVideoToPlaylistBtn = addNewVideoToPlaylistBtn;
+            AddNewImageToPlaylistBtn = addNewImageToPlaylistBtn;
             CbSortPlaylistBy = cbSortPlaylistBy;
+            CbSortPlaylistInImagePlaylist = cbSortPlaylistInImagePlaylist;
             BackBtn = backBtn;
             ChooseCategoryPanel = chooseCategoryPanel;
             NewPlaylistBtn_Click = this.newPlaylistBtn_Click;
+            browseStyleImage = BrowseStyleImage;
+            IsRuningImagePlaylist = MainWindow.IsRuningImagePlaylist;
 
             PageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/MusicPlaylistPage.xaml", UriKind.Relative));
         }
@@ -67,6 +111,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             showImagesPlaylistsBtn.BorderBrush = System.Windows.Media.Brushes.Transparent;
 
             currentPlaylistType = PlaylistPageType.Music;
+            MainPage.currentMusicBrowsingFolder = "PlaylistPage";
             PageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/MusicPlaylistPage.xaml", UriKind.Relative));
         }
 
@@ -78,17 +123,37 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
             currentPlaylistType = PlaylistPageType.Video;
 
+            MainPage.currentMusicBrowsingFolder = "__@@##OnVideoPlaylist";
             PageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/VideoPlaylistPage.xaml", UriKind.Relative));
         }
 
-        private void showImagesPlaylistsBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        public void showImagesPlaylistsBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
             showImagesPlaylistsBtn.BorderBrush = System.Windows.Media.Brushes.White;
             showMusicPlaylistsBtn.BorderBrush = System.Windows.Media.Brushes.Transparent;
             showVideosPlaylistsBtn.BorderBrush = System.Windows.Media.Brushes.Transparent;
 
             currentPlaylistType = PlaylistPageType.Image;
-            PageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/Page1.xaml", UriKind.Relative));
+            cbSortPlaylistBy.SelectedIndex = -1;
+            IsImagePlaylistPageUsingGridStyle = MainWindow.IsImagePlaylistPageUsingGridStyle = false;
+            MainWindow.IsImagePlaylistPageUsingGridStyle = false;
+
+            MainPage.currentMusicBrowsingFolder = "__@@##OnImagePlaylist";
+            PageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/ImagePlaylistPage.xaml", UriKind.Relative));
+        }
+
+        void ChangeToPageImage()
+        {
+            showImagesPlaylistsBtn.BorderBrush = System.Windows.Media.Brushes.White;
+            showMusicPlaylistsBtn.BorderBrush = System.Windows.Media.Brushes.Transparent;
+            showVideosPlaylistsBtn.BorderBrush = System.Windows.Media.Brushes.Transparent;
+
+            currentPlaylistType = PlaylistPageType.Image;
+            cbSortPlaylistBy.SelectedIndex = -1;
+            IsImagePlaylistPageUsingGridStyle = MainWindow.IsImagePlaylistPageUsingGridStyle = false;
+            MainWindow.IsImagePlaylistPageUsingGridStyle = false;
+            MainPage.currentMusicBrowsingFolder = "__@@##OnImagePlaylist";
+            PageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/ImagePlaylistPage.xaml", UriKind.Relative));
         }
 
         // Show rename, delete table
@@ -106,7 +171,8 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             }
             else if (currentPlaylistType == PlaylistPageType.Image)
             {
-
+                NewPlaylistControl newPlaylistControl = new NewPlaylistControl(AddNewImagePlaylist);
+                MainWindow.ShowCustomMessageBoxInMiddle(newPlaylistControl);
             }
 
             e.Handled = true;
@@ -139,7 +205,9 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             }
             else if (currentPlaylistType == PlaylistPageType.Image)
             {
-
+                CbSortPlaylistBy.SelectedIndex = -1;
+                IsImagePlaylistPageUsingGridStyle = MainWindow.IsImagePlaylistPageUsingGridStyle = false;
+                PlaylistPagePages.ImagePlaylistPage.ShowBtnOfPage1();
             }
 
             MainPage.currentMusicBrowsingFolder = "PlaylistPage";
@@ -150,16 +218,16 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         private void AddNewMusicPlaylist(string playlistName)
         {
             SongPlaylistModel playlist = new SongPlaylistModel(playlistName);
-            PlaylistPagePages.MusicPlaylistPage.playlists.Add(playlist);
+            MusicPlaylistPage.playlists.Add(playlist);
 
             PlaylistDatabaseAccess.SavePlaylist(playlist);
 
             MainWindow.ClearAllMessageBox();
 
-            if (PlaylistPagePages.MusicPlaylistPage.playlists.Count > 0)
+            if (MusicPlaylistPage.playlists.Count > 0)
             {
-                PlaylistPagePages.MusicPlaylistPage.EmptyPlaylistBorder.Visibility = Visibility.Collapsed;
-                PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Visible;
+                MusicPlaylistPage.EmptyPlaylistBorder.Visibility = Visibility.Collapsed;
+                NewPlaylistBtn.Visibility = Visibility.Visible;
             }
         }
         private void AddNewVideoPlaylist(string playlistName)
@@ -182,33 +250,150 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 VideoPlaylistPage.EmptyPlaylistBorder.Visibility= Visibility.Collapsed;
             }
             
+            NewPlaylistBtn.Visibility = Visibility.Visible;
         }
         private bool IsDataBaseExists(StringProperty playlistName)
         {
             return (System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\" + playlistName + ".xml"));
         }
+
+        private void AddNewImagePlaylist(string PlaylistName)
+        {
+            ImagePlaylistModel imagePlaylistModel = new ImagePlaylistModel(PlaylistName);
+            ImagePlaylistPage.ImagePlaylists.Add(imagePlaylistModel);
+            ImagePlaylistPage.listBoxImagePlaylist.Items.Add(imagePlaylistModel);
+
+            ImagesPlaylistDBAccess.SaveImagePlaylist(imagePlaylistModel);
+            MainWindow.ClearAllMessageBox();
+            if (ImagePlaylistPage.ImagePlaylists.Count > 0)
+            {
+                ImagePlaylistPage.BorderListView.Visibility = Visibility.Collapsed;
+                ImagePlaylistPage.listBoxImagePlaylist.Visibility = Visibility.Visible;
+            }
+        }
+
         private void cbSortPlaylistBy_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (cbSortPlaylistBy.SelectedItem != null)
+            if (currentPlaylistType == PlaylistPageType.Music)
             {
-                int sortIndex = cbSortPlaylistBy.SelectedIndex;
-                if (sortIndex == 0)
+                if (cbSortPlaylistBy.SelectedItem != null)
                 {
-                    List<SongPlaylistModel> tempPlaylists = new List<SongPlaylistModel>(PlaylistPagePages.MusicPlaylistPage.playlists);
-                    tempPlaylists.Sort((x, y) => x.Name.CompareTo(y.Name));
+                    int sortIndex = cbSortPlaylistBy.SelectedIndex;
+                    if (sortIndex == 0)
+                    {
+                        List<SongPlaylistModel> tempPlaylists = new List<SongPlaylistModel>(MusicPlaylistPage.playlists);
+                        tempPlaylists.Sort((x, y) => x.Name.CompareTo(y.Name));
 
-                    PlaylistPagePages.MusicPlaylistPage.playlists.Clear();
-                    foreach (SongPlaylistModel song in tempPlaylists) PlaylistPagePages.MusicPlaylistPage.playlists.Add(song);
+                        MusicPlaylistPage.playlists.Clear();
+                        foreach (SongPlaylistModel song in tempPlaylists) MusicPlaylistPage.playlists.Add(song);
+                    }
+                    else if (sortIndex == 1)
+                    {
+                        List<SongPlaylistModel> tempPlaylists = new List<SongPlaylistModel>(MusicPlaylistPage.playlists);
+                        tempPlaylists.Sort((x, y) =>
+                            DateTime.Parse(y.TimeCreated, CultureInfo.InvariantCulture)
+                            .CompareTo(DateTime.Parse(x.TimeCreated, CultureInfo.InvariantCulture)));
+
+                        MusicPlaylistPage.playlists.Clear();
+                        foreach (SongPlaylistModel song in tempPlaylists) MusicPlaylistPage.playlists.Add(song);
+                    }
                 }
-                else if (sortIndex == 1)
-                {
-                    List<SongPlaylistModel> tempPlaylists = new List<SongPlaylistModel>(PlaylistPagePages.MusicPlaylistPage.playlists);
-                    tempPlaylists.Sort((x, y) =>
-                        DateTime.Parse(y.TimeCreated, CultureInfo.InvariantCulture)
-                        .CompareTo(DateTime.Parse(x.TimeCreated, CultureInfo.InvariantCulture)));
+            }
+            else if (currentPlaylistType == PlaylistPageType.Video)
+            {
 
-                    PlaylistPagePages.MusicPlaylistPage.playlists.Clear();
-                    foreach (SongPlaylistModel song in tempPlaylists) PlaylistPagePages.MusicPlaylistPage.playlists.Add(song);
+            }
+            else if (currentPlaylistType == PlaylistPageType.Image)
+            {
+                if (cbSortPlaylistBy.SelectedItem != null)
+                {
+                    int sortIndex = cbSortPlaylistBy.SelectedIndex;
+
+                    if (sortIndex == 0)
+                    {
+                        List<ImagePlaylistModel> list = new List<ImagePlaylistModel>(ImagePlaylistPage.ImagePlaylists);
+                        list.Sort((x, y) => x.PlaylistName.CompareTo(y.PlaylistName));
+
+                        ImagePlaylistPage.listBoxImagePlaylist.Items.Clear();
+                        foreach (ImagePlaylistModel model in list)
+                        {
+                            ImagePlaylistPage.listBoxImagePlaylist.Items.Add(model);
+                        }
+                    }
+                    else if (sortIndex == 1)
+                    {
+                        List<ImagePlaylistModel> list = new List<ImagePlaylistModel>(ImagePlaylistPage.ImagePlaylists);
+                        list.Sort((x, y) => x.TimeCreated.CompareTo(y.TimeCreated));
+
+                        ImagePlaylistPage.listBoxImagePlaylist.Items.Clear();
+                        foreach (ImagePlaylistModel model in list)
+                        {
+                            ImagePlaylistPage.listBoxImagePlaylist.Items.Add(model);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void cbSortPlaylistInImagePlaylist_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(currentPlaylistType == PlaylistPageType.Image)
+            {
+                if (cbSortPlaylistInImagePlaylist.SelectedItem != null)
+                {
+                    int sortIndex = cbSortPlaylistInImagePlaylist.SelectedIndex;
+
+                    if (sortIndex == 0)
+                    {
+                        ImagePlaylistModel? playlist = PlaylistPagePages.ImagePlaylistPage.listBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
+                        if (playlist != null)
+                        {
+                            List<ImageModel> list = new List<ImageModel>(playlist.Images);
+                            list.Sort((x, y) => x.Name.CompareTo(y.Name));
+
+                            PlaylistPagePages.ImagePlaylistPage.ListViewImage.Items.Clear();
+                            PlaylistPagePages.ImagePlaylistPage.BrowseDataGrid.Items.Clear();
+                            foreach (ImageModel model in list)
+                            {
+                                PlaylistPagePages.ImagePlaylistPage.ListViewImage.Items.Add(model);
+                                PlaylistPagePages.ImagePlaylistPage.BrowseDataGrid.Items.Add(model);
+                            }
+                        }
+                    }
+                    else if (sortIndex == 1)
+                    {
+                        ImagePlaylistModel? playlist = PlaylistPagePages.ImagePlaylistPage.listBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
+                        if (playlist != null)
+                        {
+                            List<ImageModel> list = new List<ImageModel>(playlist.Images);
+                            list.Sort((x, y) => x.dateCreated.CompareTo(y.dateCreated));
+
+                            PlaylistPagePages.ImagePlaylistPage.ListViewImage.Items.Clear();
+                            PlaylistPagePages.ImagePlaylistPage.BrowseDataGrid.Items.Clear();
+                            foreach (ImageModel model in list)
+                            {
+                                PlaylistPagePages.ImagePlaylistPage.ListViewImage.Items.Add(model);
+                                PlaylistPagePages.ImagePlaylistPage.BrowseDataGrid.Items.Add(model);
+                            }
+                        }
+                    }
+                    else if (sortIndex == 2)
+                    {
+                        ImagePlaylistModel? playlist = PlaylistPagePages.ImagePlaylistPage.listBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
+                        if (playlist != null)
+                        {
+                            List<ImageModel> list = new List<ImageModel>(playlist.Images);
+                            list.Sort((x, y) => x.length.CompareTo(y.length));
+
+                            PlaylistPagePages.ImagePlaylistPage.ListViewImage.Items.Clear();
+                            PlaylistPagePages.ImagePlaylistPage.BrowseDataGrid.Items.Clear();
+                            foreach (ImageModel model in list)
+                            {
+                                PlaylistPagePages.ImagePlaylistPage.ListViewImage.Items.Add(model);
+                                PlaylistPagePages.ImagePlaylistPage.BrowseDataGrid.Items.Add(model);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -216,7 +401,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         private void addNewSongToPlaylistBtn_Click(object sender, RoutedEventArgs e)
         {
             SongPlaylistModel? playlist;
-            playlist = PlaylistPagePages.MusicPlaylistPage.PlaylistListBox.SelectedItem as SongPlaylistModel;
+            playlist = MusicPlaylistPage.PlaylistListBox.SelectedItem as SongPlaylistModel;
 
             if (playlist != null)
             {
@@ -266,7 +451,10 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                         if (PlaylistSongsDatabaseAccess.SaveSong(newSongInfor) == 1)
                         {
                             playlist.Songs.Add(newSongInfor);
-                            PlaylistPagePages.MusicPlaylistPage.currentChosenPlaylistSongs.Add(newSongInfor);
+                            MusicPlaylistPage.currentChosenPlaylistSongs.Add(newSongInfor);
+
+                            MyMusicMediaPlayer.SetTempPlaylist(MusicPlaylistPage.currentChosenPlaylistSongs.Select(s => s.Path).ToList());
+                            MainPage.Instance.ChangeButtonsViewOnOpenFolder(forceDisable: false);
                         }
                         else errorMessages += newSongInfor.Name + " already exists in playlist\n";
 
@@ -298,11 +486,73 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 }
             }
         }
+        private void addNewImageToPlaylistBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ImagePlaylistModel? playlist;
+            playlist = ImagePlaylistPage.listBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
+
+            if (playlist != null)
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                string filter = "SupportedFormat|";
+                foreach (string extenstion in SupportedExtensions.IMAGE_EXTENSION)
+                {
+                    filter += "*." + extenstion + ";";
+                }
+                openFileDialog.Filter = filter;
+                openFileDialog.Multiselect = true;
+
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    foreach (string file in openFileDialog.FileNames)
+                    {
+                        //add filePath to listview
+                        FileInfo fi = new FileInfo(file);
+                        string name = Path.GetFileName(file);
+                        string id = Guid.NewGuid().ToString();
+                        string date = fi.CreationTime.ToString();
+                        string size = fi.Length.ToString();
+                        ImageModel imgModel = new ImageModel(playlist.Id, id, name, fi.FullName, date, size);
+
+                        if (ImagesInPlaylistDBAccess.SaveImageIntoPlaylist(imgModel) != -1)
+                        {
+                            playlist.Images.Add(imgModel);
+                            ImagePlaylistPage.ListViewImage.Items.Add(imgModel);
+                            ImagePlaylistPage.BrowseDataGrid.Items.Add(imgModel);
+
+                            // Nam: activate playPauseBtn if there is an image
+                            MainPage.Instance.btnPlayPause.Background.Opacity = 1;
+                            MainPage.Instance.btnPlayPause.IsEnabled = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void BrowseStyleImage_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if(currentPlaylistType == PlaylistPageType.Image)
+            {
+                MainWindow.IsImagePlaylistPageUsingGridStyle = !MainWindow.IsImagePlaylistPageUsingGridStyle;
+                IsImagePlaylistPageUsingGridStyle = MainWindow.IsImagePlaylistPageUsingGridStyle;
+                if (IsImagePlaylistPageUsingGridStyle)
+                {
+                    PlaylistPagePages.ImagePlaylistPage.ShowBtnOfPage3();
+                    BrowseStyleImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/ComputerPageIcons/list_32.png"));
+                }
+                else
+                {
+                    PlaylistPagePages.ImagePlaylistPage.ShowBtnOfPage2();
+                    BrowseStyleImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/ComputerPageIcons/four_squares_32.png"));
+                }
+            }
+        }
+
         private void PageFrame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
 
         }
 
-
+        
     }
 }

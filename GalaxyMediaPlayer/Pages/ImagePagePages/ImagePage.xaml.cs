@@ -18,7 +18,6 @@ using GalaxyMediaPlayer.Models;
 using System.Data;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.SqlClient;
-using GalaxyMediaPlayer.ConnectDB;
 using GalaxyMediaPlayer.Databases.ImagePage;
 using GalaxyMediaPlayer.Helpers;
 using GalaxyMediaPlayer.UserControls.ImageControls;
@@ -26,7 +25,6 @@ using System.Runtime.Serialization;
 using System.Net.Mime;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-
 
 namespace GalaxyMediaPlayer.Pages
 {
@@ -36,29 +34,81 @@ namespace GalaxyMediaPlayer.Pages
     public partial class ImagePage : Page
     {
 
-        private static List<ImageModel> Images;
-       
+        private static List<ImageModel> _Images;
+        public static List<ImageModel> Images
+        {
+            get { return _Images; }
+            set { _Images = value; }
+        }
+
+        public static ListView ListViewImage;
+        private bool _isUsingGridStyle;
+        public bool isUsingGridStyle
+        {
+            get { return _isUsingGridStyle; }
+            set
+            {
+                _isUsingGridStyle = value;
+                if (isUsingGridStyle)
+                {
+                    ShowBtnOfPage(2);
+                    BrowseStyleImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/ComputerPageIcons/list_32.png"));
+                }
+                else
+                {
+                    ShowBtnOfPage(1);
+                    BrowseStyleImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/ComputerPageIcons/four_squares_32.png"));
+                }
+            }
+        }
+
         public ImagePage()
         {
             InitializeComponent();
             Images = new List<ImageModel>();
-            LoadFromDB();
+            ListViewImage = listViewImage;
+            isUsingGridStyle = MainWindow.IsImagePageUsingGridStyle;
+            LoadFromDB(isUsingGridStyle);
         }
 
-        void ShowButtonWhenDoNotHaveImage()
+        void ShowBtnOfPage(int num)
         {
-            BorderlistView.Visibility = Visibility.Visible;
-            listViewImage.Visibility = Visibility.Collapsed;
-            btn_Addmore.Visibility = Visibility.Collapsed;
-            ComboboxFilter.Visibility = Visibility.Collapsed;
-        }
+            if (num == 0)
+            {
+                //Visible button
+                BorderlistView.Visibility = Visibility.Visible;
 
-        void ShowButtonWhenHaveImage()
-        {
-            BorderlistView.Visibility = Visibility.Collapsed;
-            listViewImage.Visibility = Visibility.Visible;
-            btn_Addmore.Visibility = Visibility.Visible;
-            ComboboxFilter.Visibility = Visibility.Visible;
+                //Collasped button
+                listViewImage.Visibility = Visibility.Collapsed;
+                btn_Addmore.Visibility = Visibility.Collapsed;
+                ComboboxFilter.Visibility = Visibility.Collapsed;
+                BrowseStyleImage.Visibility = Visibility.Collapsed;
+                browseDataGrid.Visibility = Visibility.Collapsed;
+            }
+            else if (num == 1)
+            {
+                //Visible button
+                listViewImage.Visibility = Visibility.Visible;
+                ComboboxFilter.Visibility = Visibility.Visible;
+                btn_Addmore.Visibility = Visibility.Visible;
+                BrowseStyleImage.Visibility = Visibility.Visible;
+
+                //Collasped button
+                BorderlistView.Visibility = Visibility.Collapsed;
+                browseDataGrid.Visibility = Visibility.Collapsed;
+            }
+            else if (num == 2)
+            {
+                //Visible button
+                ComboboxFilter.Visibility = Visibility.Visible;
+                btn_Addmore.Visibility = Visibility.Visible;
+                browseDataGrid.Visibility = Visibility.Visible;
+                BrowseStyleImage.Visibility = Visibility.Visible;
+
+                //Collasped button
+                listViewImage.Visibility = Visibility.Collapsed;
+                BorderlistView.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void btn_Addmore_Click(object sender, RoutedEventArgs e)
@@ -79,57 +129,67 @@ namespace GalaxyMediaPlayer.Pages
                     //add filePath to listview
                     FileInfo fi = new FileInfo(file);
                     string date = fi.CreationTime.ToString();
-                    ImageModel imgModel = new ImageModel(file, date);
-                    var FindingResult = Images.Find(img => img.path == imgModel.path);
-                    if (FindingResult == null)
+                    string name = System.IO.Path.GetFileName(fi.FullName);
+                    string size = fi.Length.ToString();
+                    string id = Guid.NewGuid().ToString();
+                    ImageModel imgModel = new ImageModel(id, name, fi.FullName, date, size);
+
+                    //insert to database
+                    int SavingResult = ImagesDBAccess.SaveImage(imgModel);
+                    if (SavingResult != -1)
                     {
+                        listViewImage.Items.Add(imgModel);
+                        browseDataGrid.Items.Add(imgModel);
                         Images.Add(imgModel);
-                        //insert to database
-                        int SavingResult = ImagesDBAccess.SaveImage(imgModel);
-                        if (SavingResult == 1) listViewImage.Items.Add(imgModel);
                     }
-                    ShowButtonWhenHaveImage();
+
+                    if (Images.Count > 0)
+                    {
+                        if (isUsingGridStyle) ShowBtnOfPage(2);
+                        else ShowBtnOfPage(1);
+                    }
+                    else ShowBtnOfPage(0);
                 }
             }
         }
 
         private void Image_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ClickCount == 1)
-            {
-                Image img = (Image)sender;
-            }
-            else if (e.ClickCount >= 2)
+            if (e.ClickCount >= 2)
             {
                 ImageModel imageModelSelected = (ImageModel)listViewImage.SelectedItem;
-                string ImagePath = imageModelSelected.path;
-                OpenImagePage openImagePage = new OpenImagePage(ImagePath);
-                openImagePage.IsDoubleClick = true;
-                MainWindow.Instance.MainFrame.Navigate(openImagePage);
+                if (imageModelSelected != null)
+                {
+                    OpenImagePage openImagePage = new OpenImagePage(imageModelSelected, Images);
+                    MainWindow.Instance.MainFrame.Navigate(openImagePage);
+                }
             }
         }
 
-        private void LoadFromDB()
+
+
+        private void LoadFromDB(bool isUsingGridStyle)
         {
             Images = ImagesDBAccess.LoadImageList();
             if (Images.Count > 0)
             {
-                ShowButtonWhenHaveImage();
-
+                if (isUsingGridStyle)
+                    ShowBtnOfPage(2);
+                else
+                    ShowBtnOfPage(1);
                 foreach (ImageModel imageModel in Images)
                 {
                     if (imageModel.path != "" && imageModel.path != null)
+                    {
                         listViewImage.Items.Add(imageModel);
+                        browseDataGrid.Items.Add(imageModel);
+                    }
                 }
             }
-            else ShowButtonWhenDoNotHaveImage();
+            else ShowBtnOfPage(0);
 
         }
 
-        private void ItemBarImages_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            //ItemBarImages.BorderBrush = Brushes.White;
-        }
         private void ComboboxFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int sortIndex = ComboboxFilter.SelectedIndex;
@@ -143,10 +203,11 @@ namespace GalaxyMediaPlayer.Pages
                 List<ImageModel> list = new List<ImageModel>(Images);
                 list.Sort((x, y) => Path.GetFileName(x.path).CompareTo(Path.GetFileName(y.path)));
                 listViewImage.Items.Clear();
+                browseDataGrid.Items.Clear();
                 foreach (ImageModel model in list)
                 {
                     listViewImage.Items.Add(model);
-
+                    browseDataGrid.Items.Add(model);
                 }
             }
             else if (sortIndex == 1)
@@ -154,46 +215,134 @@ namespace GalaxyMediaPlayer.Pages
                 List<ImageModel> list = new List<ImageModel>(Images);
                 list.Sort((x, y) => x.CompareDate(y));
                 listViewImage.Items.Clear();
+                browseDataGrid.Items.Clear();
                 foreach (ImageModel model in list)
                 {
                     listViewImage.Items.Add(model);
+                    browseDataGrid.Items.Add(model);
+                }
+            }
+            else if (sortIndex == 2)
+            {
+                List<ImageModel> list = new List<ImageModel>(Images);
+                list.Sort((x, y) => x.length.CompareTo(y.length));
+                listViewImage.Items.Clear();
+                browseDataGrid.Items.Clear();
+                foreach (ImageModel model in list)
+                {
+                    listViewImage.Items.Add(model);
+                    browseDataGrid.Items.Add(model);
                 }
             }
         }
 
         private void img_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            ImageRightClickDialog dialog = new ImageRightClickDialog(
-                onDeleteButtonClick: DeleteImage);
-            int left = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).X);
-            int top = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).Y);
-            MainWindow.ShowCustomMessageBox(dialog, left: left, top: top);
+            ImageModel? image;
+            image = listViewImage.SelectedItem as ImageModel;
+            if (image != null)
+            {
+                ImageRightClickDialog dialog = new ImageRightClickDialog(
+                    onDeleteButtonClick: DeleteImageInListView);
+                int left = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).X);
+                int top = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).Y);
+                MainWindow.ShowCustomMessageBox(dialog, left: left, top: top);
+
+                e.Handled = true;
+            }
+        }
+
+
+        private void DeleteImageInListView()
+        {
+            foreach (ImageModel item in listViewImage.SelectedItems)
+            {
+                Images.Remove(item);
+                ImagesDBAccess.DeleteImage(item);
+            }
+            listViewImage.Items.Clear();
+            browseDataGrid.Items.Clear();
+            foreach (ImageModel item in Images)
+            {
+                listViewImage.Items.Add(item);
+                browseDataGrid.Items.Add(item);
+            }
+
+            if (Images.Count == 0)
+            {
+                ShowBtnOfPage(0);
+            }
+        }
+
+        private void DeleteImageInDataGridView()
+        {
+            foreach (ImageModel item in browseDataGrid.SelectedItems)
+            {
+                Images.Remove(item);
+                ImagesDBAccess.DeleteImage(item);
+            }
+            listViewImage.Items.Clear();
+            browseDataGrid.Items.Clear();
+            foreach (ImageModel item in Images)
+            {
+                listViewImage.Items.Add(item);
+                browseDataGrid.Items.Add(item);
+            }
+
+            if (Images.Count == 0)
+            {
+                ShowBtnOfPage(0);
+            }
+        }
+
+        private void Page_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            listViewImage.UnselectAll();
+            browseDataGrid.UnselectAll();
             e.Handled = true;
         }
 
-        private void DeleteImage()
+
+
+        private void BrowseStyleImage_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            foreach (ImageModel item in Images)
+            MainWindow.IsImagePageUsingGridStyle = !MainWindow.IsImagePageUsingGridStyle;
+            isUsingGridStyle = MainWindow.IsImagePageUsingGridStyle;
+        }
+
+        private void browseDataGrid_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ImageModel? image;
+            image = browseDataGrid.SelectedItem as ImageModel;
+            if (image != null)
             {
-                item.IsSelected = false;
+                ImageRightClickDialog dialog = new ImageRightClickDialog(
+                    onDeleteButtonClick: DeleteImageInDataGridView);
+                int left = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).X);
+                int top = Convert.ToInt32(e.GetPosition(MainWindow.Instance as IInputElement).Y);
+                MainWindow.ShowCustomMessageBox(dialog, left: left, top: top);
+
+                e.Handled = true;
             }
-            foreach (ImageModel item in listViewImage.SelectedItems)
+        }
+
+        private void browseDataGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount >= 2)
             {
-                int index = listViewImage.Items.IndexOf(item);
-                Images[index].IsSelected = true;
-            }
-            foreach (ImageModel item in Images.ToList())
-            {
-                if (item.IsSelected)
+                try
                 {
-                    Images.Remove(item);
-                    listViewImage.Items.Remove(item);
-                    ImagesDBAccess.DeleteImage(item);
+                    ImageModel imageModelSelected = (ImageModel)browseDataGrid.SelectedItem;
+                    if (imageModelSelected != null)
+                    {
+                        OpenImagePage openImagePage = new OpenImagePage(imageModelSelected, Images);
+                        MainWindow.Instance.MainFrame.Navigate(openImagePage);
+                    }
                 }
-            }
-            if (Images.Count == 0)
-            {
-                ShowButtonWhenDoNotHaveImage();
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
     }
