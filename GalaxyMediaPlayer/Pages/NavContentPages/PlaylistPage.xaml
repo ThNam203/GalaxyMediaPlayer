@@ -286,7 +286,7 @@
                                 Background="#2a9d8f"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center">
-                                    <TextBlock Text="Add new song" 
+                                    <TextBlock Text="Add new image" 
                                        TextAlignment="Center"
                                        Foreground="{DynamicResource brushSecondary}"
                                        Margin="4"/>
@@ -328,8 +328,19 @@
                         Grid.Column="1"
                         VerticalAlignment="Center"
                             SelectionChanged="cbSortPlaylistBy_SelectionChanged">
-                        <ComboBoxItem>Name &#8593;</ComboBoxItem>
-                        <ComboBoxItem>Date &#8593;</ComboBoxItem>
+                        <ComboBoxItem>Name &#8595;</ComboBoxItem>
+                        <ComboBoxItem>Date &#8595;</ComboBoxItem>
+                    </ComboBox>
+                    <ComboBox   Name="cbSortPlaylistInImagePlaylist"
+                                Visibility="Collapsed"
+                        Width="80"
+                        Margin="0 0 5 0"
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                            SelectionChanged="cbSortPlaylistInImagePlaylist_SelectionChanged">
+                        <ComboBoxItem>Name &#8595;</ComboBoxItem>
+                        <ComboBoxItem>Date &#8595;</ComboBoxItem>
+                        <ComboBoxItem>Size &#8595;</ComboBoxItem>
                     </ComboBox>
                     <Image
                     Margin="5"
@@ -341,6 +352,7 @@
                     Height="16"
                     Source="/Resources/Icons/ComputerPageIcons/four_squares_32.png"/>
                 </StackPanel>
+                
             </Grid>
 
             <Separator

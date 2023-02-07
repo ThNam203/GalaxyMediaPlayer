@@ -1,20 +1,16 @@
-﻿<Window x:Class="GalaxyMediaPlayer.Pages.ImagePagePages.ShowImageInPlaylistWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<Page x:Class="GalaxyMediaPlayer.Pages.ImagePagePages.ShowImageInPlaylistPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:GalaxyMediaPlayer.Pages.ImagePagePages"
       mc:Ignorable="d" 
-      WindowStyle="None"
-      AllowsTransparency="True"
-      ResizeMode="CanResizeWithGrip"
-      x:Name="PageShowImagePlaylist"
-      Title="ShowImagePlaylistPage"
-      MouseDown="PageShowImagePlaylist_MouseDown"
-      SizeChanged="PageShowImagePlaylist_SizeChanged">
-    <Window.Background>
+      d:Width="800" d:Height="500"
+      Title="ShowImageInPlaylistPage"
+      SizeChanged="Page_SizeChanged">
+    <Page.Background>
         <SolidColorBrush Color="Black"></SolidColorBrush>
-    </Window.Background>
+    </Page.Background>
     <Grid>
         <Grid.Resources>
             <Style x:Key="BtnLeftArrowStyle" TargetType="Button">
@@ -77,24 +73,6 @@
                     <ImageBrush ImageSource="/Resources/Icons/ImagePageIcons/Left_Arrow.png"></ImageBrush>
                 </Button.Background>
             </Button>
-            <StackPanel Orientation="Horizontal" 
-                        HorizontalAlignment="Right">
-                <Button Name="btnMinimizeApp"
-                            Click="btnMinimizeApp_Click"
-                            Style="{StaticResource AppControlButtonStyle}"
-                            Content="__"/>
-
-                <Button Name="btnMaximizeApp"
-                            Click="btnMaximizeApp_Click"
-                            Style="{StaticResource AppControlButtonStyle}"
-                            Content="▭" />
-
-                <Button Name="btnCloseApp" 
-                            Click="btnCloseApp_Click"
-                            Style="{StaticResource AppControlButtonStyle}"
-                            Content="✕"
-                            Margin="0 0 8 0"/>
-            </StackPanel>
         </Grid>
 
         <Grid x:Name="PictureGrid"
@@ -106,8 +84,6 @@
                     Canvas.Left="0"
                     Canvas.Top="0">
                 <Image x:Name="OpenImg" 
-                       Width="{Binding ElementName=PageShowImagePlaylist,Path=ActualWidth}" 
-                       Height="{Binding ElementName=PageShowImagePlaylist,Path=ActualHeight}"
                    RenderOptions.BitmapScalingMode="Fant"
                    Stretch="Uniform"/>
             </Canvas>
@@ -143,4 +119,4 @@
             </StackPanel>
         </Grid>
     </Grid>
-</Window>
+</Page>

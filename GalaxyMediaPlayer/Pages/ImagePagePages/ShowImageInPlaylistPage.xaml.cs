@@ -1,33 +1,37 @@
 ﻿using GalaxyMediaPlayer.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace GalaxyMediaPlayer.Pages.ImagePagePages
 {
     /// <summary>
-    /// Interaction logic for ShowImageInPlaylistWindow.xaml
+    /// Interaction logic for ShowImageInPlaylistPage.xaml
     /// </summary>
-    public partial class ShowImageInPlaylistWindow : Window
+    public partial class ShowImageInPlaylistPage : Page
     {
-        public ShowImageInPlaylistWindow(List<ImageModel> list, double width, double height, double left, double top)
+        public ShowImageInPlaylistPage(List<ImageModel> list)
         {
             InitializeComponent();
             _Images = list;
-            imgPath = _Images[0].path;
             currentImage = _Images[0];
+            LoadElement(currentImage.path);
             dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+            MainWindow.IsRuningImagePlaylist = true;
             RunPlaylistImage();
-
-            this.Width = width;
-            this.Height = height;
-            this.Left = left;
-            this.Top = top;
-
-            this.WindowStartupLocation = WindowStartupLocation.Manual;
         }
+
         private static ImageModel _currentImage;
         public static ImageModel currentImage
         {
@@ -42,52 +46,16 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
             set { _Images = value; }
         }
 
-        public string _imgPath { get; set; }
-        public string imgPath
+        void LoadElement(string path)
         {
-            get { return _imgPath; }
-            set
-            {
-                _imgPath = value;
-                if (_imgPath != null)
-                {
-                    OpenImg.Source = new BitmapImage(new Uri(_imgPath));
-                }
-            }
+            OpenImg.Source = new BitmapImage(new Uri(path));
         }
 
         private Cursor _cursor = Cursors.Hand;
         public Cursor cursor { get { return _cursor; } set { _cursor = value; CanvasImg.Cursor = _cursor; } }
 
-        System.Windows.Threading.DispatcherTimer dispatcherTimer;
+        System.Windows.Threading.DispatcherTimer dispatcherTimer ;
 
-        private void btnMinimizeApp_Click(object sender, RoutedEventArgs e)
-        {
-            this.WindowState = WindowState.Minimized;
-        }
-
-        private void btnMaximizeApp_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.WindowState == WindowState.Maximized)
-            {
-                MainWindow.Instance.WindowState = WindowState.Normal;
-                this.WindowState = WindowState.Normal;
-                cursor = Cursors.Hand;
-            }
-            else
-            {
-                MainWindow.Instance.WindowState = WindowState.Maximized;
-                this.WindowState = WindowState.Maximized;
-                cursor = Cursors.Arrow;
-            }
-        }
-
-        private void btnCloseApp_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
-
-        
         private void RunPlaylistImage()
         {
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
@@ -106,35 +74,15 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
             {
                 TargetIndex = currentIndex + 1;
             }
-            imgPath = Images[TargetIndex].path;
 
             currentImage = Images[TargetIndex];
-        }
-
-        private void PageShowImagePlaylist_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            this.DragMove();
-            MainWindow.Instance.Left = this.Left;
-            MainWindow.Instance.Top = this.Top;
-        }
-
-        private void PageShowImagePlaylist_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            if (this.WindowState != WindowState.Maximized)
-            {
-                MainWindow.Instance.Width = this.Width;
-                MainWindow.Instance.Height = this.Height;
-            }
+            LoadElement(currentImage.path);
         }
 
         private void btnLeftArrow_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow.Instance.Left = this.Left;
-            MainWindow.Instance.Top = this.Top;
-
-            Application.Current.MainWindow.Visibility = Visibility.Visible;
             dispatcherTimer.Stop();
-            this.Close();
+            MainWindow.Instance.MainFrame.NavigationService.GoBack();
         }
 
         private void btnPreviousImage_Click(object sender, RoutedEventArgs e)
@@ -147,8 +95,8 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
             else
                 TargetIndex = currentIndex - 1;
 
-            imgPath = Images[TargetIndex].path;
             currentImage = Images[TargetIndex];
+            LoadElement(currentImage.path);
         }
 
         private void btnPlayImagePlaylist_Click(object sender, RoutedEventArgs e)
@@ -175,8 +123,14 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
             else
                 TargetIndex = currentIndex + 1;
 
-            imgPath = Images[TargetIndex].path;
             currentImage = Images[TargetIndex];
+            LoadElement(currentImage.path);
+        }
+
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            OpenImg.Width = MainWindow.Instance.Width;
+            OpenImg.Height = MainWindow.Instance.Height - 80;
         }
     }
 }

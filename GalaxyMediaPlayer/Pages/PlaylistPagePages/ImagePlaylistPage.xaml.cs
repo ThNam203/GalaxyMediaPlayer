@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using static GalaxyMediaPlayer.Pages.NavContentPages.PlaylistPage;
 
 namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
 {
@@ -25,6 +26,23 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
         public static Border BorderListView;
         public static DataGrid BrowseDataGrid;
 
+        private bool _IsRuningImagePlaylist;
+        public bool IsRuningImagePlaylist
+        {
+            get { return _IsRuningImagePlaylist; }
+            set
+            {
+                _IsRuningImagePlaylist = value;
+                if (_IsRuningImagePlaylist)
+                {
+                    ShowBtnOfPage2();
+                    MainWindow.IsRuningImagePlaylist = false;
+                    PreviewlistBoxItem_MouseLeftButtonDown();
+                }
+            }
+        }
+
+
         public ImagePlaylistPage()
         {
             InitializeComponent();
@@ -34,12 +52,13 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             BrowseDataGrid = browseDataGrid;
             ImagePlaylists = new ObservableCollection<ImagePlaylistModel>(ImagesPlaylistDBAccess.LoadImagePlayList());
 
-            foreach(ImagePlaylistModel imagePlaylistModel in ImagePlaylists)
+
+            foreach (ImagePlaylistModel imagePlaylistModel in ImagePlaylists)
             {
                 ListBoxImagePlaylist.Items.Add(imagePlaylistModel);
             }
 
-            if(ImagePlaylists.Count > 0)
+            if (ImagePlaylists.Count > 0)
             {
                 ShowBtnOfPage(1);
             }
@@ -47,6 +66,8 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             {
                 ShowBtnOfPage(0);
             }
+
+            IsRuningImagePlaylist = MainWindow.IsRuningImagePlaylist;
         }
 
         public static void ShowBtnOfPage1()
@@ -54,6 +75,7 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             //Visible button
             listBoxImagePlaylist.Visibility = Visibility.Visible;
             PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Visible;
+            PlaylistPage.CbSortPlaylistBy.Visibility = Visibility.Visible;
 
             //Collasped button
             BorderListView.Visibility = Visibility.Collapsed;
@@ -62,6 +84,10 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             PlaylistPage.AddNewImageToPlaylistBtn.Visibility = Visibility.Collapsed;
             PlaylistPage.BackBtn.Visibility = Visibility.Collapsed;
             PlaylistPage.browseStyleImage.Visibility = Visibility.Hidden;
+            PlaylistPage.CbSortPlaylistInImagePlaylist.Visibility = Visibility.Collapsed;
+
+            MainPage.Instance.btnPlayPause.Background.Opacity = 0.5f;
+            MainPage.Instance.btnPlayPause.IsEnabled = false;
         }
 
         public static void ShowBtnOfPage2()
@@ -71,12 +97,17 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             PlaylistPage.BackBtn.Visibility = Visibility.Visible;
             PlaylistPage.AddNewImageToPlaylistBtn.Visibility = Visibility.Visible;
             PlaylistPage.browseStyleImage.Visibility = Visibility.Visible;
+            PlaylistPage.CbSortPlaylistInImagePlaylist.Visibility = Visibility.Visible;
+
+            MainPage.Instance.btnPlayPause.Background.Opacity = 1;
+            MainPage.Instance.btnPlayPause.IsEnabled = true;
 
             //Collasped button
             BrowseDataGrid.Visibility = Visibility.Collapsed;
             BorderListView.Visibility = Visibility.Collapsed;
             PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Collapsed;
             listBoxImagePlaylist.Visibility = Visibility.Collapsed;
+            PlaylistPage.CbSortPlaylistBy.Visibility = Visibility.Collapsed;
         }
 
         public static void ShowBtnOfPage3()
@@ -86,12 +117,17 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             PlaylistPage.AddNewImageToPlaylistBtn.Visibility = Visibility.Visible;
             BrowseDataGrid.Visibility = Visibility.Visible;
             PlaylistPage.browseStyleImage.Visibility = Visibility.Visible;
+            PlaylistPage.CbSortPlaylistInImagePlaylist.Visibility = Visibility.Visible;
+
+            MainPage.Instance.btnPlayPause.Background.Opacity = 1;
+            MainPage.Instance.btnPlayPause.IsEnabled = true;
 
             //Collasped button
             ListViewImage.Visibility = Visibility.Collapsed;
             BorderListView.Visibility = Visibility.Collapsed;
             PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Collapsed;
             listBoxImagePlaylist.Visibility = Visibility.Collapsed;
+            PlaylistPage.CbSortPlaylistBy.Visibility = Visibility.Collapsed;
         }
 
         void ShowBtnOfPage(int num)
@@ -109,12 +145,18 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                 PlaylistPage.AddNewImageToPlaylistBtn.Visibility = Visibility.Collapsed;
                 PlaylistPage.BackBtn.Visibility = Visibility.Collapsed;
                 PlaylistPage.browseStyleImage.Visibility = Visibility.Hidden;
+                PlaylistPage.CbSortPlaylistBy.Visibility = Visibility.Collapsed;
+                PlaylistPage.CbSortPlaylistInImagePlaylist.Visibility = Visibility.Collapsed;
+
+                MainPage.Instance.btnPlayPause.Background.Opacity = 0.5f;
+                MainPage.Instance.btnPlayPause.IsEnabled = false;
             }
             else if (num == 1)
             {
                 //Visible button
                 ListBoxImagePlaylist.Visibility = Visibility.Visible;
                 PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Visible;
+                PlaylistPage.CbSortPlaylistBy.Visibility = Visibility.Visible;
 
                 //Collasped button
                 BorderlistView.Visibility = Visibility.Collapsed;
@@ -123,6 +165,10 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                 PlaylistPage.AddNewImageToPlaylistBtn.Visibility = Visibility.Collapsed;
                 PlaylistPage.BackBtn.Visibility = Visibility.Collapsed;
                 PlaylistPage.browseStyleImage.Visibility = Visibility.Hidden;
+                PlaylistPage.CbSortPlaylistInImagePlaylist.Visibility = Visibility.Collapsed;
+
+                MainPage.Instance.btnPlayPause.Background.Opacity = 0.5f;
+                MainPage.Instance.btnPlayPause.IsEnabled = false;
             }
             else if (num == 2)
             {
@@ -131,12 +177,17 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                 PlaylistPage.BackBtn.Visibility = Visibility.Visible;
                 PlaylistPage.AddNewImageToPlaylistBtn.Visibility = Visibility.Visible;
                 PlaylistPage.browseStyleImage.Visibility = Visibility.Visible;
+                PlaylistPage.CbSortPlaylistInImagePlaylist.Visibility = Visibility.Visible;
+
+                MainPage.Instance.btnPlayPause.Background.Opacity = 1;
+                MainPage.Instance.btnPlayPause.IsEnabled = true;
 
                 //Collasped button
                 browseDataGrid.Visibility = Visibility.Collapsed;
                 BorderlistView.Visibility = Visibility.Collapsed;
                 PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Collapsed;
                 ListBoxImagePlaylist.Visibility = Visibility.Collapsed;
+                PlaylistPage.CbSortPlaylistBy.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -160,19 +211,17 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
 
         private void listBoxItem_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if(e.ClickCount >=2)
+            if (e.ClickCount >= 2)
             {
                 ImagePlaylistModel imagePlaylistModel = ListBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
                 SelectedPlaylistIndex = ListBoxImagePlaylist.SelectedIndex;
                 if (imagePlaylistModel != null)
                 {
-                    if(listViewImage.Items.Count > 0)
-                    {
-                        imagePlaylistModel.Images.Clear();
-                        ListViewImage.Items.Clear();
-                        browseDataGrid.Items.Clear();
-                    }
-                    foreach(ImageModel imageModel in ImagesInPlaylistDBAccess.LoadImageInPlayList(imagePlaylistModel.Id))
+                    imagePlaylistModel.Images.Clear();
+                    ListViewImage.Items.Clear();
+                    browseDataGrid.Items.Clear();
+
+                    foreach (ImageModel imageModel in ImagesInPlaylistDBAccess.LoadImageInPlayList(imagePlaylistModel.Id))
                     {
                         imagePlaylistModel.Images.Add(imageModel);
                         listViewImage.Items.Add(imageModel);
@@ -188,12 +237,41 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                     // Nam: end
 
                     ShowBtnOfPage(2);
+                    PlaylistPage.CbSortPlaylistBy.SelectedIndex = -1;
                     PlaylistPage.PlaylistNameHeader.Text = imagePlaylistModel.PlaylistName;
                     PlaylistPage.ChooseCategoryPanel.Visibility = Visibility.Collapsed;
                     PlaylistPage.BackBtn.Visibility = Visibility.Visible;
                     PlaylistPage.AddNewImageToPlaylistBtn.Visibility = Visibility.Visible;
                     PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Collapsed;
+
+                    MainWindow.PlaylistRunning = imagePlaylistModel;
                 }
+            }
+        }
+
+        void PreviewlistBoxItem_MouseLeftButtonDown()
+        {
+            ImagePlaylistModel? imagePlaylistModel = new ImagePlaylistModel(MainWindow.PlaylistRunning);
+            if (imagePlaylistModel != null)
+            {
+                imagePlaylistModel.Images.Clear();
+                ListViewImage.Items.Clear();
+                browseDataGrid.Items.Clear();
+
+                foreach (ImageModel imageModel in ImagesInPlaylistDBAccess.LoadImageInPlayList(imagePlaylistModel.Id))
+                {
+                    imagePlaylistModel.Images.Add(imageModel);
+                    listViewImage.Items.Add(imageModel);
+                    browseDataGrid.Items.Add(imageModel);
+                }
+
+                ShowBtnOfPage(2);
+                PlaylistPage.CbSortPlaylistBy.SelectedIndex = -1;
+                PlaylistPage.PlaylistNameHeader.Text = imagePlaylistModel.PlaylistName;
+                PlaylistPage.ChooseCategoryPanel.Visibility = Visibility.Collapsed;
+                PlaylistPage.BackBtn.Visibility = Visibility.Visible;
+                PlaylistPage.AddNewImageToPlaylistBtn.Visibility = Visibility.Visible;
+                PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -218,7 +296,7 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
 
         private void RemoveImagePlaylist()
         {
-            foreach(ImagePlaylistModel playlist in ListBoxImagePlaylist.SelectedItems)
+            foreach (ImagePlaylistModel playlist in ListBoxImagePlaylist.SelectedItems)
             {
                 ImagePlaylists.Remove(playlist);
                 ImagesPlaylistDBAccess.DeleteImagePlaylist(playlist);
@@ -266,26 +344,14 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
         {
             if (e.ClickCount >= 2)
             {
-                ImagePlaylistModel? imagePlaylistModel = ListBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
+                ImagePlaylistModel? imagePlaylistModel = MainWindow.PlaylistRunning;
                 if (imagePlaylistModel != null)
                 {
                     ImageModel imageModelSelected = (ImageModel)listViewImage.SelectedItem;
                     if (imageModelSelected != null)
                     {
-                        double normalWidth = MainWindow.WidthNormalSize;
-                        double normalHeight = MainWindow.HeightNormalSize;
-                        double normalLeft = MainWindow.Instance.Left;
-                        double normalTop = MainWindow.Instance.Top;
-                        ShowImageInPlaylistWindow showImagePlaylistWindow = new ShowImageInPlaylistWindow(imagePlaylistModel.Images, normalWidth, normalHeight, normalLeft, normalTop);
-
-                        showImagePlaylistWindow.WindowState = MainWindow.Instance.WindowState;
-                        if(showImagePlaylistWindow.WindowState == WindowState.Maximized)
-                            showImagePlaylistWindow.cursor = Cursors.Arrow;
-                        else
-                            showImagePlaylistWindow.cursor = Cursors.Hand;
-
-                        showImagePlaylistWindow.Show();
-                        Application.Current.MainWindow.Visibility = Visibility.Hidden;
+                        OpenImagePage openImagePage = new OpenImagePage(imageModelSelected, imagePlaylistModel.Images);
+                        MainWindow.Instance.MainFrame.NavigationService.Navigate(openImagePage);
                     }
                 }
             }

@@ -9,10 +9,12 @@
         Title="OpenImage" 
         x:Name="PageOpenImage"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
-        MouseWheel="PageOpenImage_MouseWheel">
+        MouseWheel="PageOpenImage_MouseWheel"
+        SizeChanged="PageOpenImage_SizeChanged">
     <Page.Background>
         <SolidColorBrush Color="Black" Opacity="0.8"></SolidColorBrush>
     </Page.Background>
+
     <Grid>
         <Grid.Resources>
             <Style x:Key="btnIconStyle" TargetType="Button">
@@ -85,11 +87,33 @@
                 <Setter Property="VerticalAlignment" Value="Center"></Setter>
                 <Setter Property="BorderThickness" Value="0"></Setter>
             </Style>
+            <Style x:Key="BtnControlMediaStyle" TargetType="Button">
+                <Setter Property="Width" Value="40"/>
+                <Setter Property="Height" Value="40"/>
+                <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                <Setter Property="Margin" Value="0 0 4 0"></Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="outerBorder" Padding="12">
+                                <Border x:Name="innerBorder" Background="{TemplateBinding Background}"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="outerBorder" Property="Background" Value="{DynamicResource brushLightAccent}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </Grid.Resources>
 
         <Grid.RowDefinitions>
             <RowDefinition Name="ImageFeatureRow" Height="40" />
             <RowDefinition Name="PictureRow" Height="*"/>
+            <RowDefinition Name="SecondImageFeatureRow" Height="40"/>
         </Grid.RowDefinitions>
 
         <Grid Name="ToolGrid"
@@ -167,43 +191,53 @@
                             Margin="0 0 8 0"/>
             </StackPanel>
         </Grid>
-
         <Grid x:Name="PictureGrid"
               Background="Transparent"
               Grid.Row ="1"
               ClipToBounds="True">
-            <Canvas x:Name="CanvasImg"
+                <Canvas x:Name="CanvasImg"
                     MouseLeftButtonDown="CanvasImg_MouseLeftButtonDown"
                     MouseLeftButtonUp="CanvasImg_MouseLeftButtonUp"
                     MouseMove="CanvasImg_MouseMove"
-                    Cursor="Hand"
-                    Canvas.Left="0"
-                    Canvas.Top="0">
-                <Image x:Name="OpenImg" 
-                       Width="{Binding ElementName=PageOpenImage,Path=ActualWidth}" 
+                    Cursor="Hand">
+                    <Image x:Name="OpenImg"
+                           HorizontalAlignment="Center"
                        Height="{Binding ElementName=PageOpenImage,Path=ActualHeight}"
-                   RenderOptions.BitmapScalingMode="Fant"
-                   Stretch="Uniform"
+                           Width="{Binding ElementName=PageOpenImage,Path=ActualWidth}"
+                       Stretch="Uniform"
                    MouseWheel="OpenImg_MouseWheel"/>
-            </Canvas>
-            <Button x:Name="btnMoveToPreImage"
-                        Style="{StaticResource btnNextPreviousStyle}"
-                        HorizontalAlignment="Left"
-                        Margin="10 50 0 0"
-                        Click="btnMoveToPreImage_Click">
-                <Button.Background>
-                    <ImageBrush ImageSource="/Resources/Icons/ImagePageIcons/previous.png"></ImageBrush>
-                </Button.Background>
-            </Button>
-            <Button x:Name="btnMoveToNextImage"
-                        Style="{StaticResource btnNextPreviousStyle}"
-                        HorizontalAlignment="Right"
-                        Margin="0 50 10 0"
-                        Click="btnMoveToNextImage_Click">
-                <Button.Background>
-                    <ImageBrush ImageSource="/Resources/Icons/ImagePageIcons/next.png"></ImageBrush>
-                </Button.Background>
-            </Button>
+                </Canvas>
+            
+        </Grid>
+        <Grid x:Name="BottomToolGrid"
+              Background="Transparent"
+              Grid.Row="2"
+              VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <Button x:Name="btnPreviousImage"
+                        Style="{StaticResource BtnControlMediaStyle}"
+                        Click="btnPreviousImage_Click">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/previous_32.png"></ImageBrush>
+                    </Button.Background>
+                </Button>
+                <Button x:Name="btnPlayImagePlaylist"
+                        Style="{StaticResource BtnControlMediaStyle}"
+                        IsEnabled="False"
+                        Opacity="0.4">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/play_32.png" x:Name="ImagePlayBtn"></ImageBrush>
+                    </Button.Background>
+                </Button>
+                <Button x:Name="btnNextImage"
+                        Style="{StaticResource BtnControlMediaStyle}"
+                        Click="btnNextImage_Click">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/Icons/MediaControlIcons/next_32.png"></ImageBrush>
+                    </Button.Background>
+                </Button>
+            </StackPanel>
         </Grid>
     </Grid>
 </Page>

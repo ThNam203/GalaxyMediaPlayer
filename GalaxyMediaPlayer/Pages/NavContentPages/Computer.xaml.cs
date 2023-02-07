@@ -1,4 +1,5 @@
 ﻿using GalaxyMediaPlayer.Helpers;
+using GalaxyMediaPlayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -338,7 +339,24 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 }
                 else if (entity.Type == EntityType.Image)
                 {
+                    string id;
+                    List<ImageModel> list = new List<ImageModel>();
 
+                    id = Guid.NewGuid().ToString();
+                    ImageModel imageModelSelected = new ImageModel(id, entity.Name, entity.Path, entity.DateCreated, entity.Size.ToString());
+
+                    foreach (SystemEntityModel model in browseDataGrid.Items)
+                    {
+                        id = Guid.NewGuid().ToString();
+                        ImageModel image = new ImageModel(id, model.Name, model.Path, model.DateCreated, model.Size.ToString());
+                        list.Add(image);
+                    }
+                    
+                    if (imageModelSelected != null)
+                    {
+                        OpenImagePage openImagePage = new OpenImagePage(imageModelSelected, list);
+                        MainWindow.Instance.MainFrame.Navigate(openImagePage);
+                    }
                 }
                 else if (entity.Type == EntityType.Video)
                 {
