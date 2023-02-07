@@ -12,6 +12,9 @@ using System.Windows.Threading;
 using GalaxyMediaPlayer.Databases.HomePage;
 using System.Linq;
 using System.Collections.Generic;
+using GalaxyMediaPlayer.Pages.ImagePagePages;
+using GalaxyMediaPlayer.Pages.PlaylistPagePages;
+using GalaxyMediaPlayer.Models;
 
 namespace GalaxyMediaPlayer.Pages
 {
@@ -109,6 +112,25 @@ namespace GalaxyMediaPlayer.Pages
         
         private void btnPlayPause_Click(object sender, RoutedEventArgs e)
         {
+            if (MainPage.currentMusicBrowsingFolder.StartsWith("__@@##OnImagePlaylist"))
+            {
+                double normalWidth = MainWindow.WidthNormalSize;
+                double normalHeight = MainWindow.HeightNormalSize;
+                double normalLeft = MainWindow.Instance.Left;
+                double normalTop = MainWindow.Instance.Top;
+                ShowImageInPlaylistWindow showImagePlaylistWindow = new ShowImageInPlaylistWindow(ImagePlaylistPage.ImagePlaylists[ImagePlaylistPage.SelectedPlaylistIndex].Images, normalWidth, normalHeight, normalLeft, normalTop);
+
+                showImagePlaylistWindow.WindowState = MainWindow.Instance.WindowState;
+                if (showImagePlaylistWindow.WindowState == WindowState.Maximized)
+                    showImagePlaylistWindow.cursor = Cursors.Arrow;
+                else
+                    showImagePlaylistWindow.cursor = Cursors.Hand;
+
+                showImagePlaylistWindow.Show();
+                Application.Current.MainWindow.Visibility = Visibility.Hidden;
+                return;
+            }
+
             if (MainPage.currentMusicBrowsingFolder.StartsWith("ComputerBrowse") && !MyMusicMediaPlayer.isSongOpened)
             {
                 if (Computer.selectedPlayableEntities.Count > 0)
@@ -532,12 +554,6 @@ namespace GalaxyMediaPlayer.Pages
                     ChangeAdditionControlVisibilityInInforGrid(true);
                 }
             }
-        }
-
-        private void NavButton_Selected(object sender, RoutedEventArgs e)
-        {
-           ContentFrame.Navigate(new Uri("/Pages/VideoMediaPlayerPages/Page.xaml", UriKind.Relative));
-
         }
     }
 }

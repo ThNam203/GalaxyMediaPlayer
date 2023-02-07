@@ -20,6 +20,7 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
     public partial class ImagePlaylistPage : Page
     {
         public static ObservableCollection<ImagePlaylistModel> ImagePlaylists;
+        public static int SelectedPlaylistIndex;
         public static ListView ListViewImage;
         public static ListBox listBoxImagePlaylist;
         public static Border BorderListView;
@@ -206,7 +207,6 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             MainWindow.ClearAllMessageBox();
             if (ImagePlaylists.Count > 0) ShowBtnOfPage(1);
             else ShowBtnOfPage(0);
-
         }
 
         private void listBoxItem_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -214,6 +214,7 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             if (e.ClickCount >= 2)
             {
                 ImagePlaylistModel imagePlaylistModel = ListBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
+                SelectedPlaylistIndex = ListBoxImagePlaylist.SelectedIndex;
                 if (imagePlaylistModel != null)
                 {
                     imagePlaylistModel.Images.Clear();
@@ -226,6 +227,14 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                         listViewImage.Items.Add(imageModel);
                         browseDataGrid.Items.Add(imageModel);
                     }
+
+                    // Nam: use to control btnPlayPause on click
+                    if (listViewImage.Items.Count > 0)
+                    {
+                        MainPage.Instance.btnPlayPause.Background.Opacity = 1;
+                        MainPage.Instance.btnPlayPause.IsEnabled = true;
+                    }
+                    // Nam: end
 
                     ShowBtnOfPage(2);
                     PlaylistPage.CbSortPlaylistBy.SelectedIndex = -1;
