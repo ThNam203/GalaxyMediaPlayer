@@ -234,6 +234,7 @@
                   SelectionMode="Extended"
                   SelectionUnit="FullRow"
                   VirtualizingPanel.VirtualizationMode="Standard"
+                  MouseLeftButtonDown="browseDataGrid_MouseLeftButtonDown"
                   MouseRightButtonDown="browseDataGrid_MouseRightButtonDown"
                   Margin="16 4"
                   Grid.Row="3"

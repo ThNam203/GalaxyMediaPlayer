@@ -24,7 +24,8 @@ namespace GalaxyMediaPlayer
 
         //Dat: To control ImagePlaylistPage
         public static bool IsRuningImagePlaylist;
-        public static ImagePlaylistModel? PlaylistRunning;
+        public static string IdPlaylistRunning;
+        public static int IndexPlaylistRunning;
 
         public static void ShowCustomMessageBoxInMiddle(UIElement messageBox)
         {

@@ -52,7 +52,6 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             BrowseDataGrid = browseDataGrid;
             ImagePlaylists = new ObservableCollection<ImagePlaylistModel>(ImagesPlaylistDBAccess.LoadImagePlayList());
 
-
             foreach (ImagePlaylistModel imagePlaylistModel in ImagePlaylists)
             {
                 ListBoxImagePlaylist.Items.Add(imagePlaylistModel);
@@ -214,7 +213,6 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             if (e.ClickCount >= 2)
             {
                 ImagePlaylistModel imagePlaylistModel = ListBoxImagePlaylist.SelectedItem as ImagePlaylistModel;
-                SelectedPlaylistIndex = ListBoxImagePlaylist.SelectedIndex;
                 if (imagePlaylistModel != null)
                 {
                     imagePlaylistModel.Images.Clear();
@@ -244,14 +242,15 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                     PlaylistPage.AddNewImageToPlaylistBtn.Visibility = Visibility.Visible;
                     PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Collapsed;
 
-                    MainWindow.PlaylistRunning = imagePlaylistModel;
+                    MainWindow.IdPlaylistRunning = imagePlaylistModel.Id;
+                    MainWindow.IndexPlaylistRunning = listBoxImagePlaylist.SelectedIndex;
                 }
             }
         }
 
         void PreviewlistBoxItem_MouseLeftButtonDown()
         {
-            ImagePlaylistModel? imagePlaylistModel = new ImagePlaylistModel(MainWindow.PlaylistRunning);
+            ImagePlaylistModel? imagePlaylistModel = listBoxImagePlaylist.Items[MainWindow.IndexPlaylistRunning] as ImagePlaylistModel;
             if (imagePlaylistModel != null)
             {
                 imagePlaylistModel.Images.Clear();
@@ -264,6 +263,14 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                     listViewImage.Items.Add(imageModel);
                     browseDataGrid.Items.Add(imageModel);
                 }
+
+                // Nam: use to control btnPlayPause on click
+                if (listViewImage.Items.Count > 0)
+                {
+                    MainPage.Instance.btnPlayPause.Background.Opacity = 1;
+                    MainPage.Instance.btnPlayPause.IsEnabled = true;
+                }
+                // Nam: end
 
                 ShowBtnOfPage(2);
                 PlaylistPage.CbSortPlaylistBy.SelectedIndex = -1;
@@ -344,7 +351,7 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
         {
             if (e.ClickCount >= 2)
             {
-                ImagePlaylistModel? imagePlaylistModel = MainWindow.PlaylistRunning;
+                ImagePlaylistModel? imagePlaylistModel = listBoxImagePlaylist.Items[MainWindow.IndexPlaylistRunning] as ImagePlaylistModel;
                 if (imagePlaylistModel != null)
                 {
                     ImageModel imageModelSelected = (ImageModel)listViewImage.SelectedItem;
@@ -417,6 +424,23 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             }
         }
 
+        private void browseDataGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount >= 2)
+            {
+                ImagePlaylistModel? imagePlaylistModel = listBoxImagePlaylist.Items[MainWindow.IndexPlaylistRunning] as ImagePlaylistModel;
+                if (imagePlaylistModel != null)
+                {
+                    ImageModel imageModelSelected = (ImageModel)browseDataGrid.SelectedItem;
+                    if (imageModelSelected != null)
+                    {
+                        OpenImagePage openImagePage = new OpenImagePage(imageModelSelected, imagePlaylistModel.Images);
+                        MainWindow.Instance.MainFrame.NavigationService.Navigate(openImagePage);
+                    }
+                }
+            }
+        }
+
         private void browseDataGrid_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             ImageModel? image;
@@ -439,5 +463,7 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
             browseDataGrid.UnselectAll();
             e.Handled = true;
         }
+
+        
     }
 }

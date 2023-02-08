@@ -114,20 +114,15 @@ namespace GalaxyMediaPlayer.Pages
         {
             if (MainPage.currentMusicBrowsingFolder.StartsWith("__@@##OnImagePlaylist"))
             {
-                double normalWidth = MainWindow.WidthNormalSize;
-                double normalHeight = MainWindow.HeightNormalSize;
-                double normalLeft = MainWindow.Instance.Left;
-                double normalTop = MainWindow.Instance.Top;
-                ShowImageInPlaylistWindow showImagePlaylistWindow = new ShowImageInPlaylistWindow(ImagePlaylistPage.ImagePlaylists[ImagePlaylistPage.SelectedPlaylistIndex].Images, normalWidth, normalHeight, normalLeft, normalTop);
-
-                showImagePlaylistWindow.WindowState = MainWindow.Instance.WindowState;
-                if (showImagePlaylistWindow.WindowState == WindowState.Maximized)
-                    showImagePlaylistWindow.cursor = Cursors.Arrow;
-                else
-                    showImagePlaylistWindow.cursor = Cursors.Hand;
-
-                showImagePlaylistWindow.Show();
-                Application.Current.MainWindow.Visibility = Visibility.Hidden;
+                if(MainWindow.IdPlaylistRunning != null && MainWindow.IdPlaylistRunning != "")
+                {
+                    ImagePlaylistModel imagePlaylistModel = PlaylistPagePages.ImagePlaylistPage.listBoxImagePlaylist.Items[MainWindow.IndexPlaylistRunning] as ImagePlaylistModel;
+                    if (imagePlaylistModel != null)
+                    {
+                        ShowImageInPlaylistPage showImagePlaylistPage = new ShowImageInPlaylistPage(imagePlaylistModel.Images);
+                        MainWindow.Instance.MainFrame.Navigate(showImagePlaylistPage);
+                    }
+                }
                 return;
             }
 
@@ -547,6 +542,13 @@ namespace GalaxyMediaPlayer.Pages
                 {
                     ChangeButtonsViewOnOpenFolder(false);
                     ChangeAdditionControlVisibilityInInforGrid(false);
+                }
+                else if(p.Title == "PlaylistPage")
+                {
+                    if(PlaylistPage.CurrentPlaylistType == PlaylistPage.PlaylistPageType.Image)
+                    {
+                        currentMusicBrowsingFolder = "__@@##OnImagePlaylist";
+                    }
                 }
                 else
                 {
