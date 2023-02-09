@@ -37,8 +37,8 @@ namespace GalaxyMediaPlayer.Pages.HomePage
         {
             InitializeComponent();
 
-            if (DateTime.Now.ToString("tt") == "AM") greetingTb.Text = "Good Afternoon,";
-            else if (DateTime.Now.ToString("tt") == "PM") greetingTb.Text = "Good Morning,";
+            if (DateTime.Now.ToString("tt") == "AM") greetingTb.Text = "Good Morning,";
+            else if (DateTime.Now.ToString("tt") == "PM") greetingTb.Text = "Good Afternoon,";
 
             mostWatchListbox.ItemsSource = mostWatchedEntities;
             mostListenedListbox.ItemsSource = mostListenedEntities;

@@ -114,20 +114,28 @@ namespace GalaxyMediaPlayer.Pages
         {
             if (MainPage.currentMusicBrowsingFolder.StartsWith("__@@##OnImagePlaylist"))
             {
-                double normalWidth = MainWindow.WidthNormalSize;
-                double normalHeight = MainWindow.HeightNormalSize;
-                double normalLeft = MainWindow.Instance.Left;
-                double normalTop = MainWindow.Instance.Top;
-                ShowImageInPlaylistWindow showImagePlaylistWindow = new ShowImageInPlaylistWindow(ImagePlaylistPage.ImagePlaylists[ImagePlaylistPage.SelectedPlaylistIndex].Images, normalWidth, normalHeight, normalLeft, normalTop);
+                ImagePlaylistModel? imagePlaylistModel = MainWindow.PlaylistRunning;
+                if (imagePlaylistModel != null)
+                {
+                    ShowImageInPlaylistPage showImagePlaylistPage = new ShowImageInPlaylistPage(imagePlaylistModel.Images);
+                    MainWindow.Instance.MainFrame.Navigate(showImagePlaylistPage);
+                }
 
-                showImagePlaylistWindow.WindowState = MainWindow.Instance.WindowState;
-                if (showImagePlaylistWindow.WindowState == WindowState.Maximized)
-                    showImagePlaylistWindow.cursor = Cursors.Arrow;
-                else
-                    showImagePlaylistWindow.cursor = Cursors.Hand;
+                //// Nam: old code
+                //double normalWidth = MainWindow.WidthNormalSize;
+                //double normalHeight = MainWindow.HeightNormalSize;
+                //double normalLeft = MainWindow.Instance.Left;
+                //double normalTop = MainWindow.Instance.Top;
+                //ShowImageInPlaylistWindow showImagePlaylistWindow = new ShowImageInPlaylistWindow(ImagePlaylistPage.ImagePlaylists[ImagePlaylistPage.SelectedPlaylistIndex].Images, normalWidth, normalHeight, normalLeft, normalTop);
 
-                showImagePlaylistWindow.Show();
-                Application.Current.MainWindow.Visibility = Visibility.Hidden;
+                //showImagePlaylistWindow.WindowState = MainWindow.Instance.WindowState;
+                //if (showImagePlaylistWindow.WindowState == WindowState.Maximized)
+                //    showImagePlaylistWindow.cursor = Cursors.Arrow;
+                //else
+                //    showImagePlaylistWindow.cursor = Cursors.Hand;
+
+                //showImagePlaylistWindow.Show();
+                //Application.Current.MainWindow.Visibility = Visibility.Hidden;
                 return;
             }
 
