@@ -34,6 +34,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
         public static ComboBox CbSortPlaylistInImagePlaylist;
         public static StackPanel ChooseCategoryPanel;
         public static Image browseStyleImage;
+        public static PlaylistPageType CurrentPlaylistType;
 
         public static Action<object, RoutedEventArgs> NewPlaylistBtn_Click;
 
@@ -100,6 +101,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             NewPlaylistBtn_Click = this.newPlaylistBtn_Click;
             browseStyleImage = BrowseStyleImage;
             IsRuningImagePlaylist = MainWindow.IsRuningImagePlaylist;
+            CurrentPlaylistType = currentPlaylistType;
 
             PageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/MusicPlaylistPage.xaml", UriKind.Relative));
         }
@@ -152,6 +154,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             cbSortPlaylistBy.SelectedIndex = -1;
             IsImagePlaylistPageUsingGridStyle = MainWindow.IsImagePlaylistPageUsingGridStyle = false;
             MainWindow.IsImagePlaylistPageUsingGridStyle = false;
+
             MainPage.currentMusicBrowsingFolder = "__@@##OnImagePlaylist";
             PageFrame.Navigate(new Uri("/Pages/PlaylistPagePages/ImagePlaylistPage.xaml", UriKind.Relative));
         }
@@ -247,9 +250,9 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             if (PlaylistPagePages.VideoPlaylistPage.PlaylistListBox.Items.Count > 0)
             {
                 PlaylistPage.NewPlaylistBtn.Visibility = Visibility.Visible;
-                VideoPlaylistPage.EmptyPlaylistBorder.Visibility= Visibility.Collapsed;
+                VideoPlaylistPage.EmptyPlaylistBorder.Visibility = Visibility.Collapsed;
             }
-            
+
             NewPlaylistBtn.Visibility = Visibility.Visible;
         }
         private bool IsDataBaseExists(StringProperty playlistName)
@@ -337,7 +340,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
         private void cbSortPlaylistInImagePlaylist_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(currentPlaylistType == PlaylistPageType.Image)
+            if (currentPlaylistType == PlaylistPageType.Image)
             {
                 if (cbSortPlaylistInImagePlaylist.SelectedItem != null)
                 {
@@ -517,12 +520,14 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                         if (ImagesInPlaylistDBAccess.SaveImageIntoPlaylist(imgModel) != -1)
                         {
                             playlist.Images.Add(imgModel);
+
                             ImagePlaylistPage.ListViewImage.Items.Add(imgModel);
                             ImagePlaylistPage.BrowseDataGrid.Items.Add(imgModel);
 
                             // Nam: activate playPauseBtn if there is an image
                             MainPage.Instance.btnPlayPause.Background.Opacity = 1;
                             MainPage.Instance.btnPlayPause.IsEnabled = true;
+
                         }
                     }
                 }
@@ -531,7 +536,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
         private void BrowseStyleImage_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if(currentPlaylistType == PlaylistPageType.Image)
+            if (currentPlaylistType == PlaylistPageType.Image)
             {
                 MainWindow.IsImagePlaylistPageUsingGridStyle = !MainWindow.IsImagePlaylistPageUsingGridStyle;
                 IsImagePlaylistPageUsingGridStyle = MainWindow.IsImagePlaylistPageUsingGridStyle;
@@ -553,6 +558,6 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
 
         }
 
-        
+
     }
 }

@@ -421,6 +421,15 @@
             </DataGrid.Resources>
 
             <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Thumbnail" Width="100" MinWidth="100" MaxWidth="120"
+                    IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding path}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
                 <DataGridTemplateColumn Header="Name" SortMemberPath="Name" Width="*" MinWidth="150">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
