@@ -189,6 +189,8 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             chooseCategoryPanel.Visibility = Visibility.Visible;
             backBtn.Visibility = Visibility.Collapsed;
 
+            MainPage.currentMusicBrowsingFolder = "PlaylistPage";
+
             if (currentPlaylistType == PlaylistPageType.Music)
             {
                 addNewSongToPlaylistBtn.Visibility = Visibility.Collapsed;
@@ -210,10 +212,11 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             {
                 CbSortPlaylistBy.SelectedIndex = -1;
                 IsImagePlaylistPageUsingGridStyle = MainWindow.IsImagePlaylistPageUsingGridStyle = false;
+                MainPage.currentMusicBrowsingFolder = "__@@##OnImagePlaylist";
                 PlaylistPagePages.ImagePlaylistPage.ShowBtnOfPage1();
             }
 
-            MainPage.currentMusicBrowsingFolder = "PlaylistPage";
+            
             MainPage.Instance.ChangeButtonsViewOnOpenFolder(forceDisable: true);
             MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid(forceShow: true);
         }

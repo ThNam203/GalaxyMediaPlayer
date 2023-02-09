@@ -117,10 +117,19 @@ namespace GalaxyMediaPlayer.Pages
                 if(MainWindow.IdPlaylistRunning != null && MainWindow.IdPlaylistRunning != "")
                 {
                     ImagePlaylistModel imagePlaylistModel = PlaylistPagePages.ImagePlaylistPage.listBoxImagePlaylist.Items[MainWindow.IndexPlaylistRunning] as ImagePlaylistModel;
-                    if (imagePlaylistModel != null)
+                    if(imagePlaylistModel.Images.Count > 0)
                     {
-                        ShowImageInPlaylistPage showImagePlaylistPage = new ShowImageInPlaylistPage(imagePlaylistModel.Images);
-                        MainWindow.Instance.MainFrame.Navigate(showImagePlaylistPage);
+                        List<string> listImagePath = new List<string>();
+                        foreach (ImageModel img in imagePlaylistModel.Images)
+                        {
+                            listImagePath.Add(img.path);
+                        }
+
+                        if (imagePlaylistModel != null)
+                        {
+                            ShowImageInPlaylistPage showImagePlaylistPage = new ShowImageInPlaylistPage(listImagePath);
+                            MainWindow.Instance.MainFrame.Navigate(showImagePlaylistPage);
+                        }
                     }
                 }
                 return;
