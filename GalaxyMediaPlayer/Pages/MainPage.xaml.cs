@@ -13,7 +13,6 @@ using GalaxyMediaPlayer.Databases.HomePage;
 using System.Linq;
 using System.Collections.Generic;
 using GalaxyMediaPlayer.Pages.ImagePagePages;
-using GalaxyMediaPlayer.Pages.PlaylistPagePages;
 using GalaxyMediaPlayer.Models;
 
 namespace GalaxyMediaPlayer.Pages
@@ -56,6 +55,11 @@ namespace GalaxyMediaPlayer.Pages
             NavigationCommands.BrowseForward.InputGestures.Clear();
 
             navButtonsListBox.SelectedIndex = 0;
+
+            if (MyMusicMediaPlayer.isSongPlaying)
+            {
+                AddSongInformationToInfoGrid();
+            }
         }
 
         private void MediaPlayer_MediaOpened(object? sender, EventArgs e)
@@ -552,12 +556,17 @@ namespace GalaxyMediaPlayer.Pages
                     ChangeButtonsViewOnOpenFolder(false);
                     ChangeAdditionControlVisibilityInInforGrid(false);
                 }
-                else if(p.Title == "PlaylistPage")
+                else if (p.Title == "PlaylistPage")
                 {
                     if(PlaylistPage.CurrentPlaylistType == PlaylistPage.PlaylistPageType.Image)
                     {
                         currentMusicBrowsingFolder = "__@@##OnImagePlaylist";
                     }
+                }
+                else if (p.Title == "ComputerBrowse")
+                {
+                    ChangeButtonsViewOnOpenFolder(false);
+                    ChangeAdditionControlVisibilityInInforGrid(false);
                 }
                 else
                 {

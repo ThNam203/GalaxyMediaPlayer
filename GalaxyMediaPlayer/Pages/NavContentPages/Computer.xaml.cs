@@ -339,19 +339,20 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 }
                 else if (entity.Type == EntityType.Image)
                 {
-                    string id;
                     List<ImageModel> list = new List<ImageModel>();
-
-                    id = Guid.NewGuid().ToString();
+                    string id = Guid.NewGuid().ToString();
                     ImageModel imageModelSelected = new ImageModel(id, entity.Name, entity.Path, entity.DateCreated, entity.Size.ToString());
 
-                    foreach (SystemEntityModel model in browseDataGrid.Items)
+                    foreach (SystemEntityModel model in systemEntities)
                     {
-                        id = Guid.NewGuid().ToString();
-                        ImageModel image = new ImageModel(id, model.Name, model.Path, model.DateCreated, model.Size.ToString());
-                        list.Add(image);
+                        if (model.Type == EntityType.Image)
+                        {
+                            id = Guid.NewGuid().ToString();
+                            ImageModel image = new ImageModel(id, model.Name, model.Path, model.DateCreated, model.Size.ToString());
+                            list.Add(image);
+                        }
                     }
-                    
+
                     if (imageModelSelected != null)
                     {
                         OpenImagePage openImagePage = new OpenImagePage(imageModelSelected, list);
