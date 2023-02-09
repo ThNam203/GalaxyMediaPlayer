@@ -189,11 +189,15 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             chooseCategoryPanel.Visibility = Visibility.Visible;
             backBtn.Visibility = Visibility.Collapsed;
 
+
             if (currentPlaylistType == PlaylistPageType.Music)
             {
                 addNewSongToPlaylistBtn.Visibility = Visibility.Collapsed;
                 PlaylistPagePages.MusicPlaylistPage.PlaylistListBox.Visibility = Visibility.Visible;
                 PlaylistPagePages.MusicPlaylistPage.PlaylistSongsDataGrid.Visibility = Visibility.Collapsed;
+
+
+                MainPage.currentMusicBrowsingFolder = "PlaylistPage";  
             }
             else if (currentPlaylistType == PlaylistPageType.Video)
             {
@@ -204,16 +208,19 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
                 PlaylistPage.BackBtn.Visibility = Visibility.Collapsed;
 
 
-
+                MainPage.currentMusicBrowsingFolder = "__@@##OnVideoPlaylist";
             }
             else if (currentPlaylistType == PlaylistPageType.Image)
             {
                 CbSortPlaylistBy.SelectedIndex = -1;
                 IsImagePlaylistPageUsingGridStyle = MainWindow.IsImagePlaylistPageUsingGridStyle = false;
                 PlaylistPagePages.ImagePlaylistPage.ShowBtnOfPage1();
+
+
+                MainPage.currentMusicBrowsingFolder = "__@@##OnImagePlaylist";
             }
 
-            MainPage.currentMusicBrowsingFolder = "PlaylistPage";
+            
             MainPage.Instance.ChangeButtonsViewOnOpenFolder(forceDisable: true);
             MainPage.Instance.ChangeAdditionControlVisibilityInInforGrid(forceShow: true);
         }

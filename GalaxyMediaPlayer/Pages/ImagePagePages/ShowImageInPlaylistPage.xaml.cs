@@ -21,29 +21,29 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
     /// </summary>
     public partial class ShowImageInPlaylistPage : Page
     {
-        public ShowImageInPlaylistPage(List<ImageModel> list)
+        public ShowImageInPlaylistPage(List<string> list)
         {
             InitializeComponent();
-            _Images = list;
-            currentImage = _Images[0];
-            LoadElement(currentImage.path);
+            _ImagesPath = list;
+            _currentImagePath = _ImagesPath[0];
+            LoadElement(_currentImagePath);
             dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             MainWindow.IsRuningImagePlaylist = true;
             RunPlaylistImage();
         }
 
-        private static ImageModel _currentImage;
-        public static ImageModel currentImage
+        private static string _currentImagePath;
+        public static string currentImagePath
         {
-            get { return _currentImage; }
-            set { _currentImage = value; }
+            get { return _currentImagePath; }
+            set { _currentImagePath = value; }
         }
 
-        private static List<ImageModel> _Images;
-        public static List<ImageModel> Images
+        private static List<string> _ImagesPath;
+        public static List<string> ImagesPath
         {
-            get { return _Images; }
-            set { _Images = value; }
+            get { return _ImagesPath; }
+            set { _ImagesPath = value; }
         }
 
         void LoadElement(string path)
@@ -64,9 +64,9 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
         }
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            int currentIndex = Images.IndexOf(currentImage);
+            int currentIndex = ImagesPath.IndexOf(currentImagePath);
             int TargetIndex;
-            if (currentIndex == Images.Count - 1)
+            if (currentIndex == ImagesPath.Count - 1)
             {
                 TargetIndex = 0;
             }
@@ -75,8 +75,8 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
                 TargetIndex = currentIndex + 1;
             }
 
-            currentImage = Images[TargetIndex];
-            LoadElement(currentImage.path);
+            currentImagePath = ImagesPath[TargetIndex];
+            LoadElement(currentImagePath);
         }
 
         private void btnLeftArrow_Click(object sender, RoutedEventArgs e)
@@ -87,16 +87,16 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
 
         private void btnPreviousImage_Click(object sender, RoutedEventArgs e)
         {
-            int currentIndex = Images.IndexOf(currentImage);
+            int currentIndex = ImagesPath.IndexOf(_currentImagePath);
             int TargetIndex;
 
             if (currentIndex == 0)
-                TargetIndex = Images.Count - 1;
+                TargetIndex = ImagesPath.Count - 1;
             else
                 TargetIndex = currentIndex - 1;
 
-            currentImage = Images[TargetIndex];
-            LoadElement(currentImage.path);
+            currentImagePath = ImagesPath[TargetIndex];
+            LoadElement(currentImagePath);
         }
 
         private void btnPlayImagePlaylist_Click(object sender, RoutedEventArgs e)
@@ -115,16 +115,19 @@ namespace GalaxyMediaPlayer.Pages.ImagePagePages
 
         private void btnNextImage_Click(object sender, RoutedEventArgs e)
         {
-            int currentIndex = Images.IndexOf(currentImage);
+            int currentIndex = ImagesPath.IndexOf(currentImagePath);
             int TargetIndex;
-
-            if (currentIndex == Images.Count - 1)
+            if (currentIndex == ImagesPath.Count - 1)
+            {
                 TargetIndex = 0;
+            }
             else
+            {
                 TargetIndex = currentIndex + 1;
+            }
 
-            currentImage = Images[TargetIndex];
-            LoadElement(currentImage.path);
+            currentImagePath = ImagesPath[TargetIndex];
+            LoadElement(currentImagePath);
         }
 
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)

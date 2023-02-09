@@ -267,7 +267,7 @@
             <StackPanel x:Name="LeftBar" Orientation="Horizontal"
                         HorizontalAlignment="Left"
                         Width="auto">
-                <Button Content="Add more" 
+                <Button Content="Add more images" 
                         x:Name="btn_Addmore"
                         Visibility="Collapsed"
                         Style="{StaticResource SecondButtonAddNowStyle}"
@@ -311,7 +311,7 @@
                 <TextBlock Margin="0 0 0 12" Foreground="White" Width="300" Height="auto" TextWrapping="Wrap" TextAlignment="Center">
                     Add images to have a nice look on them!
                 </TextBlock>
-                <Button Content="Add now"
+                <Button Content="Add images"
                     Style="{StaticResource FirstButtonAddNowStyle}"
                     Click="btn_Addmore_Click"/>
             </StackPanel>
