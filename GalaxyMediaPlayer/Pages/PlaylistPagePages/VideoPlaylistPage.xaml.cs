@@ -53,7 +53,9 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                 xmlDocument.Save(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPlayListPage\\VideoPlayListPath.xml");
 
             }
-            videoPaths = new VideoPaths(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\VideoPath.xml");
+
+
+            videoPaths = new VideoPaths(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPlayListPage\\VideoPlayListPath.xml");
             playlistSource = new ObservableCollection<VideoPaths>();
             playlistSource = videoPaths.GetAllPlaylistPaths();
             source = new ObservableCollection<VideoDisplay>(); 
