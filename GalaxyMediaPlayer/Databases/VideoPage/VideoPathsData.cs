@@ -88,8 +88,11 @@ namespace GalaxyMediaPlayer.Databases.VideoPage
             string[] oDirectories = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPlayListPage", "*.xml", SearchOption.AllDirectories);
             foreach (string file in oDirectories)
             {
-                VideoPaths video = new VideoPaths(file);
-                list.Add(video);
+                if (file != AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPlayListPage\\VideoPlayListPath.xml")
+                {
+                    VideoPaths video = new VideoPaths(file);
+                    list.Add(video);
+                }
             }
             return list;
         }
