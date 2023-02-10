@@ -48,7 +48,9 @@ namespace GalaxyMediaPlayer.Pages
                 }   
                 xmlDocument.Save(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\VideoPath.xml");
             }
-            videoPaths = new VideoPaths(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\VideoPath.xml");
+            
+            if(IsDataBaseExists())
+                videoPaths = new VideoPaths(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\VideoPath.xml");
 
             source = new ObservableCollection<VideoDisplay>();
              source = videoPaths.GetAllPathsObs();

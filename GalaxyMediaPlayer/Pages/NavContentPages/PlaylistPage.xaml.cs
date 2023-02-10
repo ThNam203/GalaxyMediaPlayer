@@ -245,7 +245,7 @@ namespace GalaxyMediaPlayer.Pages.NavContentPages
             XmlDocument xmlDocument = new XmlDocument();
             XmlElement root = xmlDocument.CreateElement("root");
             xmlDocument.AppendChild(root);
-            string path = AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage";
+            string path = AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPlayListPage";
             if (!File.Exists(path))
             {
                 Directory.CreateDirectory(path);

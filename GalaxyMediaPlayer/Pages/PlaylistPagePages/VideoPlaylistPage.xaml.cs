@@ -53,7 +53,9 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
                 xmlDocument.Save(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPlayListPage\\VideoPlayListPath.xml");
 
             }
-            videoPaths = new VideoPaths(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage\\VideoPath.xml");
+
+
+            videoPaths = new VideoPaths(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPlayListPage\\VideoPlayListPath.xml");
             playlistSource = new ObservableCollection<VideoPaths>();
             playlistSource = videoPaths.GetAllPlaylistPaths();
             source = new ObservableCollection<VideoDisplay>(); 
@@ -118,7 +120,7 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
         }
         private void RemovePlaylist()
         {
-            string[] oDirectories = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage", "*.xml", SearchOption.AllDirectories);
+            string[] oDirectories = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPlayListPage", "*.xml", SearchOption.AllDirectories);
             var x = playlistListBox.SelectedItem as VideoPaths;
             foreach (string oDirectory in oDirectories)
             {
@@ -137,7 +139,7 @@ namespace GalaxyMediaPlayer.Pages.PlaylistPagePages
 
         private void RenamePlaylist(string newName)
         {
-            string[] oDirectories = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPage", "*.xml", SearchOption.AllDirectories);
+            string[] oDirectories = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "Databases\\VideoPlayListPage", "*.xml", SearchOption.AllDirectories);
             var x = playlistListBox.SelectedItem as VideoPaths;
             string renamePlaylist = string.Empty;
             foreach (string oDirectory in oDirectories)
