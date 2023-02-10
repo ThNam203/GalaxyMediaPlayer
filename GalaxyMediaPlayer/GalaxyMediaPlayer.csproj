@@ -20,6 +20,10 @@
     <None Remove="Databases\MusicPage\Database.txt" />
     <None Remove="Databases\Playlist.db" />
     <None Remove="Databases\VideoPage\Database.txt" />
+    <None Remove="Fonts\Dancing\DancingScript-Bold.ttf" />
+    <None Remove="Fonts\Dancing\DancingScript-Medium.ttf" />
+    <None Remove="Fonts\Dancing\DancingScript-Regular.ttf" />
+    <None Remove="Fonts\Dancing\DancingScript-SemiBold.ttf" />
     <None Remove="Fonts\Raleway\Raleway-Black.ttf" />
     <None Remove="Fonts\Raleway\Raleway-BlackItalic.ttf" />
     <None Remove="Fonts\Raleway\Raleway-Bold.ttf" />
@@ -119,6 +123,12 @@
     <Content Include="Databases\ImagePage\ImagesDB.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Fonts\Dancing\DancingScript-Bold.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\Dancing\DancingScript-Medium.ttf" />
+    <Resource Include="Fonts\Dancing\DancingScript-Regular.ttf" />
+    <Resource Include="Fonts\Dancing\DancingScript-SemiBold.ttf" />
     <Resource Include="Resources\Icons\ImagePageIcons\Image_gallery.png" />
     <Resource Include="Resources\Icons\ImagePageIcons\next.png" />
     <Resource Include="Resources\Icons\ImagePageIcons\previous.png" />

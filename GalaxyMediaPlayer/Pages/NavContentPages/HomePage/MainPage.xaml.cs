@@ -48,6 +48,12 @@ namespace GalaxyMediaPlayer.Pages.HomePage
 
             if (mostWatchedEntities.Count == 0) mostWatchedTb.Visibility = System.Windows.Visibility.Collapsed;
             if (mostListenedEntities.Count == 0) mostListenedTb.Visibility = System.Windows.Visibility.Collapsed;
+
+            if (mostWatchedEntities.Count == 0 && mostListenedEntities.Count == 0)
+            {
+                welcomeText.Visibility = System.Windows.Visibility.Visible; 
+                contentGrid.Visibility= System.Windows.Visibility.Collapsed;
+            }
         }
 
         private void mostWatchedItem_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

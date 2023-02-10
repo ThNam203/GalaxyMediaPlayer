@@ -21,12 +21,37 @@
         </Grid.RowDefinitions>
 
         <TextBlock  Name="greetingTb" 
-                    FontFamily="{StaticResource Raleway}"
                     Foreground="White"
                     FontSize="16"
                     Margin="16 0 0 0"/>
 
-        <Grid Grid.Row="1" Margin="16">
+        <Grid Name="welcomeText" Grid.RowSpan="2" Grid.Row="1" Visibility="Collapsed"
+                    VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock
+                    Foreground="White"
+                    Width="400"
+                    FontSize="118"
+                    TextWrapping="Wrap"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    FontFamily="{StaticResource Dancing}"
+                    Margin="0 0 300 100">
+            Welcome!
+            </TextBlock>
+            
+            <TextBlock
+                    Foreground="White"
+                    FontSize="48"
+                    Width="700"
+                    TextWrapping="Wrap"
+                    FontFamily="{StaticResource Dancing}"
+                    VerticalAlignment="Center"
+                    Margin="200 150 0 0">
+            Start using to explore every features of the galaxy of media files
+            </TextBlock>
+        </Grid>
+
+        <Grid Name="contentGrid" Grid.Row="1" Margin="16" Visibility="Visible">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>

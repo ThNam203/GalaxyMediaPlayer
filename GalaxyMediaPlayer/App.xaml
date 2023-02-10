@@ -10,7 +10,8 @@
                 <ResourceDictionary x:Name="ColorResource" Source="pack://application:,,,/ColorSkins/TransparentSkin.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-            <FontFamily x:Key="Raleway">pack://application:,,,/Fonts/Raleway/Raleway</FontFamily>
+            <FontFamily x:Key="Raleway">pack://application:,,,/Fonts/Raleway/#Raleway</FontFamily>
+            <FontFamily x:Key="Dancing">pack://application:,,,/Fonts/Dancing/#Dancing Script</FontFamily>
 
             <SolidColorBrush x:Key="ThumbBg" Color="Gray" />
             <CornerRadius x:Key="radius" TopLeft="5" BottomLeft="5" TopRight="5" BottomRight="5"/>
